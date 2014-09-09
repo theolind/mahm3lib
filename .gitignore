@@ -31,3 +31,4 @@ Release/
 # OS generated
 Thumbs.db
 .DS_Store
+.localized

@@ -27,3 +27,7 @@ Debug/
 Release/
 .project
 .cproject
+
+# OS generated
+Thumbs.db
+.DS_Store

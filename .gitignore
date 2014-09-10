@@ -29,6 +29,7 @@ ldscripts/
 system/
 .project
 .cproject
+.settings
 README.txt
 
 # OS generated

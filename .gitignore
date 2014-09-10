@@ -25,9 +25,13 @@
 # Eclipse project files
 Debug/
 Release/
+ldscripts/
+system/
 .project
 .cproject
+README.txt
 
 # OS generated
 Thumbs.db
 .DS_Store
+.localized

@@ -17,12 +17,14 @@ uint32_t *const p_PMC_PCER1 = (uint32_t *) 0x400E0700U; // PMC Peripheral Clock 
 uint32_t *const p_PMC_PCDR1 = (uint32_t *) 0x400E0704U; // PMC Peripheral Clock Status Register 1
 uint32_t *const p_PMC_PCSR1 = (uint32_t *) 0x400E0708U; // PMC Peripheral Clock Status Register 1
 
+
+// Adjusts a specified peripheral (0 - 44) to the correct mask-bit
 uint32_t pmc_get_peripheral_mask(uint32_t peripheral, uint8_t reg){
 
 	if(reg == 0){
 		return (uint32_t)(0x01 << peripheral);
 	}else{
-		return (uint32_t)(0x01 << (peripheral - 32));
+		return (uint32_t)(0x01 << (peripheral - 32));	// Adjust to the correct bit
 	}
 }
 
@@ -34,7 +36,7 @@ uint8_t pmc_start_peripheral_clock(uint32_t peripheral){
 	if(peripheral < 32){
 		*p_PMC_PCER0 = pmc_get_peripheral_mask(peripheral, 0);
 	}else{
-		*p_PMC_PCER1 = (0x01 << 5);
+		*p_PMC_PCER1 = pmc_get_peripheral_mask(peripheral, 1);
 	}
 
 	return 1;

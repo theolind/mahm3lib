@@ -12,6 +12,7 @@
 
 void run_tests(void) {
 	// run the foobar test
+
 	Unity.TestFile = "test/test_foobar.c";
 	UnityBegin();
 	RUN_TEST(test_foobar, 10);

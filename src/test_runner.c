@@ -8,14 +8,14 @@
 #include "unity.h"
 #include "test_runner.h"
 
-#include "test_foobar.h"
+#include "test_adc.h"
 
 void run_tests(void) {
-	// run the foobar test
 
-	Unity.TestFile = "test/test_foobar.c";
+
+	Unity.TestFile = "test/test_adc.c";
 	UnityBegin();
-	RUN_TEST(test_foobar, 10);
+	RUN_TEST(test_adc, 10);
 	UnityEnd();
 }
 

@@ -27,6 +27,7 @@
 #define ADC_MR  	(*p_ADC_MR) 	// Mode Register
 #define ADC_CHER  	(*p_ADC_CHER) 	// Channel Enable Register
 #define ADC_CHDR 	(*p_ADC_CHDR) 	// Channel Disable Register
+#define ADC_CHSR 	(*p_ADC_CHSR) 	// Channel Status Register
 #define ADC_LCDR  	(*p_ADC_LCDR) 	// Last Converted Data Register
 #define ADC_CDR0  	(*p_ADC_CDR0) 	// Channel Data Register 0
 

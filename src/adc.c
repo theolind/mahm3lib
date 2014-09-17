@@ -13,6 +13,7 @@ uint32_t *const p_ADC_CR 	= (uint32_t *) 0x400C0000u;
 uint32_t *const p_ADC_MR 	= (uint32_t *) 0x400C0004u;
 uint32_t *const p_ADC_CHER 	= (uint32_t *) 0x400C0010u;
 uint32_t *const p_ADC_CHDR 	= (uint32_t *) 0x400C0014u;
+uint32_t *const p_ADC_CHSR 	= (uint32_t *) 0x400C0018u;
 uint32_t *const p_ADC_LCDR 	= (uint32_t *) 0x400C0020u;
 uint32_t *const p_ADC_CDR0 	= (uint32_t *) 0x400C0050u;
 
@@ -42,9 +43,17 @@ uint8_t adc_set_resolution(char resolution){
 
 uint8_t adc_enable_channel(char ADC_CHANNEL){
 
+
 	*p_ADC_CHER = (0x1u << ADC_CHANNEL);
 
-	return 0;
+	if(*p_ADC_CHSR & 0x1u){
+		return 1;
+	} else{
+		return 0;
+	}
+
+
+
 }
 
 uint8_t adc_disable_channel(char ADC_CHANNEL){

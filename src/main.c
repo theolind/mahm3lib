@@ -8,7 +8,6 @@ int main(void) {
 
 	// Needed for running tests?
 	adc_init(1);
-	adc_enable_channel(ADC_CHANNEL_4);
 
 	run_tests();
 

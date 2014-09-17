@@ -6,9 +6,11 @@
 #include "pmc.h"
 
 void setUp(void) {
+
 }
 
 void tearDown(void) {
+
 }
 
 void resetTest(void) {
@@ -17,5 +19,5 @@ void resetTest(void) {
 }
 
 void test_foobar(void) {
-
+	TEST_ASSERT(1);
 }

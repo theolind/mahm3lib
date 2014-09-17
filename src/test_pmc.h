@@ -8,9 +8,9 @@
 #ifndef TEST_PMC_H_
 #define TEST_PMC_H_
 
-void setUp(void);
-void tearDown(void);
-void resetTest(void);
+
+void test_pmc_status_peripheral_clock(void);
+void test_pmc_start_peripheral_clock(void);
 void test_pmc(void);
 
 #endif /* TEST_PMC_H_ */

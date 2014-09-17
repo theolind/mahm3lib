@@ -47,32 +47,39 @@ uint32_t *const p_PMC_WPMR = (uint32_t *) 0x400E06E4;  // PMC Write Protect Mode
 */
 
 
+// Start peripheral clock
+error pcm_start_peripheral_clk(){
 
+	return 0;
+}
 
+// Stop peripheral clock
+error pcm_stop_peripheral_clk(){
 
+	return 0;
+}
 
+// Get peripheral clock status
+error pcm_status_peripheral_clk(){
 
+	return 0;
+}
 
+// Set peripheral prescaler
+error pcm_set_peripheral_prescaler(){
 
+	return 0;
+}
 
+// Set to sleep mode, provide wakeup method
+error pcm_sleep(){
 
+	return 0;
+}
 
+// Set master clock
+error pcm_set_master_clk(){
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	return 0;
+}
 

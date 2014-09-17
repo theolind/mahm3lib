@@ -48,7 +48,7 @@ uint8_t pmc_stop_peripheral_clock(uint32_t peripheral){
 
 	if(peripheral < 32 && peripheral >= 0){   // Check if peripheral is register 0
 		*p_PMC_PCDR0 = pmc_get_peripheral_mask(peripheral, 0);
-	}else if(peripheral > 32 && peripheral < 45){	// Check if peripheral is register 0
+	}else if(peripheral > 32 && peripheral < 45){	// Check if peripheral is register 1
 		*p_PMC_PCDR1 = pmc_get_peripheral_mask(peripheral, 1);
 	}else{	// Out of bounds
 		return 0;

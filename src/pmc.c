@@ -6,79 +6,79 @@
  */
 
 #include "pmc.h"
-#include<stdint.h>
 
-/*
-uint32_t *const p_PCM_SCER = (uint32_t *) 0x400E0600U;  // PMC System Clock Enable Register
-uint32_t *const p_PMC_SCDR = (uint32_t *) 0x400E0604U;  // PMC System Clock Disable Register
-uint32_t *const p_PMC_SCSR = (uint32_t *) 0x400E0608U;  // PMC System Clock Status Register
+#include <stdint.h>
+
 uint32_t *const p_PMC_PCER0 = (uint32_t *) 0x400E0610U; // PMC Peripheral Clock Enable Register 0
 uint32_t *const p_PMC_PCDR0 = (uint32_t *) 0x400E0614U; // PMC Peripheral Clock Disable Register 0
 uint32_t *const p_PMC_PCSR0 = (uint32_t *) 0x400E0618U; // PMC Peripheral Clock Status Register 0
-uint32_t *const p_CKGR_UCKR = (uint32_t *) 0x400E061CU; // PMC UTMI Clock Configuration Register
 
-uint32_t *const p_CKGR_MOR = (uint32_t *) 0x400E0620U;  // PMC Clock Generator Main Oscillator Register
+uint32_t *const p_PMC_PCER1 = (uint32_t *) 0x400E0700U; // PMC Peripheral Clock Status Register 1
+uint32_t *const p_PMC_PCDR1 = (uint32_t *) 0x400E0704U; // PMC Peripheral Clock Status Register 1
+uint32_t *const p_PMC_PCSR1 = (uint32_t *) 0x400E0708U; // PMC Peripheral Clock Status Register 1
 
-// Main On-Chip Oscillator Frequency
-#define MOSCRCF			(0x01 << 4)
+uint32_t pmc_get_peripheral_mask(uint32_t peripheral, uint8_t reg){
 
-#define MOSCRCF_4MHZ 	(0x0U)
-#define MOSCRCF_8MHZ 	(0x1)
-#define MOSCRCF_12MHZ 	(0x2)
+	if(reg == 0){
+		return (uint32_t)(0x01 << peripheral);
+	}else{
+		return (uint32_t)(0x01 << (peripheral - 32));
+	}
+}
 
-
-uint32_t *const p_PMC_MCKR = (uint32_t *) 0x400E0630;  // PMC Master Clock Register
-
-// Master Clock Source Selection
-#define MCKR_CSS	(0x01U)
-
-#define MCKR_SLOW_CLK	(0x0U)
-#define MCKR_MAIN_CLK	(0x01U)
-#define MCKR_PLLA_CLK	(0x02U)
-#define MCKR_UPLL_CLK	(0x03U)
-
-
-uint32_t *const p_PMC_WPMR = (uint32_t *) 0x400E06E4;  // PMC Write Protect Mode Register
-
-// Write Protect Mode Bit Enable/Disable
-#define PCM_WPMR_WPEN	(0x01U)
-
-// Write Protect Mode Key
-*/
 
 
 // Start peripheral clock
-error pcm_start_peripheral_clk(){
+uint8_t pmc_start_peripheral_clock(uint32_t peripheral){
 
-	return 0;
+	if(peripheral < 32){
+		*p_PMC_PCER0 = pmc_get_peripheral_mask(peripheral, 0);
+	}else{
+		*p_PMC_PCER1 = (0x01 << 5);
+	}
+
+	return 1;
 }
 
+
 // Stop peripheral clock
-error pcm_stop_peripheral_clk(){
+uint8_t pmc_stop_peripheral_clock(uint32_t peripheral){
 
 	return 0;
 }
 
 // Get peripheral clock status
-error pcm_status_peripheral_clk(){
+uint8_t pmc_status_peripheral_clock(uint32_t peripheral){
 
-	return 0;
+	uint8_t status = 0;
+
+	if(peripheral < 32){
+
+		if((*p_PMC_PCSR0 & pmc_get_peripheral_mask(peripheral, 0)) == 0)	// Status Enabled
+			status = 1;
+
+	}else{
+		if((*p_PMC_PCSR1 & pmc_get_peripheral_mask(peripheral, 1)) > 0)	// Status Enabled
+			status = 1;
+	}
+
+	return status;
 }
 
 // Set peripheral prescaler
-error pcm_set_peripheral_prescaler(){
+uint8_t pmc_set_peripheral_prescaler(){
 
 	return 0;
 }
 
 // Set to sleep mode, provide wakeup method
-error pcm_sleep(){
+uint8_t pmc_sleep(){
 
 	return 0;
 }
 
 // Set master clock
-error pcm_set_master_clk(){
+uint8_t pmc_set_master_clock(){
 
 	return 0;
 }

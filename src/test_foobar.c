@@ -1,6 +1,10 @@
 #include "unity.h"
 #include "test_foobar.h"
 
+#include <stdint.h>
+
+#include "pmc.h"
+
 void setUp(void) {
 }
 
@@ -13,5 +17,5 @@ void resetTest(void) {
 }
 
 void test_foobar(void) {
-	TEST_ASSERT_TRUE(1);
+
 }

@@ -11,6 +11,6 @@
 void setUp(void);
 void tearDown(void);
 void resetTest(void);
-void test_foobar(void);
+void test_pmc(void);
 
 #endif /* TEST_PMC_H_ */

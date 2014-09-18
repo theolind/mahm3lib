@@ -5,7 +5,9 @@
  *      Author: Theodor Lindquist
  */
 
-void digital_io_init() {
+#include "pio.h"
+
+void pio_init() {
 	/**
 	 * TODO
 	 * Periphial IDs for PIO*
@@ -22,42 +24,44 @@ void digital_io_init() {
 	 */
 }
 
-void digital_io_close() {
+void pio_close() {
 	//TODO undo what has been done in digital_io_init
 }
 
-void digital_io_conf_pin(uint8_t port, uint8_t pin_number, uint8_t input, uint8_t pullup) {
+void pio_conf_pin(uint8_t port, uint8_t pin_number, uint8_t input, uint8_t pullup) {
 	//use the port function to set a single pin
-	digital_io_conf_port(port, (1<<pin_number), (input<<pin_number), (pullup<<pin_number));
+	pio_conf_port(port, (1<<pin_number), (input<<pin_number), (pullup<<pin_number));
 }
 
-void digital_io_conf_port(uint8_t port, uint32_t inputs, uint32_t pullups) {
+void pio_conf_port(uint8_t port, uint32_t inputs, uint32_t pullups) {
 	uint32_t *p_reg;	//register pointer points to the register currently used
 
-	//enable the pins
+	//TODO move this to init ?
+	//enable the pins of the port
 	p_reg = port+PIO_PER;	//point to PIO enable register
+	**p_reg = ~(0);
 
-	/**
-	 * TODO
-	 * Enable pullup in PIO_PUER
-	 * Disable pullup in PIO_PUDR
-	 *
-	 * Enable pin in PIO_PER
-	 * Disable pin in PIO_PDR
-	 *
-	 * Enable output in PIO_OER
-	 * Disable output in PIO_ODR
-	 */
+	//set output/input
+	p_reg = port+PIO_OER;	//point to Output enable register
+	**p_reg = inputs;		//if a bit is 1, enable input for that pin
+	p_reg = port+PIO_ODR;	//point to output disable register
+	**p_reg = ~inputs;		//if a bit is 0, disable input for that pin
+
+	//set pullups
+	p_reg = port+PIO_PUER;	//point to pull-up enable register
+	**p_reg = pullups;		//enable pull-ups
+	p_reg = port+PIO_PUDR;	//point to pull-up disable register
+	**p_reg = ~pullups;		//disable pull-ups
 }
 
-//TODO void digital_io_set_pin(uint8_t port, uint8_t pin_number, uint8_t level);
-//TODO void digital_io_set_port(uint8_t port, uint32_t levels);
+//TODO void pio_set_pin(uint8_t port, uint8_t pin_number, uint8_t level);
+//TODO void pio_set_port(uint8_t port, uint32_t levels);
 
-uint8_t digital_io_read_pin(uint8_t port, uint8_t pin_number) {
+uint8_t pio_read_pin(uint8_t port, uint8_t pin_number) {
 	//return (digital_io_read_port(port) & (1<<pin_number)) >> pin_number; ?
 }
 
-uint32_t digital_io_read_port(uint8_t port) {
+uint32_t pio_read_port(uint8_t port) {
 	/**
 	 * TODO
 	 * Read input from PIO_PDSR

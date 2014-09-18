@@ -7,7 +7,6 @@
 
 #include "unity.h"
 #include "test_runner.h"
-
 #include "test_adc.h"
 
 void run_tests(void) {

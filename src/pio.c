@@ -8,9 +8,8 @@
 
 #include "pio.h"
 
-void pio_init() {
+void pio_init(pio_init_param *param) {
 	/**
-	 * TODO
 	 * Periphial IDs for PIO*
 	 * PIO  PID   BIT #pins
 	 * PIOA PID11 11  30
@@ -23,10 +22,39 @@ void pio_init() {
 	 * Set bits 11 to 16 in PMC_PCER0 (0x400E0610) to enable clocks for a port
 	 * To do this, first clear WPEN bit (bit 0) in PMC_WPMR (0x400E06E4)
 	 */
+	uint32_t clk_config = 0;
+
+	if(param->porta == ON) {
+		clk_config |= (1<<11);
+	}
+
+	if(param->portb == ON) {
+		clk_config |= (1<<12);
+	}
+
+	if(param->portc == ON) {
+		clk_config |= (1<<13);
+	}
+
+	if(param->portd == ON) {
+		clk_config |= (1<<14);
+	}
+
+	if(param->porte == ON) {
+		clk_config |= (1<<15);
+	}
+
+	if(param->portf == ON) {
+		clk_config |= (1<<16);
+	}
+
+	uint32_t *p_pmc_pcer0 = 0x400E0610;
+	*p_pmc_pcer0 |= clk_config;
 }
 
 void pio_close() {
-	//TODO undo what has been done in digital_io_init
+	uint32_t *p_pmc_pcer0 = 0x400E0610;
+	*p_pmc_pcer0 &= ~(0b111111<<11);	//clear bit 11 to 16 in PMC_PCER0
 }
 
 void pio_conf_pin(uint32_t port, uint8_t pin_number, uint8_t input, uint8_t pullup) {

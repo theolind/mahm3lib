@@ -19,11 +19,5 @@ void resetTest(void) {
 
 void test_adc(void) {
 
-	TEST_ASSERT_FALSE(adc_init(1));
-//	TEST_ASSERT_FALSE(adc_get_channel_status(ADC_CHANNEL_0));
-//	adc_enable_channel(ADC_CHANNEL_0);
-//	TEST_ASSERT_TRUE(adc_get_channel_status(ADC_CHANNEL_0));
-
-
-
+	TEST_ASSERT_TRUE(adc_enable_channel(ADC_CHANNEL_0));
 }

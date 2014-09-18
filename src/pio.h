@@ -16,11 +16,35 @@
 #include <stdint.h>
 
 // To be determined
-#define PIO_PORTA 0x01
-#define PIO_PORTB 0x02
-#define PIO_PORTC 0x03
 #define PIO_INPUT 0x01
 #define PIO_OUTPUT 0x00
+
+// addresses to ports
+#define PIO_PORTA 0x400E0E00
+#define PIO_PORTB 0x400E1000
+#define PIO_PORTC 0x400E1200
+#define PIO_PORTD 0x400E1400
+#define PIO_PORTE 0x400E1600
+#define PIO_PORTF 0x400E1800
+
+// port register offsets
+#define PIO_PER 0x0000	//PIO enable register
+#define PIO_PDR 0x0004	//PIO disable register
+#define PIO_PSR 0x0008  //PIO status register
+
+#define PIO_OER 0x0010	//output enable register
+#define PIO_ODR 0x0014	//output disable register
+#define PIO_OSR 0x0018 	//output status register
+
+#define PIO_SODR 0x0030	//set output data register
+#define PIO_CODR 0x0034	//clear output data register
+#define PIO_ODSR 0x0038 //output data status register
+
+#define PIO_PUER 0x0064	//pull-up enable register
+#define PIO_PUDR 0x0060	//pull-up disable register
+#define PIO_PUSR 0x0068	//pull-up status register
+
+#define PIO_PDSR 0x003C	//pin data status register
 
 /**
  * Initialize the clocks in the power management controller, neccecary for using digital_io_read_*.

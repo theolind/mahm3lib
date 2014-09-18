@@ -9,6 +9,7 @@
 #include "test_runner.h"
 
 #include "test_foobar.h"
+#include "test_pio.h"
 
 void run_tests(void) {
 	// run the foobar test
@@ -16,5 +17,11 @@ void run_tests(void) {
 	UnityBegin();
 	RUN_TEST(test_foobar, 10);
 	UnityEnd();
-}
 
+	// run pio tests
+	Unity.TestFile = "test/test_pio.c";
+	UnityBegin();
+	RUN_TEST(test_pio_pullup, 0);
+	RUN_TEST(test_pio_output, 0);
+	UnityEnd();
+}

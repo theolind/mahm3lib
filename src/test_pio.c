@@ -23,7 +23,7 @@ void pio_resetTest() {
 uint8_t test_pio_pullup() {
 	uint8_t PULLUP_OK = 0;
 	uint32_t *p_PUSR = PIO_PORTB + PIO_PUSR; //Pullup status Register B
-	digital_io_conf_pin(PIO_PORTB, (1<<32), 1, 1); //PIO_PUSR
+	pio_conf_pin(PIO_PORTB, (1<<32), 1, 1); //PIO_PUSR
 	if(*p_PUSR == (1<<32)) {
 		PULLUP_OK = 1;
 	} else {
@@ -35,7 +35,7 @@ uint8_t test_pio_pullup() {
 uint8_t test_pio_output() {
 	uint8_t OUTPUT_OK = 0;
 	uint32_t *p_OSR = PIO_PORTB + PIO_OSR; //Output status Register B
-	digital_io_conf_pin(PIO_PORTB, (1<<32), 1, 1); //PIO_PUSR
+	pio_conf_pin(PIO_PORTB, (1<<32), 1, 1); //PIO_PUSR
 	if(*p_OSR == 1) {
 		OUTPUT_OK = 1;
 	} else {

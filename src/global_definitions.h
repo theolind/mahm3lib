@@ -1,16 +1,13 @@
 /*
- * io_uart.c
+ * global_definitions.c
  *
- * This file contains functions for UART communication.
+ * This file contains definitions that the developers in this group will at
+ * some point use. This file helps us to avoid collision of redefinition of
+ * some commonly used defines.
  *
- * Created by: Mathias Beckius, 2014-03-18
+ * There is a discussion about this in the forum.
  *
- * Modified: 2014-03-20
- * Added explanation of why activation of internal pull-up is
- * necessary. Did also change input parameter type for 'uart_config()'.
- *
- * Modified: 2014-09-07
- * Made the UART library 100% free from ASF!
+ * Created by: Saeed Ghasemi, 2014-09-18
  */
 
 #ifndef _GLOBAL_DEF_H_

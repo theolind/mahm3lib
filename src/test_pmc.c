@@ -17,19 +17,19 @@ void test_pmc_setup(){
 
 void test_pmc_tear_down(){
 
-	int8_t status = pmc_status_peripheral_clock(PMC_PERIPHERAL_ADC);
+	error status = pmc_status_peripheral_clock(PMC_PERIPHERAL_ADC);
 
 	if(status == 1)
 		pmc_stop_peripheral_clock(PMC_PERIPHERAL_ADC);
 }
 
 void test_pmc_reset(){
-	test_pmc_setup();
 	test_pmc_tear_down();
+	test_pmc_setup();
 }
 
 
-void test_pmc(void){
+void test_pmc(){
 	test_pmc_start_peripheral_clock_when_successful();
 	test_pmc_status_peripheral_clock_when_inactive();
 	test_pmc_status_peripheral_clock_when_active();

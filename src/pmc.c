@@ -2,12 +2,12 @@
  * pmc.c
  *
  *  Created on: 17 sep 2014
- *      Author: felix
+ *      Author: Felix (Modified by Saeed)
  */
 
-#include "pmc.h"
 
 #include <stdint.h>
+#include "pmc.h"
 
 uint32_t *const p_PMC_PCER0 = (uint32_t *) 0x400E0610U; // PMC Peripheral Clock Enable Register 0
 uint32_t *const p_PMC_PCDR0 = (uint32_t *) 0x400E0614U; // PMC Peripheral Clock Disable Register 0
@@ -80,7 +80,7 @@ uint8_t pmc_status_peripheral_clock(uint32_t peripheral){
 }
 
 // Set peripheral prescaler
-uint8_t pmc_set_peripheral_prescaler(){
+uint8_t pmc_set_peripheral_prescaler(defInput peripheral, defInput prescaler){
 
 	return 0;
 }
@@ -92,7 +92,7 @@ uint8_t pmc_sleep(){
 }
 
 // Set master clock
-uint8_t pmc_set_master_clock(){
+uint8_t pmc_set_master_clock(defInput clock){
 
 	return 0;
 }

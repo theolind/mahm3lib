@@ -36,3 +36,6 @@ README.txt
 Thumbs.db
 .DS_Store
 .localized
+
+# Doxygen
+*.doxyfile

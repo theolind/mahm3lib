@@ -30,7 +30,7 @@ void pio_close() {
 
 void pio_conf_pin(uint8_t port, uint8_t pin_number, uint8_t input, uint8_t pullup) {
 	//use the port function to set a single pin
-	pio_conf_port(port, (1<<pin_number), (input<<pin_number), (pullup<<pin_number));
+	pio_conf_port(port, (input<<pin_number), (pullup<<pin_number));
 }
 
 void pio_conf_port(uint8_t port, uint32_t inputs, uint32_t pullups) {
@@ -39,23 +39,28 @@ void pio_conf_port(uint8_t port, uint32_t inputs, uint32_t pullups) {
 	//TODO move this to init ?
 	//enable the pins of the port
 	p_reg = port+PIO_PER;	//point to PIO enable register
-	**p_reg = ~(0);
+	*p_reg = ~(0);
 
 	//set output/input
 	p_reg = port+PIO_ODR;	//point to Output enable register
-	**p_reg = inputs;		//if a bit is 1, disable output for that pin
+	*p_reg = inputs;		//if a bit is 1, disable output for that pin
 	p_reg = port+PIO_OER;	//point to output disable register
-	**p_reg = ~inputs;		//if a bit is 0, enable output for that pin
+	*p_reg = ~inputs;		//if a bit is 0, enable output for that pin
 
 	//set pullups
 	p_reg = port+PIO_PUER;	//point to pull-up enable register
-	**p_reg = pullups;		//enable pull-ups
+	*p_reg = pullups;		//enable pull-ups
 	p_reg = port+PIO_PUDR;	//point to pull-up disable register
-	**p_reg = ~pullups;		//disable pull-ups
+	*p_reg = ~pullups;		//disable pull-ups
 }
 
-//TODO void pio_set_pin(uint8_t port, uint8_t pin_number, uint8_t level);
-//TODO void pio co_set_port(uint8_t port, uint32_t levels);
+void pio_set_pin(uint8_t port, uint8_t pin_number, uint8_t level) {
+
+}
+
+void pio_set_port(uint8_t port, uint32_t levels) {
+
+}
 
 uint8_t pio_read_pin(uint8_t port, uint8_t pin_number) {
 	//return (digital_io_read_port(port) & (1<<pin_number)) >> pin_number; ?

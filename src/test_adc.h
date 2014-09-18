@@ -20,4 +20,3 @@ void resetTest(void);
 void test_adc_channel_enabled(void);
 void test_adc_12bit(void);
 void test_adc_10bit(void);
-void test_adc_channel_enabled(void);

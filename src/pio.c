@@ -28,12 +28,12 @@ void pio_close() {
 	//TODO undo what has been done in digital_io_init
 }
 
-void pio_conf_pin(uint8_t port, uint8_t pin_number, uint8_t input, uint8_t pullup) {
+void pio_conf_pin(uint32_t port, uint8_t pin_number, uint8_t input, uint8_t pullup) {
 	//use the port function to set a single pin
 	pio_conf_port(port, (input<<pin_number), (pullup<<pin_number));
 }
 
-void pio_conf_port(uint8_t port, uint32_t inputs, uint32_t pullups) {
+void pio_conf_port(uint32_t port, uint32_t inputs, uint32_t pullups) {
 	uint32_t *p_reg;	//register pointer points to the register currently used
 
 	//TODO move this to init ?
@@ -54,16 +54,19 @@ void pio_conf_port(uint8_t port, uint32_t inputs, uint32_t pullups) {
 	*p_reg = ~pullups;		//disable pull-ups
 }
 
-void pio_set_pin(uint8_t port, uint8_t pin_number, uint8_t level) {
-
+void pio_set_pin(uint32_t port, uint8_t pin_number, uint8_t level) {
+	pio_set_port(port, (level<<pin_number));
 }
 
-void pio_set_port(uint8_t port, uint32_t levels) {
+void pio_set_port(uint32_t port, uint32_t levels) {
+	uint32_t *p_reg;
 
+	p_reg = port+PIO_SODR;
+	*p_reg = levels;
 }
 
 uint8_t pio_read_pin(uint8_t port, uint8_t pin_number) {
-	return (digital_io_read_port(port) & (1<<pin_number)) >> pin_number;
+	return (pio_read_port(port) & (1<<pin_number)) >> pin_number;
 }
 
 uint32_t pio_read_port(uint8_t port) {

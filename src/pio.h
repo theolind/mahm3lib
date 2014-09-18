@@ -15,10 +15,6 @@
 
 #include <stdint.h>
 
-// To be determined
-#define PIO_INPUT 0x01
-#define PIO_OUTPUT 0x00
-
 // addresses to ports
 #define PIO_PORTA 0x400E0E00
 #define PIO_PORTB 0x400E1000

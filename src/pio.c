@@ -63,12 +63,12 @@ void pio_set_port(uint8_t port, uint32_t levels) {
 }
 
 uint8_t pio_read_pin(uint8_t port, uint8_t pin_number) {
-	//return (digital_io_read_port(port) & (1<<pin_number)) >> pin_number; ?
+	return (digital_io_read_port(port) & (1<<pin_number)) >> pin_number;
 }
 
 uint32_t pio_read_port(uint8_t port) {
-	/**
-	 * TODO
-	 * Read input from PIO_PDSR
-	 */
+	uint32_t *p_reg;	//register pointer points to the register currently used
+
+	p_reg = port+PIO_PDSR;
+	return *p_reg;
 }

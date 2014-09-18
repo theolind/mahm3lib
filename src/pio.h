@@ -62,7 +62,7 @@ void pio_init(pio_init_param *param);
 /**
  * Deinitialize the clocks in the power management controller, saves power if you don't need to use digital_io_read_* anymore.
  */
-void pio_close();
+void pio_close(void);
 
 /**
  * Configure a pin to be either an input or an output

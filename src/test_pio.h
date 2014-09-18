@@ -16,12 +16,9 @@
 
 #include <stdint.h>
 
-void pio_setUp();
-void pio_tearDown();
-void pio_resetTest();
-uint8_t test_pio_pullup();	//testing pio_conf_*
-uint8_t test_pio_output();	//testing pio_conf_*
-uint8_t test_pio_read_pin();	//testing pio_read_*
-uint8_t test_pio_set_output();	//testing pio_set_*
+uint8_t test_pio_pullup(void);	//testing pio_conf_*
+uint8_t test_pio_output(void);	//testing pio_conf_*
+uint8_t test_pio_read_pin(void);	//testing pio_read_*
+uint8_t test_pio_set_output(void);	//testing pio_set_*
 
 #endif /* TEST_PIO_H_ */

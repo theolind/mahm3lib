@@ -2,13 +2,13 @@
  * adc.c
  *
  *  Created on: Sep 17, 2014
- *      Author: Hisham
+ *      Author: Hisham & Prince
  */
 
 #include "adc.h"
 #include <stdint.h>
 
-
+// Pointers to ADC-registers
 uint32_t *const p_ADC_CR 	= (uint32_t *) 0x400C0000u;
 uint32_t *const p_ADC_MR 	= (uint32_t *) 0x400C0004u;
 uint32_t *const p_ADC_CHER 	= (uint32_t *) 0x400C0010u;
@@ -17,6 +17,9 @@ uint32_t *const p_ADC_CHSR 	= (uint32_t *) 0x400C0018u;
 uint32_t *const p_ADC_LCDR 	= (uint32_t *) 0x400C0020u;
 uint32_t *const p_ADC_CDR0 	= (uint32_t *) 0x400C0050u;
 
+/*
+ * Initializes the ADC.
+ */
 uint8_t adc_init(const uint32_t prescal_pos){
 
 	// Software reset
@@ -31,6 +34,9 @@ uint8_t adc_init(const uint32_t prescal_pos){
 	return 0;
 }
 
+/*
+ * Sets ADC resolution to 10 bits or 12 bits. 12 bits is default after reset.(adc_init();)
+ */
 uint8_t adc_set_resolution(char resolution){
 
 	if(resolution == 12){
@@ -41,8 +47,10 @@ uint8_t adc_set_resolution(char resolution){
 	return 0;
 }
 
+/*
+ * Enables a specific channel
+ */
 uint8_t adc_enable_channel(char ADC_CHANNEL){
-
 
 	*p_ADC_CHER = (0x1u << ADC_CHANNEL);
 
@@ -51,11 +59,11 @@ uint8_t adc_enable_channel(char ADC_CHANNEL){
 	} else{
 		return 0;
 	}
-
-
-
 }
 
+/*
+ * Disables a specific channel
+ */
 uint8_t adc_disable_channel(char ADC_CHANNEL){
 
 	*p_ADC_CHDR = (uint32_t)(1 << ADC_CHANNEL);

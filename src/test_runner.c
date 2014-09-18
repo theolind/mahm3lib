@@ -1,8 +1,9 @@
 /*
  * Test runner, add your tests here
  *
- * Created by: Theodor Lindquist
- * Date: 2014-09-10
+ * Author: Theodor Lindquist
+ * Author: Soded Alatia
+ * Date: 2014-09-18
  */
 
 #include "unity.h"
@@ -10,6 +11,7 @@
 
 #include "test_foobar.h"
 #include "test_pio.h"
+#include "pio.h"
 
 void run_tests(void) {
 	// run the foobar test

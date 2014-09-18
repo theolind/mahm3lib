@@ -23,5 +23,7 @@ void run_tests(void) {
 	UnityBegin();
 	RUN_TEST(test_pio_pullup, 0);
 	RUN_TEST(test_pio_output, 0);
+	RUN_TEST(test_pio_read_pin, 0);
+	RUN_TEST(test_pio_set_output, 0);
 	UnityEnd();
 }

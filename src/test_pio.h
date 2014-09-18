@@ -18,7 +18,9 @@
 void pio_setUp();
 void pio_tearDown();
 void pio_resetTest();
-uint8_t test_pio_pullup();
-uint8_t test_pio_output();
+uint8_t test_pio_pullup();	//testing pio_conf_*
+uint8_t test_pio_output();	//testing pio_conf_*
+uint8_t test_pio_read_pin();	//testing pio_read_*
+uint8_t test_pio_set_output();	//testing pio_set_*
 
 #endif /* TEST_PIO_H_ */

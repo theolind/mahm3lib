@@ -21,26 +21,50 @@ void pio_resetTest() {
 }
  
 uint8_t test_pio_pullup() {
-	uint8_t PULLUP_OK = 0;
-	uint32_t *p_PUSR = PIO_PORTB + PIO_PUSR; //Pullup status Register B
+	uint8_t ret = 0;
+	uint32_t *p_pusr = PIO_PORTB + PIO_PUSR; //Pullup status Register B
 	pio_conf_pin(PIO_PORTB, (1<<32), 1, 1); //PIO_PUSR
-	if(*p_PUSR == (1<<32)) {
-		PULLUP_OK = 1;
+	if(*p_pusr == (1<<32)) {
+		ret = 1;
 	} else {
-		PULLUP_OK = 0;
+		ret = 0;
 	}
-	return PULLUP_OK;
+	return ret;
 }
 
 uint8_t test_pio_output() {
-	uint8_t OUTPUT_OK = 0;
-	uint32_t *p_OSR = PIO_PORTB + PIO_OSR; //Output status Register B
+	uint8_t ret = 0;
+	uint32_t *p_osr = PIO_PORTB + PIO_OSR; //Output status Register B
 	pio_conf_pin(PIO_PORTB, (1<<32), 1, 1); //PIO_PUSR
-	if(*p_OSR == 1) {
-		OUTPUT_OK = 1;
+	if(*p_osr == (1<<32)) {
+		ret = 1;
 	} else {
-		OUTPUT_OK = 0;
+		ret = 0;
 	}
-	return OUTPUT_OK;
+	return ret;
 }
 
+uint8_t test_pio_read_pin() {
+	uint8_t ret = 0;
+	uint8_t value = pio_read_pin(PIO_PORTB, 17);
+	if(value == 0) {
+		ret = 1;
+	} else {
+		ret = 0;
+	}
+
+	return ret;
+}
+
+uint8_t test_pio_set_output() {
+	uint8_t ret = 0;
+	uint32_t *p_odsr = PIO_PORTB + PIO_ODSR;
+
+	pio_set_pin(PIO_PORTB, (1<<17), 1);
+	if(*p_odsr == (1<<17)) {
+		ret = 1;
+	} else {
+		ret = 0;
+	}
+	return ret;
+}

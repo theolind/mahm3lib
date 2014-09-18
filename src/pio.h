@@ -1,14 +1,15 @@
-/*!
- * \brief Digital IO controller
- * \details The functions in this file controls the digital input and output of the processor
+/**
+ * @file
+ * @brief Digital IO controller
+ * @details The functions in this file controls the digital input and output of the processor
  *
- * \author Theodor Lindquist
- * \author Soded Alatia
+ * @author Theodor Lindquist
+ * @author Soded Alatia
  *
- * \version 0.2
- * \date 18-09-2014
+ * @version 0.2
+ * @date 18-09-2014
  *
- * \pre First initialize the board, if you want to read inputs, you need to call digital_io_init()
+ * @pre First initialize the board, if you want to read inputs, you need to call digital_io_init()
  */
 
 #ifndef PIO_H_
@@ -42,7 +43,6 @@
 #define PIO_PUSR 0x0068	//pull-up status register
 
 #define PIO_PDSR 0x003C	//pin data status register
-
 
 typedef enum {OFF, ON} pio_init_setting;
 typedef struct pio_init_param {

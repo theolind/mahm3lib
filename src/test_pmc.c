@@ -1,8 +1,12 @@
-/*
- * test_pcm.c
- *
- *  Created on: 17 sep 2014
- *      Author: felix
+/**
+ * \class test_pmc
+ * \brief Power Managment Test Class (PMC)
+ * \details This class is used to test the PMC using Unity
+ * \author Felix Ruponen
+ * \author Mattias Nilsson
+ * \author Saeed Ghasemi
+ * \version 0.1
+ * \date 17 sep 2014
  */
 
 #include "unity.h"

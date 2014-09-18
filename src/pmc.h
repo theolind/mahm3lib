@@ -1,8 +1,12 @@
-/*
- * pmc.h
- *
- *  Created on: 17 sep 2014
- *      Author: felix
+/**
+ * \class pmc
+ * \brief Power Managment Class (PMC)
+ * \details Header for pmc.h
+ * \author Felix Ruponen
+ * \author Mattias Nilsson
+ * \author Saeed Ghasemi
+ * \version 0.1
+ * \date 17 sep 2014
  */
 
 #ifndef PMC_H_
@@ -10,16 +14,16 @@
 
 #include <stdint.h>
 
-#define PMC_PERIPHERAL_PIOA (11)
-#define PMC_PERIPHERAL_PIOB (12)
-#define PMC_PERIPHERAL_PIOC (13)
-#define PMC_PERIPHERAL_PIOD (14)
-#define PMC_PERIPHERAL_PIOE (15)
-#define PMC_PERIPHERAL_PIOF (16)
+#define PMC_PERIPHERAL_PIOA (11) ///<Peripheral PIOA
+#define PMC_PERIPHERAL_PIOB (12) ///<Peripheral PIOB
+#define PMC_PERIPHERAL_PIOC (13) ///<Peripheral PIOC
+#define PMC_PERIPHERAL_PIOD (14) ///<Peripheral PIOD
+#define PMC_PERIPHERAL_PIOE (15) ///<Peripheral PIOE
+#define PMC_PERIPHERAL_PIOF (16) ///<Peripheral PIOF
 
-#define PMC_PERIPHERAL_PWM (36)
-#define PMC_PERIPHERAL_ADC (37)
-#define PMC_PERIPHERAL_DACC	(38)
+#define PMC_PERIPHERAL_PWM (36) ///<Peripheral PWM
+#define PMC_PERIPHERAL_ADC (37) ///<Peripheral ADC
+#define PMC_PERIPHERAL_DACC	(38) ///<Peripheral DACC
 
 
 extern uint32_t *const p_PMC_PCER1;

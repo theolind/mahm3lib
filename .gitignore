@@ -37,3 +37,6 @@ Thumbs.db
 .DS_Store
 .localized
 .metadata
+
+# Doxygen
+*.doxyfile

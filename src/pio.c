@@ -66,11 +66,11 @@ void pio_set_port(uint32_t port, uint32_t levels) {
 	*p_reg = levels;
 }
 
-uint8_t pio_read_pin(uint8_t port, uint8_t pin_number) {
+uint8_t pio_read_pin(uint32_t port, uint8_t pin_number) {
 	return (pio_read_port(port) & (1<<pin_number)) >> pin_number;
 }
 
-uint32_t pio_read_port(uint8_t port) {
+uint32_t pio_read_port(uint32_t port) {
 	uint32_t *p_reg;	//register pointer points to the register currently used
 
 	p_reg = port+PIO_PDSR;

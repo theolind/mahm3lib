@@ -31,8 +31,12 @@
 #define ADC_LCDR  	(*p_ADC_LCDR) 	// Last Converted Data Register
 #define ADC_CDR0  	(*p_ADC_CDR0) 	// Channel Data Register 0
 
+#define PMC_PCER1	(*p_PMC_PCER1)   // pmc peripheral
+
+#define ADC_PTCR	(*p_ADC_PTCR)
+
 uint8_t adc_init(const uint32_t adc_clk);
 uint8_t adc_set_resolution(char resolution);
 uint8_t adc_enable_channel(char ADC_CHANNEL);
 uint8_t adc_disable_channel(char ADC_CHANNEL);
-uint8_t adc_read_channel(char ADC_CHANNEL);
+uint16_t adc_read_channel(char ADC_CHANNEL);

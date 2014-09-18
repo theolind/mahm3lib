@@ -3,8 +3,9 @@
  * \details The functions in this file controls the digital input and output of the processor
  *
  * \author Theodor Lindquist
+ * \author Soded Alatia
  *
- * \version 0.1
+ * \version 0.2
  * \date 18-09-2014
  *
  * \pre First initialize the board, if you want to read inputs, you need to call digital_io_init()

@@ -3,8 +3,9 @@
  * \details detailed description
  *
  * \author Theodor Lindquist
+ * \author Soded Alatia
  *
- * \version 0.1
+ * \version 0.2
  * \date Sep 18, 2014
  *
  * \pre requirements

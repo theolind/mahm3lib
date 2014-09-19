@@ -33,5 +33,10 @@ uint8_t dacc_write(uint8_t pin, unit16_t value){
 
 //Check if a channel is enabled
 uint8_t dacc_channel_enabled(uint8_t dacc_channel){
-	//Read from channel status register
+
+	if(*p_DACC_CHSR &(0x1u << DACC_CHANNEL)){
+		return 1;
+	} else {
+		return 0;
+	}
 }

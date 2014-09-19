@@ -21,13 +21,14 @@ int main(void) {
 	uint16_t data;
 
 	data = adc_read_channel(ADC_CHANNEL_0);
-
+	//data = adc_get_latest_value();
 
 	while (1){
 		data = adc_read_channel(ADC_CHANNEL_0);
+		//data = adc_get_latest_value();
 		print_int(data);
 
-		for(int i = 0; i<100000; i++);
+		for(int i = 0; i<10000000; i++);
 	}
     return 0;
 }

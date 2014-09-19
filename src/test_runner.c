@@ -11,11 +11,12 @@
 #include "test_adc.h"
 
 void run_tests(void) {
-
-
 	Unity.TestFile = "test/test_adc.c";
 	UnityBegin();
-	RUN_TEST(test_adc, 10);
+
+	RUN_TEST(test_adc_channel_enabled, 10);
+	RUN_TEST(test_adc_12bit, 20);
+	RUN_TEST(test_adc_10bit, 30);
+
 	UnityEnd();
 }
-

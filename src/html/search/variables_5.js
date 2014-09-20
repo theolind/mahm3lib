@@ -14,5 +14,11 @@ var searchData=
   ['p_5fuart_5frhr',['p_UART_RHR',['../io__uart_8c.html#aae9c8411650abd421a68e1713de7957e',1,'io_uart.c']]],
   ['p_5fuart_5fsr',['p_UART_SR',['../io__uart_8c.html#aa680e72191a3d5117deb50ee5ef347ce',1,'io_uart.c']]],
   ['p_5fuart_5fthr',['p_UART_THR',['../io__uart_8c.html#aff17cb9f3054561b51a1bf630c0b8e14',1,'io_uart.c']]],
-  ['paritytype',['paritytype',['../structuart__options__t.html#ad3fade57f7af5f4aae676ac213da8137',1,'uart_options_t']]]
+  ['paritytype',['paritytype',['../structuart__options__t.html#ad3fade57f7af5f4aae676ac213da8137',1,'uart_options_t']]],
+  ['porta',['porta',['../structpio__init__param.html#a8fc36594e9134c559e90d4486cd1da16',1,'pio_init_param']]],
+  ['portb',['portb',['../structpio__init__param.html#a49a5f6eec0de08695cf62efc7c001305',1,'pio_init_param']]],
+  ['portc',['portc',['../structpio__init__param.html#a8115432d36d375c5ee218deae8696f36',1,'pio_init_param']]],
+  ['portd',['portd',['../structpio__init__param.html#ab1387d999bcdb70ca7ba8859dfb407da',1,'pio_init_param']]],
+  ['porte',['porte',['../structpio__init__param.html#ab0658b2fa3a6113aa40629066a456392',1,'pio_init_param']]],
+  ['portf',['portf',['../structpio__init__param.html#a118c0722630f431e410a4c9c46d27b15',1,'pio_init_param']]]
 ];

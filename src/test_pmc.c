@@ -21,7 +21,7 @@ void test_pmc_setup(){
 
 void test_pmc_tear_down(){
 
-	int8_t status = pmc_status_peripheral_clock(PMC_PERIPHERAL_ADC);
+	uint8_t status = pmc_status_peripheral_clock(PMC_PERIPHERAL_ADC);
 
 	if(status == 1)
 		pmc_stop_peripheral_clock(PMC_PERIPHERAL_ADC);
@@ -33,12 +33,6 @@ void test_pmc_reset(){
 }
 
 
-void test_pmc(void){
-	test_pmc_start_peripheral_clock_when_successful();
-	test_pmc_status_peripheral_clock_when_inactive();
-	test_pmc_status_peripheral_clock_when_active();
-	test_pmc_stop_peripheral_clock_when_successful();
-}
 
 
 void test_pmc_status_peripheral_clock_when_inactive(void){

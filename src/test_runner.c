@@ -16,8 +16,12 @@ void run_tests(void) {
 	Unity.TestFile = "test/test_foobar.c";
 	Unity.TestFile = "test/test_pmc.c";
 	UnityBegin();
-	RUN_TEST(test_foobar, 10);
-	RUN_TEST(test_pmc, 10);
+
+
+	RUN_TEST(test_pmc_start_peripheral_clock_when_successful, 10);
+	RUN_TEST(test_pmc_status_peripheral_clock_when_inactive, 10);
+	RUN_TEST(test_pmc_status_peripheral_clock_when_active, 10);
+	RUN_TEST(test_pmc_stop_peripheral_clock_when_successful, 10);
 	UnityEnd();
 }
 

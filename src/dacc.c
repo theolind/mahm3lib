@@ -1,6 +1,6 @@
 /**
- * @author Andreas Drotth
- * @author Jonathan Bjarnason
+ * \author Andreas Drotth
+ * \author Jonathan Bjarnason
  */
 
 #include "dacc.h"
@@ -21,8 +21,8 @@ uint32_t *const p_PMC_WPSR  = (uint32_t *) 0x400E06E8U;
 
 /**
  * Initiates the DACC
- * @param Settings for DACC mode register
- * @return Return 1 if settings contain illegal values. Otherwise return 0.
+ * @param settings Settings for DACC mode register
+ * @return Return 0 if settings contain illegal values. Otherwise return 1.
  */
 uint8_t dacc_init(const dacc_settings_t *settings){
 
@@ -31,54 +31,61 @@ uint8_t dacc_init(const dacc_settings_t *settings){
 			settings->word_transfer>1||
 			settings->max_speed_mode>1||
 			settings->startup_time<64){
-		return 1;
+		return 0;
 	}
 
 	// Software reset
 	DACC_CR = (0x1u << 0);
 
+	//TODO: Are these really necessary?
 	// Disable write protect for DACC registers
-	DACC_WRMR = 0x44414300;
-	DACC_WRMR = (0x0 << 0);
+	//DACC_WRMR = 0x44414300;
+	//DACC_WRMR = (0x0 << 0);
 
 	// Disable write protect for PMC registers
-	PMC_WPMR = 0x504D4300;
-	PMC_WPMR = (0x0 << 0);
+	//PMC_WPMR = 0x504D4300;
+	//PMC_WPMR = (0x0 << 0);
 
 	// Enable Peripheral clock for DACC
 	PMC_PCER1 = (1 << 6);
 
 	// Trigger mode
-	DACC_MR = (settings->trigger_mode << 0);
+	DACC_MR |= (settings->trigger_mode << 0);
 
 	// Word transfer
-	DACC_MR = (settings->word_transfer << 4);
+	DACC_MR |= (settings->word_transfer << 4);
 
 	// Refresh period
-	DACC_MR = (settings->refresh << 8);
+	DACC_MR |= (settings->refresh << 8);
 
 	// Max speed mode
-	DACC_MR = (settings->max_speed_mode << 21);
+	DACC_MR |= (settings->max_speed_mode << 21);
 
 	// Startup time selection
-	DACC_MR = (settings->startup_time << 24);
+	DACC_MR |= (settings->startup_time << 24);
 
+	// TODO: Are these really necessary as well?
 	// Check for write protection errors
-	if (DACC_WPSR & 0x0u){
-		//return DACC_WPSR & 0xFF00
-		return 2;
-	}
+//	if (DACC_WPSR & 0x0u){
+//		//return DACC_WPSR & 0xFF00
+//		return 2;
+//	}
+//
+//	if (PMC_WPSR & 0x0u){
+//		//return DACC_WPSR & 0xFF00
+//		return 3;
+//	}
 
-	if (PMC_WPSR & 0x0u){
-		//return DACC_WPSR & 0xFF00
-		return 3;
-	}
-
-	return 0;
+	return 1;
 }
 
+/**
+ * Enables a specified DACC channel.
+ * @param dacc_channel The channel to enable.
+ * @return Return 1 if the function executed correctly.
+ */
 uint8_t dacc_enable_channel(uint8_t dacc_channel){
-	//TODO: Check for parameters > 2
+	if (dacc_channel > 1) return 0;
 
 	*p_DACC_CHER = (0x1u << dacc_channel);
 
@@ -88,8 +95,13 @@ uint8_t dacc_enable_channel(uint8_t dacc_channel){
 	else return 0;
 }
 
+/**
+ * Disables a specified DACC channel.
+ * @param dacc_channel The channel to disable.
+ * @return Return 1 if the function executed correctly.
+ */
 uint8_t dacc_disable_channel(uint8_t dacc_channel){
-	//TODO: Check for parameters > 2
+	if (dacc_channel > 1) return 0;
 
 	*p_DACC_CHER = (0x1u << dacc_channel);
 
@@ -99,16 +111,39 @@ uint8_t dacc_disable_channel(uint8_t dacc_channel){
 	else return 0;
 }
 
-uint8_t dacc_write(uint8_t dacc_channel, uint16_t value){
-	//Check status flag, TXRDY
-	while (!(*p_DACC_ISR & 0x1u << 0));
-	//TODO: Write to conversion data register
-	return 1;
-}
-
+/**
+ * Checks if the specified channel is enabled.
+ * @param dacc_channel The channel which is checked for.
+ * @return Return 1 if the function executed correctly.
+ */
 uint8_t dacc_channel_enabled(uint8_t dacc_channel){
+	if (dacc_channel > 1) return 0;
+
 	if (*p_DACC_CHSR & (0x1u << dacc_channel)){
 		return 1;
 	}
 	else return 0;
+}
+
+/**
+ * Converts a 12-bit digital value to corresponding analog
+ * value on a specified channel.
+ * If transfer mode is set to HALF-WORD then only DACC_CHR[15:0]
+ * is used whereby [11:0] make up the actual output data.
+ * If transfer mode is set to WORD then all bits are used whereby
+ * [15:0] is converted first and afterwards the [31:16] bits.
+ * @param dacc_channel The channel to output the value
+ * @param value The value to output.
+ * @return Return 1 if the function executed correctly.
+ */
+uint8_t dacc_write(uint8_t dacc_channel, uint32_t value){
+	//TODO: Fix conversion warnings
+	*p_DACC_MR |= (dacc_channel << 16);
+
+	//Check if converter is ready before sending new data
+	while (!(*p_DACC_ISR & 0x1u << 0));
+
+	*p_DACC_CDR = value;
+
+	return 1;
 }

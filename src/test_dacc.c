@@ -21,10 +21,13 @@ void tearDown(void){
 	
 }
 
-void test_dacc_channel_0(){
+void test_dacc_channel_0_enabled(){
 	TEST_ASSERT_TRUE(dacc_enable_channel_0);
 }
 
-void test_dacc_channel_1(){
+void test_dacc_channel_1_enabled(){
 	TEST_ASSERT_TRUE(dacc_enable_channel_1);	
+}
+
+void test_dacc_chanel_1_disabled(){
 }

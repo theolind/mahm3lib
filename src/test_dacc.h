@@ -7,8 +7,10 @@
  * @date 2014-09-19
  * @pre
  */
+#ifndef TEST_DACC_H_
+#define TEST_DACC_H_
 
-void setUp(void);
-void tearDown(void);
 void test_dacc_channel_0(void);
 void test_dacc_channel_1(void);
+
+#endif

@@ -9,12 +9,20 @@
 #include "test_runner.h"
 
 #include "test_foobar.h"
+#include "test_dacc.h"
 
 void run_tests(void) {
-	// run the foobar test
 	Unity.TestFile = "test/test_foobar.c";
+	Unity.TestFile = "test/test_dacc.c";
 	UnityBegin();
+
+	// Run foobar tests
 	RUN_TEST(test_foobar, 10);
+
+	// Run DACC tests
+	RUN_TEST(test_dacc_channel_0, 20);
+	RUN_TEST(test_dacc_channel_1, 30);
+
 	UnityEnd();
 }
 

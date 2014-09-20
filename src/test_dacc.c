@@ -4,29 +4,30 @@
 
 
 //  TODO:
-//- testa funktionen channel enable två gånger, en för kanal 0 och en för kanal 1
-//- testa funktionen channel disable två gånger, en för kanal 0 och en för kanal 1
-//- testa funktionen init, genom att läsa mode register att dem stämemr överrens med vad som ska ställas in (du får prata med jonathan om det)
-//- testa funktionen channel enabled, genom att själv läsa av registret och kontrollera att både funktionen och testet svarar samma
+//- testa funktionen channel enable tvï¿½ gï¿½nger, en fï¿½r kanal 0 och en fï¿½r kanal 1
+//- testa funktionen channel disable tvï¿½ gï¿½nger, en fï¿½r kanal 0 och en fï¿½r kanal 1
+//- testa funktionen init, genom att lï¿½sa mode register att dem stï¿½memr ï¿½verrens med vad som ska stï¿½llas in (du fï¿½r prata med jonathan om det)
+//- testa funktionen channel enabled, genom att sjï¿½lv lï¿½sa av registret och kontrollera att bï¿½de funktionen och testet svarar samma
 
-#include "dacc_test.h"
-#include "unity.c"
 #include "dacc.h"
+#include "test_dacc.h"
+#include "unity.h"
 
-void setUp(void){
-	
-}
-
-void tearDown(void){
-	
-}
-
+<<<<<<< HEAD
 void test_dacc_channel_0_enabled(){
 	TEST_ASSERT_TRUE(dacc_enable_channel_0);
 }
 
 void test_dacc_channel_1_enabled(){
 	TEST_ASSERT_TRUE(dacc_enable_channel_1);	
+=======
+void test_dacc_channel_0(){
+	TEST_ASSERT_TRUE(dacc_enable_channel(0));
+}
+
+void test_dacc_channel_1(){
+	TEST_ASSERT_TRUE(dacc_enable_channel(1));
+>>>>>>> origin/dacc
 }
 
 void test_dacc_chanel_1_disabled(){

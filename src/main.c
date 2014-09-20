@@ -1,5 +1,6 @@
 #include "unity_hw_setup.h"
 #include "test_runner.h"
+#include "dacc.h"
 
 int main(void) {
 	// basic initialization of hardware and UART communication.

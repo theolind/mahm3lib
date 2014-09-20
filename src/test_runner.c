@@ -17,11 +17,11 @@ void run_tests(void) {
 	UnityBegin();
 
 	// Run foobar tests
-	RUN_TEST(test_foobar, 10);
+	RUN_TEST(test_foobar, 0);
 
 	// Run DACC tests
-	RUN_TEST(test_dacc_channel_0, 20);
-	RUN_TEST(test_dacc_channel_1, 30);
+	RUN_TEST(test_dacc_channel_0_enable, 0);
+	RUN_TEST(test_dacc_channel_1_enable, 0);
 
 	UnityEnd();
 }

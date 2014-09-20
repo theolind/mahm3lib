@@ -30,43 +30,44 @@
 #define PMC_WPMR	(*p_PMC_WPMR)	/// Write protect mode Register
 #define PMC_WPSR    (*p_PMC_WPSR)	/// Write protect status register
 
+// TODO: Is this used somwhere?
 //#define DACC_PID	(38)	/// DACC Peripheral ID
 
-typedef struct dacc_settings_t {
+typedef struct dacc_settings {
 	/**
 	 * Trigger Mode
 	 * 0: External trigger mode disabled, DACC in free running mode
 	 * 1: External trigger mode enabled
 	 */
-	uint32_t trigger_mode;
+	uint8_t trigger_mode;
 
 	/**
 	 * Word transfer
 	 * 0: Half-Word transfer
 	 * 1: Word transfer
 	 */
-	uint32_t word_transfer;
+	uint8_t word_transfer;
 
 	/** Refresh Period = 1024*refresh/DACC Clock */
-	uint32_t refresh;
+	uint8_t refresh;
 
 	/**
 	 * Max speed mode
 	 * 0: Normal mode
 	 * 1: Max speed mode enabled
 	 */
-	uint32_t max_speed_mode;
+	uint8_t max_speed_mode;
 
 	/** Startup Time Selection */
-	uint32_t startup_time;
+	uint8_t startup_time;
 
-} dacc_settings_t;
+} dacc_settings;
 
 /**
  * Initiates the DACC
  * @param dacc_settings_t Settings for DACC mode register.
  */
-uint8_t dacc_init(const dacc_settings_t *);
+uint8_t dacc_init(dacc_settings *settings);
 uint8_t dacc_enable_channel(uint8_t dacc_channel);
 uint8_t dacc_disable_channel(uint8_t dacc_channel);
 uint8_t dacc_channel_enabled(uint8_t dacc_channel);

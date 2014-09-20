@@ -7,7 +7,6 @@
 
 var indexSectionsWithContent =
 {
-<<<<<<< HEAD
   0: "_abcefimnprstu",
   1: "_au",
   2: "aimtu",
@@ -17,17 +16,6 @@ var indexSectionsWithContent =
   6: "u",
   7: "u",
   8: "aceprtu",
-=======
-  0: "_abcefghilmnoprstuy",
-  1: "_ptu",
-  2: "gimptu",
-  3: "cmprstu",
-  4: "abcfnpstu",
-  5: "_pu",
-  6: "pu",
-  7: "ou",
-  8: "cefhlnprstuy",
->>>>>>> origin/integration
   9: "b"
 };
 

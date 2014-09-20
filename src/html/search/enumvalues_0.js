@@ -1,6 +1,5 @@
 var searchData=
 [
-<<<<<<< HEAD
   ['unity_5fdisplay_5fstyle_5fhex16',['UNITY_DISPLAY_STYLE_HEX16',['../unity__internals_8h.html#a828517387e75bc0b3ee6a99d2e0722a4ad34011b6a340663cf55a595f87490462',1,'unity_internals.h']]],
   ['unity_5fdisplay_5fstyle_5fhex32',['UNITY_DISPLAY_STYLE_HEX32',['../unity__internals_8h.html#a828517387e75bc0b3ee6a99d2e0722a4a3d229459b9309f9c527f3f1cb5ac1915',1,'unity_internals.h']]],
   ['unity_5fdisplay_5fstyle_5fhex8',['UNITY_DISPLAY_STYLE_HEX8',['../unity__internals_8h.html#a828517387e75bc0b3ee6a99d2e0722a4af3eb9042cc384cbcba5847d20449c8fa',1,'unity_internals.h']]],
@@ -13,8 +12,4 @@ var searchData=
   ['unity_5fdisplay_5fstyle_5fuint32',['UNITY_DISPLAY_STYLE_UINT32',['../unity__internals_8h.html#a828517387e75bc0b3ee6a99d2e0722a4a6658cd9d7d136ee81a34600b7385567e',1,'unity_internals.h']]],
   ['unity_5fdisplay_5fstyle_5fuint8',['UNITY_DISPLAY_STYLE_UINT8',['../unity__internals_8h.html#a828517387e75bc0b3ee6a99d2e0722a4a6ea09dbdaa4fe235b7422c850a4b14f8',1,'unity_internals.h']]],
   ['unity_5fdisplay_5fstyle_5funknown',['UNITY_DISPLAY_STYLE_UNKNOWN',['../unity__internals_8h.html#a828517387e75bc0b3ee6a99d2e0722a4a8623f549d1b8e9da499f091eae8f86da',1,'unity_internals.h']]]
-=======
-  ['off',['OFF',['../pio_8h.html#ab55bcabb2b73bde1a759aff5e53c5f22aac132f2982b98bcaa3445e535a03ff75',1,'pio.h']]],
-  ['on',['ON',['../pio_8h.html#ab55bcabb2b73bde1a759aff5e53c5f22a977d478dacaae531f95695750d1e9d03',1,'pio.h']]]
->>>>>>> origin/integration
 ];

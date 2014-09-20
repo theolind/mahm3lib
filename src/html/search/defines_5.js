@@ -1,6 +1,5 @@
 var searchData=
 [
-<<<<<<< HEAD
   ['test_5fabort',['TEST_ABORT',['../unity_8h.html#a35ff53d9ad3c4ec9d611fdf04319a23b',1,'unity.h']]],
   ['test_5fassert',['TEST_ASSERT',['../unity_8h.html#ae0a72bc174ac97e90c4a711e5e52d540',1,'unity.h']]],
   ['test_5fassert_5fbit_5fhigh',['TEST_ASSERT_BIT_HIGH',['../unity_8h.html#ab07290e7bac80e36e4f169f50da59632',1,'unity.h']]],
@@ -146,7 +145,4 @@ var searchData=
   ['test_5fline_5fnum',['TEST_LINE_NUM',['../unity_8h.html#aa9c480092f985483d29fe0bc26b3a650',1,'unity.h']]],
   ['test_5fonly',['TEST_ONLY',['../unity_8h.html#a4bcc44a2d1e871b1a26d9e5e907f1d7e',1,'unity.h']]],
   ['test_5fprotect',['TEST_PROTECT',['../unity_8h.html#a61d21043921ebc1c2ee49543fc100f9a',1,'unity.h']]]
-=======
-  ['no',['NO',['../global__definitions_8h.html#a996bde01ecac342918f0a2c4e7ce7bd5',1,'global_definitions.h']]]
->>>>>>> origin/integration
 ];

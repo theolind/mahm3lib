@@ -1,6 +1,5 @@
 var searchData=
 [
-<<<<<<< HEAD
   ['uart_5fbrgr',['UART_BRGR',['../io__uart_8h.html#a3e2673da4a056a3a6c5a4cc5eda70224',1,'io_uart.h']]],
   ['uart_5fbrgr_5fcd',['UART_BRGR_CD',['../io__uart_8h.html#ac9dea7b4cd4fbe4efc6c09f21aff1b9d',1,'io_uart.h']]],
   ['uart_5fbrgr_5fcd_5fmsk',['UART_BRGR_CD_Msk',['../io__uart_8h.html#a73b3dd57455736468a4feb1ac356ccf5',1,'io_uart.h']]],
@@ -184,35 +183,4 @@ var searchData=
   ['unity_5ftest_5fassert_5fuint_5fwithin',['UNITY_TEST_ASSERT_UINT_WITHIN',['../unity__internals_8h.html#a59fb8212b029495f536d29d2a37d5d1f',1,'unity_internals.h']]],
   ['unity_5ftest_5ffail',['UNITY_TEST_FAIL',['../unity__internals_8h.html#a3d31f0df7b97fe0bed97d15583042aa4',1,'unity_internals.h']]],
   ['unity_5ftest_5fignore',['UNITY_TEST_IGNORE',['../unity__internals_8h.html#acfab15b7b78c28a3891f2d73675cbd11',1,'unity_internals.h']]]
-=======
-  ['pio_5fcodr',['PIO_CODR',['../pio_8h.html#a08afe74b98d59d6e30a205282746e95e',1,'pio.h']]],
-  ['pio_5fodr',['PIO_ODR',['../pio_8h.html#afc9c83f7a53520d6f0a4693ed1a71290',1,'pio.h']]],
-  ['pio_5fodsr',['PIO_ODSR',['../pio_8h.html#aabe5107a622c09e8a890796c31f0eadb',1,'pio.h']]],
-  ['pio_5foer',['PIO_OER',['../pio_8h.html#a626bde48733b96df120da1492cc7f657',1,'pio.h']]],
-  ['pio_5fosr',['PIO_OSR',['../pio_8h.html#af8bdb0ba10c8c78d1285766910b7a450',1,'pio.h']]],
-  ['pio_5fpdr',['PIO_PDR',['../pio_8h.html#a52661d47da252fca8ab4b4d74d81b2e1',1,'pio.h']]],
-  ['pio_5fpdsr',['PIO_PDSR',['../pio_8h.html#a2c967f26a206cd809e6fe94cd9db48f9',1,'pio.h']]],
-  ['pio_5fper',['PIO_PER',['../pio_8h.html#a6f1c3a5948df39dd5472e3f5aca32fea',1,'pio.h']]],
-  ['pio_5fporta',['PIO_PORTA',['../pio_8h.html#a7a7684a34ca6604e31e77778751955a9',1,'pio.h']]],
-  ['pio_5fportb',['PIO_PORTB',['../pio_8h.html#a255fdda95f8ed80f62e8f111aa5a651d',1,'pio.h']]],
-  ['pio_5fportc',['PIO_PORTC',['../pio_8h.html#a2e02855ce534995130dc107f8ae791a3',1,'pio.h']]],
-  ['pio_5fportd',['PIO_PORTD',['../pio_8h.html#af9187fa01bb2b64498b495b9277e6ad7',1,'pio.h']]],
-  ['pio_5fporte',['PIO_PORTE',['../pio_8h.html#a74321406d1e75bfe2bc854b3c6482c50',1,'pio.h']]],
-  ['pio_5fportf',['PIO_PORTF',['../pio_8h.html#a047f3988993c8cdb612ce29271b13935',1,'pio.h']]],
-  ['pio_5fpsr',['PIO_PSR',['../pio_8h.html#aad72e429751874c88afee54ed4094f4c',1,'pio.h']]],
-  ['pio_5fpudr',['PIO_PUDR',['../pio_8h.html#ad7b1eaf86720e6d1276aa61fda88ada8',1,'pio.h']]],
-  ['pio_5fpuer',['PIO_PUER',['../pio_8h.html#a72c92c6a4967b7156fdefe7c3dd81710',1,'pio.h']]],
-  ['pio_5fpusr',['PIO_PUSR',['../pio_8h.html#a424b9ccca3a5cfa6345687ccaf96fe02',1,'pio.h']]],
-  ['pio_5fsodr',['PIO_SODR',['../pio_8h.html#adef961dcf226c9ec588d2c7fb39ce8f6',1,'pio.h']]],
-  ['pmc_5fperipheral_5fadc',['PMC_PERIPHERAL_ADC',['../pmc_8h.html#a59b91d33fe52d9ed9fb4c5d1caebf33f',1,'pmc.h']]],
-  ['pmc_5fperipheral_5fdacc',['PMC_PERIPHERAL_DACC',['../pmc_8h.html#ab1b96464554ff739b9ddd60756302e73',1,'pmc.h']]],
-  ['pmc_5fperipheral_5fpioa',['PMC_PERIPHERAL_PIOA',['../pmc_8h.html#a516f6398a3f7041ee09176ef5ff1b911',1,'pmc.h']]],
-  ['pmc_5fperipheral_5fpiob',['PMC_PERIPHERAL_PIOB',['../pmc_8h.html#acf8caffd34df4ede9a0caf65d4032411',1,'pmc.h']]],
-  ['pmc_5fperipheral_5fpioc',['PMC_PERIPHERAL_PIOC',['../pmc_8h.html#a97716e76f512acc63b8ebfa21d092da1',1,'pmc.h']]],
-  ['pmc_5fperipheral_5fpiod',['PMC_PERIPHERAL_PIOD',['../pmc_8h.html#aef55a9fc4015adefa0d3758785286a8a',1,'pmc.h']]],
-  ['pmc_5fperipheral_5fpioe',['PMC_PERIPHERAL_PIOE',['../pmc_8h.html#ae7245d42b69057ef53d1a3dab314eb77',1,'pmc.h']]],
-  ['pmc_5fperipheral_5fpiof',['PMC_PERIPHERAL_PIOF',['../pmc_8h.html#a4d58358f81be4728d17ea74754b4e526',1,'pmc.h']]],
-  ['pmc_5fperipheral_5fpwm',['PMC_PERIPHERAL_PWM',['../pmc_8h.html#ab2ed1726e39d35cbc0b112ecb62340bc',1,'pmc.h']]],
-  ['pmc_5fsr',['PMC_SR',['../unity__hw__setup_8h.html#aa809adcd1690770e60a2395914c18887',1,'unity_hw_setup.h']]]
->>>>>>> origin/integration
 ];

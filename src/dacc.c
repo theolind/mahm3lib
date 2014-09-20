@@ -24,7 +24,7 @@ uint32_t *const p_PMC_WPSR  = (uint32_t *) 0x400E06E8U;
  * @param settings Settings for DACC mode register
  * @return Return 1 if settings contain illegal values.
  * Return 2 if DACC encounters write protection errors.
- * Return 3 if PMC encounters write protection errors.
+ * Return 3 if PMC encounters write protection 	errors.
  * Otherwise return 0.
  */
 uint8_t dacc_init(const dacc_settings_t *settings){
@@ -73,7 +73,7 @@ uint8_t dacc_init(const dacc_settings_t *settings){
 		return 2;
 		/*
 		 * For future improvement:
-		 * Alternatively return the address were the write protection error
+		 * Alternatively return the address where the write protection error
 		 * occurred
 		 *
 		 * return (DACC_WPSR & 0xFF00 >> 8);
@@ -84,7 +84,7 @@ uint8_t dacc_init(const dacc_settings_t *settings){
 		return 3;
 		/*
 		 * For future improvement:
-		 * Alternatively return the address were the write protection error
+		 * Alternatively return the address where the write protection error
 		 * occurred
 		 *
 		 * return (PMC_WPSR & 0xFF00 >> 8);

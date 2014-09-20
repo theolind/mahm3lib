@@ -49,4 +49,3 @@ uint8_t adc_enable_channel(char ADC_CHANNEL);
 uint8_t adc_disable_channel(char ADC_CHANNEL);
 uint8_t adc_get_channel_status(char ADC_CHANNEL);
 uint16_t adc_read_channel(char ADC_CHANNEL);
-uint16_t adc_get_latest_value();

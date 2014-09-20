@@ -14,14 +14,16 @@ int main(void) {
 
 	adc_set_resolution(12);
 
-	//run_tests();
+	run_tests();
 
+	// Used to read data from ADC
+	/*
 	adc_enable_channel(ADC_CHANNEL_0);
 
 	uint16_t data;
 
 	data = adc_read_channel(ADC_CHANNEL_0);
-	//data = adc_get_latest_value();
+
 
 	while (1){
 		data = adc_read_channel(ADC_CHANNEL_0);
@@ -30,6 +32,7 @@ int main(void) {
 
 		for(int i = 0; i<10000000; i++);
 	}
+	*/
     return 0;
 }
 

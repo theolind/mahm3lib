@@ -21,8 +21,11 @@ uint32_t *const p_PMC_WPSR  = (uint32_t *) 0x400E06E8U;
 
 /**
  * Initiates the DACC
- * @param Settings for DACC mode register
- * @return Return 1 if settings contain illegal values. Otherwise return 0.
+ * @param settings Settings for DACC mode register
+ * @return Return 1 if settings contain illegal values.
+ * Return 2 if DACC encounters write protection errors.
+ * Return 3 if PMC encounters write protection errors.
+ * Otherwise return 0.
  */
 uint8_t dacc_init(const dacc_settings_t *settings){
 
@@ -30,7 +33,7 @@ uint8_t dacc_init(const dacc_settings_t *settings){
 	if(settings->trigger_mode>1||
 			settings->word_transfer>1||
 			settings->max_speed_mode>1||
-			settings->startup_time<64){
+			settings->startup_time>64){
 		return 1;
 	}
 
@@ -55,6 +58,7 @@ uint8_t dacc_init(const dacc_settings_t *settings){
 	DACC_MR = (settings->word_transfer << 4);
 
 	// Refresh period
+	/* Not to sure if this will be assigned the right position. */
 	DACC_MR = (settings->refresh << 8);
 
 	// Max speed mode
@@ -65,13 +69,25 @@ uint8_t dacc_init(const dacc_settings_t *settings){
 
 	// Check for write protection errors
 	if (DACC_WPSR & 0x0u){
-		//return DACC_WPSR & 0xFF00
 		return 2;
+		/*
+		 * For future improvement:
+		 * Alternatively return the address were the write protection error
+		 * occurred
+		 *
+		 * return (DACC_WPSR & 0xFF00 >> 8);
+		 */
 	}
 
 	if (PMC_WPSR & 0x0u){
-		//return DACC_WPSR & 0xFF00
 		return 3;
+		/*
+		 * For future improvement:
+		 * Alternatively return the address were the write protection error
+		 * occurred
+		 *
+		 * return (PMC_WPSR & 0xFF00 >> 8);
+		 */
 	}
 
 	return 0;

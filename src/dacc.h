@@ -63,8 +63,8 @@ typedef struct dacc_settings_t {
 } dacc_settings_t;
 
 /**
- * Initialize the  settings necessary for the DACC.
- * @param dacc_settings_t Settings for the DACC initialization.
+ * Initiates the DACC
+ * @param dacc_settings_t Settings for DACC mode register.
  */
 uint8_t dacc_init(const dacc_settings_t *);
 

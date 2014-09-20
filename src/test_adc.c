@@ -9,16 +9,7 @@
 #include "test_adc.h"
 #include "adc.h"
 
-void setUp(void) {
-}
 
-void tearDown(void) {
-}
-
-void resetTest(void) {
-	tearDown();
-	setUp();
-}
 
 
 /*

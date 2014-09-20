@@ -1,5 +1,6 @@
 var searchData=
 [
+<<<<<<< HEAD
   ['adc_5fcdr0',['ADC_CDR0',['../adc_8h.html#a9c8203eff9594fbbd303c5e9a1e6160f',1,'adc.h']]],
   ['adc_5fchannel_5f0',['ADC_CHANNEL_0',['../adc_8h.html#a3c5075aee5af4eae02f1a72d6216199c',1,'adc.h']]],
   ['adc_5fchannel_5f1',['ADC_CHANNEL_1',['../adc_8h.html#aeb119201733a871c94971c51843ffaac',1,'adc.h']]],
@@ -24,4 +25,9 @@ var searchData=
   ['adc_5fmr',['ADC_MR',['../adc_8h.html#a875c9590c133ab1ad39e229e84a65329',1,'adc.h']]],
   ['adc_5fptcr',['ADC_PTCR',['../adc_8h.html#a7a96f96a94b8ecfbb3581ac5b9c4aa63',1,'adc.h']]],
   ['adc_5fwpmr',['ADC_WPMR',['../adc_8h.html#afaa4ad45a259a3a98b434e4113808da3',1,'adc.h']]]
+=======
+  ['ckgr_5fmor_5fmoscxtst',['CKGR_MOR_MOSCXTST',['../unity__hw__setup_8h.html#a6ff4c5a00cbdfc5bad9f7f2a482e2ef2',1,'unity_hw_setup.h']]],
+  ['ckgr_5fmor_5fmoscxtst_5fmsk',['CKGR_MOR_MOSCXTST_Msk',['../unity__hw__setup_8h.html#a5ff66bbd6a365c48d29c17698727d42b',1,'unity_hw_setup.h']]],
+  ['ckgr_5fmor_5fmoscxtst_5fpos',['CKGR_MOR_MOSCXTST_Pos',['../unity__hw__setup_8h.html#af210d79c682c0e27d838dfb5118a5308',1,'unity_hw_setup.h']]]
+>>>>>>> origin/integration
 ];

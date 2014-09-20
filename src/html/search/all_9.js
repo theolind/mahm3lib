@@ -1,5 +1,6 @@
 var searchData=
 [
+<<<<<<< HEAD
   ['p_5fadc_5fcdr0',['p_ADC_CDR0',['../adc_8c.html#af5dd487f8b7ebfa8c4ca0d489c3422df',1,'adc.c']]],
   ['p_5fadc_5fchdr',['p_ADC_CHDR',['../adc_8c.html#a39e4ad9a99b98878f6be1a5530044930',1,'adc.c']]],
   ['p_5fadc_5fcher',['p_ADC_CHER',['../adc_8c.html#ac4778a1c09cf7497f428ca77e44186fe',1,'adc.c']]],
@@ -26,4 +27,7 @@ var searchData=
   ['pmc_5fsr',['PMC_SR',['../unity__hw__setup_8h.html#aa809adcd1690770e60a2395914c18887',1,'unity_hw_setup.h']]],
   ['pmc_5fswitch_5fmclk_5fto_5fpllack',['pmc_switch_mclk_to_pllack',['../unity__hw__setup_8c.html#a6d805074f94acfc70c3b906f27d50711',1,'unity_hw_setup.c']]],
   ['print_5fint',['print_int',['../main_8c.html#a97fe5dde82fb3ea83438c2346c00ad3b',1,'main.c']]]
+=======
+  ['low',['LOW',['../global__definitions_8h.html#ab811d8c6ff3a505312d3276590444289',1,'global_definitions.h']]]
+>>>>>>> origin/integration
 ];

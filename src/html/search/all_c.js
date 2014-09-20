@@ -1,5 +1,6 @@
 var searchData=
 [
+<<<<<<< HEAD
   ['teardown',['tearDown',['../test__adc_8c.html#a9909011e5fea0c018842eec4d93d0662',1,'tearDown(void):&#160;test_adc.c'],['../test__adc_8h.html#a9909011e5fea0c018842eec4d93d0662',1,'tearDown(void):&#160;test_adc.c'],['../unity_8c.html#a9909011e5fea0c018842eec4d93d0662',1,'tearDown(void):&#160;test_adc.c']]],
   ['test_5fabort',['TEST_ABORT',['../unity_8h.html#a35ff53d9ad3c4ec9d611fdf04319a23b',1,'unity.h']]],
   ['test_5fadc',['test_adc',['../test__adc_8c.html#ab949a474447ee5fbc70c1c19c342667c',1,'test_adc(void):&#160;test_adc.c'],['../test__adc_8h.html#ab949a474447ee5fbc70c1c19c342667c',1,'test_adc(void):&#160;test_adc.c']]],
@@ -154,4 +155,8 @@ var searchData=
   ['testfailures',['TestFailures',['../struct___unity.html#a88dfa4173b123b8d6d445c27a215aeca',1,'_Unity']]],
   ['testfile',['TestFile',['../struct___unity.html#a9ee7e59ab860bbcc01b585f85c724298',1,'_Unity']]],
   ['testignores',['TestIgnores',['../struct___unity.html#a3e4d779b528b5bd2103c719b278c3fb0',1,'_Unity']]]
+=======
+  ['off',['OFF',['../pio_8h.html#ab55bcabb2b73bde1a759aff5e53c5f22aac132f2982b98bcaa3445e535a03ff75',1,'pio.h']]],
+  ['on',['ON',['../pio_8h.html#ab55bcabb2b73bde1a759aff5e53c5f22a977d478dacaae531f95695750d1e9d03',1,'pio.h']]]
+>>>>>>> origin/integration
 ];

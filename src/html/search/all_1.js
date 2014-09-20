@@ -1,5 +1,6 @@
 var searchData=
 [
+<<<<<<< HEAD
   ['abortframe',['AbortFrame',['../struct___unity.html#a68b7afb8472d0008f072d8cf8be1fd4d',1,'_Unity']]],
   ['adc',['adc',['../classadc.html',1,'']]],
   ['adc_2ec',['adc.c',['../adc_8c.html',1,'']]],
@@ -37,4 +38,7 @@ var searchData=
   ['adc_5fstart',['adc_start',['../adc_8c.html#ad73e4f47af7a1d81e5ac0b0a3e850a29',1,'adc_start():&#160;adc.c'],['../adc_8h.html#ad73e4f47af7a1d81e5ac0b0a3e850a29',1,'adc_start():&#160;adc.c']]],
   ['adc_5fstop',['adc_stop',['../adc_8c.html#a99fc925f8682b0bff714147d3c8471dc',1,'adc_stop():&#160;adc.c'],['../adc_8h.html#a99fc925f8682b0bff714147d3c8471dc',1,'adc_stop():&#160;adc.c']]],
   ['adc_5fwpmr',['ADC_WPMR',['../adc_8h.html#afaa4ad45a259a3a98b434e4113808da3',1,'adc.h']]]
+=======
+  ['abortframe',['AbortFrame',['../struct___unity.html#a68b7afb8472d0008f072d8cf8be1fd4d',1,'_Unity']]]
+>>>>>>> origin/integration
 ];

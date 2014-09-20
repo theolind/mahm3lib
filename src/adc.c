@@ -162,3 +162,16 @@ uint16_t adc_read_channel(char ADC_CHANNEL){
 
 	return data;
 }
+
+/***
+ * Read the last ADC result data.
+ * @return ADC latest value.
+ */
+uint16_t adc_get_latest_value(){
+
+	adc_start();
+	//while((*p_ADC_ISR & 0x1u << 24) == 0);
+	while(!(*p_ADC_ISR & 0x01000000));
+	uint16_t data = *p_ADC_LCDR;
+	return data;
+}

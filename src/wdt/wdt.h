@@ -1,6 +1,5 @@
 /**
 * @file wdt.h
-*
 * @brief Watchdog Timer
 * @details With the Watchdog API you can setup the Watchdog Timer.<br>
 * @details Important! The API is currently very limited. There's only a

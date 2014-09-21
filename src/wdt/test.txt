@@ -1,6 +1,6 @@
----- Manual tests for the Watchdog API ----
+------ Manual tests for the Watchdog API ------
 
----- void wdt_disable(void)
+--- void wdt_disable(void)
 -Description:
 The Watchdog Timer API is currently very limited. There's only a function for disabling the Watchdog timer, which must be done during system initialization. Otherwise the system will restart after 16 seconds. This is described in the datasheet:
 	"The Watchdog Timer can be used to prevent system lock-up if the software becomes trapped in	a deadlock.

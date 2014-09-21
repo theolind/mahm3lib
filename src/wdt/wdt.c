@@ -1,6 +1,5 @@
 /*
  * wdt.c
- *
  * API for the Watchdog Timer.
  *
  * Author: Mathias Beckius

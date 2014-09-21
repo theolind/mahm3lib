@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['charlength',['charlength',['../structuart__options__t.html#addd38e87d5dbf092c320c027ec94816f',1,'uart_options_t']]]
+  ['baudrate',['baudrate',['../structuart__options__t.html#af1331e929d8651ee0add871f01dfa757',1,'uart_options_t']]],
+  ['bug_20list',['Bug List',['../bug.html',1,'']]]
 ];

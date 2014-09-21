@@ -7,11 +7,16 @@
 
 var indexSectionsWithContent =
 {
-  0: "_bcpsu",
-  1: "_pu",
-  2: "p",
-  3: "p",
-  4: "bcps"
+  0: "_abcefghilmnoprstuy",
+  1: "_ptu",
+  2: "gimptu",
+  3: "mprstu",
+  4: "abcnpstu",
+  5: "_pu",
+  6: "pu",
+  7: "ou",
+  8: "cefhlnprstuy",
+  9: "b"
 };
 
 var indexSectionNames =
@@ -20,7 +25,12 @@ var indexSectionNames =
   1: "classes",
   2: "files",
   3: "functions",
-  4: "variables"
+  4: "variables",
+  5: "typedefs",
+  6: "enums",
+  7: "enumvalues",
+  8: "defines",
+  9: "pages"
 };
 
 function convertToId(search)

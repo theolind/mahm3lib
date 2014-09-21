@@ -48,4 +48,8 @@ documentation/
 .css
 .js
 .tex
+<<<<<<< HEAD
 .sty
+=======
+.sty
+>>>>>>> integration

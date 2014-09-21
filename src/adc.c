@@ -129,13 +129,13 @@ uint8_t adc_get_channel_status(uint8_t ADC_CHANNEL) {
  * @param ADC_CHANNEL The channel that is to be read from.
  * @return ADC value of the specific channel.
  */
-uint16_t adc_read_channel(uint8_t ADC_CHANNEL) {
+uint32_t adc_read_channel(uint32_t ADC_CHANNEL) {
 
 	ADC_CR = (0x1u << 1);
 
 	while(!(ADC_ISR & 0x01000000));
 
-	uint16_t data = (uint16_t)(ADC_CDR);
+	uint32_t data = (char*)(ADC_CDR + ADC_CHANNEL);
 
 	ADC_CR = (0x1u << 1);
 

@@ -45,4 +45,4 @@ uint8_t adc_set_resolution(uint8_t resolution);
 uint8_t adc_enable_channel(uint8_t ADC_CHANNEL);
 uint8_t adc_disable_channel(uint8_t ADC_CHANNEL);
 uint8_t adc_get_channel_status(uint8_t ADC_CHANNEL);
-uint16_t adc_read_channel(uint8_t ADC_CHANNEL);
+uint32_t adc_read_channel(uint32_t ADC_CHANNEL);

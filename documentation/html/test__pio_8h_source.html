@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.8"/>
-<title>mahm3lib: src/test_pio.h Source File</title>
+<title>ARM_Cortex-M3_API: src/test_pio.h Source File</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -22,7 +22,8 @@
  <tbody>
  <tr style="height: 56px;">
   <td style="padding-left: 0.5em;">
-   <div id="projectname">mahm3lib
+   <div id="projectname">ARM_Cortex-M3_API
+   &#160;<span id="projectnumber">1.0</span>
    </div>
   </td>
  </tr>
@@ -37,6 +38,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div id="navrow1" class="tabs">
     <ul class="tablist">
       <li><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="pages.html"><span>Related&#160;Pages</span></a></li>
       <li><a href="annotated.html"><span>Data&#160;Structures</span></a></li>
       <li class="current"><a href="files.html"><span>Files</span></a></li>
       <li>
@@ -68,7 +70,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
      onmouseover="return searchBox.OnSearchSelectShow()"
      onmouseout="return searchBox.OnSearchSelectHide()"
      onkeydown="return searchBox.OnSearchSelectKey(event)">
-<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a></div>
+<a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(0)"><span class="SelectionMark">&#160;</span>All</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(1)"><span class="SelectionMark">&#160;</span>Data Structures</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(2)"><span class="SelectionMark">&#160;</span>Files</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(3)"><span class="SelectionMark">&#160;</span>Functions</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(4)"><span class="SelectionMark">&#160;</span>Variables</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(5)"><span class="SelectionMark">&#160;</span>Typedefs</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(6)"><span class="SelectionMark">&#160;</span>Enumerations</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(7)"><span class="SelectionMark">&#160;</span>Enumerator</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(8)"><span class="SelectionMark">&#160;</span>Macros</a><a class="SelectItem" href="javascript:void(0)" onclick="searchBox.OnSelectItem(9)"><span class="SelectionMark">&#160;</span>Pages</a></div>
 
 <!-- iframe showing the search results (closed by default) -->
 <div id="MSearchResultsWindow">
@@ -87,25 +89,26 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="title">test_pio.h</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
+<a href="test__pio_8h.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;</div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#ifndef TEST_PIO_H_</span></div>
 <div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#define TEST_PIO_H_</span></div>
 <div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;stdint.h&gt;</span></div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keywordtype">void</span> pio_setUp();</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keywordtype">void</span> pio_tearDown();</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keywordtype">void</span> pio_resetTest();</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;uint8_t test_pio_pullup();  <span class="comment">//testing pio_conf_*</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;uint8_t test_pio_output();  <span class="comment">//testing pio_conf_*</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;uint8_t test_pio_read_pin();    <span class="comment">//testing pio_read_*</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;uint8_t test_pio_set_output();  <span class="comment">//testing pio_set_*</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* TEST_PIO_H_ */</span><span class="preprocessor"></span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;uint8_t <a class="code" href="test__pio_8h.html#aa2c3c4604dfc0887892bae3468376a07">test_pio_pullup</a>(<span class="keywordtype">void</span>);  <span class="comment">//testing pio_conf_*</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;uint8_t <a class="code" href="test__pio_8h.html#a7e5c464e326ad53b81da16b1a0461cf9">test_pio_output</a>(<span class="keywordtype">void</span>);  <span class="comment">//testing pio_conf_*</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;uint8_t <a class="code" href="test__pio_8h.html#aad02764a8381022b71de56d10eded187">test_pio_read_pin</a>(<span class="keywordtype">void</span>);    <span class="comment">//testing pio_read_*</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;uint8_t <a class="code" href="test__pio_8h.html#a1df20c8d1f9e4604a20351a19d179719">test_pio_set_output</a>(<span class="keywordtype">void</span>);  <span class="comment">//testing pio_set_*</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* TEST_PIO_H_ */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="test__pio_8h_html_a7e5c464e326ad53b81da16b1a0461cf9"><div class="ttname"><a href="test__pio_8h.html#a7e5c464e326ad53b81da16b1a0461cf9">test_pio_output</a></div><div class="ttdeci">uint8_t test_pio_output(void)</div><div class="ttdef"><b>Definition:</b> test_pio.c:23</div></div>
+<div class="ttc" id="test__pio_8h_html_a1df20c8d1f9e4604a20351a19d179719"><div class="ttname"><a href="test__pio_8h.html#a1df20c8d1f9e4604a20351a19d179719">test_pio_set_output</a></div><div class="ttdeci">uint8_t test_pio_set_output(void)</div><div class="ttdef"><b>Definition:</b> test_pio.c:47</div></div>
+<div class="ttc" id="test__pio_8h_html_aad02764a8381022b71de56d10eded187"><div class="ttname"><a href="test__pio_8h.html#aad02764a8381022b71de56d10eded187">test_pio_read_pin</a></div><div class="ttdeci">uint8_t test_pio_read_pin(void)</div><div class="ttdef"><b>Definition:</b> test_pio.c:35</div></div>
+<div class="ttc" id="test__pio_8h_html_aa2c3c4604dfc0887892bae3468376a07"><div class="ttname"><a href="test__pio_8h.html#aa2c3c4604dfc0887892bae3468376a07">test_pio_pullup</a></div><div class="ttdeci">uint8_t test_pio_pullup(void)</div><div class="ttdoc">brief description </div><div class="ttdef"><b>Definition:</b> test_pio.c:11</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Thu Sep 18 2014 16:17:21 for mahm3lib by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Sep 21 2014 20:49:37 for ARM_Cortex-M3_API by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.8
 </small></address>

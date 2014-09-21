@@ -135,7 +135,7 @@ uint32_t adc_read_channel(uint32_t ADC_CHANNEL) {
 
 	while(!(ADC_ISR & 0x01000000));
 
-	uint32_t data = (char*)(ADC_CDR + ADC_CHANNEL);
+	uint32_t data = *(p_ADC_CDR + ADC_CHANNEL);
 
 	ADC_CR = (0x1u << 1);
 

@@ -28,10 +28,10 @@ int main(void) {
 // used to test ADC
 void read_adc(void){
 	while (1){
-	      adc_enable_channel(ADC_CHANNEL_0);
+	      adc_enable_channel(ADC_CHANNEL_1);
 
 	      uint16_t data;
-	      data = adc_read_channel(ADC_CHANNEL_0);
+	      data = adc_read_channel(ADC_CHANNEL_1);
 	      print_int(data);
 	      for(int i = 0; i<10000000; i++);
   	}

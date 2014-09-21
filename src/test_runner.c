@@ -9,7 +9,7 @@
 #include "test_runner.h"
 
 
-
+#include "test_foobar.h"
 #include "test_pmc.h"
 #include "test_pio.h"
 #include "test_adc.h"

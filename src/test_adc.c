@@ -24,6 +24,8 @@ void test_adc_channel_enabled(void) {
  * Test 12 bit conversion with ADC channel 0
  */
 void test_adc_12bit(void) {
+	pmc_start_peripheral_clock(PMC_PERIPHERAL_ADC);
+
 	// Chosen channel to test
 	uint8_t channel = ADC_CHANNEL_0;
 
@@ -39,6 +41,9 @@ void test_adc_12bit(void) {
  * Test 10 bit conversion with ADC channel 0
  */
 void test_adc_10bit(void) {
+
+	pmc_start_peripheral_clock(PMC_PERIPHERAL_ADC);
+
 	// Chosen channel to test
 	uint8_t channel = ADC_CHANNEL_0;
 

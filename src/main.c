@@ -1,30 +1,28 @@
 #include <stdio.h>
-
+#include <inttypes.h>
 #include "unity_hw_setup.h"
 #include "unity.h"
 #include "test_runner.h"
 #include "adc.h"
+
 
 int main(void) {
 	// basic initialization of hardware and UART communication.
 	unity_hw_setup();
 
 	// Needed for running tests?
-	adc_init(2);
+	adc_init();
 
 	adc_set_resolution(12);
 
 	//run_tests();
 
-	adc_enable_channel(ADC_CHANNEL_0);
+	adc_enable_channel(ADC_CHANNEL_2);
 
 	uint16_t data;
 
-	data = adc_read_channel(ADC_CHANNEL_0);
-	//data = adc_get_latest_value();
-
 	while (1){
-		data = adc_read_channel(ADC_CHANNEL_0);
+		data = adc_read_channel(ADC_CHANNEL_2);
 		//data = adc_get_latest_value();
 		print_int(data);
 

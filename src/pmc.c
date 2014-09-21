@@ -19,7 +19,7 @@ Reg p_PMC_BASE_ADD = (uint32_t *) 0x400E0600U;
 
 /**
  *  Necessary registers addressed by incrementing the base address by an
- *  register specific offset.
+ *  register-specific offset.
  */
 #define PMC_PCER0 	*(p_PMC_BASE_ADD + 4) // Peripheral Clock Enable Register 0
 #define PMC_PCDR0 	*(p_PMC_BASE_ADD + 5) // Peripheral Clock Disable Register 0

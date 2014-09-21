@@ -15,22 +15,28 @@ int main(void) {
 
 	adc_set_resolution(12);
 
-	//run_tests();
+	run_tests();
+	//read_adc();
 
-	adc_enable_channel(ADC_CHANNEL_2);
 
-	uint16_t data;
 
-	while (1){
-		data = adc_read_channel(ADC_CHANNEL_2);
-		//data = adc_get_latest_value();
-		print_int(data);
 
-		for(int i = 0; i<10000000; i++);
-	}
     return 0;
 }
 
+// used to test ADC
+void read_adc(void){
+	while (1){
+	      adc_enable_channel(ADC_CHANNEL_0);
+
+	      uint16_t data;
+	      data = adc_read_channel(ADC_CHANNEL_0);
+	      print_int(data);
+	      for(int i = 0; i<10000000; i++);
+  	}
+}
+
+// used to print ADC-values from unity
 void print_int(uint16_t data){
 	uint16_t first, second, third, fourth;
 

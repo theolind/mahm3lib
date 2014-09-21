@@ -5,10 +5,10 @@
  * \author Hisham Ramish
  * \author Mattias Nilsson
  * \author Prince Balabis
- * \version 0.2
+ * \version 0.3
  * \date 17 sep 2014
  * \pre As it is now, the ADC is very much stripped down. All functions not included.
- * \bug Not working currently
+ * \bug
  */
 
 

@@ -34,7 +34,7 @@
 #define ADC_CHSR 	(*p_ADC_CHSR) 	///< Channel Status Register
 #define ADC_LCDR  	(*p_ADC_LCDR) 	///< Last Converted Data Register
 #define ADC_CDR  	(*p_ADC_CDR) 	///< Channel Data Register 0
-#define ADC_ISR		(*p_ADC_ISR)	// < Interrupt Status Register
+#define ADC_ISR		(*p_ADC_ISR)	/// < Interrupt Status Register
 #define PMC_PCER1	(*p_PMC_PCER1)  ///< PMC peripheral for ADC
 
 

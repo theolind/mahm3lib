@@ -72,11 +72,18 @@ void test_pmc_start_peripheral_clock_when_successful(void){
 
 	pmc_start_peripheral_clock(PMC_PERIPHERAL_ADC);
 
-	if((*p_PMC_PCSR1 & (0x01u << 5)) == (0x01u << 5))
-	{
-		TEST_ASSERT_TRUE(1);
-	}
-	else{
-		TEST_FAIL();
-	}
+	uint8_t status = pmc_status_peripheral_clock(PMC_PERIPHERAL_ADC);
+
+	TEST_ASSERT(status);
 }
+
+void test_pmc_set_master_clock_when_successful(void) {
+
+	test_pmc_reset();
+
+	//uint8_t status = pmc_set_master_clock(PMC_CSS_SLOW_CLK);
+
+	TEST_ASSERT(1);
+}
+
+

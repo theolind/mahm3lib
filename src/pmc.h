@@ -14,6 +14,20 @@
 
 #include <stdint.h>
 
+
+#define PMC_PCER0	(*p_PMC_PCER0)	///< PMC Peripheral Clock Enable Register 0
+#define PMC_PCDR0	(*p_PMC_PCDR0)	///< PMC Peripheral Clock Disable Register 0
+#define PMC_PCSR0	(*p_PMC_PCSR0)	///< PMC Peripheral Clock Status Register 0
+
+#define PMC_PCER1	(*p_PMC_PCER1)	///< PMC Peripheral Clock Enable Register 1
+#define PMC_PCDR1	(*p_PMC_PCDR1)	///< PMC Peripheral Clock Disable Register 1
+#define PMC_PCSR1	(*p_PMC_PCSR1)	///< PMC Peripheral Clock Status Register 1
+
+#define PMC_MCKR	(*p_PMC_MCKR)	///<PMC Set Master Clock Register
+
+#define PMC_SR		(*p_PMC_SR)		///<PMC Status Register
+
+
 #define PMC_PERIPHERAL_PIOA (11) ///<Peripheral PIOA
 #define PMC_PERIPHERAL_PIOB (12) ///<Peripheral PIOB
 #define PMC_PERIPHERAL_PIOC (13) ///<Peripheral PIOC
@@ -25,36 +39,29 @@
 #define PMC_PERIPHERAL_ADC (37) ///<Peripheral ADC
 #define PMC_PERIPHERAL_DACC	(38) ///<Peripheral DACC
 
-#define PMC_CSS					(0x01U);		///<Master Clock Source Selection Bit Mask
 
-#define PMC_CSS_SLOW_CLK		(0x0U);		///<Master Clock Source Selection SLOW CLK
-#define PMC_CSS_MAIN_CLK		(0x01U);	///<Master Clock Source Selection MAIN CLK
-#define PMC_CSS_PLLA_CLK		(0x02U);	///<Master Clock Source Selection PLLA CLK
-#define PMC_CSS_UPLL_CLK		(0x03U);	///<Master Clock Source Selection UPLL CLK
+#define PMC_CSS					(0x01U)		///<Master Clock Source Selection Bit Mask
 
-#define PMC_PRESCALER			(0x01U << 4);	///<Processor Clock Prescaler Bit Mask
+#define PMC_CSS_SLOW_CLK		(0x0)		///<Master Clock Source Selection SLOW CLK
+#define PMC_CSS_MAIN_CLK		(0x01)		///<Master Clock Source Selection MAIN CLK
+#define PMC_CSS_PLLA_CLK		(0x02)		///<Master Clock Source Selection PLLA CLK
+#define PMC_CSS_UPLL_CLK		(0x03)		///<Master Clock Source Selection UPLL CLK
 
-#define PMC_PRES_CLK_0			(0x0U);		///<Processor Clock Prescaler - Selected Clock
-#define PMC_PRES_CLK_2			(0x1U);		///<Processor Clock Prescaler - Selected Clock / 2
-#define PMC_PRES_CLK_4			(0x2U);		///<Processor Clock Prescaler - Selected Clock / 4
-#define PMC_PRES_CLK_8			(0x3U);		///<Processor Clock Prescaler - Selected Clock / 8
-#define PMC_PRES_CLK_16			(0x4U);		///<Processor Clock Prescaler - Selected Clock / 16
-#define PMC_PRES_CLK_32			(0x5U);		///<Processor Clock Prescaler - Selected Clock / 32
-#define PMC_PRES_CLK_64			(0x6U);		///<Processor Clock Prescaler - Selected Clock / 64
-#define PMC_PRES_CLK_3			(0x7U);		///<Processor Clock Prescaler - Selected Clock / 3
+#define PMC_PRESCALER			(0x01U << 4)	///<Processor Clock Prescaler Bit Mask
 
-
-#define PMC_SR_MCKRDY			(0x01U << 3);	///<Master Clock Status	0 = Not Ready 1 = Ready
+#define PMC_PRES_CLK_0			(0x0U)		///<Processor Clock Prescaler - Selected Clock
+#define PMC_PRES_CLK_2			(0x1U)		///<Processor Clock Prescaler - Selected Clock / 2
+#define PMC_PRES_CLK_4			(0x2U)		///<Processor Clock Prescaler - Selected Clock / 4
+#define PMC_PRES_CLK_8			(0x3U)		///<Processor Clock Prescaler - Selected Clock / 8
+#define PMC_PRES_CLK_16			(0x4U)		///<Processor Clock Prescaler - Selected Clock / 16
+#define PMC_PRES_CLK_32			(0x5U)		///<Processor Clock Prescaler - Selected Clock / 32
+#define PMC_PRES_CLK_64			(0x6U)		///<Processor Clock Prescaler - Selected Clock / 64
+#define PMC_PRES_CLK_3			(0x7U)		///<Processor Clock Prescaler - Selected Clock / 3
 
 
+#define PMC_SR_MCKRDY			(0x01U << 3)	///<Master Clock Status	0 = Not Ready 1 = Ready
 
-extern uint32_t *const p_PMC_PCER1;
-extern uint32_t *const p_PMC_PCER0;
-extern uint32_t *const p_PMC_PCDR0;
-extern uint32_t *const p_PMC_PCSR0;
 
-extern uint32_t *const p_PMC_PCDR1;
-extern uint32_t *const p_PMC_PCSR1;
 
 
 
@@ -74,7 +81,7 @@ uint8_t pmc_set_peripheral_prescaler(void);
 uint8_t pmc_sleep(void);
 
 // Set master clock
-uint8_t pmc_set_master_clock(void);
+uint8_t pmc_set_master_clock(uint32_t clock);
 
 
 #endif /* PMC_H_ */

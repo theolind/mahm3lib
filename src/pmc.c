@@ -11,8 +11,8 @@
  * \bug May still be bugs
  */
 
-#include "pmc.h"
 
+#include "pmc.h"
 #include <stdint.h>
 
 uint32_t *const p_PMC_PCER0 = (uint32_t *) 0x400E0610U; ///< PMC Peripheral Clock Enable Register 0
@@ -50,9 +50,9 @@ uint32_t pmc_get_peripheral_mask(uint32_t peripheral, uint8_t reg){
 uint8_t pmc_start_peripheral_clock(uint32_t peripheral){
 
 	if(peripheral < 32){
-		*p_PMC_PCER0 = pmc_get_peripheral_mask(peripheral, 0);
+		PMC_PCER0 = pmc_get_peripheral_mask(peripheral, 0);
 	}else{
-		*p_PMC_PCER1 = pmc_get_peripheral_mask(peripheral, 1);
+		PMC_PCER1 = pmc_get_peripheral_mask(peripheral, 1);
 	}
 
 	return 1;
@@ -66,9 +66,9 @@ uint8_t pmc_start_peripheral_clock(uint32_t peripheral){
 uint8_t pmc_stop_peripheral_clock(uint32_t peripheral){
 
 	if(peripheral < 32){   // Check if peripheral is register 0
-		*p_PMC_PCDR0 = pmc_get_peripheral_mask(peripheral, 0);
+		PMC_PCDR0 = pmc_get_peripheral_mask(peripheral, 0);
 	}else if(peripheral > 32 && peripheral < 45){	// Check if peripheral is register 1
-		*p_PMC_PCDR1 = pmc_get_peripheral_mask(peripheral, 1);
+		PMC_PCDR1 = pmc_get_peripheral_mask(peripheral, 1);
 	}else{	// Out of bounds
 		return 0;
 	}
@@ -86,12 +86,12 @@ uint8_t pmc_status_peripheral_clock(uint32_t peripheral){
 
 	if(peripheral < 32){   // Check if peripheral is register 0
 
-		if((*p_PMC_PCSR0 & pmc_get_peripheral_mask(peripheral, 0)) == 0)	// Status Enabled?
+		if((PMC_PCSR0 & pmc_get_peripheral_mask(peripheral, 0)) == 0)	// Status Enabled?
 			status = 1;
 
 	}else if(peripheral > 32 && peripheral < 45){	// Check if peripheral is register 0
 
-		if((*p_PMC_PCSR1 & pmc_get_peripheral_mask(peripheral, 1)) > 0)	// Is Status Enabled?
+		if((PMC_PCSR1 & pmc_get_peripheral_mask(peripheral, 1)) > 0)	// Is Status Enabled?
 			status = 1;
 
 	}else{	// Out of bounds
@@ -120,8 +120,20 @@ uint8_t pmc_sleep(){
 /** Set master clock
  *
  */
-uint8_t pmc_set_master_clock(){
+uint8_t pmc_set_master_clock(uint32_t clock){
 
-	return 0;
+	uint8_t status = 0;
+
+
+	if(clock <= 7) {
+
+			PMC_MCKR = clock;
+
+			while((PMC_SR | PMC_SR_MCKRDY) == 0);	// Wait for masterclock ready
+
+			status = 1;
+	}
+
+	return status;
 }
 

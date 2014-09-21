@@ -15,7 +15,12 @@
 #include "dacc.h"
 #include "unity.h"
 
-void test_dacc_channel_0_enable(void);
-void test_dacc_channel_1_enable(void);
+void test_dacc_channel_0_enable();
+void test_dacc_channel_1_enable();
+void test_dacc_channel_0_disable();
+void test_dacc_channel_1_disable();
+void test_dacc_channel_0_write();
+void test_dacc_channel_1_write();
+void test_dacc_init();
 
 #endif

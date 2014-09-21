@@ -22,6 +22,11 @@ void run_tests(void) {
 	// Run DACC tests
 	RUN_TEST(test_dacc_channel_0_enable, 0);
 	RUN_TEST(test_dacc_channel_1_enable, 0);
+	RUN_TEST(test_dacc_channel_0_disable, 0);
+	RUN_TEST(test_dacc_channel_0_disable, 0);
+	RUN_TEST(test_dacc_channel_1_write, 0);
+	RUN_TEST(test_dacc_channel_1_write, 0);
+
 
 	UnityEnd();
 }

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dacc_5fsettings',['dacc_settings',['../dacc_8h.html#aa5ff8a34a6945dc8f16038f79d235ad6',1,'dacc.h']]]
+  ['dacc_5fsettings_5ft',['dacc_settings_t',['../dacc_8h.html#acdf2907b1cc5ae554eb4676d9866ad7c',1,'dacc.h']]]
 ];

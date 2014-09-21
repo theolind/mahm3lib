@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['refresh',['refresh',['../structdacc__settings.html#aa613f4f1565b79a2ad442a345a8451d2',1,'dacc_settings']]]
+  ['refresh',['refresh',['../structdacc__settings__t.html#ace63a67dcc08ebf72ea290ca92d7cf7a',1,'dacc_settings_t']]]
 ];

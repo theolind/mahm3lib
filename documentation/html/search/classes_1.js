@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dacc_5fsettings',['dacc_settings',['../structdacc__settings.html',1,'']]]
+  ['dacc_5fsettings_5ft',['dacc_settings_t',['../structdacc__settings__t.html',1,'']]]
 ];

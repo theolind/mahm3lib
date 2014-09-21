@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['word_5ftransfer',['word_transfer',['../structdacc__settings.html#a5f7e2a3991050949c54ce8715254ed3e',1,'dacc_settings']]]
+  ['word_5ftransfer',['word_transfer',['../structdacc__settings__t.html#a3e64e037c2fcb4ddf4ec903194827773',1,'dacc_settings_t']]]
 ];

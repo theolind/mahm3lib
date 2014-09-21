@@ -12,10 +12,10 @@ var searchData=
   ['dacc_5fcr',['DACC_CR',['../dacc_8h.html#a5c7ec663bf62fab5a5ebd2e7a59c8db1',1,'dacc.h']]],
   ['dacc_5fdisable_5fchannel',['dacc_disable_channel',['../dacc_8c.html#a514d31d0643ff099bb1797e37a8e418b',1,'dacc_disable_channel(uint8_t dacc_channel):&#160;dacc.c'],['../dacc_8h.html#a514d31d0643ff099bb1797e37a8e418b',1,'dacc_disable_channel(uint8_t dacc_channel):&#160;dacc.c']]],
   ['dacc_5fenable_5fchannel',['dacc_enable_channel',['../dacc_8c.html#a7d06872f2301568bddbb91e1d36535b8',1,'dacc_enable_channel(uint8_t dacc_channel):&#160;dacc.c'],['../dacc_8h.html#a7d06872f2301568bddbb91e1d36535b8',1,'dacc_enable_channel(uint8_t dacc_channel):&#160;dacc.c']]],
-  ['dacc_5finit',['dacc_init',['../dacc_8c.html#a4cb6c976986fd3f1efa513bf81d2da4d',1,'dacc_init(dacc_settings *settings):&#160;dacc.c'],['../dacc_8h.html#a4cb6c976986fd3f1efa513bf81d2da4d',1,'dacc_init(dacc_settings *settings):&#160;dacc.c']]],
+  ['dacc_5finit',['dacc_init',['../dacc_8c.html#a7fd436a144aaa56fabdcadadc99cc689',1,'dacc_init(dacc_settings_t *settings):&#160;dacc.c'],['../dacc_8h.html#a7fd436a144aaa56fabdcadadc99cc689',1,'dacc_init(dacc_settings_t *settings):&#160;dacc.c']]],
   ['dacc_5fisr',['DACC_ISR',['../dacc_8h.html#a6c55550ae15257ae932d018b4d72914e',1,'dacc.h']]],
   ['dacc_5fmr',['DACC_MR',['../dacc_8h.html#a379e2bc92524f8dce528b282fd59934f',1,'dacc.h']]],
-  ['dacc_5fsettings',['dacc_settings',['../structdacc__settings.html',1,'dacc_settings'],['../dacc_8h.html#aa5ff8a34a6945dc8f16038f79d235ad6',1,'dacc_settings():&#160;dacc.h']]],
+  ['dacc_5fsettings_5ft',['dacc_settings_t',['../structdacc__settings__t.html',1,'dacc_settings_t'],['../dacc_8h.html#acdf2907b1cc5ae554eb4676d9866ad7c',1,'dacc_settings_t():&#160;dacc.h']]],
   ['dacc_5fwpmr',['DACC_WPMR',['../dacc_8h.html#a5abb233d4035ac3697833655faeb7a7b',1,'dacc.h']]],
   ['dacc_5fwpsr',['DACC_WPSR',['../dacc_8h.html#ade8d502f6106908d223c82d20bdc2b83',1,'dacc.h']]],
   ['dacc_5fwrite',['dacc_write',['../dacc_8c.html#ac7ebc177f9a8cd3479630a88d799c31e',1,'dacc_write(uint8_t dacc_channel, uint32_t value):&#160;dacc.c'],['../dacc_8h.html#ac7ebc177f9a8cd3479630a88d799c31e',1,'dacc_write(uint8_t dacc_channel, uint32_t value):&#160;dacc.c']]]

@@ -20,13 +20,13 @@ void run_tests(void) {
 	RUN_TEST(test_foobar, 0);
 
 	// Run DACC tests
+	RUN_TEST(test_dacc_init, 0);
 	RUN_TEST(test_dacc_channel_0_enable, 0);
 	RUN_TEST(test_dacc_channel_1_enable, 0);
-	RUN_TEST(test_dacc_channel_0_disable, 0);
-	RUN_TEST(test_dacc_channel_0_disable, 0);
+	RUN_TEST(test_dacc_channel_0_write, 0);
 	RUN_TEST(test_dacc_channel_1_write, 0);
-	RUN_TEST(test_dacc_channel_1_write, 0);
-
+	RUN_TEST(test_dacc_channel_0_disable, 0);
+	RUN_TEST(test_dacc_channel_1_disable, 0);
 
 	UnityEnd();
 }

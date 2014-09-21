@@ -70,7 +70,7 @@ uint8_t dacc_disable_channel(uint8_t dacc_channel){
 		return 0;
 	}
 
-	DACC_CHER |= (0x1u << dacc_channel);
+	DACC_CHDR |= (0x1u << dacc_channel);
 
 	if ( !(*p_DACC_CHSR & (0x1u << dacc_channel)) ) {
 		return 1;

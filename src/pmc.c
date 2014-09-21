@@ -14,12 +14,41 @@
 #include "global_definitions.h"
 #include "pmc.h"
 
-Reg p_PMC_BASE_ADD = (uint32_t *) 0x400E0610U;
+// The first register in the Power Management Controller
+Reg p_PMC_BASE_ADD = (uint32_t *) 0x400E0600U;
 
-#define PMC_PCER0 (p_PMC_BASE_ADD + 4);
-#define PMC_PCDR0 (p_PMC_BASE_ADD + 5);
-#define PMC_PCSR0 (p_PMC_BASE_ADD + 6);
+/**
+ *  Necessary registers addressed by incrementing the base address by an
+ *  register specific offset.
+ */
+#define PMC_PCER0 	*(p_PMC_BASE_ADD + 4) // Peripheral Clock Enable Register 0
+#define PMC_PCDR0 	*(p_PMC_BASE_ADD + 5) // Peripheral Clock Disable Register 0
+#define PMC_PCSR0 	*(p_PMC_BASE_ADD + 6) // Peripheral Clock Status Register 0
+#define PMC_PCER1 	*(p_PMC_BASE_ADD + 64) // Peripheral Clock Enable Register 1
+#define PMC_PCDR1 	*(p_PMC_BASE_ADD + 65) // Peripheral Clock Disable Register 1
+#define PMC_PCSR1 	*(p_PMC_BASE_ADD + 66) // Peripheral Clock Status Register 1
 
+#define PMC_MOR   	*(p_PMC_BASE_ADD + 8)  // Main Oscillator Register
+
+#define PMC_MCFR   	*(p_PMC_BASE_ADD + 9)  // Main Clock Frequency Register
+
+#define PMC_MCKR  	*(p_PMC_BASE_ADD + 12) // Master Clock Register
+
+#define PMC_SR    	*(p_PMC_BASE_ADD + 26) // Status Register
+
+#define PMC_PCR   	*(p_PMC_BASE_ADD + 67) // Peripheral Control register
+
+#define PMC_FSMR   	*(p_PMC_BASE_ADD + 28) // Fast Startup Mode Register
+#define PMC_FSPR   	*(p_PMC_BASE_ADD + 29) // Fast Startup polarity Register
+
+#define PMC_WPMR   	*(p_PMC_BASE_ADD + 57) // Write Protect Mode Register
+#define PMC_WPSR   	*(p_PMC_BASE_ADD + 58) // Write Protect Status Register
+
+// Remove the following if tests passes
+
+/*   ---- Look up, changed the way registers are accessed in. ----
+// This may even have some memory advantages as well.
+ *
 Reg p_PMC_PCER0 = (uint32_t *) 0x400E0610U; ///< PMC Peripheral Clock Enable Register 0
 Reg p_PMC_PCDR0 = (uint32_t *) 0x400E0614U; ///< PMC Peripheral Clock Disable Register 0
 Reg p_PMC_PCSR0 = (uint32_t *) 0x400E0618U; ///< PMC Peripheral Clock Status Register 0
@@ -30,15 +59,16 @@ Reg p_PMC_PCSR1 = (uint32_t *) 0x400E0708U; ///< PMC Peripheral Clock Status Reg
 
 Reg p_PMC_MCKR  = (uint32_t *) 0x400E0630U; ///< PMC Master Clock Register
 Reg p_PMC_SR    = (uint32_t *) 0x400E0668; ///< PMC Status Register
+*/
 
 
-
-/** Adjusts a specified peripheral (0 - 44) to the correct mask-bit
+/** Adjusts a specified peripheral (0 - 44) to the correct mask-bit.
+ * Static because it's an internal function to the API.
  *
  * @param peripheral The peripheral clock that get the mask-bit added.
  * @param reg Register 0 containing peripheral 0-31, register 1 containing peripheral 32-44
  */
-uint32_t pmc_get_peripheral_mask(uint32_t peripheral, uint8_t reg){
+static uint32_t pmc_get_peripheral_mask(uint32_t peripheral, uint8_t reg){
 	if(reg == 0){
 		return (uint32_t)(0x01U << peripheral);
 	}else{

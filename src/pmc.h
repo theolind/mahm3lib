@@ -12,6 +12,14 @@
 #ifndef PMC_H_
 #define PMC_H_
 
+/**
+ * No idea as to why these should be defined here as these should not be
+ * accessed outside the API, or should they?
+ * @author Saeed Ghasemi
+ * @param peripheral
+ * @return
+ */
+/*
 // REGISTERS //
 #define PMC_PCER0	(*p_PMC_PCER0)	///< PMC Peripheral Clock Enable Register 0
 #define PMC_PCDR0	(*p_PMC_PCDR0)	///< PMC Peripheral Clock Disable Register 0
@@ -24,6 +32,7 @@
 #define PMC_MCKR	(*p_PMC_MCKR)	///<PMC Set Master Clock Register
 
 #define PMC_SR		(*p_PMC_SR)		///<PMC Status Register
+*/
 
 /*    --     MOVED TO GLOBAL DEFINITIONS    ----
 // PHERIPHERAL IDENTIFIERS //
@@ -63,7 +72,7 @@
 
 
 
-
+//////////////////////////////////
 
 // Start peripheral clock
 uint8_t pmc_start_peripheral_clock(uint32_t peripheral);

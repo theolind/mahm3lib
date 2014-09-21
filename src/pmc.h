@@ -12,9 +12,7 @@
 #ifndef PMC_H_
 #define PMC_H_
 
-#include <stdint.h>
-
-
+// REGISTERS //
 #define PMC_PCER0	(*p_PMC_PCER0)	///< PMC Peripheral Clock Enable Register 0
 #define PMC_PCDR0	(*p_PMC_PCDR0)	///< PMC Peripheral Clock Disable Register 0
 #define PMC_PCSR0	(*p_PMC_PCSR0)	///< PMC Peripheral Clock Status Register 0
@@ -27,7 +25,8 @@
 
 #define PMC_SR		(*p_PMC_SR)		///<PMC Status Register
 
-
+/*    --     MOVED TO GLOBAL DEFINITIONS    ----
+// PHERIPHERAL IDENTIFIERS //
 #define PMC_PERIPHERAL_PIOA (11) ///<Peripheral PIOA
 #define PMC_PERIPHERAL_PIOB (12) ///<Peripheral PIOB
 #define PMC_PERIPHERAL_PIOC (13) ///<Peripheral PIOC
@@ -38,8 +37,9 @@
 #define PMC_PERIPHERAL_PWM (36) ///<Peripheral PWM
 #define PMC_PERIPHERAL_ADC (37) ///<Peripheral ADC
 #define PMC_PERIPHERAL_DACC	(38) ///<Peripheral DACC
+*/
 
-
+// MASER CLOCK SETTING //
 #define PMC_CSS					(0x01U)		///<Master Clock Source Selection Bit Mask
 
 #define PMC_CSS_SLOW_CLK		(0x0)		///<Master Clock Source Selection SLOW CLK

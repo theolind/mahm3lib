@@ -11,20 +11,25 @@
  * \bug May still be bugs
  */
 
-
+#include "global_definitions.h"
 #include "pmc.h"
-#include <stdint.h>
 
-uint32_t *const p_PMC_PCER0 = (uint32_t *) 0x400E0610U; ///< PMC Peripheral Clock Enable Register 0
-uint32_t *const p_PMC_PCDR0 = (uint32_t *) 0x400E0614U; ///< PMC Peripheral Clock Disable Register 0
-uint32_t *const p_PMC_PCSR0 = (uint32_t *) 0x400E0618U; ///< PMC Peripheral Clock Status Register 0
+Reg p_PMC_BASE_ADD = (uint32_t *) 0x400E0610U;
 
-uint32_t *const p_PMC_PCER1 = (uint32_t *) 0x400E0700U; ///< PMC Peripheral Clock Status Register 1
-uint32_t *const p_PMC_PCDR1 = (uint32_t *) 0x400E0704U; ///< PMC Peripheral Clock Status Register 1
-uint32_t *const p_PMC_PCSR1 = (uint32_t *) 0x400E0708U; ///< PMC Peripheral Clock Status Register 1
+#define PMC_PCER0 (p_PMC_BASE_ADD + 4);
+#define PMC_PCDR0 (p_PMC_BASE_ADD + 5);
+#define PMC_PCSR0 (p_PMC_BASE_ADD + 6);
 
-uint32_t *const p_PMC_MCKR = (uint32_t *) 0x400E0630U; ///< PMC Master Clock Register
-uint32_t *const p_PMC_SR = (uint32_t *) 0x400E0668; ///< PMC Status Register
+Reg p_PMC_PCER0 = (uint32_t *) 0x400E0610U; ///< PMC Peripheral Clock Enable Register 0
+Reg p_PMC_PCDR0 = (uint32_t *) 0x400E0614U; ///< PMC Peripheral Clock Disable Register 0
+Reg p_PMC_PCSR0 = (uint32_t *) 0x400E0618U; ///< PMC Peripheral Clock Status Register 0
+
+Reg p_PMC_PCER1 = (uint32_t *) 0x400E0700U; ///< PMC Peripheral Clock Status Register 1
+Reg p_PMC_PCDR1 = (uint32_t *) 0x400E0704U; ///< PMC Peripheral Clock Status Register 1
+Reg p_PMC_PCSR1 = (uint32_t *) 0x400E0708U; ///< PMC Peripheral Clock Status Register 1
+
+Reg p_PMC_MCKR  = (uint32_t *) 0x400E0630U; ///< PMC Master Clock Register
+Reg p_PMC_SR    = (uint32_t *) 0x400E0668; ///< PMC Status Register
 
 
 
@@ -34,7 +39,6 @@ uint32_t *const p_PMC_SR = (uint32_t *) 0x400E0668; ///< PMC Status Register
  * @param reg Register 0 containing peripheral 0-31, register 1 containing peripheral 32-44
  */
 uint32_t pmc_get_peripheral_mask(uint32_t peripheral, uint8_t reg){
-
 	if(reg == 0){
 		return (uint32_t)(0x01U << peripheral);
 	}else{

@@ -33,7 +33,7 @@
 // Addresses to PMC registers
 #define PMC_PCER1	(*p_PMC_PCER1)	///<Peripheral clock status register 1
 
-typedef struct dacc_settings {
+typedef struct dacc_settings_t {
 	/**
 	 * 0: External trigger mode disabled, DACC in free running mode
 	 * 1: External trigger mode enabled
@@ -58,7 +58,7 @@ typedef struct dacc_settings {
 	/** Value can be 0-63 */
 	uint8_t startup_time;
 
-} dacc_settings;
+} dacc_settings_t;
 
 /**
  * Initiates the DACC with provided settings.
@@ -66,7 +66,7 @@ typedef struct dacc_settings {
  * @return Return 0 if settings contain illegal values.
  * Otherwise return 1.
  */
-uint8_t dacc_init(dacc_settings *settings);
+uint8_t dacc_init(dacc_settings_t *settings);
 
 /**
  * Enables a specified DACC channel.

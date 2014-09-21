@@ -35,6 +35,7 @@
 */
 
 /*    --     MOVED TO GLOBAL DEFINITIONS    ----
+ * Can't call them PMC_ since they are global identifiers in the MCU
 // PHERIPHERAL IDENTIFIERS //
 #define PMC_PERIPHERAL_PIOA (11) ///<Peripheral PIOA
 #define PMC_PERIPHERAL_PIOB (12) ///<Peripheral PIOB

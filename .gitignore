@@ -40,3 +40,16 @@ Thumbs.db
 
 # Doxygen
 *.doxyfile
+
+# html-documentation
+documentation/
+.html
+.png
+.css
+.js
+.tex
+<<<<<<< HEAD
+.sty
+=======
+.sty
+>>>>>>> integration

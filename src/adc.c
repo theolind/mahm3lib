@@ -8,7 +8,6 @@
  * \version 0.3
  * \date 17 sep 2014
  * \pre As it is now, the ADC is very much stripped down. All functions not included.
- * \bug Currently only ADC channel 0 is working
  */
 
 

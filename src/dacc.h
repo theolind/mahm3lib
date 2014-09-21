@@ -14,6 +14,7 @@
 #define DACC_H
 
 #include <inttypes.h>
+#include "pmc.h"
 
 #define DACC_CHANNEL_0 0			///<DACC Channel 0
 #define DACC_CHANNEL_1 1			///<DACC Channel 1
@@ -28,10 +29,6 @@
 #define DACC_ISR	(*p_DACC_ISR)	///<Interrupt Status Register
 #define DACC_WPMR	(*p_DACC_WPMR)	///<Write Protect Mode Register
 #define DACC_WPSR 	(*p_DACC_WPSR)	///<Write Protect Status Register
-
-// TODO: should be unnecessary after PMC API is done
-// Addresses to PMC registers
-#define PMC_PCER1	(*p_PMC_PCER1)	///<Peripheral clock status register 1
 
 typedef struct dacc_settings_t {
 	/**

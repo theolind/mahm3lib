@@ -10,9 +10,6 @@ uint32_t *const p_DACC_ISR  = (uint32_t *) 0x400C8030U;
 uint32_t *const p_DACC_WRMR = (uint32_t *) 0x400C80E4U;
 uint32_t *const p_DACC_WPSR = (uint32_t *) 0x400C80E8U;
 
-// TODO: should be unnecessary after PMC API is done
-uint32_t *const p_PMC_PCER1	= (uint32_t *) 0x400E0700U;
-
 uint8_t dacc_init(dacc_settings_t *settings){
 
 	// Check for illegal values
@@ -23,9 +20,8 @@ uint8_t dacc_init(dacc_settings_t *settings){
 		return 0;
 	}
 
-	// TODO: change to PMC API when that's done
 	// Enable Peripheral clock for DACC
-	PMC_PCER1 |= (1 << 6);
+	pmc_start_peripheral_clock(PMC_PERIPHERAL_DACC);
 
 	// Software reset
 	DACC_CR = (0x1u << 0);

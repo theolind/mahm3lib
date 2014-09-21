@@ -10,6 +10,7 @@
  */
 
 #include <inttypes.h>
+#include "pmc.h"
 
 #define ADC_CHANNEL_0 	0	///<Channel 0
 #define ADC_CHANNEL_1	1	///<Channel 1
@@ -35,7 +36,7 @@
 #define ADC_LCDR  	(*p_ADC_LCDR) 	///< Last Converted Data Register
 #define ADC_CDR  	(*p_ADC_CDR) 	///< Channel Data Register 0
 #define ADC_ISR		(*p_ADC_ISR)	/// < Interrupt Status Register
-#define PMC_PCER1	(*p_PMC_PCER1)  ///< PMC peripheral for ADC
+
 
 
 void adc_init(void);

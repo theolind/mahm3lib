@@ -10,22 +10,26 @@
 
 
 
-//#include "test_pmc.h"
-//#include "test_pio.h"
+#include "test_pmc.h"
+#include "test_pio.h"
 #include "test_adc.h"
 #include "test_dacc.h"
-//#include "pio.h"
+#include "pio.h"
 
 void run_tests(void) {
-	//Unity.TestFile = "test/test_pio.c";
-	//Unity.TestFile = "test/test_pmc.c";
-	Unity.TestFile = "test/test_adc.c";
+	Unity.TestFile = "test/test_pio.c";
+	Unity.TestFile = "test/test_pmc.c";
 	Unity.TestFile = "test/test_dacc.c";
+	Unity.TestFile = "test/test_adc.c";
 
 	UnityBegin();
 
 
-
+	// run pio tests
+	RUN_TEST(test_pio_pullup, 0);
+	RUN_TEST(test_pio_output, 0);
+	RUN_TEST(test_pio_read_pin, 0);
+	RUN_TEST(test_pio_set_output, 0);
 
 	// run pmc tests
 	RUN_TEST(test_pmc_start_peripheral_clock_when_successful, 10);
@@ -43,9 +47,9 @@ void run_tests(void) {
 	RUN_TEST(test_dacc_channel_1_disable, 20);
 
 	// Run ADC tests
-	RUN_TEST(test_adc_channel_enabled, 10);
-	RUN_TEST(test_adc_12bit, 20);
-	RUN_TEST(test_adc_10bit, 30);
+	RUN_TEST(test_adc_channel_enabled, 30);
+	//RUN_TEST(test_adc_12bit, 30);
+	//RUN_TEST(test_adc_10bit, 30);
 
 
 	UnityEnd();

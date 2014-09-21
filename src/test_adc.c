@@ -7,18 +7,9 @@
 
 #include "unity.h"
 #include "test_adc.h"
-#include "adc.h"
 
-void setUp(void) {
-}
 
-void tearDown(void) {
-}
 
-void resetTest(void) {
-	tearDown();
-	setUp();
-}
 
 
 /*
@@ -44,6 +35,8 @@ void test_adc_12bit(void) {
 
 	// Read the specific channel and test if a 12 bit value comes through
 	TEST_ASSERT_UINT_WITHIN(2048, 2048, adc_read_channel(channel));
+
+	adc_disable_channel(channel);
 }
 
 /*
@@ -61,6 +54,8 @@ void test_adc_10bit(void) {
 
 	// Read the specific channel and test if a 10 bit value comes through
 	TEST_ASSERT_UINT_WITHIN(512, 512, adc_read_channel(channel));
+
+	adc_disable_channel(channel);
 }
 
 /*

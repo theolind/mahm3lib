@@ -25,7 +25,7 @@ uint32_t *const p_ADC_LCDR 	= (uint32_t *) 0x400C0020u;	///<ADC Last Converted D
 uint32_t *const p_ADC_CDR 	= (uint32_t *) 0x400C0050u;	///<ADC Channel Data Register 0
 uint32_t *const p_ADC_ISR 	= (uint32_t *) 0x400C0030u;	///<ADC Interrupts Status Register
 
-uint32_t *const p_PMC_PCER1	= (uint32_t *) 0x400E0700u;	///<PMC Peripheral Clock Status Register 1
+
 
 
 /**
@@ -35,7 +35,7 @@ uint32_t *const p_PMC_PCER1	= (uint32_t *) 0x400E0700u;	///<PMC Peripheral Clock
 void adc_init(void) {
 
 	// Enable Peripheral clock
-	PMC_PCER1 = (1 << 5);
+	 pmc_start_peripheral_clock(PMC_PERIPHERAL_ADC);
 
 	// Software reset
 	ADC_CR = (0x1u << 0);

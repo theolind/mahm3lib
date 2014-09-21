@@ -14,6 +14,8 @@
 //uint32_t *const p_ADC_LCDR 	= (uint32_t *) 0x400C0020u;
 //uint32_t *const p_ADC_CDR0 	= (uint32_t *) 0x400C0050u;
 
+#include "adc.h"
+
 void setUp(void);
 void tearDown(void);
 void resetTest(void);

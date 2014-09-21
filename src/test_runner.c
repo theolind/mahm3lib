@@ -1,16 +1,18 @@
 /*
  * Test runner, add your tests here
  *
- * Author: Theodor Lindquist
- * Author: Soded Alatia
- * Date: 2014-09-18
+ * Created by: Theodor Lindquist
+ * Date: 2014-09-10
  */
 
 #include "unity.h"
 #include "test_runner.h"
+
+
 #include "test_foobar.h"
 #include "test_pmc.h"
 #include "test_pio.h"
+#include "test_adc.h"
 #include "test_dacc.h"
 #include "pio.h"
 
@@ -18,7 +20,10 @@ void run_tests(void) {
 	Unity.TestFile = "test/test_pio.c";
 	Unity.TestFile = "test/test_pmc.c";
 	Unity.TestFile = "test/test_dacc.c";
+	Unity.TestFile = "test/test_adc.c";
+
 	UnityBegin();
+
 
 	// run pio tests
 	RUN_TEST(test_pio_pullup, 0);
@@ -40,6 +45,12 @@ void run_tests(void) {
 	RUN_TEST(test_dacc_channel_1_write, 20);
 	RUN_TEST(test_dacc_channel_0_disable, 20);
 	RUN_TEST(test_dacc_channel_1_disable, 20);
+
+	// Run ADC tests
+	RUN_TEST(test_adc_channel_enabled, 30);
+	RUN_TEST(test_adc_12bit, 30);
+	RUN_TEST(test_adc_10bit, 30);
+
 
 	UnityEnd();
 }

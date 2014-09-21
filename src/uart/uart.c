@@ -13,17 +13,19 @@
 #include "uart.h"
 
 // UART Control Register
-uint32_t *const p_UART_CR = (uint32_t *) 0x400E0800U;
+//uint32_t *const p_UART_CR = (uint32_t *) 0x400E0800U;
 // UART Mode Register
-uint32_t *const p_UART_MR = (uint32_t *) 0x400E0804U;
+//uint32_t *const p_UART_MR = (uint32_t *) 0x400E0804U;
 // UART Status Register
-uint32_t *const p_UART_SR = (uint32_t *) 0x400E0814U;
+//uint32_t *const p_UART_SR = (uint32_t *) 0x400E0814U;
 // UART Receiver Holding Register
-uint32_t *const p_UART_RHR = (uint32_t *) 0x400E0818U;
+//uint32_t *const p_UART_RHR = (uint32_t *) 0x400E0818U;
 // UART Transmit Holding Register
-uint32_t *const p_UART_THR = (uint32_t *) 0x400E081CU;
+//uint32_t *const p_UART_THR = (uint32_t *) 0x400E081CU;
 // UART Baud Rate Generator Register
-uint32_t *const p_UART_BRGR = (uint32_t *) 0x400E0820U;
+//uint32_t *const p_UART_BRGR = (uint32_t *) 0x400E0820U;
+
+uart_reg_t *const UART = (uart_reg_t *) 0x400E0800U;
 
 /*
  * Important! When a control of input parameters is implemented,
@@ -31,26 +33,31 @@ uint32_t *const p_UART_BRGR = (uint32_t *) 0x400E0820U;
  */
 uint8_t uart_init(const uart_settings_t *options) {
 	// reset and disable receiver & transmitter
-	UART_CR = UART_CR_RSTRX | UART_CR_RSTTX	| UART_CR_RXDIS | UART_CR_TXDIS;
+	UART->UART_CR = UART_CR_RSTRX | UART_CR_RSTTX |
+					UART_CR_RXDIS | UART_CR_TXDIS;
 	// configure baud rate
-	UART_BRGR = (84000000UL >> 4) / options->baudrate; //(sysclk_get_cpu_hz() >> 4) / options->baudrate;
+	UART->UART_BRGR = (84000000UL >> 4) / options->baudrate;
+	//(sysclk_get_cpu_hz() >> 4) / options->baudrate;
+
 	// configure mode
-	UART_MR = options->paritytype | UART_MR_CHMODE_NORMAL;
+	UART->UART_MR = options->paritytype | UART_MR_CHMODE_NORMAL;
 	// enable receiver and transmitter
-	UART_CR = UART_CR_RXEN | UART_CR_TXEN;
+	UART->UART_CR = UART_CR_RXEN | UART_CR_TXEN;
+
+	return 1;
 }
 
 uint8_t uart_tx_ready(void) {
-	return (UART_SR & UART_SR_TXRDY);
+	return (UART->UART_SR & UART_SR_TXRDY);
 }
 
 uint8_t uart_rx_ready(void) {
-	return (UART_SR & UART_SR_RXRDY);
+	return (UART->UART_SR & UART_SR_RXRDY);
 }
 
-void uart_write_chr(uint8_t chr) {
+void uart_write_chr(char chr) {
 	//write character to Transmit Holding Register
-	UART_THR = chr;
+	UART->UART_THR = (uint32_t) chr;
 }
 
 void uart_write_str(char *str) {
@@ -63,6 +70,6 @@ void uart_write_str(char *str) {
 
 char uart_read_chr(void) {
 	//read character from Receiver Holding Register
-	char chr = UART_RHR;
+	char chr = (char) UART->UART_RHR;
 	return chr;
 }

@@ -23,41 +23,18 @@
 
 #include <inttypes.h>
 
-/** Input parameters when initializing RS232 and similar modes. */
-typedef struct {
-	/** Set baud rate of the USART (unused in slave modes). */
-	uint32_t baudrate;
-
-	/** Number of bits to transmit as a character (5 to 9). */
-	uint32_t charlength;
-
-	/**
-	 * Parity type: USART_PMODE_DISABLED_gc, USART_PMODE_EVEN_gc,
-	 * USART_PMODE_ODD_gc.
-	 */
-	uint32_t paritytype;
-
-	/** 
-	 * Number of stop bits between two characters:
-	 * 1: 2 stop bits
-	 * 0: 1 stop bit
-	 */
-	uint8_t stopbits;
-
-} uart_settings_t;
-
 // UART Control Register
-#define UART_CR (*p_UART_CR)
+//#define UART_CR (*p_UART_CR)
 // UART Mode Register
-#define UART_MR (*p_UART_MR)
+//#define UART_MR (*p_UART_MR)
 // UART Status Register
-#define UART_SR (*p_UART_SR)
+//#define UART_SR (*p_UART_SR)
 // UART Receiver Holding Register
-#define UART_RHR (*p_UART_RHR)
+//#define UART_RHR (*p_UART_RHR)
 // UART Transmit Holding Register
-#define UART_THR (*p_UART_THR)
+//#define UART_THR (*p_UART_THR)
 // UART Baud Rate Generator Register
-#define UART_BRGR (*p_UART_BRGR)
+//#define UART_BRGR (*p_UART_BRGR)
 
 // UART_CR: (UART Offset: 0x0000) Control Register
 #define UART_CR_RSTRX (0x1u << 2) /**< \brief (UART_CR) Reset Receiver */
@@ -185,13 +162,61 @@ typedef struct {
 #define UART_PTSR_TXCBEN (0x1u << 18) /**< \brief (UART_PTSR) Transmitter Transfer Enable */
 #define UART_PTSR_ERR (0x1u << 24) /**< \brief (UART_PTSR) Transfer Bus Error */
 
+/*
+ * Mapping of UART registers
+ * Base address: 0x400E0800
+ */
+typedef struct {
+	// Control Register, offset 0x0000
+	uint32_t UART_CR;
+	// Mode Register, offset 0x0004
+	uint32_t UART_MR;
+	// Interrupt Enable Register, offset 0x0008
+	uint32_t UART_IER;
+	// Interrupt Disable Register, offset 0x000C
+	uint32_t UART_IDR;
+	// Interrupt Mask Register, offset 0x0010
+	uint32_t UART_IMR;
+	// Status Register, offset 0x0014
+	uint32_t UART_SR;
+	// Receiver Holding Register, offset 0x0018
+	uint32_t UART_RHR;
+	// Transmit Holding Register, offset 0x001C
+	uint32_t UART_THR;
+	// Baud Rate Generator Register, offset 0x0020
+	uint32_t UART_BRGR;
+} uart_reg_t;
+
+/** Input parameters when initializing RS232 and similar modes. */
+typedef struct {
+	/** Set baud rate of the USART (unused in slave modes). */
+	uint32_t baudrate;
+
+	/** Number of bits to transmit as a character (5 to 9). */
+	uint32_t charlength;
+
+	/**
+	 * Parity type: USART_PMODE_DISABLED_gc, USART_PMODE_EVEN_gc,
+	 * USART_PMODE_ODD_gc.
+	 */
+	uint32_t paritytype;
+
+	/**
+	 * Number of stop bits between two characters:
+	 * 1: 2 stop bits
+	 * 0: 1 stop bit
+	 */
+	uint32_t stopbits;
+
+} uart_settings_t;
+
 /**
  * @fn Initialization of the UART.
  * @param Settings for the initialization (baud rate, parity, etc).
  * @return 1 is returned for successful initialization, 0 for failure.
- * @pre Enable PMC Periphal Clock for UART.
+ * @pre Enable PMC Peripheral Clock for UART.
  * @pre Disable the PIO from controlling PA8 (RX-pin) and PA9 (TX-pin).
- * @pre Enable pullup on PA8 (RX-pin) - only when reading from UART on the Arduino Due!
+ * @pre Enable pull-up on PA8 (RX-pin) - only when reading from UART on the Arduino Due!
  */
 uint8_t uart_init(const uart_settings_t *);
 
@@ -214,7 +239,7 @@ uint8_t uart_rx_ready(void);
  * @param Character (ASCII code) to send.
  * @pre Call uart_tx_ready() to check if a character can be sent.
  */
-void uart_write_chr(uint8_t);
+void uart_write_chr(char);
 
 /**
  * @fn Sends a string of characters to the UART.

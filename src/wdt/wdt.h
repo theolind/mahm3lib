@@ -1,7 +1,7 @@
 /**
 * @file wdt.h
 * @brief Watchdog Timer
-* @details With the Watchdog API you can setup the Watchdog Timer.<br>
+* @details With the Watchdog API you can configure the Watchdog Timer.<br>
 * @details Important! The API is currently very limited. There's only a
 * @details a function for disabling the Watchdog.
 *
@@ -14,11 +14,13 @@
 #ifndef WDT_H
 #define WDT_H
 
+#include <inttypes.h>
+
 // Watchdog Timer Mode Register
-#define WDT_MR	(*p_WDT_MR)
+#define WDT_MR (*p_WDT_MR)
 
 // WDT_MR: Watchdog disable
-#define WDDIS	(1 << 15)
+#define WDT_MR_WDDIS (1 << 15)
 
 /**
  * @fn Disables the Watchdog Timer.

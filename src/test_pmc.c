@@ -72,7 +72,7 @@ void test_pmc_start_peripheral_clock_when_successful(void){
 
 	pmc_start_peripheral_clock(PMC_PERIPHERAL_ADC);
 
-	if((*p_PMC_PCSR1 & (0x01 << 5)) == (0x01 << 5))
+	if((*p_PMC_PCSR1 & (0x01u << 5)) == (0x01u << 5))
 	{
 		TEST_ASSERT_TRUE(1);
 	}

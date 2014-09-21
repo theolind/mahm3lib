@@ -23,12 +23,13 @@ void run_tests(void) {
 	Unity.TestFile = "test/test_pmc.c";
 	UnityBegin();
 
+	/*
 	// run pio tests
 	RUN_TEST(test_pio_pullup, 0);
 	RUN_TEST(test_pio_output, 0);
 	RUN_TEST(test_pio_read_pin, 0);
 	RUN_TEST(test_pio_set_output, 0);
-
+	*/
 	// run pmc tests
 	RUN_TEST(test_pmc_start_peripheral_clock_when_successful, 10);
 	RUN_TEST(test_pmc_status_peripheral_clock_when_inactive, 10);

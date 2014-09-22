@@ -140,7 +140,7 @@ error pmc_status_peripheral_clock(definedInput8 ID_) {
  *
  * @param device_prescaler_ This defines the prescaler to use.
  */
-error pmc_set_CAN_prescaler(definedInput8 ID_, definedInput32 device_prescaler_) {
+error pmc_set_can_prescaler(definedInput8 ID_, definedInput32 device_prescaler_) {
 	if (ID_ == ID_CAN0 || ID_ == ID_CAN1) {
 
 		// Code goes here
@@ -184,32 +184,19 @@ error pmc_sleep(definedInput8 wake_on_) {
  * @return
  */
 error pmc_sleep_for_ms(uint32_t ms) {
+
 	// Set wake up alarm
-	pmc_sleep(wake_on_event);
-	return SUCCESS;
+
+	return pmc_sleep(wake_on_event);
 }
 
 /** Set master clock
  *
  */
-error pmc_select_master_clock(uint32_t clock) {
+error pmc_select_master_clock(uint32_t PMC_CLOCK_){
 
-	error status = FAIL;
-
-	if (clock <= 7) {
-
-		PMC_MCKR = clock;
-
-		while ((PMC_SR | PMC_SR_MCKRDY_MASK) == 0)
-			;	// Wait for masterclock ready
-
-		status = SUCCESS;
-	}
-
-	return status;
 }
 
-#define pmc_
 
 /** This function will set the prescaler of the processor clock or master clock
  * to the desired value. For the input one must begin writing

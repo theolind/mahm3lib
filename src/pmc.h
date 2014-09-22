@@ -69,16 +69,16 @@
 #define PMC_CSS_PLLA_CLK		(0x02)		///<Master Clock Source Selection PLLA CLK
 #define PMC_CSS_UPLL_CLK		(0x03)		///<Master Clock Source Selection UPLL CLK
 
-#define PMC_PRESCALER			(0x01U << 4)	///<Processor Clock Prescaler Bit Mask
+#define PMC_PRESCALER			(1 << 4)	///<Processor Clock Prescaler Bit Mask
 
-#define PMC_PRES_CLK_0			(0x0U)		///<Processor Clock Prescaler - Selected Clock
-#define PMC_PRES_CLK_2			(0x1U)		///<Processor Clock Prescaler - Selected Clock / 2
-#define PMC_PRES_CLK_4			(0x2U)		///<Processor Clock Prescaler - Selected Clock / 4
-#define PMC_PRES_CLK_8			(0x3U)		///<Processor Clock Prescaler - Selected Clock / 8
-#define PMC_PRES_CLK_16			(0x4U)		///<Processor Clock Prescaler - Selected Clock / 16
-#define PMC_PRES_CLK_32			(0x5U)		///<Processor Clock Prescaler - Selected Clock / 32
-#define PMC_PRES_CLK_64			(0x6U)		///<Processor Clock Prescaler - Selected Clock / 64
-#define PMC_PRES_CLK_3			(0x7U)		///<Processor Clock Prescaler - Selected Clock / 3
+#define PMC_PROCESSOR_PRES_1	(0)		///<Processor Clock Prescaler - Selected Clock
+#define PMC_PROCESSOR_PRES_2	(1)		///<Processor Clock Prescaler - Selected Clock / 2
+#define PMC_PROCESSOR_PRES_3	(2)		///<Processor Clock Prescaler - Selected Clock / 3
+#define PMC_PROCESSOR_PRES_4	(3)		///<Processor Clock Prescaler - Selected Clock / 4
+#define PMC_PROCESSOR_PRES_8	(4)		///<Processor Clock Prescaler - Selected Clock / 8
+#define PMC_PROCESSOR_PRES_16	(5)		///<Processor Clock Prescaler - Selected Clock / 16
+#define PMC_PROCESSOR_PRES_32	(6)		///<Processor Clock Prescaler - Selected Clock / 32
+#define PMC_PROCESSOR_PRES_64	(7)		///<Processor Clock Prescaler - Selected Clock / 64
 
 
 #define PMC_SR_MCKRDY_MASK		(0x01U << 3)	///<Master Clock Status	0 = Not Ready 1 = Ready

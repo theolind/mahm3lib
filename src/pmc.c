@@ -54,7 +54,7 @@ uint32_t *const p_PMC_BASE_ADD = (uint32_t *) 0x400E0600U;
  */
 
 static uint32_t pmc_get_peripheral_mask(uint8_t ID_) {
-	if (ID_ < 33) {
+	if (ID_ < 32) {
 		return (uint32_t) (0x01U << ID_);
 	} else {
 		return (uint32_t) (0x01U << (ID_ - 32));	// Adjust to the correct bit

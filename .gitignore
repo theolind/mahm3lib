@@ -37,3 +37,23 @@ Thumbs.db
 .DS_Store
 .localized
 .metadata
+
+# Doxygen
+*.doxyfile
+
+# html-documentation
+documentation/
+.html
+.png
+.css
+.js
+.tex
+<<<<<<< HEAD
+.sty
+=======
+<<<<<<< HEAD
+.sty
+=======
+.sty
+>>>>>>> integration
+>>>>>>> integration

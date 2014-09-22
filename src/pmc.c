@@ -68,7 +68,7 @@ Reg p_PMC_SR    = (uint32_t *) 0x400E0668; ///< PMC Status Register
  * @param ID_ The peripheral clock that get the mask-bit added.
  * @param reg Register 0 containing peripheral 0-31, register 1 containing peripheral 32-44
  */
-static uint32_t pmc_get_peripheral_mask(definedInput8 ID_){
+static mask pmc_get_peripheral_mask(definedInput8 ID_){
 	if(ID_ < 33){
 		return (uint32_t)(0x01U << ID_);
 	}else{
@@ -89,7 +89,7 @@ error pmc_start_peripheral_clock(definedInput8 ID_){
 		PMC_PCER1 = pmc_get_peripheral_mask(ID_);
 	}
 
-	return 1;
+	return SUCCESS;
 }
 
 
@@ -104,10 +104,9 @@ error pmc_stop_peripheral_clock(definedInput8 ID_){
 	}else if(ID_ > 32 && ID_ < 45){	// Check if peripheral is register 1
 		PMC_PCDR1 = pmc_get_peripheral_mask(ID_);
 	}else{	// Out of bounds
-		return 0;
+		return FAIL;
 	}
-
-	return 1;
+	return SUCCESS;
 }
 
 /** Get peripheral clock status
@@ -116,44 +115,55 @@ error pmc_stop_peripheral_clock(definedInput8 ID_){
  */
 error pmc_status_peripheral_clock(definedInput8 ID_){
 
-	uint8_t status = 0;
+	error status = FAIL;
 
 	if(ID_ < 32){   // Check if ID_ is register 0
 
 		if((PMC_PCSR0 & pmc_get_peripheral_mask(ID_)) == 0)	// Status Enabled?
-			status = 1;
+			status = SUCCESS;
 
 	}else if(ID_ > 32 && ID_ < 45){	// Check if ID_ is register 0
 
 		if((PMC_PCSR1 & pmc_get_peripheral_mask(ID_)) > 0)	// Is Status Enabled?
-			status = 1;
+			status = SUCCESS;
 
 	}else{	// Out of bounds
-		status = 0;
+		status = FAIL;
 	}
 
 	return status;
 }
 
 /** Set peripheral prescaler.
- * This will set a prescaler for a given peripheral.s
+ * This will set a prescaler for the CAN controllers.
+ * The CAN controller are the only ones that need their prescalers to be set
+ * from the PMC. Every other peripheral has its own internal prescaler settings.
+ *
  * 'device' in the parameter-names indicate a peripheral mnemonic like
- * PWM, ADC, DACC ...
+ * PWM, ADC, DACC ... (All of the peripherals will be ignored by this function
+ * except for the CAN controllers.)
  *
  * @param device_prescaler_ This defines the prescaler to use.
  */
-uint8_t pmc_set_peripheral_prescaler(definedInput8 ID_,
+error pmc_set_CAN_prescaler(definedInput8 ID_,
 		definedInput32 device_prescaler_){
+	if(ID_ == ID_CAN0 || ID_ == ID_CAN1){
 
-	return 0;
+		// Code goes here
+
+		return SUCCESS;
+	}else{
+		return FAIL;
+	}
+	return FAIL;
 }
 
 /** Set to sleep mode, provide wakeup method
  *
  */
-uint8_t pmc_sleep(){
+error pmc_sleep(){
 
-	return 0;
+	return FAIL;
 }
 
 /** Set master clock
@@ -161,7 +171,7 @@ uint8_t pmc_sleep(){
  */
 error pmc_set_master_clock(uint32_t clock){
 
-	uint8_t status = 0;
+	error status = FAIL;
 
 
 	if(clock <= 7) {
@@ -170,7 +180,7 @@ error pmc_set_master_clock(uint32_t clock){
 
 			while((PMC_SR | PMC_SR_MCKRDY) == 0);	// Wait for masterclock ready
 
-			status = 1;
+			status = SUCCESS;
 	}
 
 	return status;

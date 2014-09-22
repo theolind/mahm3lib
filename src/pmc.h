@@ -97,7 +97,7 @@ error pmc_stop_peripheral_clock(definedInput8 ID_);
 error pmc_status_peripheral_clock(definedInput8 ID_);
 
 // Set peripheral prescaler
-error pmc_set_peripheral_prescaler(definedInput8 ID_, definedInput32 device_prescaler_);
+error pmc_set_CAN_prescaler(definedInput8 ID_, definedInput32 device_prescaler_);
 
 // Set to sleep mode, provide wakeup method
 error pmc_sleep(void);

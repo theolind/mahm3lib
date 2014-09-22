@@ -25,18 +25,32 @@ void run_tests(void) {
 	UnityBegin();
 
 
-	// run pio tests
+	// Run PIO tests
 	RUN_TEST(test_pio_pullup, 0);
 	RUN_TEST(test_pio_output, 0);
 	RUN_TEST(test_pio_read_pin, 0);
 	RUN_TEST(test_pio_set_output, 0);
 
-	// run pmc tests
+	// Run PMC tests
 	RUN_TEST(test_pmc_start_peripheral_clock_when_successful, 10);
 	RUN_TEST(test_pmc_status_peripheral_clock_when_inactive, 10);
 	RUN_TEST(test_pmc_status_peripheral_clock_when_active, 10);
 	RUN_TEST(test_pmc_stop_peripheral_clock_when_successful, 10);
 	RUN_TEST(test_pmc_set_master_clock_when_successful, 10);
+
+	// Run DACC tests
+	RUN_TEST(test_dacc_init, 20);
+	RUN_TEST(test_dacc_channel_0_enable, 20);
+	RUN_TEST(test_dacc_channel_1_enable, 20);
+	RUN_TEST(test_dacc_channel_0_write, 20);
+	RUN_TEST(test_dacc_channel_1_write, 20);
+	RUN_TEST(test_dacc_channel_0_disable, 20);
+	RUN_TEST(test_dacc_channel_1_disable, 20);
+
+	// Run ADC tests
+	RUN_TEST(test_adc_channel_enabled, 30);
+	RUN_TEST(test_adc_12bit, 30);
+	RUN_TEST(test_adc_10bit, 30);
 
 	UnityEnd();
 }

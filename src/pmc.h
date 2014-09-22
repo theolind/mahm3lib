@@ -12,6 +12,8 @@
 #ifndef PMC_H_
 #define PMC_H_
 
+#include "global_definitions.h"
+
 /**
  * No idea as to why these should be defined here as these should not be
  * accessed outside the API, or should they?
@@ -49,6 +51,16 @@
 #define PMC_PERIPHERAL_DACC	(38) ///<Peripheral DACC
 */
 
+/////////////////////////////////////
+#define pmc_clock_Main			0
+#define pmc_clock_slow_clock	0
+#define pmc_clock_PLL			0
+#define pmc_clock_ULLD //? look it up
+/////////////////////////////////////
+#define wake_on_interupt		1
+#define wake_on_event			0
+/////////////////////////////////////
+
 // MASER CLOCK SETTING //
 #define PMC_CSS					(0x01U)		///<Master Clock Source Selection Bit Mask
 
@@ -76,22 +88,22 @@
 //////////////////////////////////
 
 // Start peripheral clock
-uint8_t pmc_start_peripheral_clock(uint32_t peripheral);
+error pmc_start_peripheral_clock(definedInput8 ID_);
 
 // Stop peripheral clock
-uint8_t pmc_stop_peripheral_clock(uint32_t peripheral);
+error pmc_stop_peripheral_clock(definedInput8 ID_);
 
 // Get peripheral clock status
-uint8_t pmc_status_peripheral_clock(uint32_t peripheral);
+error pmc_status_peripheral_clock(definedInput8 ID_);
 
 // Set peripheral prescaler
-uint8_t pmc_set_peripheral_prescaler(void);
+error pmc_set_peripheral_prescaler(definedInput8 ID_, definedInput32 device_prescaler_);
 
 // Set to sleep mode, provide wakeup method
-uint8_t pmc_sleep(void);
+error pmc_sleep(void);
 
 // Set master clock
-uint8_t pmc_set_master_clock(uint32_t clock);
+error pmc_set_master_clock(uint32_t clock);
 
 
 #endif /* PMC_H_ */

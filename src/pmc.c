@@ -63,30 +63,30 @@ Reg p_PMC_SR    = (uint32_t *) 0x400E0668; ///< PMC Status Register
 
 
 /** Adjusts a specified peripheral (0 - 44) to the correct mask-bit.
- * Static because it's an internal function to the API.
+ * Static, because it's an internal function to the API.
  *
- * @param peripheral The peripheral clock that get the mask-bit added.
+ * @param ID_ The peripheral clock that get the mask-bit added.
  * @param reg Register 0 containing peripheral 0-31, register 1 containing peripheral 32-44
  */
-static uint32_t pmc_get_peripheral_mask(uint32_t peripheral, uint8_t reg){
-	if(reg == 0){
-		return (uint32_t)(0x01U << peripheral);
+static uint32_t pmc_get_peripheral_mask(definedInput8 ID_){
+	if(ID_ < 33){
+		return (uint32_t)(0x01U << ID_);
 	}else{
-		return (uint32_t)(0x01U << (peripheral - 32));	// Adjust to the correct bit
+		return (uint32_t)(0x01U << (ID_ - 32));	// Adjust to the correct bit
 	}
 }
 
 
 
 /** Start peripheral clock
- * @param peripheral Which peripheral clock that should be started.
+ * @param ID_ Which peripheral clock that should be started.
 */
-uint8_t pmc_start_peripheral_clock(uint32_t peripheral){
+error pmc_start_peripheral_clock(definedInput8 ID_){
 
-	if(peripheral < 32){
-		PMC_PCER0 = pmc_get_peripheral_mask(peripheral, 0);
+	if(ID_ < 32){
+		PMC_PCER0 = pmc_get_peripheral_mask(ID_);
 	}else{
-		PMC_PCER1 = pmc_get_peripheral_mask(peripheral, 1);
+		PMC_PCER1 = pmc_get_peripheral_mask(ID_);
 	}
 
 	return 1;
@@ -95,14 +95,14 @@ uint8_t pmc_start_peripheral_clock(uint32_t peripheral){
 
 /** Stop peripheral clock
  *
- * @param peripheral Which peripheral clock that should be stopped.
+ * @param ID_ Which peripheral clock that should be stopped.
  */
-uint8_t pmc_stop_peripheral_clock(uint32_t peripheral){
+error pmc_stop_peripheral_clock(definedInput8 ID_){
 
-	if(peripheral < 32){   // Check if peripheral is register 0
-		PMC_PCDR0 = pmc_get_peripheral_mask(peripheral, 0);
-	}else if(peripheral > 32 && peripheral < 45){	// Check if peripheral is register 1
-		PMC_PCDR1 = pmc_get_peripheral_mask(peripheral, 1);
+	if(ID_ < 32){   // Check if peripheral is register 0
+		PMC_PCDR0 = pmc_get_peripheral_mask(ID_);
+	}else if(ID_ > 32 && ID_ < 45){	// Check if peripheral is register 1
+		PMC_PCDR1 = pmc_get_peripheral_mask(ID_);
 	}else{	// Out of bounds
 		return 0;
 	}
@@ -112,20 +112,20 @@ uint8_t pmc_stop_peripheral_clock(uint32_t peripheral){
 
 /** Get peripheral clock status
  *
- * @param peripheral Shows the status of selected peripheral clock.
+ * @param ID_ Shows the status of selected peripheral clock.
  */
-uint8_t pmc_status_peripheral_clock(uint32_t peripheral){
+error pmc_status_peripheral_clock(definedInput8 ID_){
 
 	uint8_t status = 0;
 
-	if(peripheral < 32){   // Check if peripheral is register 0
+	if(ID_ < 32){   // Check if ID_ is register 0
 
-		if((PMC_PCSR0 & pmc_get_peripheral_mask(peripheral, 0)) == 0)	// Status Enabled?
+		if((PMC_PCSR0 & pmc_get_peripheral_mask(ID_)) == 0)	// Status Enabled?
 			status = 1;
 
-	}else if(peripheral > 32 && peripheral < 45){	// Check if peripheral is register 0
+	}else if(ID_ > 32 && ID_ < 45){	// Check if ID_ is register 0
 
-		if((PMC_PCSR1 & pmc_get_peripheral_mask(peripheral, 1)) > 0)	// Is Status Enabled?
+		if((PMC_PCSR1 & pmc_get_peripheral_mask(ID_)) > 0)	// Is Status Enabled?
 			status = 1;
 
 	}else{	// Out of bounds
@@ -135,10 +135,15 @@ uint8_t pmc_status_peripheral_clock(uint32_t peripheral){
 	return status;
 }
 
-/** Set peripheral prescaler
+/** Set peripheral prescaler.
+ * This will set a prescaler for a given peripheral.s
+ * 'device' in the parameter-names indicate a peripheral mnemonic like
+ * PWM, ADC, DACC ...
  *
+ * @param device_prescaler_ This defines the prescaler to use.
  */
-uint8_t pmc_set_peripheral_prescaler(){
+uint8_t pmc_set_peripheral_prescaler(definedInput8 ID_,
+		definedInput32 device_prescaler_){
 
 	return 0;
 }
@@ -154,7 +159,7 @@ uint8_t pmc_sleep(){
 /** Set master clock
  *
  */
-uint8_t pmc_set_master_clock(uint32_t clock){
+error pmc_set_master_clock(uint32_t clock){
 
 	uint8_t status = 0;
 

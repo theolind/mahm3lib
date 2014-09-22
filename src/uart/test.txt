@@ -1,0 +1,13 @@
+------ Manual tests for the UART ------
+
+Test of the API has been performed by sending/receiving characters with the existing functions:
+uint8_t uart_init(const uart_settings_t *);
+uint8_t uart_tx_ready(void);
+uint8_t uart_rx_ready(void);
+void uart_write_chr(uint8_t);
+void uart_write_str(char *);
+char uart_read_chr(void);
+
+Important!
+The function "uint8_t uart_init(const uart_settings_t *)" doesn't perform any control of the input parameter.
+This must be implemented in future versions!

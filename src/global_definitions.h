@@ -16,20 +16,6 @@
 
 #include <stdint.h>
 
-/// Used when creating a pointer to a register. (helps semantic)
-typedef uint32_t *const Reg;
-/// Standard error return (helps semantic)
-typedef uint8_t error;
-
-
-typedef uint32_t mask;
-
-/** Indicates that this input can be found among the defined values for ease of
- * use. Use the right bit-length to promote compiler optimization.
- */
-typedef uint32_t definedInput32;
-typedef uint8_t definedInput8;
-
 /**
  * These are identifiers and may be used in several APIs and therefore
  * placed here.

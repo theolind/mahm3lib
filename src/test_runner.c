@@ -37,24 +37,6 @@ void run_tests(void) {
 	RUN_TEST(test_pmc_status_peripheral_clock_when_active, 10);
 	RUN_TEST(test_pmc_stop_peripheral_clock_when_successful, 10);
 	RUN_TEST(test_pmc_set_master_clock_when_successful, 10);
-	UnityEnd();
-
-
-
-	// Run DACC tests
-	RUN_TEST(test_dacc_init, 20);
-	RUN_TEST(test_dacc_channel_0_enable, 20);
-	RUN_TEST(test_dacc_channel_1_enable, 20);
-	RUN_TEST(test_dacc_channel_0_write, 20);
-	RUN_TEST(test_dacc_channel_1_write, 20);
-	RUN_TEST(test_dacc_channel_0_disable, 20);
-	RUN_TEST(test_dacc_channel_1_disable, 20);
-
-	// Run ADC tests
-	RUN_TEST(test_adc_channel_enabled, 30);
-	RUN_TEST(test_adc_12bit, 30);
-	RUN_TEST(test_adc_10bit, 30);
-
 
 	UnityEnd();
 }

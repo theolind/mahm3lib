@@ -15,7 +15,7 @@
 #include "pmc.h"
 
 // The first register in the Power Management Controller
-Reg p_PMC_BASE_ADD = (uint32_t *) 0x400E0600U;
+uint32_t *const p_PMC_BASE_ADD = (uint32_t *) 0x400E0600U;
 
 /**
  *  Necessary registers addressed by incrementing the base address by an
@@ -46,28 +46,14 @@ Reg p_PMC_BASE_ADD = (uint32_t *) 0x400E0600U;
 
 // Remove the following if tests passes
 
-/*   ---- Look up, changed the way registers are accessed in. ----
- // This may even have some memory advantages as well.
- *
- Reg p_PMC_PCER0 = (uint32_t *) 0x400E0610U; ///< PMC Peripheral Clock Enable Register 0
- Reg p_PMC_PCDR0 = (uint32_t *) 0x400E0614U; ///< PMC Peripheral Clock Disable Register 0
- Reg p_PMC_PCSR0 = (uint32_t *) 0x400E0618U; ///< PMC Peripheral Clock Status Register 0
-
- Reg p_PMC_PCER1 = (uint32_t *) 0x400E0700U; ///< PMC Peripheral Clock Status Register 1
- Reg p_PMC_PCDR1 = (uint32_t *) 0x400E0704U; ///< PMC Peripheral Clock Status Register 1
- Reg p_PMC_PCSR1 = (uint32_t *) 0x400E0708U; ///< PMC Peripheral Clock Status Register 1
-
- Reg p_PMC_MCKR  = (uint32_t *) 0x400E0630U; ///< PMC Master Clock Register
- Reg p_PMC_SR    = (uint32_t *) 0x400E0668; ///< PMC Status Register
- */
-
 /** Adjusts a specified peripheral (0 - 44) to the correct mask-bit.
  * Static, because it's an internal function to the API.
  *
  * @param ID_ The peripheral clock that get the mask-bit added.
  * @param reg Register 0 containing peripheral 0-31, register 1 containing peripheral 32-44
  */
-static uint32_t pmc_get_peripheral_mask(definedInput8 ID_) {
+
+static uint32_t pmc_get_peripheral_mask(uint8_t ID_) {
 	if (ID_ < 33) {
 		return (uint32_t) (0x01U << ID_);
 	} else {
@@ -78,7 +64,7 @@ static uint32_t pmc_get_peripheral_mask(definedInput8 ID_) {
 /** Start peripheral clock
  * @param ID_ Which peripheral clock that should be started.
  */
-error pmc_start_peripheral_clock(definedInput8 ID_) {
+uint8_t pmc_start_peripheral_clock(uint8_t ID_) {
 	if (ID_ < 32) {
 		PMC_PCER0 |= pmc_get_peripheral_mask(ID_);
 	} else {
@@ -91,7 +77,7 @@ error pmc_start_peripheral_clock(definedInput8 ID_) {
  *
  * @param ID_ Which peripheral clock that should be stopped.
  */
-error pmc_stop_peripheral_clock(definedInput8 ID_) {
+uint8_t pmc_stop_peripheral_clock(uint8_t ID_) {
 	if (ID_ < 32) {   // Check if peripheral is register 0
 		PMC_PCDR0 = pmc_get_peripheral_mask(ID_);
 	} else if (ID_ > 32 && ID_ < 45) {	// Check if peripheral is register 1
@@ -106,9 +92,9 @@ error pmc_stop_peripheral_clock(definedInput8 ID_) {
  *
  * @param ID_ Shows the status of selected peripheral clock.
  */
-error pmc_status_peripheral_clock(definedInput8 ID_) {
+uint8_t pmc_status_peripheral_clock(uint8_t ID_) {
 
-	error status = FAIL;
+	uint8_t status = FAIL;
 
 	if (ID_ < 32) {   // Check if ID_ is register 0
 
@@ -140,29 +126,21 @@ error pmc_status_peripheral_clock(definedInput8 ID_) {
  *
  * @param device_prescaler_ This defines the prescaler to use.
  */
-error pmc_set_can_prescaler(definedInput8 ID_, definedInput32 device_prescaler_) {
-	if (ID_ == ID_CAN0 || ID_ == ID_CAN1) {
 
-		// Code goes here
 
-		return SUCCESS;
-	} else {
-		return FAIL;
-	}
-	return FAIL;
-}
+
 
 /** Set to sleep mode, provide wakeup method
  *
  */
-error pmc_sleep(definedInput8 wake_on_) {
-	if (wake_on_ == wake_on_event) {
+uint8_t pmc_sleep(uint8_t wake_on_) {
+	if (wake_on_ == PMC_WAKE_ON_EVENT) {
 		__asm__ ("wfe;"
 				: /* output */
 				: /* input */
 				: /* clobbered register */
 		);
-	} else if (wake_on_ == wake_on_interupt) {
+	} else if (wake_on_ == PMC_WAKE_ON_INTERUPT) {
 		__asm__ ("wfi;"
 				: /* output */
 				: /* input */
@@ -183,18 +161,19 @@ error pmc_sleep(definedInput8 wake_on_) {
  * @param ms
  * @return
  */
-error pmc_sleep_for_ms(uint32_t ms) {
+uint8_t pmc_sleep_for_ms(uint32_t ms){
 
 	// Set wake up alarm
 
-	return pmc_sleep(wake_on_event);
+	return pmc_sleep(PMC_WAKE_ON_EVENT);
 }
 
 /** Set master clock
  *
  */
-error pmc_select_master_clock(uint32_t PMC_CLOCK_){
+uint8_t pmc_select_master_clock(uint32_t PMC_CLOCK_){
 
+	return SUCCESS;
 }
 
 
@@ -205,12 +184,11 @@ error pmc_select_master_clock(uint32_t PMC_CLOCK_){
  * @param pmc_processor_clk_prescaler_ Choose amoung predefined prescalers
  * @return
  */
-error pmc_set_processor_clk(definedInput8 pmc_processor_clk_prescaler_){
+uint8_t pmc_set_processor_clk(uint8_t PMC_PROCESSOR_PRES_){
 	// 0x00000003 = CSS mask
 	if((PMC_MCKR & 0x00000003) < 2){
 		while(~PMC_SR_MCKRDY_MASK){} // Wait till the master clock gets ready
-		PMC_MCKR |= (~PMC_MCKR_PRES_MASK | (pmc_processor_clk_prescaler_ << 4));
-
+		PMC_MCKR |= (~PMC_MCKR_PRES_MASK | (PMC_PROCESSOR_PRES_ << 4));
 	}
 
 	return SUCCESS;

@@ -1,3 +1,4 @@
+#include "global_definitions.h"
 #include "dacc.h"
 
 uint32_t *const p_DACC_CR   = (uint32_t *) 0x400C8000U;
@@ -21,7 +22,7 @@ uint8_t dacc_init(dacc_settings_t *settings){
 	}
 
 	// Enable Peripheral clock for DACC
-	pmc_start_peripheral_clock(PMC_PERIPHERAL_DACC);
+	pmc_start_peripheral_clock(ID_DACC);
 
 	// Software reset
 	DACC_CR = (0x1u << 0);

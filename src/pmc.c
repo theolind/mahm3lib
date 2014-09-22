@@ -52,6 +52,7 @@ uint32_t *const p_PMC_BASE_ADD = (uint32_t *) 0x400E0600U;
  * @param ID_ The peripheral clock that get the mask-bit added.
  * @param reg Register 0 containing peripheral 0-31, register 1 containing peripheral 32-44
  */
+
 static uint32_t pmc_get_peripheral_mask(uint8_t ID_) {
 	if (ID_ < 33) {
 		return (uint32_t) (0x01U << ID_);
@@ -125,7 +126,7 @@ uint8_t pmc_status_peripheral_clock(uint8_t ID_) {
  *
  * @param device_prescaler_ This defines the prescaler to use.
  */
-uint8_t pmc_set_CAN_prescaler(uint8_t ID_, uint32_t device_prescaler_) {
+uint8_t pmc_set_can_prescaler(uint8_t ID_, uint32_t device_prescaler_) {
 	if (ID_ == ID_CAN0 || ID_ == ID_CAN1) {
 
 		// Code goes here
@@ -141,13 +142,13 @@ uint8_t pmc_set_CAN_prescaler(uint8_t ID_, uint32_t device_prescaler_) {
  *
  */
 uint8_t pmc_sleep(uint8_t wake_on_) {
-	if (wake_on_ == wake_on_event) {
+	if (wake_on_ == PMC_WAKE_ON_EVENT) {
 		__asm__ ("wfe;"
 				: /* output */
 				: /* input */
 				: /* clobbered register */
 		);
-	} else if (wake_on_ == wake_on_interupt) {
+	} else if (wake_on_ == PMC_WAKE_ON_INTERUPT) {
 		__asm__ ("wfi;"
 				: /* output */
 				: /* input */
@@ -170,7 +171,7 @@ uint8_t pmc_sleep(uint8_t wake_on_) {
  */
 uint8_t pmc_sleep_for_ms(uint32_t ms) {
 	// Set wake up alarm
-	pmc_sleep(wake_on_event);
+	pmc_sleep(PMC_WAKE_ON_EVENT);
 	return SUCCESS;
 }
 
@@ -185,15 +186,12 @@ uint8_t pmc_select_master_clock(uint32_t clock) {
 
 		PMC_MCKR = clock;
 
-		//while ((PMC_SR | PMC_SR) == 0);	// Wait for masterclock ready
-
 		status = SUCCESS;
 	}
 
 	return status;
 }
 
-#define pmc_
 
 /** This function will set the prescaler of the processor clock or master clock
  * to the desired value. For the input one must begin writing

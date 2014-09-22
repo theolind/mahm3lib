@@ -7,6 +7,7 @@
  * \date 17 sep 2014
  */
 
+#include "global_definitions.h"
 #include "unity.h"
 #include "test_adc.h"
 
@@ -14,7 +15,6 @@
  * Checking that ADC channel 0 is enabled
  */
 void test_adc_channel_enabled(void) {
-
 	// ADC Channel Status Register
 	uint32_t * const p_ADC_CHSR = (uint32_t *) 0x400C0018u;
 
@@ -58,6 +58,7 @@ void test_adc_channel_disabled(void) {
 
 }
 
+
 /*
  * Test channel status function, requires "test_adc_channel_enabled" and
  * "test_adc_channel_disabled" to pass it's tests
@@ -90,7 +91,7 @@ void test_adc_channel_status(void) {
  */
 void test_adc_12bit(void) {
 
-	pmc_start_peripheral_clock(PMC_PERIPHERAL_ADC);
+	pmc_start_peripheral_clock(ID_ADC);
 
 	// Mode Register
 	uint32_t * const p_ADC_MR = (uint32_t *) 0x400C0004u;
@@ -110,7 +111,7 @@ void test_adc_12bit(void) {
  */
 void test_adc_10bit(void) {
 
-	pmc_start_peripheral_clock(PMC_PERIPHERAL_ADC);
+	pmc_start_peripheral_clock(ID_ADC);
 
 	// Mode Register
 	uint32_t * const p_ADC_MR = (uint32_t *) 0x400C0004u;

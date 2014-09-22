@@ -10,7 +10,7 @@
  * \pre As it is now, the ADC is very much stripped down. All functions not included.
  */
 
-
+#include "global_definitions.h"
 #include <inttypes.h>
 #include "adc.h"
 
@@ -34,7 +34,7 @@ uint32_t *const p_ADC_ISR 	= (uint32_t *) 0x400C0030u;	///<ADC Interrupts Status
 void adc_init(void) {
 
 	// Enable Peripheral clock
-	 pmc_start_peripheral_clock(PMC_PERIPHERAL_ADC);
+	 pmc_start_peripheral_clock(ID_ADC);
 
 	// Software reset
 	ADC_CR = (0x1u << 0);

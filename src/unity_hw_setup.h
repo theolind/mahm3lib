@@ -17,6 +17,7 @@
 // EEFC Flash Mode Register 1
 #define EEFC_FMR_1 (*p_EEFC_FMR_1)
 
+
 #define PMC_SR (*((volatile uint32_t *)0x400E0668U))
 
 /* -------- EEFC_FMR : (EFC Offset: 0x00) EEFC Flash Mode Register -------- */

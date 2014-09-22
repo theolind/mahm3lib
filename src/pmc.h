@@ -81,8 +81,8 @@
 #define PMC_PRES_CLK_3			(0x7U)		///<Processor Clock Prescaler - Selected Clock / 3
 
 
-#define PMC_SR_MCKRDY			(0x01U << 3)	///<Master Clock Status	0 = Not Ready 1 = Ready
-
+#define PMC_SR_MCKRDY_MASK		(0x01U << 3)	///<Master Clock Status	0 = Not Ready 1 = Ready
+#define PMC_MCKR_PRES_MASK		(0x07U << 4)	///<Mask for the processor prescaler
 
 
 //////////////////////////////////
@@ -100,7 +100,10 @@ error pmc_status_peripheral_clock(definedInput8 ID_);
 error pmc_set_CAN_prescaler(definedInput8 ID_, definedInput32 device_prescaler_);
 
 // Set to sleep mode, provide wakeup method
-error pmc_sleep(void);
+error pmc_sleep(definedInput8 wake_on_);
+
+// Sleep for a given amount of milliseconds
+error pmc_sleep_for_ms(uint32_t ms);
 
 // Set master clock
 error pmc_set_master_clock(uint32_t clock);

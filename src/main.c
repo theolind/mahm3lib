@@ -14,8 +14,5 @@ int main(void) {
 
 	run_tests();
 
-    return 0;
+	return 0;
 }
-
-
-

@@ -3,7 +3,7 @@
  * API for the UART.
  *
  * Author: Mathias Beckius
- * Date: September 21, 2014
+ * Date: September 22, 2014
  *
  * To do:
  * - Add some control of the parameters in uart_init().
@@ -12,64 +12,49 @@
 
 #include "uart.h"
 
-// UART Control Register
-//uint32_t *const p_UART_CR = (uint32_t *) 0x400E0800U;
-// UART Mode Register
-//uint32_t *const p_UART_MR = (uint32_t *) 0x400E0804U;
-// UART Status Register
-//uint32_t *const p_UART_SR = (uint32_t *) 0x400E0814U;
-// UART Receiver Holding Register
-//uint32_t *const p_UART_RHR = (uint32_t *) 0x400E0818U;
-// UART Transmit Holding Register
-//uint32_t *const p_UART_THR = (uint32_t *) 0x400E081CU;
-// UART Baud Rate Generator Register
-//uint32_t *const p_UART_BRGR = (uint32_t *) 0x400E0820U;
-
-uart_reg_t *const UART = (uart_reg_t *) 0x400E0800U;
-
 /*
  * Important! When a control of input parameters is implemented,
  * write a test for this.
  */
-uint8_t uart_init(const uart_settings_t *options) {
+uint8_t uart_init(uart_reg_t *uart, const uart_settings_t *options) {
 	// reset and disable receiver & transmitter
-	UART->UART_CR = UART_CR_RSTRX | UART_CR_RSTTX |
+	uart->UART_CR = UART_CR_RSTRX | UART_CR_RSTTX |
 					UART_CR_RXDIS | UART_CR_TXDIS;
 	// configure baud rate
-	UART->UART_BRGR = (84000000UL >> 4) / options->baudrate;
+	uart->UART_BRGR = (84000000UL >> 4) / options->baudrate;
 	//(sysclk_get_cpu_hz() >> 4) / options->baudrate;
 
 	// configure mode
-	UART->UART_MR = options->paritytype | UART_MR_CHMODE_NORMAL;
+	uart->UART_MR = options->paritytype | UART_MR_CHMODE_NORMAL;
 	// enable receiver and transmitter
-	UART->UART_CR = UART_CR_RXEN | UART_CR_TXEN;
+	uart->UART_CR = UART_CR_RXEN | UART_CR_TXEN;
 
 	return 1;
 }
 
-uint8_t uart_tx_ready(void) {
-	return (UART->UART_SR & UART_SR_TXRDY);
+uint8_t uart_tx_ready(uart_reg_t *uart) {
+	return (uart->UART_SR & UART_SR_TXRDY);
 }
 
-uint8_t uart_rx_ready(void) {
-	return (UART->UART_SR & UART_SR_RXRDY);
+uint8_t uart_rx_ready(uart_reg_t *uart) {
+	return (uart->UART_SR & UART_SR_RXRDY);
 }
 
-void uart_write_chr(char chr) {
+void uart_write_chr(uart_reg_t *uart, char chr) {
 	//write character to Transmit Holding Register
-	UART->UART_THR = (uint32_t) chr;
+	uart->UART_THR = (uint32_t) chr;
 }
 
-void uart_write_str(char *str) {
+void uart_write_str(uart_reg_t *uart, char *str) {
 	while (*str != '\0') {
-		while (!uart_tx_ready());
-		uart_write_chr(*str);
+		while (!uart_tx_ready(uart));
+		uart_write_chr(uart, *str);
 		str++;
 	}
 }
 
-char uart_read_chr(void) {
+char uart_read_chr(uart_reg_t *uart) {
 	//read character from Receiver Holding Register
-	char chr = (char) UART->UART_RHR;
+	char chr = (char) uart->UART_RHR;
 	return chr;
 }

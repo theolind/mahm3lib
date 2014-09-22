@@ -13,7 +13,7 @@
 * the pull-up resistor on the RX0 pin.
 *
 * @author Mathias Beckius
-* @date September 21, 2014
+* @date September 22, 2014
 *
 * @pre Initialize system clock.
 */
@@ -23,18 +23,8 @@
 
 #include <inttypes.h>
 
-// UART Control Register
-//#define UART_CR (*p_UART_CR)
-// UART Mode Register
-//#define UART_MR (*p_UART_MR)
-// UART Status Register
-//#define UART_SR (*p_UART_SR)
-// UART Receiver Holding Register
-//#define UART_RHR (*p_UART_RHR)
-// UART Transmit Holding Register
-//#define UART_THR (*p_UART_THR)
-// UART Baud Rate Generator Register
-//#define UART_BRGR (*p_UART_BRGR)
+// pointer to registers of UART peripheral, base address: 0x400E0800
+#define UART ((uart_reg_t *) 0x400E0800U)
 
 // UART_CR: (UART Offset: 0x0000) Control Register
 #define UART_CR_RSTRX (0x1u << 2) /**< \brief (UART_CR) Reset Receiver */
@@ -162,6 +152,7 @@
 #define UART_PTSR_TXCBEN (0x1u << 18) /**< \brief (UART_PTSR) Transmitter Transfer Enable */
 #define UART_PTSR_ERR (0x1u << 24) /**< \brief (UART_PTSR) Transfer Bus Error */
 
+
 /*
  * Mapping of UART registers
  * Base address: 0x400E0800
@@ -212,46 +203,52 @@ typedef struct {
 
 /**
  * @fn Initialization of the UART.
+ * @param Base address to UART peripheral.
  * @param Settings for the initialization (baud rate, parity, etc).
  * @return 1 is returned for successful initialization, 0 for failure.
  * @pre Enable PMC Peripheral Clock for UART.
  * @pre Disable the PIO from controlling PA8 (RX-pin) and PA9 (TX-pin).
  * @pre Enable pull-up on PA8 (RX-pin) - only when reading from UART on the Arduino Due!
  */
-uint8_t uart_init(const uart_settings_t *);
+uint8_t uart_init(uart_reg_t *, const uart_settings_t *);
 
 /**
  * @fn Checks if a character can be sent by the UART.
+ * @param Base address to UART peripheral.
  * @return 1 is returned when a character is ready to be sent,
  * @return otherwise 0 is returned.
  */
-uint8_t uart_tx_ready(void);
+uint8_t uart_tx_ready(uart_reg_t *);
 
 /**
  * @fn Checks if a character has received to the UART.
+ * @param Base address to UART peripheral.
  * @return 1 is returned when a character has received,
  * @return otherwise 0 is returned.
  */
-uint8_t uart_rx_ready(void);
+uint8_t uart_rx_ready(uart_reg_t *);
 
 /**
  * @fn Sends a character to the UART.
+ * @param Base address to UART peripheral.
  * @param Character (ASCII code) to send.
  * @pre Call uart_tx_ready() to check if a character can be sent.
  */
-void uart_write_chr(char);
+void uart_write_chr(uart_reg_t *, char);
 
 /**
  * @fn Sends a string of characters to the UART.
+ * @param Base address to UART peripheral.
  * @param String (pointer to character) to send.
  */
-void uart_write_str(char *);
+void uart_write_str(uart_reg_t *, char *);
 
 /**
  * @fn Reads a character from the UART.
+ * @param Base address to UART peripheral.
  * @return Character.
  * @pre Call uart_rx_ready() to check if a character can be read.
  */
-char uart_read_chr(void);
+char uart_read_chr(uart_reg_t *);
 
 #endif

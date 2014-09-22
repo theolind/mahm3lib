@@ -180,16 +180,6 @@ uint8_t pmc_sleep_for_ms(uint32_t ms) {
  */
 uint8_t pmc_select_master_clock(uint32_t clock) {
 
-	uint8_t status = FAIL;
-
-	if (clock <= 7) {
-
-		PMC_MCKR = clock;
-
-		status = SUCCESS;
-	}
-
-	return status;
 }
 
 

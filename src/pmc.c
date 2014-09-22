@@ -113,22 +113,6 @@ uint8_t pmc_status_peripheral_clock(uint8_t ID_) {
 	return status;
 }
 
-/** Set peripheral prescaler.
- * This will set a prescaler for the CAN controllers.
- * The CAN controller are the only ones that need their prescalers to be set
- * from the PMC. Every other peripheral has its own internal prescaler settings.
- *
- * 'device' in the parameter-names indicate a peripheral mnemonic like
- * PWM, ADC, DACC ... (All of the peripherals will be ignored by this function
- * except for the CAN controllers.)
- *
- * !! Not yet ready !!
- *
- * @param device_prescaler_ This defines the prescaler to use.
- */
-
-
-
 
 /** Set to sleep mode, provide wakeup method
  *
@@ -168,7 +152,7 @@ uint8_t pmc_sleep_for_ms(uint32_t ms){
 	return pmc_sleep(PMC_WAKE_ON_EVENT);
 }
 
-/** Set master clock
+/** select master clock
  *
  */
 uint8_t pmc_select_master_clock(uint32_t PMC_CLOCK_){
@@ -192,4 +176,29 @@ uint8_t pmc_set_processor_clk(uint8_t PMC_PROCESSOR_PRES_){
 	}
 
 	return SUCCESS;
+}
+
+/** Set peripheral prescaler.
+ * This will set a prescaler for the CAN controllers.
+ * The CAN controller are the only ones that need their prescalers to be set
+ * from the PMC. Every other peripheral has its own internal prescaler settings.
+ *
+ * 'device' in the parameter-names indicate a peripheral mnemonic like
+ * PWM, ADC, DACC ... (All of the peripherals will be ignored by this function
+ * except for the CAN controllers.)
+ *
+ * !! Not yet ready !!
+ *
+ * @param device_prescaler_ This defines the prescaler to use.
+ */
+uint8_t pmc_set_can_prescaler(uint8_t ID_, uint32_t CAN_PRES_) {
+	if (ID_ == ID_CAN0 || ID_ == ID_CAN1) {
+
+		// Code goes here
+
+		return SUCCESS;
+	} else {
+		return FAIL;
+	}
+	return FAIL;
 }

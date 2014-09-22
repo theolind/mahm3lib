@@ -56,8 +56,6 @@ void run_tests(void) {
 	RUN_TEST(test_adc_channel_status, 30);
 	RUN_TEST(test_adc_12bit, 30);
 	RUN_TEST(test_adc_10bit, 30);
-	RUN_TEST(test_adc_12bit_reading_single_channel, 30);
-	RUN_TEST(test_adc_10bit_reading_single_channel, 30);
 
 	UnityEnd();
 }

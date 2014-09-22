@@ -57,14 +57,13 @@
 /////////////////////////////////////
 
 // MASER CLOCK SETTING //
-#define PMC_CSS					(0x01U)		///<Master Clock Source Selection Bit Mask
+#define PMC_MCKR_CSS_MASK	(0x03U)	///<Master Clock Source Selection section Mask
 
 #define PMC_CLOCK_SLOW		(0)		///<Master Clock Source Selection SLOW CLK
 #define PMC_CLOCK_MAIN		(1)		///<Master Clock Source Selection MAIN CLK
 #define PMC_CLOCK_PLLA		(2)		///<Master Clock Source Selection PLLA CLK
 #define PMC_CLOCK_UPLL		(3)		///<Master Clock Source Selection UPLL CLK
 
-#define PMC_PRESCALER			(1 << 4)	///<Processor Clock Prescaler Bit Mask
 
 
 #define PMC_PROCESSOR_PRES_1	(0)		///<Processor Clock Prescaler - Selected Clock
@@ -77,8 +76,10 @@
 #define PMC_PROCESSOR_PRES_64	(6)		///<Processor Clock Prescaler - Selected Clock / 64
 
 
+#define PMC_PRESCALER_MASK		(1 << 4)	///<Processor Clock Prescaler Bit Mask
+
 #define PMC_SR_MCKRDY_MASK		(1 << 3)	///<Master Clock Status	0 = Not Ready 1 = Ready
-#define PMC_MCKR_PRES_MASK		(7 << 4)	///<Mask for the processor prescaler
+#define PMC_MCKR_PRES_MASK		(7 << 4)	///<Section Mask for the processor prescaler position
 
 
 //////////////////////////////////

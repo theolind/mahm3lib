@@ -165,18 +165,28 @@ uint8_t pmc_select_master_clock(uint32_t PMC_CLOCK_){
  * to the desired value. For the input one must begin writing
  * pmc_processor_clk_prescaler_ to get to the correct prescalers.
  *
+ * This will only work if Slow_clock or Main_clock is selected.
+ *
  * @param pmc_processor_clk_prescaler_ Choose amoung predefined prescalers
- * @return
+ * @return error
  */
 uint8_t pmc_set_processor_clk(uint8_t PMC_PROCESSOR_PRES_){
-	// 0x00000003 = CSS mask
-	if((PMC_MCKR & 0x00000003) < 2){
-		while(~PMC_SR_MCKRDY_MASK){} // Wait till the master clock gets ready
-		PMC_MCKR |= (~PMC_MCKR_PRES_MASK | (PMC_PROCESSOR_PRES_ << 4));
+	if((PMC_MCKR & PMC_MCKR_CSS_MASK) < 2){
+		// Wait till the master clock stabilizes
+		while(~is_bit_high(PMC_SR,PMC_SR_MCKRDY_MASK)){}
+		// Explanation: Clear the field of the prescaler and add a new prescaler
+		// Set PRES with one update of PMC_MCKR
+		PMC_MCKR &= ((PMC_MCKR & (~PMC_MCKR_PRES_MASK)) | (PMC_PROCESSOR_PRES_ << 4));
+		// Wait till the master clock stabilizes
+		while(~is_bit_high(PMC_SR,PMC_SR_MCKRDY_MASK)){}
+		return SUCCESS;
+	}else{
+		return FAIL;
 	}
 
 	return SUCCESS;
 }
+
 
 /** Set peripheral prescaler.
  * This will set a prescaler for the CAN controllers.

@@ -88,25 +88,25 @@
 //////////////////////////////////
 
 // Start peripheral clock
-error pmc_start_peripheral_clock(definedInput8 ID_);
+uint8_t pmc_start_peripheral_clock(uint8_t ID_);
 
 // Stop peripheral clock
-error pmc_stop_peripheral_clock(definedInput8 ID_);
+uint8_t pmc_stop_peripheral_clock(uint8_t ID_);
 
 // Get peripheral clock status
-error pmc_status_peripheral_clock(definedInput8 ID_);
+uint8_t pmc_status_peripheral_clock(uint8_t ID_);
 
 // Set peripheral prescaler
-error pmc_set_CAN_prescaler(definedInput8 ID_, definedInput32 device_prescaler_);
+uint8_t pmc_set_CAN_prescaler(uint8_t ID_, uint32_t device_prescaler_);
 
 // Set to sleep mode, provide wakeup method
-error pmc_sleep(definedInput8 wake_on_);
+uint8_t pmc_sleep(uint8_t wake_on_);
 
 // Sleep for a given amount of milliseconds
-error pmc_sleep_for_ms(uint32_t ms);
+uint8_t pmc_sleep_for_ms(uint32_t ms);
 
 // Set master clock
-error pmc_set_master_clock(uint32_t clock);
+uint8_t pmc_set_master_clock(uint32_t clock);
 
 
 #endif /* PMC_H_ */

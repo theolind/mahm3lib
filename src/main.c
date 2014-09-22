@@ -17,10 +17,6 @@ int main(void) {
 	adc_set_resolution(12);
 
 	run_tests();
-	//read_adc();
 
-
-
-
-    return 0;
+	return 0;
 }

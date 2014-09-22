@@ -15,7 +15,7 @@
  */
 void test_adc_channel_enabled(void) {
 
-	///<ADC Channel Status Register
+	// ADC Channel Status Register
 	uint32_t * const p_ADC_CHSR = (uint32_t *) 0x400C0018u;
 
 	// Chosen channel to test
@@ -64,7 +64,7 @@ void test_adc_channel_disabled(void) {
  */
 void test_adc_channel_status(void) {
 
-	///<ADC Channel Status Register
+	// ADC Channel Status Register
 	uint32_t * const p_ADC_CHSR = (uint32_t *) 0x400C0018u;
 
 	// Chosen channel to test
@@ -92,7 +92,7 @@ void test_adc_12bit(void) {
 
 	pmc_start_peripheral_clock(PMC_PERIPHERAL_ADC);
 
-	///< Mode Register
+	// Mode Register
 	uint32_t * const p_ADC_MR = (uint32_t *) 0x400C0004u;
 
 	// 12 Bit should be enabled as default
@@ -112,7 +112,7 @@ void test_adc_10bit(void) {
 
 	pmc_start_peripheral_clock(PMC_PERIPHERAL_ADC);
 
-	///< Mode Register
+	// Mode Register
 	uint32_t * const p_ADC_MR = (uint32_t *) 0x400C0004u;
 
 	// Set ADC to 12 bit
@@ -143,38 +143,39 @@ void test_adc_12bit_reading_single_channel(void) {
 	adc_enable_channel(channel);
 
 	// Read ADC-channel
-    uint16_t data;
-    data = adc_read_channel(channel);
+	uint16_t data;
+	data = adc_read_channel(channel);
 
 	// Test if a 12 bit value comes through (0-4095)
 	//TEST_ASSERT_UINT_WITHIN(2048, 2047, data);
 
-    // Print value through serial communicatin
+	// Print value through serial communicatin
 	uint16_t first, second, third, fourth;
 
 	first = (data - (data % 1000)) / 1000;
-	data = (data - first*1000);
+	data = (data - first * 1000);
 	second = (data - (data % 100)) / 100;
-	data = (data - second*100);
-	third = (data -(data % 10)) / 10;
-	data = (data - second *10);
+	data = (data - second * 100);
+	third = (data - (data % 10)) / 10;
+	data = (data - second * 10);
 	fourth = data % 10;
 
 	char dataprint[4];
-	dataprint[0] = (char)first;
-	dataprint[1] = (char)second;
-	dataprint[2] = (char)third;
-	dataprint[3] = (char)fourth;
+	dataprint[0] = (char) first;
+	dataprint[1] = (char) second;
+	dataprint[2] = (char) third;
+	dataprint[3] = (char) fourth;
 
-	for(int i = 0; i<4; i++){
-		UNITY_OUTPUT_CHAR(dataprint[i]+48);
+	for (int i = 0; i < 4; i++) {
+		UNITY_OUTPUT_CHAR(dataprint[i] + 48);
 	}
 
 	UNITY_OUTPUT_CHAR('\r');
-    UNITY_OUTPUT_CHAR('\n');
+	UNITY_OUTPUT_CHAR('\n');
 
-    // Delay
-    for(int i = 0; i<10000000; i++);
+	// Delay
+	for (int i = 0; i < 10000000; i++)
+		;
 }
 
 /*
@@ -192,37 +193,38 @@ void test_adc_10bit_reading_single_channel(void) {
 	adc_enable_channel(channel);
 
 	// Read ADC-channel
-    uint16_t data;
-    data = adc_read_channel(channel);
+	uint16_t data;
+	data = adc_read_channel(channel);
 
 	// Test if a 12 bit value comes through (0-4095)
 	//TEST_ASSERT_UINT_WITHIN(512, 511, data);
 
-    // Print value through serial communicatin
+	// Print value through serial communicatin
 	uint16_t first, second, third, fourth;
 
 	first = (data - (data % 1000)) / 1000;
-	data = (data - first*1000);
+	data = (data - first * 1000);
 	second = (data - (data % 100)) / 100;
-	data = (data - second*100);
-	third = (data -(data % 10)) / 10;
-	data = (data - second *10);
+	data = (data - second * 100);
+	third = (data - (data % 10)) / 10;
+	data = (data - second * 10);
 	fourth = data % 10;
 
 	char dataprint[4];
-	dataprint[0] = (char)first;
-	dataprint[1] = (char)second;
-	dataprint[2] = (char)third;
-	dataprint[3] = (char)fourth;
+	dataprint[0] = (char) first;
+	dataprint[1] = (char) second;
+	dataprint[2] = (char) third;
+	dataprint[3] = (char) fourth;
 
-	for(int i = 0; i<4; i++){
-		UNITY_OUTPUT_CHAR(dataprint[i]+48);
+	for (int i = 0; i < 4; i++) {
+		UNITY_OUTPUT_CHAR(dataprint[i] + 48);
 	}
 
 	UNITY_OUTPUT_CHAR('\r');
-    UNITY_OUTPUT_CHAR('\n');
+	UNITY_OUTPUT_CHAR('\n');
 
-    // Delay
-    for(int i = 0; i<10000000; i++);
+	// Delay
+	for (int i = 0; i < 10000000; i++)
+		;
 
 }

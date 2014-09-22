@@ -15,34 +15,34 @@
 #include "pmc.h"
 
 // The first register in the Power Management Controller
-uint32_t *const p_PMC_BASE_ADD = (uint32_t *) 0x400E0600U;
+uint32_t *const p_pmc_base_add = (uint32_t *) 0x400E0600U;
 
 /**
  *  Necessary registers addressed by incrementing the base address by an
  *  register-specific offset.
  */
-#define PMC_PCER0 	*(p_PMC_BASE_ADD + 4) // Peripheral Clock Enable Register 0
-#define PMC_PCDR0 	*(p_PMC_BASE_ADD + 5) // Peripheral Clock Disable Register 0
-#define PMC_PCSR0 	*(p_PMC_BASE_ADD + 6) // Peripheral Clock Status Register 0
-#define PMC_PCER1 	*(p_PMC_BASE_ADD + 64) // Peripheral Clock Enable Register 1
-#define PMC_PCDR1 	*(p_PMC_BASE_ADD + 65) // Peripheral Clock Disable Register 1
-#define PMC_PCSR1 	*(p_PMC_BASE_ADD + 66) // Peripheral Clock Status Register 1
+#define PMC_PCER0 	*(p_pmc_base_add + 4) // Peripheral Clock Enable Register 0
+#define PMC_PCDR0 	*(p_pmc_base_add + 5) // Peripheral Clock Disable Register 0
+#define PMC_PCSR0 	*(p_pmc_base_add + 6) // Peripheral Clock Status Register 0
+#define PMC_PCER1 	*(p_pmc_base_add + 64) // Peripheral Clock Enable Register 1
+#define PMC_PCDR1 	*(p_pmc_base_add + 65) // Peripheral Clock Disable Register 1
+#define PMC_PCSR1 	*(p_pmc_base_add + 66) // Peripheral Clock Status Register 1
 
-#define PMC_MOR   	*(p_PMC_BASE_ADD + 8)  // Main Oscillator Register
+#define PMC_MOR   	*(p_pmc_base_add + 8)  // Main Oscillator Register
 
-#define PMC_MCFR   	*(p_PMC_BASE_ADD + 9)  // Main Clock Frequency Register
+#define PMC_MCFR   	*(p_pmc_base_add + 9)  // Main Clock Frequency Register
 
-#define PMC_MCKR  	*(p_PMC_BASE_ADD + 12) // Master Clock Register
+#define PMC_MCKR  	*(p_pmc_base_add + 12) // Master Clock Register
 
-#define PMC_SR    	*(p_PMC_BASE_ADD + 26) // Status Register
+#define PMC_SR    	*(p_pmc_base_add + 26) // Status Register
 
-#define PMC_PCR   	*(p_PMC_BASE_ADD + 67) // Peripheral Control register
+#define PMC_PCR   	*(p_pmc_base_add + 67) // Peripheral Control register
 
-#define PMC_FSMR   	*(p_PMC_BASE_ADD + 28) // Fast Startup Mode Register
-#define PMC_FSPR   	*(p_PMC_BASE_ADD + 29) // Fast Startup polarity Register
+#define PMC_FSMR   	*(p_pmc_base_add + 28) // Fast Startup Mode Register
+#define PMC_FSPR   	*(p_pmc_base_add + 29) // Fast Startup polarity Register
 
-#define PMC_WPMR   	*(p_PMC_BASE_ADD + 57) // Write Protect Mode Register
-#define PMC_WPSR   	*(p_PMC_BASE_ADD + 58) // Write Protect Status Register
+#define PMC_WPMR   	*(p_pmc_base_add + 57) // Write Protect Mode Register
+#define PMC_WPSR   	*(p_pmc_base_add + 58) // Write Protect Status Register
 
 // Remove the following if tests passes
 

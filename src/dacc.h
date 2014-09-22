@@ -20,15 +20,15 @@
 #define DACC_CHANNEL_1 1			///<DACC Channel 1
 
 // Addresses to DACC registers
-#define DACC_CR 	(*p_DACC_CR)	///<Control Register
-#define DACC_MR		(*p_DACC_MR)	///<Mode Register
-#define DACC_CHER 	(*p_DACC_CHER)	///<Channel Enable Register
-#define DACC_CHDR 	(*p_DACC_CHDR)	///<Channel Disable Register
-#define DACC_CHSR 	(*p_DACC_CHSR)	///<Channel Status Register
-#define DACC_CDR	(*p_DACC_CDR)	///<Conversion Data Register
-#define DACC_ISR	(*p_DACC_ISR)	///<Interrupt Status Register
-#define DACC_WPMR	(*p_DACC_WPMR)	///<Write Protect Mode Register
-#define DACC_WPSR 	(*p_DACC_WPSR)	///<Write Protect Status Register
+#define DACC_CR 	(*p_dacc_cr)	///<Control Register
+#define DACC_MR		(*p_dacc_mr)	///<Mode Register
+#define DACC_CHER 	(*p_dacc_cher)	///<Channel Enable Register
+#define DACC_CHDR 	(*p_dacc_chdr)	///<Channel Disable Register
+#define DACC_CHSR 	(*p_dacc_chsr)	///<Channel Status Register
+#define DACC_CDR	(*p_dacc_cdr)	///<Conversion Data Register
+#define DACC_ISR	(*p_dacc_isr)	///<Interrupt Status Register
+#define DACC_WPMR	(*p_dacc_wpmr)	///<Write Protect Mode Register
+#define DACC_WPSR 	(*p_dacc_wpsr)	///<Write Protect Status Register
 
 typedef struct dacc_settings_t {
 	/**

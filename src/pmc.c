@@ -67,11 +67,11 @@ Reg p_PMC_BASE_ADD = (uint32_t *) 0x400E0600U;
  * @param ID_ The peripheral clock that get the mask-bit added.
  * @param reg Register 0 containing peripheral 0-31, register 1 containing peripheral 32-44
  */
-static mask pmc_get_peripheral_mask(definedInput8 ID_) {
+static uint32_t pmc_get_peripheral_mask(definedInput8 ID_) {
 	if (ID_ < 33) {
-		return (mask) (0x01U << ID_);
+		return (uint32_t) (0x01U << ID_);
 	} else {
-		return (mask) (0x01U << (ID_ - 32));	// Adjust to the correct bit
+		return (uint32_t) (0x01U << (ID_ - 32));	// Adjust to the correct bit
 	}
 }
 
@@ -200,7 +200,7 @@ error pmc_select_master_clock(uint32_t clock) {
 
 		PMC_MCKR = clock;
 
-		while ((PMC_SR | PMC_SR_MCKRDY) == 0)
+		while ((PMC_SR | PMC_SR_MCKRDY_MASK) == 0)
 			;	// Wait for masterclock ready
 
 		status = SUCCESS;

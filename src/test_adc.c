@@ -17,6 +17,9 @@
  */
 void test_adc_channel_enabled(void) {
 
+	///<ADC Channel Status Register
+    uint32_t *const p_ADC_CHSR      = (uint32_t *) 0x400C0018u;
+
 	// Chosen channel to test
 	uint8_t channel = ADC_CHANNEL_0;
 
@@ -35,6 +38,9 @@ void test_adc_channel_enabled(void) {
  * Checking that ADC channel 0 is disabled
  */
 void test_adc_channel_disabled(void) {
+
+	///<ADC Channel Status Register
+    uint32_t *const p_ADC_CHSR      = (uint32_t *) 0x400C0018u;
 
 	// Chosen channel to test
 	uint8_t channel = ADC_CHANNEL_0;
@@ -60,6 +66,9 @@ void test_adc_12bit(void) {
 
 	pmc_start_peripheral_clock(PMC_PERIPHERAL_ADC);
 
+	///< Mode Register
+    uint32_t *const p_ADC_MR        = (uint32_t *) 0x400C0004u;
+
 	// 12 Bit should be enabled as default
 	TEST_ASSERT_FALSE(ADC_MR | (0x0u << 4));
 
@@ -76,6 +85,9 @@ void test_adc_12bit(void) {
 void test_adc_10bit(void) {
 
 	pmc_start_peripheral_clock(PMC_PERIPHERAL_ADC);
+
+	///< Mode Register
+    uint32_t *const p_ADC_MR        = (uint32_t *) 0x400C0004u;
 
 	// Set ADC to 12 bit
 	adc_set_resolution(12);

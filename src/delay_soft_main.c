@@ -20,15 +20,16 @@
  *
  */
 
-#include <asf.h>
+#include "global_definitions.h"
 #include "delay_soft.h"
-#include "pio"
+#include "pio.h"
 
 /*
  * Include header files for all drivers that have been imported from
  * Atmel Software Framework (ASF).
  */
 
+/*--------------------------
 
 // Descriptive names for TIMING-pins
 #define Arduino_Pin_24_Front_Reg    PIO_PA15_IDX		//Arduino Due pin 24 used to measure work load
@@ -67,3 +68,5 @@ int main (void)
 
 	}
 }
+
+-------------------------*/

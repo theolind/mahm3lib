@@ -1,13 +1,11 @@
 /**
  * @file
- * \class pmc
- * \brief Power Managment Class (PMC)
- * \details Header for pmc.h
- * \author Felix Ruponen
- * \author Mattias Nilsson
- * \author Saeed Ghasemi
- * \version 0.1
- * \date 17 sep 2014
+
+ * @author Felix Ruponen
+ * @author Mattias Nilsson
+ * @author Saeed Ghasemi
+ * @version 0.2
+ * @date 17 sep 2014
  */
 
 #ifndef PMC_H_

@@ -1,24 +1,33 @@
 /**
  * @file
- * \class pmc
- * \brief Power Managment Class (PMC)
- * \details This class is used to initiate internal clocks on SAM3XAE
- * \author Felix Ruponen
- * \author Mattias Nilsson
- * \author Saeed Ghasemi
- * \version 0.1
- * \date 17 sep 2014
- * \pre First initialize the system. Not all peripheral added yet.
- * \bug May still be bugs
+ * @brief Power Managment Class (PMC)
+ * @details This class is used to initiate internal clocks on SAM3XAE
+ * @author Felix Ruponen
+ * @author Mattias Nilsson
+ * @author Saeed Ghasemi
+ * @version 0.5
+ * @date 17 sep 2014
+ * @pre First initialize the system.
+ * @pre The only peripheral used so far is:
+ * @pre PIO A is on ID 11
+ * @pre PIO B is on ID 12
+ * @pre PIO C is on ID 13
+ * @pre PIO D is on ID 14
+ * @pre PIO E is on ID 15
+ * @pre PIO F is on ID 16
+ * @pre ADC is on ID 37
+ * @pre DACC is on ID 38
+ * @bug May still be bugs
  */
 
 #include "global_definitions.h"
 #include "pmc.h"
 
+///\cond
 // The first register in the Power Management Controller
 uint32_t *const p_pmc_base_add = (uint32_t *) 0x400E0600U;
 
-/**
+/*
  *  Necessary registers addressed by incrementing the base address by an
  *  register-specific offset.
  */
@@ -31,10 +40,9 @@ uint32_t *const p_pmc_base_add = (uint32_t *) 0x400E0600U;
 
 
 
-// Remove the following if tests passes
-
-/** Adjusts a specified peripheral (0 - 44) to the correct mask-bit.
+/* Adjusts a specified peripheral (0 - 44) to the correct mask-bit.
  * Static, because it's an internal function to the API.
+ * Only called upon by internal functions (not to be used by end user).
  *
  * @param ID_ The peripheral clock that get the mask-bit added.
  * @param reg Register 0 containing peripheral 0-31, register 1 containing peripheral 32-44
@@ -48,24 +56,35 @@ static uint32_t pmc_get_peripheral_mask(uint8_t ID_) {
 	}
 }
 
-/** Start peripheral clock
- * @param ID_ Which peripheral clock that should be started.
+///\endcond
+
+/** Start peripheral clock, in the range between 0-44.
+ *
+ * @param ID_ Which peripheral clock (0-44) that should be started.
+ * @return If peripheral clock is started, a 1 is returned. If out of range (not in between 0-44), 0 is returned.
  */
 uint8_t pmc_start_peripheral_clock(uint8_t ID_) {
-	if (ID_ < 32) {
-		PMC_PCER0 |= pmc_get_peripheral_mask(ID_);
+	if(ID_ < 0 && ID_ > 32){
+		return FAIL;
 	} else {
-		PMC_PCER1 |= pmc_get_peripheral_mask(ID_);
+		if (ID_ < 32) {
+			PMC_PCER0 |= pmc_get_peripheral_mask(ID_);
+		} else {
+			PMC_PCER1 |= pmc_get_peripheral_mask(ID_);
+		}
+		return SUCCESS;
 	}
-	return SUCCESS;
 }
 
-/** Stop peripheral clock
+
+
+/** Stop peripheral clock, in the range between 0-44.
  *
- * @param ID_ Which peripheral clock that should be stopped.
+ * @param ID_ Which peripheral clock (0-44) that should be stopped.
+ * @return If peripheral clock is stopped, a 1 is returned. If out of range (not in between 0-44), 0 is returned.
  */
 uint8_t pmc_stop_peripheral_clock(uint8_t ID_) {
-	if (ID_ < 32) {   // Check if peripheral is register 0
+	if (ID_ > 0 && ID_ < 32) {   // Check if peripheral is register 0
 		PMC_PCDR0 = pmc_get_peripheral_mask(ID_);
 	} else if (ID_ > 32 && ID_ < 45) {	// Check if peripheral is register 1
 		PMC_PCDR1 = pmc_get_peripheral_mask(ID_);
@@ -75,15 +94,16 @@ uint8_t pmc_stop_peripheral_clock(uint8_t ID_) {
 	return SUCCESS;
 }
 
-/** Get peripheral clock status
+/** Get peripheral clock status, in the range between 0-44.
  *
- * @param ID_ Shows the status of selected peripheral clock.
+ * @param ID_ Shows the status of selected peripheral clock (0-44).
+ * @return Returns the status of the peripheral clock (0-44). If on, a 1 is returned. If off, a 0 is returned. If out of range (not in between 0-44), 0 is returned.
  */
 uint8_t pmc_status_peripheral_clock(uint8_t ID_) {
 
 	uint8_t status = FAIL;
 
-	if (ID_ < 32) {   // Check if ID_ is register 0
+	if (ID_ > 0 && ID_ < 32) {   // Check if ID_ is register 0
 
 		if ((PMC_PCSR0 & pmc_get_peripheral_mask(ID_)) == 0)  // Status Enabled?
 			status = SUCCESS;

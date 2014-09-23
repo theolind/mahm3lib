@@ -59,7 +59,33 @@ void pio_close(void) {
 
 void pio_conf_pin(uint32_t port, uint8_t pin_number, uint8_t input, uint8_t pullup) {
 	//use the port function to set a single pin
-	pio_conf_port(port, (uint32_t)(input<<pin_number), (uint32_t)(pullup<<pin_number));
+	pio_conf_pins(port, (uint32_t)(input<<pin_number), input, pullup);
+}
+
+void pio_conf_pins(uint32_t port, uint32_t pin_numbers, uint8_t input, uint8_t pullup) {
+	uint32_t *p_reg;	//register pointer points to the register currently used
+
+	//set output/input
+	if(input == 1) {
+		//use the output disable register to enable inputs
+		p_reg = (uint32_t *)(port+PIO_ODR);
+		*p_reg = pin_numbers;
+	} else {
+		//use the output enable register to enalbe outputs
+		p_reg = (uint32_t *)(port+PIO_OER);
+		*p_reg = pin_numbers;
+	}
+
+	//set pullupts
+	if(pullup == 1) {
+		//use the pull up enable register
+		p_reg = (uint32_t *)(port+PIO_PUER);
+		*p_reg = pin_numbers;
+	} else {
+		//use the pull up disable register
+		p_reg = (uint32_t *)(port+PIO_PUDR);
+		*p_reg = pin_numbers;
+	}
 }
 
 void pio_conf_port(uint32_t port, uint32_t inputs, uint32_t pullups) {
@@ -84,7 +110,19 @@ void pio_conf_port(uint32_t port, uint32_t inputs, uint32_t pullups) {
 }
 
 void pio_set_pin(uint32_t port, uint8_t pin_number, uint8_t level) {
-	pio_set_port(port, (uint32_t)(level<<pin_number));
+	pio_set_pins(port, (uint32_t)(1<<pin_number), level);
+}
+
+void pio_set_pins(uint32_t port, uint32_t pin_numbers, uint8_t level) {
+	uint32_t *p_reg;
+	p_reg = (uint32_t *)(port+PIO_SODR);
+	if(level == 1) {
+		//set pins high
+		*p_reg |= pin_numbers;
+	} else {
+		//set pins low
+		*p_reg &= ~pin_numbers;
+	}
 }
 
 void pio_set_port(uint32_t port, uint32_t levels) {

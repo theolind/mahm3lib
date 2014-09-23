@@ -75,13 +75,4 @@ void test_pmc_start_peripheral_clock_when_successful(void){
 	TEST_ASSERT(status);
 }
 
-void test_pmc_set_master_clock_when_successful(void) {
-
-	test_pmc_reset();
-
-	//uint8_t status = pmc_set_master_clock(PMC_CSS_SLOW_CLK);
-
-	TEST_ASSERT(1);
-}
-
 

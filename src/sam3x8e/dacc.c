@@ -27,7 +27,6 @@ uint8_t dacc_init(dacc_settings_t *settings){
 	// Software reset
 	DACC_CR = (0x1u << 0);
 
-	// TODO: Fix five warnings below
 	// Trigger mode
 	DACC_MR |= (settings->trigger_mode << 0);
 

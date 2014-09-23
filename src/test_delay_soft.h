@@ -12,8 +12,15 @@
 #define ITIMERDELAYBYSOFTWARE_H_
 
 
+
+
+
 //////////////////////////////////////////////////////////////////////////
 // Function prototypes
+void test_delay_soft_setup(void);
+void test_delay_soft_tear_down(void);
+void test_delay_soft_reset(void);
+void test_delay_soft_delay_3us(void);
 
 
 

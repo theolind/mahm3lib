@@ -35,20 +35,30 @@
 #define Arduino_Pin_24_Front_Reg    PIO_PA15_IDX		//Arduino Due pin 24 used to measure work load
 #define Arduino_Pin_25_LineAnalizer	PIO_PD0_IDX		//Arduino Due pin 25 used to measure work load
 
-#define usDelay(us) {\
-	us = 0.25*us;\
-	while (us != 0){\
-		us -= 1;\
-	}\
-	(void 0)\
-}
 
 int main (void)
 {
+	pio_init_param *param;
+
+	(*param).porta = OFF;
+	(*param).portb = OFF;
+	(*param).portc = OFF;
+	(*param).portd = ON;
+	(*param).porte = OFF;
+	(*param).portf = OFF;
+
+
 	board_init();
+
+	pio_init(param);
+
+
 
 	// Insert application code here, after the board has been initialized.
 	ioport_set_pin_dir(Arduino_Pin_25_LineAnalizer, IOPORT_DIR_OUTPUT);
+
+	void pio_conf_pin(uint32_t port, uint8_t pin_number, uint8_t input, uint8_t pullup);
+
 	ioport_set_pin_dir(Arduino_Pin_24_Front_Reg, IOPORT_DIR_OUTPUT);
 	while (1){
 		ioport_set_pin_level(Arduino_Pin_24_Front_Reg, HIGH);

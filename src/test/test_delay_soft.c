@@ -1,33 +1,20 @@
 /**
- * \file
- *
- * \brief Empty user application template
- *
+ * \class test_runner_delay_soft
+ * \brief Test runner for the software delay routines
+ * \details This class starts the tests for the delay routines in delay_soft API
+ * \author Saeed Ghasemi
+ * \version 0.1
+ * \date 22 sep 2014
+ * \pre These test are waiting for the Hardware timer API to be released in order to make a automated test
+ * \bug
  */
 
-/**
- * \mainpage User Application template doxygen documentation
- *
- * \par Empty user application template
- *
- * Bare minimum empty user application template
- *
- * \par Content
- *
- * -# Include the ASF header files (through asf.h)
- * -# Minimal main function that starts with a call to board_init()
- * -# "Insert application code here" comment
- *
- */
 
 #include "global_definitions.h"
 #include "delay_soft.h"
 #include "pio.h"
 
-/*
- * Include header files for all drivers that have been imported from
- * Atmel Software Framework (ASF).
- */
+
 
 /*--------------------------
 

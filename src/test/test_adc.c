@@ -7,9 +7,9 @@
  * \date 17 sep 2014
  */
 
-#include "global_definitions.h"
-#include "unity.h"
-#include "test_adc.h"
+#include "sam3x8e/global_definitions.h"
+#include "unity/unity.h"
+#include "test/test_adc.h"
 
 /*
  * Checking that ADC channel 0 is enabled

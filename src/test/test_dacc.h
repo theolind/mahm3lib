@@ -12,9 +12,6 @@
 #ifndef TEST_DACC_H_
 #define TEST_DACC_H_
 
-#include "dacc.h"
-#include "unity.h"
-
 void test_dacc_init(void);
 void test_dacc_channel_0_enable(void);
 void test_dacc_channel_1_enable(void);

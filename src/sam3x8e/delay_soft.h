@@ -1,4 +1,5 @@
 /**
+ * @file
  * \class delay_soft
  * \brief Delay functions based on software and no hardware
  * \details Thisclass is used to make delays in the microsecond and millisecond range

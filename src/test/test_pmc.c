@@ -9,11 +9,11 @@
  * \date 17 sep 2014
  */
 
-#include "global_definitions.h"
-#include "unity.h"
-#include "test_pmc.h"
+#include "sam3x8e/global_definitions.h"
+#include "unity/unity.h"
+#include "test/test_pmc.h"
 
-#include "pmc.h"
+#include "sam3x8e/pmc.h"
 
 void test_pmc_setup(){
 
@@ -32,9 +32,6 @@ void test_pmc_reset(){
 	test_pmc_setup();
 	test_pmc_tear_down();
 }
-
-
-
 
 void test_pmc_status_peripheral_clock_when_inactive(void){
 	test_pmc_reset();

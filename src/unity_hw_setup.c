@@ -7,9 +7,10 @@
 
 //#include <asf.h>
 #include "unity_hw_setup.h"
-#include "io_uart.h"
+#include "uart/uart.h"
+#include "wdt/wdt.h"
 // #include "unity.h" //remove this when done!!
-// 
+//
 // uint16_t test = 1; //remove this when done!!
 
 // EEFC Flash Mode Register 0
@@ -18,11 +19,34 @@ uint32_t *const p_EEFC_FMR_0 = (uint32_t *) 0x400E0A00U;
 uint32_t *const p_EEFC_FMR_1 = (uint32_t *) 0x400E0C00U;
 
 static void configure_uart(void) {
-	const uart_options_t uart_options = {
+	// Peripheral Clock Enable Register 0 ---- REMOVE WHEN DONE!
+	uint32_t *const p_PMC_PCER0 = (uint32_t *) 0x400E0610U;
+	// PIO Controller PIO Disable Register - PIOA ---- REMOVE WHEN DONE!
+	uint32_t *const p_PIO_PDR = (uint32_t *) 0x400E0E04U;
+	// PIO Controller Output Enable Register - PIOA ---- REMOVE WHEN DONE!
+	uint32_t *const p_PIO_OER = (uint32_t *) 0x400E0E10U;
+	// PIO Pull Up Enable Register (PIOA) ---- REMOVE WHEN DONE!
+	uint32_t *const p_PIO_PUER = (uint32_t *) 0x400E0E64U;
+
+	const uart_settings_t uart_settings = {
 		.baudrate = 115200,
 		.paritytype = UART_MR_PAR_NO
 	};
-	uart_config(&uart_options);
+	// Enable Peripheral Clock for UART.
+	// This register can only be written if the WPEN bit is cleared in �PMC Write Protect Mode Register� .
+	*p_PMC_PCER0 = 1 << 8;
+
+	/* Configure UART pins */
+	// Remove the pins from under the control of PIO
+	// This register can only be written if the WPEN bit is cleared in �PIO Write Protect Mode Register� .
+	*p_PIO_PDR = (1 << 8) | (1 << 9);
+	// configure TX0 as output
+	//*p_PIO_OER = (1 << 9);
+	// configure RX0 pin as input/pull-up
+	*p_PIO_PUER = (1 << 8);
+
+	//initialize UART
+	uart_init(UART, &uart_settings);
 }
 
 /**

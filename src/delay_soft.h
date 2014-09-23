@@ -16,9 +16,11 @@
 
 //////////////////////////////////////////////////////////////////////////
 // Function prototypes
+
 volatile inline void timer_delaySoftware_1us(float us);
 volatile inline void timer_delaySoftware_1ms(uint32_t ms);
 
+//////////////////////////////////////////////////////////////////////////
 
 /**
  * This function will delay in microseconds from 3us to 3000us have been tested
@@ -26,7 +28,7 @@ volatile inline void timer_delaySoftware_1ms(uint32_t ms);
  *
  * @param us Amount of time in us to delay
  */
-volatile inline void timer_delaySoftware_1us(float us){
+volatile inline void timer_delay_Software_1us(float us){
 	volatile uint32_t count; // changed from int32_t
 	//count = (int32_t) (0.0 + 1.0*((float)us));
 	//count = (uint32_t)(1.933199443 + 3.087132653*us); //replaced ((float)us) with us and changed final cast from int32_t
@@ -44,7 +46,7 @@ volatile inline void timer_delaySoftware_1us(float us){
  *
  * @param us Amount of time in us to delay
  */
-volatile inline void timer_delaySoftware_1ms(uint32_t ms){
+volatile inline void timer_delay_Software_1ms(uint32_t ms){
 	volatile uint32_t count; // changed from int32_t
 
 	while (count != 0){

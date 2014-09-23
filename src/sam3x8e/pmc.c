@@ -65,7 +65,7 @@ static uint32_t pmc_get_peripheral_mask(uint8_t ID_) {
  */
 uint8_t pmc_start_peripheral_clock(uint8_t ID_) {
 	if(ID_ < 0 && ID_ > 32){
-		return FAIL
+		return FAIL;
 	} else {
 		if (ID_ < 32) {
 			PMC_PCER0 |= pmc_get_peripheral_mask(ID_);
@@ -74,9 +74,9 @@ uint8_t pmc_start_peripheral_clock(uint8_t ID_) {
 		}
 		return SUCCESS;
 	}
-
-
 }
+
+
 
 /** Stop peripheral clock, in the range between 0-44.
  *

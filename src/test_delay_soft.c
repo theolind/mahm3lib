@@ -4,7 +4,7 @@
  * \author Saeed Ghasemi
  * \version 0.1
  * \date 22 sep 2014
- * \bug Caution: These functions are tested but not after integrating the PIO-API. Tests will follow.
+ * \bug Caution: These functions are tested but not after integrating the PIO-API. Tests will follow. Test could not be generated since we need timers to compare it to.
  */
 
 

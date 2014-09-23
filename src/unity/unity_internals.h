@@ -9,7 +9,7 @@
 
 #include <stdio.h>
 #include <setjmp.h>
-#include "uart/uart.h"		//modified by Beckius 2014-09-07
+#include "sam3x8e/uart.h"		//modified by Beckius 2014-09-07
 
 // Unity attempts to determine sizeof(various types)
 // based on UINT_MAX, ULONG_MAX, etc. These are typically

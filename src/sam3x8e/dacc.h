@@ -1,5 +1,5 @@
 /**
- * @file
+ * @file dacc.h
  * @brief Digital-to-Analog Conversion Controller
  * @details This file provides basic functionality for usage of the DACC.
  * @author Andreas Drotth
@@ -30,6 +30,8 @@
 #define DACC_WPMR	(*p_dacc_wpmr)	///<Write Protect Mode Register
 #define DACC_WPSR 	(*p_dacc_wpsr)	///<Write Protect Status Register
 
+#define DACC_MAX_RESOLUTION 4095	///<The DACC has a 12 bit resolution
+
 typedef struct dacc_settings_t {
 	/**
 	 * 0: External trigger mode disabled, DACC in free running mode
@@ -52,7 +54,10 @@ typedef struct dacc_settings_t {
 	 */
 	uint8_t speed_mode;
 
-	/** Value can be 0-63 */
+	/**
+	 * A value in the range of 0-63 that describes the length of the startup time.
+	 * The length for each corresponding value can be found in the datasheet.
+	 */
 	uint8_t startup_time;
 
 } dacc_settings_t;
@@ -60,8 +65,7 @@ typedef struct dacc_settings_t {
 /**
  * Initiates the DACC with provided settings.
  * @param settings Settings for DACC mode register
- * @return Return 0 if settings contain illegal values.
- * Otherwise return 1.
+ * @return Return 0 if settings contain illegal values. Otherwise return 1.
  */
 uint8_t dacc_init(dacc_settings_t *settings);
 
@@ -84,7 +88,7 @@ uint8_t dacc_disable_channel(uint8_t dacc_channel);
  * @param dacc_channel The channel which is checked for.
  * @return Return 1 if the function executed correctly, otherwise 0.
  */
-uint8_t dacc_channel_enabled(uint8_t dacc_channel);
+uint8_t dacc_get_channel_status(uint8_t dacc_channel);
 
 /**
  * Converts a 12-bit digital value to corresponding analog

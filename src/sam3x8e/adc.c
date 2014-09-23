@@ -1,4 +1,5 @@
 /**
+ * @file
  * \class adc
  * \brief Analog to Digital Converter (ADC)
  * \details This class is used to read values from the ADC-channels

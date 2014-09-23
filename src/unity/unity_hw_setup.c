@@ -7,8 +7,8 @@
 
 //#include <asf.h>
 #include "unity_hw_setup.h"
-#include "uart/uart.h"
-#include "wdt/wdt.h"
+#include "sam3x8e/uart.h"
+#include "sam3x8e/wdt.h"
 // #include "unity.h" //remove this when done!!
 //
 // uint16_t test = 1; //remove this when done!!

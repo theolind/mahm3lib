@@ -1,4 +1,5 @@
 /**
+ * @file
  * \class adc
  * \brief Analog to Digital Converter (ADC)
  * \details Header for adc.c

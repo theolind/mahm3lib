@@ -76,7 +76,7 @@ uint8_t dacc_disable_channel(uint8_t dacc_channel){
 	}
 }
 
-uint8_t dacc_channel_enabled(uint8_t dacc_channel){
+uint8_t dacc_get_channel_status(uint8_t dacc_channel){
 
 	if (dacc_channel > 1) {
 		return 0;
@@ -91,7 +91,7 @@ uint8_t dacc_channel_enabled(uint8_t dacc_channel){
 
 uint8_t dacc_write(uint8_t dacc_channel, uint32_t value){
 
-	if (dacc_channel > 1 || value > 4095) {
+	if (dacc_channel > 1 || value > DACC_MAX_RESOLUTION) {
 		return 0;
 	}
 

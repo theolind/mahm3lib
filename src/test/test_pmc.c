@@ -1,12 +1,11 @@
 /**
- * \class test_pmc
- * \brief Power Managment Test Class (PMC)
- * \details This class is used to test the PMC using Unity
- * \author Felix Ruponen
- * \author Mattias Nilsson
- * \author Saeed Ghasemi
- * \version 0.1
- * \date 17 sep 2014
+ * @brief Power Managment Test Class (PMC)
+ * @details This class is used to test the PMC using Unity
+ * @author Felix Ruponen
+ * @author Mattias Nilsson
+ * @author Saeed Ghasemi
+ * @version 0.5
+ * @date 17 sep 2014
  */
 
 #include "sam3x8e/global_definitions.h"

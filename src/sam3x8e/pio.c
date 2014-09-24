@@ -59,7 +59,7 @@ void pio_close(void) {
 
 void pio_conf_pin(uint32_t port, uint8_t pin_number, uint8_t input, uint8_t pullup) {
 	//use the port function to set a single pin
-	pio_conf_pins(port, (uint32_t)(input<<pin_number), input, pullup);
+	pio_conf_pins(port, (uint32_t)(1<<pin_number), input, pullup);
 }
 
 void pio_conf_pins(uint32_t port, uint32_t pin_numbers, uint8_t input, uint8_t pullup) {

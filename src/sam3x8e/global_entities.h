@@ -115,7 +115,7 @@ uint8_t set_section_in_register(uint32_t *reg, uint8_t start_bit,
  * @param value The value the section must store
  * @return error Can either be SUCCES or FAIL
  */
-uint8_t set_section_in_register2(uint32_t *reg, uint8_t mask, uint32_t value);
+uint8_t set_section_in_register2(uint32_t *reg, uint32_t mask, uint32_t value);
 
 /**
  * This function will return the value of a specified section in a given
@@ -127,4 +127,14 @@ uint8_t set_section_in_register2(uint32_t *reg, uint8_t mask, uint32_t value);
  */
 uint8_t get_value_of_register2(uint32_t *reg, uint32_t mask);
 
+/**
+ * This function return the bit-number of the first bit being high in a 32-bit
+ * long value. The main porpose of this function is to find the start-bit of a
+ * given mask. The start-bit can then be used to left-bit-shift a value into
+ * position relative to a section in a register.
+ *
+ * @param mask The mask to be examined
+ * @return Bit-number of the first position
+ */
+uint32_t first_bit_position_of_mask(uint32_t mask);
 #endif

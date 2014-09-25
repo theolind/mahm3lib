@@ -90,14 +90,14 @@ uint8_t set_section_in_register2(uint32_t *reg, uint32_t mask, uint32_t value){
  * @param mask The mask to be examined
  * @return Bit-number of the first position
  */
-uint8_t first_bit_position_of_mask(uint32_t mask){
+uint32_t first_bit_position_of_mask(uint32_t mask){
 	uint8_t j = 0;
 	// 0x80000000 has one bit to the far left only
 	while(mask != 0x80000000){
 		mask = (mask << 1);
 		j++;
 	}
-	return 31 - j;
+	return (31 - j);
 }
 
 

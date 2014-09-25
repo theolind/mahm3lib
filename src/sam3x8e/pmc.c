@@ -17,7 +17,7 @@
  * @pre PIO F is on ID 16
  * @pre ADC is on ID 37
  * @pre DACC is on ID 38
- * @bug May still be bugs
+ * @bug May still be bugged
  */
 
 #include "global_definitions.h"

@@ -11,7 +11,7 @@
 #ifndef PMC_H_
 #define PMC_H_
 
-#include "global_definitions.h"
+#include "global_entities.h"
 
 
 // Start peripheral clock

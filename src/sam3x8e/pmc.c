@@ -20,7 +20,6 @@
  * @bug May still be bugged
  */
 
-#include "global_definitions.h"
 #include "pmc.h"
 
 ///\cond

@@ -1,5 +1,5 @@
 /*
- * global_definitions.c
+ * global_entities.c
  *
  * This file contains definitions that the developers in this group will at
  * some point use. This file helps us to avoid collision of redefinition of
@@ -10,8 +10,8 @@
  */
 
 
-#ifndef _GLOBAL_DEF_H_
-#define _GLOBAL_DEF_H_
+#ifndef _GLOBAL_ENT_H_
+#define _GLOBAL_ENT_H_
 
 #include <stdint.h>
 
@@ -80,4 +80,61 @@
 
 //////////////////////////
 
+// Prototypes
+/**
+ * This function will test to see if a specified bit in a register is set high.
+ *
+ * @param reg This specifies a pointer to the register
+ * @param bit Specifies the bit-number in the register
+ * @return The return will be TRUE or FLASE
+ */
+uint8_t is_bit_high(uint32_t *reg, uint8_t bit);
+
+/**
+ * This function will modify a section of a given register as indicated by
+ * start_bit and length with the value specified with 'value'.
+ *
+ * Define the parameters like this:
+ * Ex: Having -> 0b00011000 -> start_bit = 3, length = 2
+ *
+ * @param reg This specifies a pointer to the register
+ * @param start_bit The position of the first bit of the section
+ * @param length The length of the section
+ * @param value The value the section must store
+ * @return error Can either be SUCCES or FAIL
+ */
+uint8_t set_section_in_register(uint32_t *reg, uint8_t start_bit,
+		uint8_t length, uint32_t value);
+
+/**
+ * This function will modify a section of a given register as indicated by
+ * start_bit and length with the value specified with 'value'.
+ *
+ * @param reg This specifies a pointer to the register
+ * @param mask It must have the same length as the register, with ones across the section
+ * @param value The value the section must store
+ * @return error Can either be SUCCES or FAIL
+ */
+uint8_t set_section_in_register2(uint32_t *reg, uint32_t mask, uint32_t value);
+
+/**
+ * This function will return the value of a specified section in a given
+ * register.
+ *
+ * @param reg The pointer to the register (not its value)
+ * @param mask The area for which the value must be returned (high bit are read)
+ * @return The value of the section in the register
+ */
+uint8_t get_value_of_register2(uint32_t *reg, uint32_t mask);
+
+/**
+ * This function return the bit-number of the first bit being high in a 32-bit
+ * long value. The main porpose of this function is to find the start-bit of a
+ * given mask. The start-bit can then be used to left-bit-shift a value into
+ * position relative to a section in a register.
+ *
+ * @param mask The mask to be examined
+ * @return Bit-number of the first position
+ */
+uint32_t first_bit_position_of_mask(uint32_t mask);
 #endif

@@ -1,4 +1,4 @@
-#include "global_definitions.h"
+#include "global_entities.h"
 #include "dacc.h"
 
 uint32_t *const p_dacc_cr   = (uint32_t *) 0x400C8000U;

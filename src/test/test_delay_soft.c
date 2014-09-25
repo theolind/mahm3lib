@@ -11,7 +11,7 @@
  */
 
 
-//#include "global_definitions.h"
+//#include "global_entities.h"
 //#include "delay_soft.h"
 //#include "pio.h"
 

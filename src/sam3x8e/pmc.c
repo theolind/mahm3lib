@@ -20,7 +20,6 @@
  * @bug May still be bugged
  */
 
-#include "global_definitions.h"
 #include "pmc.h"
 
 ///\cond
@@ -64,7 +63,7 @@ static uint32_t pmc_get_peripheral_mask(uint8_t ID_) {
  * @return If peripheral clock is started, a 1 is returned. If out of range (not in between 0-44), 0 is returned.
  */
 uint8_t pmc_start_peripheral_clock(uint8_t ID_) {
-	if(ID_ < 0 && ID_ > 32){
+	if(ID_ > 44){
 		return FAIL;
 	} else {
 		if (ID_ < 32) {

@@ -168,18 +168,11 @@ uint8_t pmc_select_master_clock(uint32_t PMC_CLOCK_){
 /** This function will set the prescaler of the processor clock or master clock
  * to the desired value. For the input one must begin writing
  * pmc_processor_clk_prescaler_ to get to the correct prescalers.
- *
-<<<<<<< HEAD
- * @param pmc_processor_clk_prescaler_ Choose among predefined prescalers
- * @return
-=======
  * This will only work if Slow_clock or Main_clock is selected.
  *
- * @param pmc_processor_clk_prescaler_ Choose amoung predefined prescalers
+ * @param pmc_processor_clk_prescaler_ Choose among predefined prescalers
  * @return error
->>>>>>> refs/remotes/origin/pmc_master_and_processor_clocks
  */
-
 uint8_t pmc_set_processor_clk(uint8_t PMC_PROCESSOR_PRES_){
 	if((PMC_MCKR & PMC_MCKR_CSS_MASK) < 2){
 		// Wait till the master clock stabilizes
@@ -193,7 +186,6 @@ uint8_t pmc_set_processor_clk(uint8_t PMC_PROCESSOR_PRES_){
 	}else{
 		return FAIL;
 	}
-
 	return SUCCESS;
 }
 

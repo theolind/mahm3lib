@@ -14,45 +14,6 @@
 
 #include "global_definitions.h"
 
-/**
- * No idea as to why these should be defined here as these should not be
- * accessed outside the API, or should they?
- * @author Saeed Ghasemi
- * @param peripheral
- * @return
- */
-/*
-// REGISTERS //
-#define PMC_PCER0	(*p_PMC_PCER0)	///< PMC Peripheral Clock Enable Register 0
-#define PMC_PCDR0	(*p_PMC_PCDR0)	///< PMC Peripheral Clock Disable Register 0
-#define PMC_PCSR0	(*p_PMC_PCSR0)	///< PMC Peripheral Clock Status Register 0
-
-
-#define PMC_PCER1	(*p_PMC_PCER1)	///< PMC Peripheral Clock Enable Register 1
-#define PMC_PCDR1	(*p_PMC_PCDR1)	///< PMC Peripheral Clock Disable Register 1
-#define PMC_PCSR1	(*p_PMC_PCSR1)	///< PMC Peripheral Clock Status Register 1
-
-#define PMC_MCKR	(*p_PMC_MCKR)	///<PMC Set Master Clock Register
-
-#define PMC_SR		(*p_PMC_SR)		///<PMC Status Register
-*/
-
-/*    --     MOVED TO GLOBAL DEFINITIONS    ----
- * Can't call them PMC_ since they are global identifiers in the MCU
-// PHERIPHERAL IDENTIFIERS //
-#define PMC_PERIPHERAL_PIOA (11) ///<Peripheral PIOA
-#define PMC_PERIPHERAL_PIOB (12) ///<Peripheral PIOB
-#define PMC_PERIPHERAL_PIOC (13) ///<Peripheral PIOC
-#define PMC_PERIPHERAL_PIOD (14) ///<Peripheral PIOD
-#define PMC_PERIPHERAL_PIOE (15) ///<Peripheral PIOE
-#define PMC_PERIPHERAL_PIOF (16) ///<Peripheral PIOF
-
-#define PMC_PERIPHERAL_PWM (36) ///<Peripheral PWM
-#define PMC_PERIPHERAL_ADC (37) ///<Peripheral ADC
-#define PMC_PERIPHERAL_DACC	(38) ///<Peripheral DACC
-*/
-
-
 #define PMC_WAKE_ON_INTERUPT		(1)
 #define PMC_WAKE_ON_EVENT			(0)
 /////////////////////////////////////

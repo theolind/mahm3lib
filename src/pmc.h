@@ -27,6 +27,7 @@
 #define PMC_PCDR0	(*p_PMC_PCDR0)	///< PMC Peripheral Clock Disable Register 0
 #define PMC_PCSR0	(*p_PMC_PCSR0)	///< PMC Peripheral Clock Status Register 0
 
+
 #define PMC_PCER1	(*p_PMC_PCER1)	///< PMC Peripheral Clock Enable Register 1
 #define PMC_PCDR1	(*p_PMC_PCDR1)	///< PMC Peripheral Clock Disable Register 1
 #define PMC_PCSR1	(*p_PMC_PCSR1)	///< PMC Peripheral Clock Status Register 1
@@ -56,6 +57,7 @@
 #define PMC_WAKE_ON_EVENT			(0)
 /////////////////////////////////////
 
+
 // MASER CLOCK SETTING //
 #define PMC_CSS					(0x01U)		///<Master Clock Source Selection Bit Mask
 
@@ -83,6 +85,7 @@
 
 //////////////////////////////////
 
+
 // Start peripheral clock
 uint8_t pmc_start_peripheral_clock(uint8_t ID_);
 
@@ -105,6 +108,6 @@ uint8_t pmc_sleep_for_ms(uint32_t ms);
 uint8_t pmc_select_master_clock(uint32_t PMC_CLOCK_);
 
 // Set processor clock
-uint8_t pmc_set_processor_clk(uint8_t PMC_PROCESSOR_PRES_);
+uint8_t pmc_set_processor_clk(uint32_t PMC_PROCESSOR_PRES_);
 
 #endif /* PMC_H_ */

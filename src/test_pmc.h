@@ -17,4 +17,11 @@ void test_pmc_stop_peripheral_clock_when_successful(void);
 
 void test_pmc_set_master_clock_when_successful(void);
 
+void test_pmc_setup(void);
+void test_pmc_tear_down(void);
+void test_pmc_reset(void);
+void test_pmc(void);
+void test_pmc_status_peripheral_clock_when_inactive(void);
+void test_pmc_status_peripheral_clock_when_active(void);
+
 #endif /* TEST_PMC_H_ */

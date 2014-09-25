@@ -11,11 +11,14 @@
  * \bug May still be bugs
  */
 
+
 #include "global_definitions.h"
 #include "pmc.h"
 
+
 // The first register in the Power Management Controller
 uint32_t *const p_PMC_BASE_ADD = (uint32_t *) 0x400E0600U;
+
 
 /**
  *  Necessary registers addressed by incrementing the base address by an
@@ -114,6 +117,7 @@ uint8_t pmc_status_peripheral_clock(uint8_t ID_) {
 }
 
 
+
 /** Set to sleep mode, provide wakeup method
  *
  */
@@ -151,11 +155,11 @@ uint8_t pmc_sleep_for_ms(uint32_t ms){
 
 	return pmc_sleep(PMC_WAKE_ON_EVENT);
 }
-
 /** select master clock
  *
  */
 uint8_t pmc_select_master_clock(uint32_t PMC_CLOCK_){
+
 
 	return SUCCESS;
 }
@@ -165,14 +169,15 @@ uint8_t pmc_select_master_clock(uint32_t PMC_CLOCK_){
  * to the desired value. For the input one must begin writing
  * pmc_processor_clk_prescaler_ to get to the correct prescalers.
  *
- * @param pmc_processor_clk_prescaler_ Choose amoung predefined prescalers
+ * @param pmc_processor_clk_prescaler_ Choose among predefined prescalers
  * @return
  */
-uint8_t pmc_set_processor_clk(uint8_t PMC_PROCESSOR_PRES_){
+uint8_t pmc_set_processor_clk(uint32_t PMC_PROCESSOR_PRES_){
 	// 0x00000003 = CSS mask
 	if((PMC_MCKR & 0x00000003) < 2){
 		while(~PMC_SR_MCKRDY_MASK){} // Wait till the master clock gets ready
-		PMC_MCKR |= (~PMC_MCKR_PRES_MASK | (PMC_PROCESSOR_PRES_ << 4));
+		// Position of the prescaler start from bit 4 and is 3 bits wide
+		PMC_MCKR |= (PMC_MCKR & (~0x00000070))|(PMC_PROCESSOR_PRES_ << 4);
 	}
 
 	return SUCCESS;

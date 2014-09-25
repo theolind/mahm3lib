@@ -29,11 +29,17 @@ void test_pmc_tear_down(){
 }
 
 void test_pmc_reset(){
-	test_pmc_setup();
 	test_pmc_tear_down();
+	test_pmc_setup();
 }
 
 
+void test_pmc(){
+	test_pmc_start_peripheral_clock_when_successful();
+	test_pmc_status_peripheral_clock_when_inactive();
+	test_pmc_status_peripheral_clock_when_active();
+	test_pmc_stop_peripheral_clock_when_successful();
+}
 
 
 void test_pmc_status_peripheral_clock_when_inactive(void){

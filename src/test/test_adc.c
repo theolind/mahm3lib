@@ -1,10 +1,9 @@
 /**
- * \class test_adc
- * \brief Analog-to-digital converter(ADC) tests
- * \details This class is used to test ADC capabilities of this API
- * \author Prince Balabis
- * \version 0.1
- * \date 17 sep 2014
+ * @brief Analog-to-digital converter(ADC) tests
+ * @details This class is used to test ADC capabilities of this API
+ * @author Prince Balabis
+ * @version 0.1
+ * @date 17 sep 2014
  */
 
 #include "sam3x8e/global_definitions.h"
@@ -38,7 +37,7 @@ void test_adc_channel_enabled(void) {
  */
 void test_adc_channel_disabled(void) {
 
-	///<ADC Channel Status Register
+	//ADC Channel Status Register
 	uint32_t * const p_ADC_CHSR = (uint32_t *) 0x400C0018u;
 
 	// Chosen channel to test

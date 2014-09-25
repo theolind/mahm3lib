@@ -5,7 +5,6 @@
  * some point use. This file helps us to avoid collision of redefinition of
  * some commonly used defines.
  *
- * There is a discussion about this in the forum.
  *
  * Created by: Saeed Ghasemi, 2014-09-18
  */
@@ -73,8 +72,8 @@
 #define SUCCESS		1
 #define FAIL		0
 
-#define YES			1
-#define NO			0
+#define TRUE		1
+#define FALSE		0
 
 #define HIGH		1
 #define LOW			0

@@ -66,15 +66,24 @@ void pio_close(void);
 
 /**
  * Configure a pin to be either an input or an output
- * @param port the port to which the pin belongs
+ * @param port the port to which the pin belong
  * @param pin_number the pin number (on the port) to configure
- * @param input (optional) set to 1 to configure pin as an input, 0 to configure as an output (default)
- * @param pullup (optional) set to 1 to configure pin with internal pullup (default), 0 to configure without
+ * @param input set to 1 to configure pin as an input, 0 to configure as an output (default)
+ * @param pullup set to 1 to configure pin with internal pullup (default), 0 to configure without
  */
 void pio_conf_pin(uint32_t port, uint8_t pin_number, uint8_t input, uint8_t pullup);
 
 /**
- * Configure a port (multiple pins) to be either inputs or outputs
+ * Configure multiple pins to be either inputs or outputs
+ * @param port the port to which the pins belong
+ * @param pin_numbers the pin numbers (on the port) to configure (1 means, will be configured, 0 = will not be configured)
+ * @param input set to 1 to configure pin as an input, 0 to configure as an output (default)
+ * @param pullup set to 1 to configure pin with internal pullup (default), 0 to configure without
+ */
+void pio_conf_pins(uint32_t port, uint32_t pin_numbers, uint8_t input, uint8_t pullup);
+
+/**
+ * Configure a whole to be either inputs or outputs, this will reset the whole port
  * @param port the port to configure
  * @param inputs set a bit to 1 to configure the corresponding pin as an input, 0 to configure as output
  * @param pullups set a bit to 1 to configure the corresponding pin with an internal pullup, 0 to configure without internal pullup
@@ -88,6 +97,14 @@ void pio_conf_port(uint32_t port, uint32_t inputs, uint32_t pullups);
  * @param level 1 is high, 0 is low
  */
 void pio_set_pin(uint32_t port, uint8_t pin_number, uint8_t level);
+
+/**
+ * Set multiple pins to either a high or a low level
+ * @param port the port to which the pin belongs
+ * @param pin_numbers the pin numbers (on the port) to configure (1= configure the pin, 0= do not configure the pin)
+ * @param level 1 is high, 0 is low
+ */
+void pio_set_pins(uint32_t port, uint32_t pin_numbers, uint8_t level);
 
 /**
  * Set an entire port to either high or low levels

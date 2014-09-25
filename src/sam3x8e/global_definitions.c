@@ -1,10 +1,10 @@
-/**
+/*
  * global_definitions.c
  *
  * This file contains functions that the developers in this group will at
  * some point use. This file helps us to avoid recreating function with the
- * same functionality.
- *
+ * same functionality. Mostly intended for bitwise operations and other small
+ * operations.
  *
  * Created by: Saeed Ghasemi, 2014-09-22
  */
@@ -12,7 +12,7 @@
 #include "global_definitions.h"
 
 
-/**
+/*
  * This function can be used to check for the state of a single bit in a
  * register.
  *
@@ -25,7 +25,7 @@ uint8_t is_bit_high(uint32_t *reg, uint8_t bit){
 }
 
 
-/**
+/*
  * This function sets or clear or modifies a section of a register, reg,
  * defined by 'mask' with 'value'.
  * This will only work for read/write register.
@@ -48,7 +48,7 @@ uint8_t set_section_in_register(uint32_t *reg, uint8_t start_bit, uint8_t length
 	return SUCCESS;
 }
 
-/**
+/*
  * This function will only return the value of a specified section in a given
  * register.
  * @param reg The pointer to the register (not its value)

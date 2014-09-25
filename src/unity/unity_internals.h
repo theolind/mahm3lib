@@ -9,7 +9,7 @@
 
 #include <stdio.h>
 #include <setjmp.h>
-#include "io_uart.h"		//modified by Beckius 2014-09-07
+#include "sam3x8e/uart.h"		//modified by Beckius 2014-09-07
 
 // Unity attempts to determine sizeof(various types)
 // based on UINT_MAX, ULONG_MAX, etc. These are typically
@@ -242,8 +242,8 @@ typedef UNITY_DOUBLE_TYPE _UD;
 //putchar(a)
 //removed 'putchar(a)' - modified by Beckius 2014-09-07
 #define UNITY_OUTPUT_CHAR(a) {			\
-	while (!uart_transmitter_ready());	\
-	uart_send_char(a);					\
+	while (!uart_tx_ready(UART));	\
+	uart_write_chr(UART, a);					\
 }
 	
 #else

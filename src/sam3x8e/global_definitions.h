@@ -1,11 +1,10 @@
-/**
- * global_definitions.h
+/*
+ * global_definitions.c
  *
  * This file contains definitions that the developers in this group will at
  * some point use. This file helps us to avoid collision of redefinition of
  * some commonly used defines.
  *
- * There is a discussion about this in the forum.
  *
  * Created by: Saeed Ghasemi, 2014-09-18
  */
@@ -73,20 +72,12 @@
 #define SUCCESS		1
 #define FAIL		0
 
-#define YES			1
-#define NO			0
+#define TRUE		1
+#define FALSE		0
 
 #define HIGH		1
 #define LOW			0
 
-///////////////////////////
-
-// checks the state of a given bit in a register
-uint8_t is_bit_high(uint32_t reg, uint8_t bit);
-
-// Sets the section in register
-uint8_t set_section_in_register(uint32_t *reg, uint8_t start_bit,
-		uint8_t length, uint32_t value);
-
+//////////////////////////
 
 #endif

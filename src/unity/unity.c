@@ -1101,12 +1101,12 @@ void UnityDefaultTestRun(UnityTestFunction Func, const char* FuncName, const int
     Unity.NumberOfTests++;
     if (TEST_PROTECT())
     {
-        setUp();
+        //setUp();
         Func();
     }
     if (TEST_PROTECT() && !(Unity.CurrentTestIgnored))
     {
-        tearDown();
+        //tearDown();
     }
     UnityConcludeTest();
 }

@@ -1,15 +1,15 @@
 #include "global_definitions.h"
 #include "dacc.h"
 
-uint32_t *const p_DACC_CR   = (uint32_t *) 0x400C8000U;
-uint32_t *const p_DACC_MR   = (uint32_t *) 0x400C8004U;
-uint32_t *const p_DACC_CHER = (uint32_t *) 0x400C8010U;
-uint32_t *const p_DACC_CHDR = (uint32_t *) 0x400C8014U;
-uint32_t *const p_DACC_CHSR = (uint32_t *) 0x400C8018U;
-uint32_t *const p_DACC_CDR  = (uint32_t *) 0x400C8020U;
-uint32_t *const p_DACC_ISR  = (uint32_t *) 0x400C8030U;
-uint32_t *const p_DACC_WRMR = (uint32_t *) 0x400C80E4U;
-uint32_t *const p_DACC_WPSR = (uint32_t *) 0x400C80E8U;
+uint32_t *const p_dacc_cr   = (uint32_t *) 0x400C8000U;
+uint32_t *const p_dacc_mr   = (uint32_t *) 0x400C8004U;
+uint32_t *const p_dacc_cher = (uint32_t *) 0x400C8010U;
+uint32_t *const p_dacc_chdr = (uint32_t *) 0x400C8014U;
+uint32_t *const p_dacc_chsr = (uint32_t *) 0x400C8018U;
+uint32_t *const p_dacc_cdr  = (uint32_t *) 0x400C8020U;
+uint32_t *const p_dacc_isr  = (uint32_t *) 0x400C8030U;
+uint32_t *const p_dacc_wrmr = (uint32_t *) 0x400C80E4U;
+uint32_t *const p_dacc_wpsr = (uint32_t *) 0x400C80E8U;
 
 uint8_t dacc_init(dacc_settings_t *settings){
 
@@ -27,7 +27,6 @@ uint8_t dacc_init(dacc_settings_t *settings){
 	// Software reset
 	DACC_CR = (0x1u << 0);
 
-	// TODO: Fix five warnings below
 	// Trigger mode
 	DACC_MR |= (settings->trigger_mode << 0);
 
@@ -54,7 +53,7 @@ uint8_t dacc_enable_channel(uint8_t dacc_channel) {
 
 	DACC_CHER |= (0x1u << dacc_channel);
 
-	if ( *p_DACC_CHSR & (0x1u << dacc_channel) ) {
+	if ( DACC_CHSR & (0x1u << dacc_channel) ) {
 		return 1;
 	} else {
 		return 0;
@@ -69,20 +68,20 @@ uint8_t dacc_disable_channel(uint8_t dacc_channel){
 
 	DACC_CHDR |= (0x1u << dacc_channel);
 
-	if ( !(*p_DACC_CHSR & (0x1u << dacc_channel)) ) {
+	if ( !( DACC_CHSR & (0x1u << dacc_channel)) ) {
 		return 1;
 	} else {
 		return 0;
 	}
 }
 
-uint8_t dacc_channel_enabled(uint8_t dacc_channel){
+uint8_t dacc_get_channel_status(uint8_t dacc_channel){
 
 	if (dacc_channel > 1) {
 		return 0;
 	}
 
-	if ( *p_DACC_CHSR & (0x1u << dacc_channel) ) {
+	if ( DACC_CHSR & (0x1u << dacc_channel) ) {
 		return 1;
 	} else {
 		return 0;
@@ -91,7 +90,7 @@ uint8_t dacc_channel_enabled(uint8_t dacc_channel){
 
 uint8_t dacc_write(uint8_t dacc_channel, uint32_t value){
 
-	if (dacc_channel > 1 || value > 4095) {
+	if (dacc_channel > 1 || value > DACC_MAX_RESOLUTION) {
 		return 0;
 	}
 
@@ -99,7 +98,7 @@ uint8_t dacc_write(uint8_t dacc_channel, uint32_t value){
 	DACC_MR |= (dacc_channel << 16);
 
 	//Check if converter is ready before sending new data
-	while ( !(*p_DACC_ISR & 0x1u << 0) );
+	while ( !( DACC_ISR & 0x1u << 0) );
 
 	DACC_CDR = value;
 

@@ -40,8 +40,8 @@
 //////////////////////////////////////////////////////////////////////////
 // Function prototypes
 
-volatile inline void timer_delay_software_us(float us);
-volatile inline void timer_delay_software_ms(uint32_t ms);
+inline void timer_delay_software_us(float us);
+inline void timer_delay_software_ms(uint32_t ms);
 
 //////////////////////////////////////////////////////////////////////////
 

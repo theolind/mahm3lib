@@ -3,9 +3,10 @@
  * \brief Test runner for the software delay routines
  * \details This class starts the tests for the delay routines in delay_soft API
  * \author Saeed Ghasemi
- * \version 0.1
+ * \version 0.2
  * \date 22 sep 2014
- * \pre These test are waiting for the Hardware timer API to be released in order to make a automated test
+ * \pre These test are waiting for the Hardware timer API to be released in
+ * \pre order to make automated tests.
  * \bug
  */
 
@@ -17,6 +18,8 @@
 
 
 /*--------------------------
+
+// Pin mapping dependency
 
 // Descriptive names for TIMING-pins
 #define Arduino_Pin_24_Front_Reg    PIO_PA15_IDX		//Arduino Due pin 24 used to measure work load

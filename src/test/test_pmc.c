@@ -8,7 +8,7 @@
  * @date 17 sep 2014
  */
 
-#include "sam3x8e/global_definitions.h"
+#include "sam3x8e/global_entities.h"
 #include "unity/unity.h"
 #include "test/test_pmc.h"
 

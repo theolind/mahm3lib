@@ -12,7 +12,7 @@
  */
 
 ///\cond
-#include "global_definitions.h"
+#include "global_entities.h"
 #include <inttypes.h>
 #include "adc.h"
 

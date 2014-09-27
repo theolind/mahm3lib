@@ -8,9 +8,6 @@
 
 #include "wdt.h"
 
-// Watchdog Timer Mode Register
-uint32_t *const p_WDT_MR = (uint32_t *) 0x400E1A54U;
-
-void wdt_disable(void) {
-	WDT_MR = WDT_MR_WDDIS;
+void wdt_disable(wdt_reg_t *wdt) {
+	wdt->WDT_MR = WDT_MR_WDDIS;
 }

@@ -7,6 +7,7 @@
 
 //#include <asf.h>
 #include "unity_hw_setup.h"
+#include "sam3x8e/pmc.h"
 #include "sam3x8e/uart.h"
 #include "sam3x8e/wdt.h"
 // #include "unity.h" //remove this when done!!
@@ -20,11 +21,9 @@ uint32_t *const p_EEFC_FMR_1 = (uint32_t *) 0x400E0C00U;
 
 static void configure_uart(void) {
 	// Peripheral Clock Enable Register 0 ---- REMOVE WHEN DONE!
-	uint32_t *const p_PMC_PCER0 = (uint32_t *) 0x400E0610U;
+	//uint32_t *const p_PMC_PCER0 = (uint32_t *) 0x400E0610U;
 	// PIO Controller PIO Disable Register - PIOA ---- REMOVE WHEN DONE!
 	uint32_t *const p_PIO_PDR = (uint32_t *) 0x400E0E04U;
-	// PIO Controller Output Enable Register - PIOA ---- REMOVE WHEN DONE!
-	uint32_t *const p_PIO_OER = (uint32_t *) 0x400E0E10U;
 	// PIO Pull Up Enable Register (PIOA) ---- REMOVE WHEN DONE!
 	uint32_t *const p_PIO_PUER = (uint32_t *) 0x400E0E64U;
 
@@ -128,23 +127,11 @@ static void systemclock_init(void)
 }
 
 void unity_hw_setup(void) {
-	// Watchdog Timer Mode Register
-	uint32_t *const p_WDT_MR = (uint32_t *) 0x400E1A54U;
-	// Peripheral Clock Enable Register 0
-	uint32_t *const p_PMC_PCER0 = (uint32_t *) 0x400E0610U;
-	
 	//sysclk_init();
 	systemclock_init();
 	
-	// Disable the watchdog timer
-	*p_WDT_MR = (1 << 15);
-
-	/*
-	 * Enables peripheral clocks for Parallel I/O Controller A-F.
-	 * This a standard initialization before using peripherals.
-	 */
-	*p_PMC_PCER0 =	(1 << 11) | (1 << 12) | (1 << 13) |
-					(1 << 14) | (1 << 15) | (1 << 16);
+	// disable the watchdog timer
+	wdt_disable();
 	
 	// configure UART so Unity can use USB/RS-232 as output
 	configure_uart();

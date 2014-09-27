@@ -1,40 +1,34 @@
 /**
- * global_entities.c
- *
- * This file contains functions that the developers in this group will at
- * some point use. This file helps us to avoid recreating function with the
- * same functionality. Mostly intended for bitwise operations and other small
- * operations.
- *
- * Created by: Saeed Ghasemi, 2014-09-22
- */
-
-/**
- * @file global_entities
+ * @file global_entities.c
+ * @anchor <global_entities>
  * @brief A storage place for globally used entities
- * @details This class holds some globally important definitions and functions
- * @details of bitwise operation and generally functions that are common to the
- * @details different APIs but not linked to the tasks of any API.
- * @author Saeed Ghasemi
- * @version 0.2
- * @date 25 sep 2014
- * @pre These function can be used both internally as well as externally by the
- * @pre end programmer. Its functions fall into the definition of stand-alone
- * @pre and independent of any API. These are mainly a collection of tested
- * @pre bitwise operations on registers or memory.
- * @bug Tests are being put in place....
+ * @details {This class holds some globally important definitions and functions.
+ * This file helps us avoid recreating function with the same functionality.
+ * Mostly intended for bitwise operation and other small operations and
+ * generally functions that are common for the different APIs but not linked to
+ * the tasks of any API.
+ * These function can be used both internally and as well as externally by the
+ * end programmer. Its functions fall into the definition of stand-alone and
+ * independent of any API. These are mainly a collection of tested bitwise
+ * operations on registers or memory.}
+ * @author {Saeed Ghasemi}
+ * @version {v0.3}
+ * @since {Since v0.3, first_bit_position_of_mask() has been added. And mask is
+ * the preferred way of editing a register section and the use of start_bit is
+ * deprecated.}
+ * @date {25 sep 2014}
+ * @pre {Since they are stand-alone, there are no preconditions for thier use.}
+ * @bug {Not yet fully tested.}
  */
-
 
 #include "global_entities.h"
 
-
-/*
+/**
  * This function can be used to check for the state of a single bit in a
  * register.
  *
- * @param reg a 32bit long register value to be examined
- * @param bit the bit-number to be examined
+ * @param reg A 32bit long register value to be examined
+ * @param bit The bit-number to be examined
  * @return The state of the bit in HIGH or LOW
  */
 uint8_t is_bit_high(uint32_t *reg, uint8_t bit){
@@ -56,7 +50,7 @@ uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value){
 	return SUCCESS;
 }
 
-/*
+/**
  * This function modifies a section of a register, reg, defined by 'mask' with
  * the value in 'value'.
  * It will only work for read/write registers.
@@ -69,6 +63,9 @@ uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value){
  * @param length The length of the section
  * @param value The value to be inserted in the register-section
  * @return
+ * @deprecated (see How and When To Deprecate APIs)
+ * @deprecated  As of JDK 1.1, replaced by
+ *             {@link #set_section_in_register(uint32_t,uint32_t,uint32_t)}
  */
 uint8_t set_section_in_register2(uint32_t *reg, uint8_t start_bit,
 		uint8_t length, uint32_t value){

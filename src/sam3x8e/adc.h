@@ -3,10 +3,13 @@
  * @brief Analog-to-Digital Converter (ADC)
  * @details This class is used to read values from the ADC-channels.
  *
+ * Important: Not all functionality of the ADC is implemented in this API yet.
+ *
  * @author Hisham Ramish
  * @author Mattias Nilsson
  * @author Prince Balabis
- * @date 17 September 2014
+ * @author Andreas Drotth
+ * @date 27 September 2014
  *
  * @pre Initiate board and enable peripheral clock for ADC.
  */
@@ -16,23 +19,8 @@
 
 #include <inttypes.h>
 
-/// @cond
 // pointer to registers of ADC, base address: 0x400C0000
 #define ADC ((adc_reg_t *) 0x400C0000U)
-
-// ADC_CR: (ADC Offset: 0x0000) Control Register
-#define ADC_CR_START	(0x1u << 1)
-#define ADC_CR_RESET	(0x1u << 0)
-
-// ADC_MR: (ADC Offset: 0x0004) Mode Register
-#define ADC_MR_RESET	(0)
-#define ADC_MR_RES_12	(0x0u << 4)
-#define ADC_MR_RES_10	(0x1u << 4)
-#define ADC_STARTUP_0	(0 << 16)
-#define ADC_PRESCAL_2	(2 << 8)
-
-// ADC_ISR: (ADC Offset: 0x0030) Interrupt Status Register
-#define ADC_ISR_DRDY	(0x01 << 24)
 
 // Valid DACC channels
 #define ADC_CHANNEL_0 	0
@@ -51,9 +39,28 @@
 #define ADC_CHANNEL_13	13
 #define ADC_CHANNEL_14	14
 
+#define ADC_RESOLUTION_10_BIT	1
+#define ADC_RESOLUTION_12_BIT	0
+
 // To check if a provided ID is a valid channel
 #define ADC_VALID_CHANNEL(channel) \
 	((channel) >= 0 && (channel) <= 14)
+
+/// @cond
+// ADC_CR: (ADC Offset: 0x0000) Control Register
+#define ADC_CR_START	(0x1u << 1)
+#define ADC_CR_RESET	(0x1u << 0)
+
+// ADC_MR: (ADC Offset: 0x0004) Mode Register
+#define ADC_MR_RESET	(0)
+#define ADC_MR_RES(resolution)	\
+	((resolution) << 4)
+
+#define ADC_STARTUP_0	(0 << 16)
+#define ADC_PRESCAL_2	(2 << 8)
+
+// ADC_ISR: (ADC Offset: 0x0030) Interrupt Status Register
+#define ADC_ISR_DRDY	(0x01 << 24)
 
 /*
  * Mapping of ADC registers
@@ -94,20 +101,20 @@ uint8_t adc_init(void);
  * Starts the ADC.
  * @return Return 1 if started.
  */
-uint8_t adc_start(void);
+void adc_start(void);
 
 /**
  * Resets the ADC.
  * @return Return 1 if stopped.
  */
-uint8_t adc_reset(void);
+void adc_reset(void);
 
 /**
  * Sets ADC resolution to 10 bits or 12 bits. 12 bits is default after initiation.
  * @param resolution The resolution of the ADC.
  * @return Returns 1 if correctly set or 0 if not correct set (10 or 12-bit not used as input).
  */
-uint8_t adc_set_resolution(uint8_t resolution);
+void adc_set_resolution(uint8_t resolution);
 
 /**
  * Enables a specific channel. Channel 0 - 15 is available.
@@ -115,14 +122,14 @@ uint8_t adc_set_resolution(uint8_t resolution);
  * @param channel The channel (0-15) that is to be enabled.
  * @return If not in the range 0-15 or channel does not become enabled, 0 is returned. Otherwise 1.
  */
-uint8_t adc_enable_channel(uint32_t channel);
+void adc_enable_channel(uint32_t channel);
 
 /**
  * Disables a specific channel. Channel 0-15 is available.
  * @param channel The channel (0-15) that is to be disabled.
  * @return If not in the range 0-15 or channel does not become disabled, 0 is returned. Otherwise 1.
  */
-uint8_t adc_disable_channel(uint32_t channel);
+void adc_disable_channel(uint32_t channel);
 
 /**
  * Reads the status for a specific channel. Channel 0-15 is available for readout.

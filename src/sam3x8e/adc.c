@@ -27,66 +27,30 @@ uint8_t adc_init(void) {
 	return 0;
 }
 
-uint8_t adc_start(void) {
-
+void adc_start(void) {
 	ADC->ADC_CR = ADC_CR_START;
-	return 1;
 }
 
-uint8_t adc_reset(void) {
-
+void adc_reset(void) {
 	ADC->ADC_CR = ADC_CR_RESET;
-	return 1;
 }
 
-uint8_t adc_set_resolution(uint8_t resolution) {
-
-	if(resolution == 12) {
-		ADC->ADC_MR = ADC_MR_RES_12;
-		return 1;
-
-	} else if(resolution == 10) {
-		ADC->ADC_MR = ADC_MR_RES_10;
-		return 1;
-	}
-
-	return 0;
+void adc_set_resolution(uint8_t resolution) {
+	ADC->ADC_MR |= ADC_MR_RES(resolution);
 }
 
-uint8_t adc_enable_channel(uint32_t channel) {
-
+void adc_enable_channel(uint32_t channel) {
 	ADC->ADC_CHER = (0x1u << channel);
-	return 1;
 }
 
-uint8_t adc_disable_channel(uint32_t channel) {
-
+void adc_disable_channel(uint32_t channel) {
 	ADC->ADC_CHDR = (0x1u << channel);
-	return 1;
 }
 
 uint8_t adc_channel_enabled(uint32_t channel) {
-
-	if(ADC->ADC_CHSR & (0x1u << channel)) {
-			return 1;
-
-	} else {
-		return 0;
-	}
+	return (ADC->ADC_CHSR & (0x1u << channel));
 }
 
 uint32_t adc_read_channel(uint32_t channel) {
-
-	adc_start();
-
-	while(!(ADC->ADC_ISR & ADC_ISR_DRDY));
-
-	uint32_t data = (ADC->ADC_CDR + channel);
-
-	//Original code
-	//uint32_t data = *(p_ADC_CDR + ADC_CHANNEL);
-
-	adc_start();
-
-	return data;
+	return (ADC->ADC_CDR[channel]);
 }

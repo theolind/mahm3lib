@@ -8,6 +8,6 @@
 
 #include "wdt.h"
 
-void wdt_disable(wdt_reg_t *wdt) {
-	wdt->WDT_MR = WDT_MR_WDDIS;
+void wdt_disable(void) {
+	WDT->WDT_MR = WDT_MR_WDDIS;
 }

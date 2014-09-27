@@ -36,8 +36,7 @@ typedef struct {
 
 /**
  * Disables the Watchdog Timer.
- * @param wdt wdt_reg_t struct on base address for watchdog timer registers. Expects: WDT struct defined in wdt.h
  */
-void wdt_disable(wdt_reg_t *wdt);
+void wdt_disable(void);
 
 #endif

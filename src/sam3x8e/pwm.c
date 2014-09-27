@@ -14,6 +14,7 @@
 #include "global_entities.h"
 #include "pwm.h"
 
+/////////////////////////////////////////////////////////////////////////////
 ///\cond
 /*
  *  Necessary registers addressed by incrementing the base address by an
@@ -32,7 +33,7 @@
 #define PWM_CPRD 	*(p_PWM_BASE_ADD + 0x20C) // PWM Channel Period Register
 #define PWM_CPRDUPD *(p_PWM_BASE_ADD + 0x210) // PWM Channel Period Update Register
 ///\endcond
-
+/////////////////////////////////////////////////////////////////////////////
 /**
  * MASKs are being defined like this:
  * [PERIPHERAL]_[REGISTER]_[SECTION]_MASK
@@ -70,7 +71,7 @@
 
 #define PWM_CPRDx_CPRD_MASK				(0x0000FFFF)
 #define PWM_CPRDUPDx_CPRDUPD_MASK		(0x0000FFFF)
-//////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
 /**
  * Parameters are being defined like this:
  * [PERIPHERAL]_[REGISTER]_[SECTION]_VALUE    (IF ANY NUMBER)
@@ -87,6 +88,20 @@
 #define PWM_CLK_PRES_256				(0b1000)
 #define PWM_CLK_PRES_512				(0b1001)
 #define PWM_CLK_PRES_1024				(0b1010)
+
+// Parameters for easy selecting of clocks within each channel
+#define PWM_CMRx_SELECTOR_MCK/1			(0b0000)
+#define PWM_CMRx_SELECTOR_MCK/2			(0b0001)
+#define PWM_CMRx_SELECTOR_MCK/4			(0b0010)
+#define PWM_CMRx_SELECTOR_MCK/8			(0b0011)
+#define PWM_CMRx_SELECTOR_MCK/16		(0b0100)
+#define PWM_CMRx_SELECTOR_MCK/32		(0b0101)
+#define PWM_CMRx_SELECTOR_MCK/64		(0b0110)
+#define PWM_CMRx_SELECTOR_MCK/128		(0b0111)
+#define PWM_CMRx_SELECTOR_MCK/256		(0b1000)
+#define PWM_CMRx_SELECTOR_MCK/512		(0b1001)
+#define PWM_CMRx_SELECTOR_MCK/1024		(0b1010)
+
 //DIVIDERS FOR CLKA AND CLKB
 #define PWM_CLK_DIVx_TURNOFF			0
 #define PWM_CLK_DIVx_PREx				1
@@ -113,7 +128,17 @@
 //////////////////////////////////
 
 void function(){
-	PWM_CLK =
+	/**
+	 * enable the PWM clock in PMC
+	 * See status for channel
+	 * if enabled then disable channel
+	 ** initialize peripheral by selecting a prescaler of clk register with PREA
+	 * Select a clock for channel_0
+	 * Select alignment for channel_0
+	 * Select polarity for channel_0
+	 *
+	 *
+	 */
 }
 
 

@@ -46,7 +46,7 @@ static void configure_uart(void) {
 	*p_PIO_PUER = (1 << 8);
 
 	//initialize UART
-	uart_init(UART, &uart_settings);
+	uart_init(&uart_settings);
 }
 
 /**

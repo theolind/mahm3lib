@@ -231,52 +231,46 @@ typedef struct {
 
 /**
  * Initialization of the UART
- * @param uart Base address to UART registers. Expects: UART struct defined in uart.h
  * @param settings Settings for the initialization (baud rate, parity, etc).
  * @return 0 is returned for successful initialization, 1 is return for failure.
  * @pre Enable PMC Peripheral Clock for UART.
  * @pre Disable the PIO from controlling PA8 (RX-pin) and PA9 (TX-pin).
  * @pre Enable pull-up on PA8 (RX-pin) - only when reading from UART on the Arduino Due!
  */
-uint8_t uart_init(uart_reg_t *uart, const uart_settings_t *settings);
+uint8_t uart_init(const uart_settings_t *settings);
 
 /**
  * Checks if a character can be sent by the UART.
- * @param uart Base address to UART peripheral.
  * @return 1 is returned when a character is ready to be sent,
  * @return otherwise 0 is returned.
  */
-uint8_t uart_tx_ready(uart_reg_t *uart);
+uint8_t uart_tx_ready(void);
 
 /**
  * Checks if a character has received to the UART.
- * @param uart Base address to UART registers. Expects: UART struct defined in uart.h
  * @return 1 is returned when a character has received,
  * @return otherwise 0 is returned.
  */
-uint8_t uart_rx_ready(uart_reg_t *uart);
+uint8_t uart_rx_ready(void);
 
 /**
  * Sends a character to the UART.
- * @param uart Base address to UART registers. Expects: UART struct defined in uart.h
  * @param chr Character (ASCII code) to send.
  * @pre Call uart_tx_ready() to check if a character can be sent.
  */
-void uart_write_chr(uart_reg_t *uart, char chr);
+void uart_write_chr(char chr);
 
 /**
  * Sends a string of characters to the UART.
- * @param uart Base address to UART registers. Expects: UART struct defined in uart.h
  * @param str String (pointer to character) to send.
  */
-void uart_write_str(uart_reg_t *uart, char *str);
+void uart_write_str(char *str);
 
 /**
  * Reads a character from the UART.
- * @param uart Base address to UART peripheral.
  * @return Character.
  * @pre Call uart_rx_ready() to check if a character can be read.
  */
-char uart_read_chr(uart_reg_t *uart);
+char uart_read_chr(void);
 
 #endif

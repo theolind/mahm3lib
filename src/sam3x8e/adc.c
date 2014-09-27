@@ -1,7 +1,7 @@
 /*
  * adc.c
  *
- * Author: Hisham Ramish, Mattias Nilsson, Prince Balabis
+ * Author: Hisham Ramish, Mattias Nilsson, Prince Balabis, Andreas Drotth
  * Date: 17 September 2014
  */
 
@@ -35,7 +35,7 @@ void adc_reset(void) {
 	ADC->ADC_CR = ADC_CR_RESET;
 }
 
-void adc_set_resolution(uint8_t resolution) {
+void adc_set_resolution(uint32_t resolution) {
 	ADC->ADC_MR |= ADC_MR_RES(resolution);
 }
 
@@ -47,7 +47,7 @@ void adc_disable_channel(uint32_t channel) {
 	ADC->ADC_CHDR = (0x1u << channel);
 }
 
-uint8_t adc_channel_enabled(uint32_t channel) {
+uint32_t adc_channel_enabled(uint32_t channel) {
 	return (ADC->ADC_CHSR & (0x1u << channel));
 }
 

@@ -39,8 +39,12 @@
 #define ADC_CHANNEL_13	13
 #define ADC_CHANNEL_14	14
 
+// Valid resolution values
 #define ADC_RESOLUTION_10_BIT	1
 #define ADC_RESOLUTION_12_BIT	0
+
+// ADC_ISR: (ADC Offset: 0x0030) Interrupt Status Register
+#define ADC_ISR_DRDY	(0x01 << 24)
 
 // To check if a provided ID is a valid channel
 #define ADC_VALID_CHANNEL(channel) \
@@ -53,14 +57,10 @@
 
 // ADC_MR: (ADC Offset: 0x0004) Mode Register
 #define ADC_MR_RESET	(0)
-#define ADC_MR_RES(resolution)	\
-	((resolution) << 4)
-
 #define ADC_STARTUP_0	(0 << 16)
 #define ADC_PRESCAL_2	(2 << 8)
-
-// ADC_ISR: (ADC Offset: 0x0030) Interrupt Status Register
-#define ADC_ISR_DRDY	(0x01 << 24)
+#define ADC_MR_RES(resolution) \
+	((resolution) << 4)
 
 /*
  * Mapping of ADC registers
@@ -71,7 +71,7 @@ typedef struct {
 	uint32_t ADC_CR;
 	// Mode Register, offset 0x0004
 	uint32_t ADC_MR;
-	uint32_t dummy1[2];
+	uint32_t unused1[2];
 	// Channel Enable Register, offset 0x0010
 	uint32_t ADC_CHER;
 	// Channel Disable Register, offset 0x0014
@@ -81,12 +81,12 @@ typedef struct {
 	uint32_t reserved[1];
 	// Last Converted Data Register, offset 0x0020
 	uint32_t ADC_LCDR;
-	uint32_t dummy2[3];
+	uint32_t unused2[3];
 	// Interrupt Status Register, offset 0x0030
 	uint32_t ADC_ISR;
-	uint32_t dummy3[7];
+	uint32_t unused3[7];
 	// Channel Data Register, offset 0x0050
-	uint32_t ADC_CDR;
+	uint32_t ADC_CDR[0];
 
 } adc_reg_t;
 /// @endcond
@@ -114,7 +114,7 @@ void adc_reset(void);
  * @param resolution The resolution of the ADC.
  * @return Returns 1 if correctly set or 0 if not correct set (10 or 12-bit not used as input).
  */
-void adc_set_resolution(uint8_t resolution);
+void adc_set_resolution(uint32_t resolution);
 
 /**
  * Enables a specific channel. Channel 0 - 15 is available.
@@ -136,7 +136,7 @@ void adc_disable_channel(uint32_t channel);
  * @param channel The channel (0-15) that the status is asked for.
  * @return If the channel is enabled, returns 1. Otherwise returns 0.
  */
-uint8_t adc_channel_enabled(uint32_t channel);
+uint32_t adc_channel_enabled(uint32_t channel);
 
 /**
  * Read the values from a specific channel. Channel 0-15 is available.

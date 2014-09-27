@@ -12,7 +12,7 @@
 void test_adc_channel_enabled(void);
 void test_adc_channel_disabled(void);
 void test_adc_channel_status(void);
-void test_adc_12bit(void);
-void test_adc_10bit(void);
+void test_adc_set_resolution_12_bit(void);
+void test_adc_set_resolution_10_bit(void);
 void test_adc_12bit_reading_single_channel(void);
 void test_adc_10bit_reading_single_channel(void);

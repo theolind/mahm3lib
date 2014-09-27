@@ -8,13 +8,16 @@
 #include "unity/unity.h"
 #include "test/test_adc.h"
 
+// ADC Channel Status Register
+uint32_t * const p_ADC_CHSR = (uint32_t *) 0x400C0018u;
+
+// ADC Mode Register
+uint32_t * const p_ADC_MR = (uint32_t *) 0x400C0004u;
+
 /*
- * Checking that ADC channel 0 is enabled
+ * Checking that an ADC channel is enabled.
  */
 void test_adc_channel_enabled(void) {
-	// ADC Channel Status Register
-	uint32_t * const p_ADC_CHSR = (uint32_t *) 0x400C0018u;
-
 	// Chosen channel to test
 	uint8_t channel = ADC_CHANNEL_0;
 
@@ -26,18 +29,14 @@ void test_adc_channel_enabled(void) {
 
 	// Check if that channel is enabled
 	TEST_ASSERT_TRUE(*p_ADC_CHSR & (0x1u << channel));
-
 }
 
 /*
- * Checking that ADC channel 0 is disabled, requires "test_adc_channel_enabled"
+ * Checking that an ADC channel is disabled.
+ * Requires "test_adc_channel_enabled"
  * to pass it's test
  */
 void test_adc_channel_disabled(void) {
-
-	//ADC Channel Status Register
-	uint32_t * const p_ADC_CHSR = (uint32_t *) 0x400C0018u;
-
 	// Chosen channel to test
 	uint8_t channel = ADC_CHANNEL_0;
 
@@ -52,19 +51,15 @@ void test_adc_channel_disabled(void) {
 
 	// Check if that channel is disabled
 	TEST_ASSERT_FALSE(*p_ADC_CHSR & (0x1u << channel));
-
 }
 
 
 /*
- * Test channel status function, requires "test_adc_channel_enabled" and
+ * Test getting the state of a channel (enabled or not).
+ * Requires "test_adc_channel_enabled" and
  * "test_adc_channel_disabled" to pass it's tests
  */
 void test_adc_channel_status(void) {
-
-	// ADC Channel Status Register
-	uint32_t * const p_ADC_CHSR = (uint32_t *) 0x400C0018u;
-
 	// Chosen channel to test
 	uint32_t channel = ADC_CHANNEL_0;
 
@@ -79,70 +74,49 @@ void test_adc_channel_status(void) {
 	adc_disable_channel(channel);
 
 	// Check if registry value and function has the same value
-	TEST_ASSERT_FALSE(
-			(*p_ADC_CHSR & (0x1u << channel)) & adc_channel_enabled(channel));
+	TEST_ASSERT_FALSE(*p_ADC_CHSR & (0x1u << channel));
+	TEST_ASSERT_FALSE(adc_channel_enabled(channel));
 }
 
 /*
- * Test 12 bit setting
+ * Test setting the ADC to use 10 bit resolution.
  */
-void test_adc_12bit(void) {
-
-	//pmc_start_peripheral_clock(ID_ADC);
-
-	// Mode Register
-	uint32_t * const p_ADC_MR = (uint32_t *) 0x400C0004u;
-
-	// 12 Bit should be enabled as default
-	TEST_ASSERT_FALSE(*p_ADC_MR | (0x0u << 4));
-
-	// Set ADC to 12 bit
-	adc_set_resolution(12);
-
-	// Test if ADC is still set as 12 bit
-	TEST_ASSERT_FALSE(*p_ADC_MR | (0x0u << 4));
-}
-
-/*
- * Test 10 bit setting
- */
-void test_adc_10bit(void) {
-
-	//pmc_start_peripheral_clock(ID_ADC);
-
-	// Mode Register
-	uint32_t * const p_ADC_MR = (uint32_t *) 0x400C0004u;
-
-	// Set ADC to 12 bit
-	adc_set_resolution(12);
-
-	// Test if ADC is not set as 10 bit
-	TEST_ASSERT_TRUE(*p_ADC_MR ^ (0x1u << 4));
-
-	// Set ADC to 10 bit
-	adc_set_resolution(10);
+void test_adc_set_resolution_10_bit(void) {
+	// Set ADC resolution to 10 bit
+	adc_set_resolution(ADC_RESOLUTION_10_BIT);
 
 	// Test if ADC is set as 10 bit
-	TEST_ASSERT_FALSE(*p_ADC_MR ^ (0x1u << 4));
+	TEST_ASSERT_TRUE(*p_ADC_MR & (0x1u << 4));
 }
 
 /*
- * Test 12 bit ADC reading on a single channel
+ * Test setting the ADC to use 12 bit resolution.
+ */
+void test_adc_set_resolution_12_bit(void) {
+	// Set ADC resolution to 12 bit
+	adc_set_resolution(ADC_RESOLUTION_12_BIT);
+
+	// Test if ADC is set as 12 bit
+	TEST_ASSERT_FALSE(*p_ADC_MR | (0x0u << 4));
+}
+
+/*
+ * Test reading from a single ADC channel using 12 bit resolution.
  */
 void test_adc_12bit_reading_single_channel(void) {
 
-	// Set ADC to 12 bit
+	// Set ADC resolution to 12 bit
 	adc_set_resolution(12);
 
 	// Chosen channel to test
 	uint8_t channel = ADC_CHANNEL_0;
 
-	// Enable specific channel
+	// Enable that channel
 	adc_enable_channel(channel);
 
-	// Read ADC-channel
+	// Read channel
 	uint16_t data;
-	data = adc_read_channel(channel);
+	data = (uint16_t) adc_read_channel(channel);
 
 	// Test if a 12 bit value comes through (0-4095)
 	//TEST_ASSERT_UINT_WITHIN(2048, 2047, data);
@@ -176,7 +150,7 @@ void test_adc_12bit_reading_single_channel(void) {
 }
 
 /*
- * Test 10 bit ADC reading on a single channel
+ * Test reading from a single ADC channel using 10 bit resolution.
  */
 void test_adc_10bit_reading_single_channel(void) {
 

@@ -34,9 +34,9 @@ uint8_t uart_init(uart_reg_t *uart, const uart_settings_t *options) {
 		// enable receiver and transmitter
 		uart->UART_CR = UART_CR_RXEN | UART_CR_TXEN;
 
-		return 1;
-	} else {
 		return 0;
+	} else {
+		return 1;
 	}
 }
 

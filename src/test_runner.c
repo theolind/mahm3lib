@@ -45,6 +45,7 @@ void run_tests(void) {
 	RUN_TEST(test_adc_channel_enabled, 30);
 	RUN_TEST(test_adc_channel_disabled, 30);
 	RUN_TEST(test_adc_channel_status, 30);
+	pmc_start_peripheral_clock(37); //temp
 	RUN_TEST(test_adc_12bit, 30);
 	RUN_TEST(test_adc_10bit, 30);
 

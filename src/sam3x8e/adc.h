@@ -1,17 +1,40 @@
 /**
  * @file
+ * @brief Analog-to-Digital Converter (ADC)
+ * @details This class is used to read values from the ADC-channels.
  *
  * @author Hisham Ramish
  * @author Mattias Nilsson
  * @author Prince Balabis
- * @version 0.4
- * \date 17 sep 2014
+ * @date 17 September 2014
+ *
+ * @pre Initiate board and enable peripheral clock for ADC.
  */
 
-#include <inttypes.h>
-#include "pmc.h"
+#ifndef ADC_H_
+#define ADC_H_
 
-///\cond
+#include <inttypes.h>
+
+/// @cond
+// pointer to registers of ADC, base address: 0x400C0000
+#define ADC ((adc_reg_t *) 0x400C0000U)
+
+// ADC_CR: (ADC Offset: 0x0000) Control Register
+#define ADC_CR_START	(0x1u << 1)
+#define ADC_CR_RESET	(0x1u << 0)
+
+// ADC_MR: (ADC Offset: 0x0004) Mode Register
+#define ADC_MR_RESET	(0)
+#define ADC_MR_RES_12	(0x0u << 4)
+#define ADC_MR_RES_10	(0x1u << 4)
+#define ADC_STARTUP_0	(0 << 16)
+#define ADC_PRESCAL_2	(2 << 8)
+
+// ADC_ISR: (ADC Offset: 0x0030) Interrupt Status Register
+#define ADC_ISR_DRDY	(0x01 << 24)
+
+// Valid DACC channels
 #define ADC_CHANNEL_0 	0
 #define ADC_CHANNEL_1	1
 #define ADC_CHANNEL_2	2
@@ -28,22 +51,90 @@
 #define ADC_CHANNEL_13	13
 #define ADC_CHANNEL_14	14
 
-#define ADC_CR		(*p_ADC_CR) 	// Control Register
-#define ADC_MR  	(*p_ADC_MR) 	// Mode Register
-#define ADC_CHER  	(*p_ADC_CHER) 	// Channel Enable Register
-#define ADC_CHDR 	(*p_ADC_CHDR) 	// Channel Disable Register
-#define ADC_CHSR 	(*p_ADC_CHSR) 	// Channel Status Register
-#define ADC_LCDR  	(*p_ADC_LCDR) 	// Last Converted Data Register
-#define ADC_CDR  	(*p_ADC_CDR) 	// Channel Data Register 0
-#define ADC_ISR		(*p_ADC_ISR)	// Interrupt Status Register
+// To check if a provided ID is a valid channel
+#define ADC_VALID_CHANNEL(channel) \
+	((channel) >= 0 && (channel) <= 14)
 
-///\endcond
+/*
+ * Mapping of ADC registers
+ * Base address: 0x400E0800
+ */
+typedef struct {
+	// Control Register, offset 0x0000
+	uint32_t ADC_CR;
+	// Mode Register, offset 0x0004
+	uint32_t ADC_MR;
+	uint32_t dummy1[2];
+	// Channel Enable Register, offset 0x0010
+	uint32_t ADC_CHER;
+	// Channel Disable Register, offset 0x0014
+	uint32_t ADC_CHDR;
+	// Channel Status Register, offset 0x0018
+	uint32_t ADC_CHSR;
+	uint32_t reserved[1];
+	// Last Converted Data Register, offset 0x0020
+	uint32_t ADC_LCDR;
+	uint32_t dummy2[3];
+	// Interrupt Status Register, offset 0x0030
+	uint32_t ADC_ISR;
+	uint32_t dummy3[7];
+	// Channel Data Register, offset 0x0050
+	uint32_t ADC_CDR;
 
-void adc_init(void);
+} adc_reg_t;
+/// @endcond
+
+/**
+ * Initializes the ADC.
+ * @return Returns error code, 0 if everything went okay, 1 means illegal values.
+ */
+uint8_t adc_init(void);
+
+/**
+ * Starts the ADC.
+ * @return Return 1 if started.
+ */
 uint8_t adc_start(void);
-uint8_t adc_stop(void);
+
+/**
+ * Resets the ADC.
+ * @return Return 1 if stopped.
+ */
+uint8_t adc_reset(void);
+
+/**
+ * Sets ADC resolution to 10 bits or 12 bits. 12 bits is default after initiation.
+ * @param resolution The resolution of the ADC.
+ * @return Returns 1 if correctly set or 0 if not correct set (10 or 12-bit not used as input).
+ */
 uint8_t adc_set_resolution(uint8_t resolution);
-uint8_t adc_enable_channel(uint8_t ADC_CHANNEL);
-uint8_t adc_disable_channel(uint8_t ADC_CHANNEL);
-uint8_t adc_get_channel_status(uint8_t ADC_CHANNEL);
-uint32_t adc_read_channel(uint32_t ADC_CHANNEL);
+
+/**
+ * Enables a specific channel. Channel 0 - 15 is available.
+ * Channel 15 is used for temperature-reader.
+ * @param channel The channel (0-15) that is to be enabled.
+ * @return If not in the range 0-15 or channel does not become enabled, 0 is returned. Otherwise 1.
+ */
+uint8_t adc_enable_channel(uint32_t channel);
+
+/**
+ * Disables a specific channel. Channel 0-15 is available.
+ * @param channel The channel (0-15) that is to be disabled.
+ * @return If not in the range 0-15 or channel does not become disabled, 0 is returned. Otherwise 1.
+ */
+uint8_t adc_disable_channel(uint32_t channel);
+
+/**
+ * Reads the status for a specific channel. Channel 0-15 is available for readout.
+ * @param channel The channel (0-15) that the status is asked for.
+ * @return If the channel is enabled, returns 1. Otherwise returns 0.
+ */
+uint8_t adc_channel_enabled(uint32_t channel);
+
+/**
+ * Read the values from a specific channel. Channel 0-15 is available.
+ * @param channel The channel (0-15) that is to be read from.
+ * @return ADC value of the specific channel.
+ */
+uint32_t adc_read_channel(uint32_t channel);
+#endif

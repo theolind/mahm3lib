@@ -1,13 +1,13 @@
 /**
- * @brief Analog-to-digital converter(ADC) tests
+ * @file
+ * @brief Analog-to-Digital Converter (ADC) unit tests
  * @details This class is used to test ADC capabilities of this API
+ *
  * @author Prince Balabis
- * @version 0.1
- * @date 17 sep 2014
+ * @date 17 September 2014
  */
 
 #include "sam3x8e/adc.h"
-
 
 void test_adc_channel_enabled(void);
 void test_adc_channel_disabled(void);

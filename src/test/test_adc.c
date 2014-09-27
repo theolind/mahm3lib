@@ -1,12 +1,10 @@
-/**
- * @brief Analog-to-digital converter(ADC) tests
- * @details This class is used to test ADC capabilities of this API
- * @author Prince Balabis
- * @version 0.1
- * @date 17 sep 2014
+/*
+ * Analog-to-Digital Converter (ADC) unit tests
+ *
+ * Author: Prince Balabis
+ * Date: 17 September 2014
  */
 
-#include "sam3x8e/global_entities.h"
 #include "unity/unity.h"
 #include "test/test_adc.h"
 
@@ -21,13 +19,13 @@ void test_adc_channel_enabled(void) {
 	uint8_t channel = ADC_CHANNEL_0;
 
 	// Check if that channel is disabled
-	TEST_ASSERT_FALSE(ADC_CHSR & (0x1u << channel));
+	TEST_ASSERT_FALSE(*p_ADC_CHSR & (0x1u << channel));
 
 	// Enable channel
 	adc_enable_channel(channel);
 
 	// Check if that channel is enabled
-	TEST_ASSERT_TRUE(ADC_CHSR & (0x1u << channel));
+	TEST_ASSERT_TRUE(*p_ADC_CHSR & (0x1u << channel));
 
 }
 
@@ -47,13 +45,13 @@ void test_adc_channel_disabled(void) {
 	adc_enable_channel(channel);
 
 	// Check if that channel is enabled
-	TEST_ASSERT_TRUE(ADC_CHSR & (0x1u << channel));
+	TEST_ASSERT_TRUE(*p_ADC_CHSR & (0x1u << channel));
 
 	// Disable channel
 	adc_disable_channel(channel);
 
 	// Check if that channel is disabled
-	TEST_ASSERT_FALSE(ADC_CHSR & (0x1u << channel));
+	TEST_ASSERT_FALSE(*p_ADC_CHSR & (0x1u << channel));
 
 }
 
@@ -75,14 +73,14 @@ void test_adc_channel_status(void) {
 
 	// Check if registry value and function has the same value
 	TEST_ASSERT_TRUE(
-			(ADC_CHSR & (0x1u << channel)) & adc_get_channel_status(channel));
+			(*p_ADC_CHSR & (0x1u << channel)) & adc_channel_enabled(channel));
 
 	// Disable channel
 	adc_disable_channel(channel);
 
 	// Check if registry value and function has the same value
 	TEST_ASSERT_FALSE(
-			(ADC_CHSR & (0x1u << channel)) & adc_get_channel_status(channel));
+			(*p_ADC_CHSR & (0x1u << channel)) & adc_channel_enabled(channel));
 }
 
 /*
@@ -90,19 +88,19 @@ void test_adc_channel_status(void) {
  */
 void test_adc_12bit(void) {
 
-	pmc_start_peripheral_clock(ID_ADC);
+	//pmc_start_peripheral_clock(ID_ADC);
 
 	// Mode Register
 	uint32_t * const p_ADC_MR = (uint32_t *) 0x400C0004u;
 
 	// 12 Bit should be enabled as default
-	TEST_ASSERT_FALSE(ADC_MR | (0x0u << 4));
+	TEST_ASSERT_FALSE(*p_ADC_MR | (0x0u << 4));
 
 	// Set ADC to 12 bit
 	adc_set_resolution(12);
 
 	// Test if ADC is still set as 12 bit
-	TEST_ASSERT_FALSE(ADC_MR | (0x0u << 4));
+	TEST_ASSERT_FALSE(*p_ADC_MR | (0x0u << 4));
 }
 
 /*
@@ -110,7 +108,7 @@ void test_adc_12bit(void) {
  */
 void test_adc_10bit(void) {
 
-	pmc_start_peripheral_clock(ID_ADC);
+	//pmc_start_peripheral_clock(ID_ADC);
 
 	// Mode Register
 	uint32_t * const p_ADC_MR = (uint32_t *) 0x400C0004u;
@@ -119,13 +117,13 @@ void test_adc_10bit(void) {
 	adc_set_resolution(12);
 
 	// Test if ADC is not set as 10 bit
-	TEST_ASSERT_TRUE(ADC_MR ^ (0x1u << 4));
+	TEST_ASSERT_TRUE(*p_ADC_MR ^ (0x1u << 4));
 
 	// Set ADC to 10 bit
 	adc_set_resolution(10);
 
 	// Test if ADC is set as 10 bit
-	TEST_ASSERT_FALSE(ADC_MR ^ (0x1u << 4));
+	TEST_ASSERT_FALSE(*p_ADC_MR ^ (0x1u << 4));
 }
 
 /*
@@ -174,8 +172,7 @@ void test_adc_12bit_reading_single_channel(void) {
 	UNITY_OUTPUT_CHAR('\n');
 
 	// Delay
-	for (int i = 0; i < 10000000; i++)
-		;
+	for (int i = 0; i < 10000000; i++);
 }
 
 /*
@@ -199,7 +196,7 @@ void test_adc_10bit_reading_single_channel(void) {
 	// Test if a 12 bit value comes through (0-4095)
 	//TEST_ASSERT_UINT_WITHIN(512, 511, data);
 
-	// Print value through serial communicatin
+	// Print value through serial communicating
 	uint16_t first, second, third, fourth;
 
 	first = (data - (data % 1000)) / 1000;
@@ -224,7 +221,6 @@ void test_adc_10bit_reading_single_channel(void) {
 	UNITY_OUTPUT_CHAR('\n');
 
 	// Delay
-	for (int i = 0; i < 10000000; i++)
-		;
+	for (int i = 0; i < 10000000; i++);
 
 }

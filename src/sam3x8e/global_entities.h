@@ -94,6 +94,17 @@ uint8_t is_bit_high(uint32_t *reg, uint8_t bit);
  * This function will modify a section of a given register as indicated by
  * start_bit and length with the value specified with 'value'.
  *
+ * @param reg This specifies a pointer to the register
+ * @param mask It must have the same length as the register, with ones across the section
+ * @param value The value the section must store
+ * @return error Can either be SUCCES or FAIL
+ */
+uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value);
+
+/**
+ * This function will modify a section of a given register as indicated by
+ * start_bit and length with the value specified with 'value'.
+ *
  * Define the parameters like this:
  * Ex: Having -> 0b00011000 -> start_bit = 3, length = 2
  *
@@ -103,19 +114,8 @@ uint8_t is_bit_high(uint32_t *reg, uint8_t bit);
  * @param value The value the section must store
  * @return error Can either be SUCCES or FAIL
  */
-uint8_t set_section_in_register(uint32_t *reg, uint8_t start_bit,
+uint8_t set_section_in_register2(uint32_t *reg, uint8_t start_bit,
 		uint8_t length, uint32_t value);
-
-/**
- * This function will modify a section of a given register as indicated by
- * start_bit and length with the value specified with 'value'.
- *
- * @param reg This specifies a pointer to the register
- * @param mask It must have the same length as the register, with ones across the section
- * @param value The value the section must store
- * @return error Can either be SUCCES or FAIL
- */
-uint8_t set_section_in_register2(uint32_t *reg, uint32_t mask, uint32_t value);
 
 /**
  * This function will return the value of a specified section in a given

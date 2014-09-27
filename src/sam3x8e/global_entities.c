@@ -41,6 +41,20 @@ uint8_t is_bit_high(uint32_t *reg, uint8_t bit){
 	return ((*reg >> bit) & 0x01U) == HIGH;
 }
 
+/**
+ * This function will modify a section of a given register as indicated by
+ * mask with the value specified in 'value'.
+ *
+ * @param reg This specifies a pointer to the register
+ * @param mask The mask for the section in question (it may not be inverted)
+ * @param value The value the section must store
+ * @return error Can either be SUCCES or FAIL
+ */
+uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value){
+	// Retrieving the register and modifying it
+	*reg = (~mask & *reg) | (value << first_bit_position_of_mask(mask));
+	return SUCCESS;
+}
 
 /*
  * This function modifies a section of a register, reg, defined by 'mask' with
@@ -56,7 +70,7 @@ uint8_t is_bit_high(uint32_t *reg, uint8_t bit){
  * @param value The value to be inserted in the register-section
  * @return
  */
-uint8_t set_section_in_register(uint32_t *reg, uint8_t start_bit,
+uint8_t set_section_in_register2(uint32_t *reg, uint8_t start_bit,
 		uint8_t length, uint32_t value){
 	uint32_t mask;
 	// Creating the mask for the section in the register
@@ -66,20 +80,6 @@ uint8_t set_section_in_register(uint32_t *reg, uint8_t start_bit,
 	return SUCCESS;
 }
 
-/**
- * This function will modify a section of a given register as indicated by
- * mask with the value specified in 'value'.
- *
- * @param reg This specifies a pointer to the register
- * @param mask The mask for the section in question (it may not be inverted)
- * @param value The value the section must store
- * @return error Can either be SUCCES or FAIL
- */
-uint8_t set_section_in_register2(uint32_t *reg, uint32_t mask, uint32_t value){
-	// Retrieving the register and modifying it
-	*reg = (~mask & *reg) | (value << first_bit_position_of_mask(mask));
-	return SUCCESS;
-}
 
 /**
  * This function return the bit-number of the first bit being high in a 32-bit

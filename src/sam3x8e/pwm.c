@@ -1,13 +1,24 @@
 /**
- * \class PWM
- * \brief Pulse Width Modulation (PWM)
- * \details This class is used to output a pulse width modulated waveform using
- * \details the PWM peripheral on the MCU.
- * \author Saeed Ghasemi
- * \version 0.1
- * \date 25 sep 2014
- * \pre
- * \bug
+ * @file pwm.c
+ * @anchor <pwm>
+ * @brief Pulse Width Modulation (PWM)
+ * @details {This class is used to output a pulse width modulated waveform
+ * using the PWM peripheral on the MCU.
+ * This peripheral is an embedded macrocell within the MCU and all of its 44
+ * registers are physically mapped on this macrocell, therefore modifying the
+ * register requires that the peripheral clock is enabled in PMC. However, when
+ * modified, the register values are stored even it the peripheral clock is
+ * turned off and the peripheral will continue its operation when the clock is
+ * turned back on.
+ * This API implements all 8 independent channels and their change of polarity,
+ * alignment, PWM frequency and handles the pin multiplexing for all 16 outputs
+ * of the peripheral. The API does not stop any clock once it has started them.}
+ * @author {Saeed Ghasemi}
+ * @version {v0.1}
+ * @date {28 sep 2014}
+ * @pre {The API handles all of its dependencies on other peripherals
+ * internally and will start other clocks in order to properly operate.}
+ * @bug {Manual and automated testing are being designed.}
  */
 
 

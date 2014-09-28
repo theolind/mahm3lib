@@ -5,11 +5,13 @@
  *
  * @author Theodor Lindquist
  * @author Soded Alatia
+ * @author Felix Ruponen
  *
- * @version 0.2
- * @date 18-09-2014
+ * @date 18 September 2014
  *
- * @pre First initialize the board, if you want to read inputs, you need to call digital_io_init()
+ * @pre First initialize the board, if you want to read inputs,
+ * @pre you need to call pmc_enable_peripheral_clock() for the
+ * @pre correct peripheral. See pmc.h for details
  */
 
 #ifndef PIO_H_
@@ -17,18 +19,23 @@
 
 #include <stdint.h>
 
-// addresses to ports
+/** \brief Port A peripheral. Contains all register information about this port. */
 #define PIO_PORTA 	((pio_reg_t *) 0x400E0E00)
+/** \brief Port B peripheral. Contains all register information about this port. */
 #define PIO_PORTB 	((pio_reg_t *) 0x400E1000)
+/** \brief Port C peripheral. Contains all register information about this port. */
 #define PIO_PORTC 	((pio_reg_t *) 0x400E1200)
+/** \brief Port D peripheral. Contains all register information about this port. */
 #define PIO_PORTD 	((pio_reg_t *) 0x400E1400)
+/** \brief Port E peripheral. Contains all register information about this port. */
 #define PIO_PORTE 	((pio_reg_t *) 0x400E1600)
+/** \brief Port F peripheral. Contains all register information about this port. */
 #define PIO_PORTF 	((pio_reg_t *) 0x400E1800)
 
 
-
+///\cond
 /** \brief Pio hardware registers */
-typedef struct {
+typedef struct pio_reg_t {
   uint32_t PIO_PER;       /**< \brief (Pio Offset: 0x0000) PIO Enable Register */
   uint32_t PIO_PDR;       /**< \brief (Pio Offset: 0x0004) PIO Disable Register */
   uint32_t PIO_PSR;       /**< \brief (Pio Offset: 0x0008) PIO Status Register */
@@ -85,10 +92,12 @@ typedef struct {
   uint32_t PIO_WPSR;      /**< \brief (Pio Offset: 0x00E8) Write Protect Status Register */
 } pio_reg_t;
 
+///\endcond
+
 
 /**
  * Configure a pin to be either an input or an output
- * @param port the port to which the pin belong
+ * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
  * @param pin_number the pin number (on the port) to configure
  * @param input set to 1 to configure pin as an input, 0 to configure as an output (default)
  * @param pullup set to 1 to configure pin with internal pullup (default), 0 to configure without
@@ -97,7 +106,7 @@ void pio_conf_pin(pio_reg_t *port, uint8_t pin_number, uint8_t input, uint8_t pu
 
 /**
  * Configure multiple pins to be either inputs or outputs
- * @param port the port to which the pins belong
+ * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
  * @param pin_numbers the pin numbers (on the port) to configure (1 means, will be configured, 0 = will not be configured)
  * @param input set to 1 to configure pin as an input, 0 to configure as an output (default)
  * @param pullup set to 1 to configure pin with internal pullup (default), 0 to configure without
@@ -106,7 +115,7 @@ void pio_conf_pins(pio_reg_t *port, uint32_t pin_numbers, uint8_t input, uint8_t
 
 /**
  * Configure a whole to be either inputs or outputs, this will reset the whole port
- * @param port the port to configure
+ * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
  * @param inputs set a bit to 1 to configure the corresponding pin as an input, 0 to configure as output
  * @param pullups set a bit to 1 to configure the corresponding pin with an internal pullup, 0 to configure without internal pullup
  */
@@ -114,7 +123,7 @@ void pio_conf_port(pio_reg_t *port, uint32_t inputs, uint32_t pullups);
 
 /**
  * Set a pin to either a high or a low level
- * @param port the port to which the pin belongs
+ * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
  * @param pin_number the pin number (on the port) to configure
  * @param level 1 is high, 0 is low
  */
@@ -122,7 +131,7 @@ void pio_set_pin(pio_reg_t *port, uint8_t pin_number, uint8_t level);
 
 /**
  * Set multiple pins to either a high or a low level
- * @param port the port to which the pin belongs
+ * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
  * @param pin_numbers the pin numbers (on the port) to configure (1= configure the pin, 0= do not configure the pin)
  * @param level 1 is high, 0 is low
  */
@@ -130,22 +139,22 @@ void pio_set_pins(pio_reg_t *port, uint32_t pin_numbers, uint8_t level);
 
 /**
  * Set an entire port to either high or low levels
- * @param port the port to set levels on
+ * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
  * @param levels set a bit to 1 to set a high level for the correspondingpin, 0 to set a low level
  */
 void pio_set_port(pio_reg_t *port, uint32_t levels);
 
 /**
  * Check if a pin is either high or low
- * @param port the port to which the pin belongs
+ * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
  * @param pin_number the pin number (on the port) to check
  * @return 1 if high, 0 if low
  */
-uint8_t pio_read_pin(pio_reg_t *port, uint8_t pin_number);
+uint8_t pio_read_pin(pio_reg_t *port, uint32_t pin_number);
 
 /**
  * Check the levels of an entire port
- * @param port the port to check
+ * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
  * @return A bit with value 1 means the corresponding pin is high, bit with 0 means the pin is low
  */
 uint32_t pio_read_port(pio_reg_t *port);

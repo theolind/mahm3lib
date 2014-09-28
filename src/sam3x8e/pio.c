@@ -2,8 +2,9 @@
  * pio.c
  *
  *  Created on: Sep 18, 2014
- *      Author: Theodor Lindquist
- *      Author: Soded Alatia
+ *  Author: Theodor Lindquist
+ *  Author: Soded Alatia
+ *  Author: Felix Ruponen
  */
 
 #include "pio.h"
@@ -11,7 +12,7 @@
 
 void pio_conf_pin(pio_reg_t *port, uint8_t pin_number, uint8_t input, uint8_t pullup) {
 	//use the port function to set a single pin
-	pio_conf_pins(port, (uint32_t)(1<<pin_number), input, pullup);
+	pio_conf_pins(port, (uint32_t)(1U << pin_number), input, pullup);
 }
 
 void pio_conf_pins(pio_reg_t *port, uint32_t pin_numbers, uint8_t input, uint8_t pullup) {
@@ -37,9 +38,9 @@ void pio_conf_pins(pio_reg_t *port, uint32_t pin_numbers, uint8_t input, uint8_t
 
 void pio_conf_port(pio_reg_t *port, uint32_t inputs, uint32_t pullups) {
 
-	//TODO move this to init ?
+
 	//enable the pins of the port
-	port->PIO_PER = ~(0);
+	port->PIO_PER = ~(0U);
 
 	//set output/input
 	port->PIO_ODR = inputs;		//if a bit is 1, disable output for that pin
@@ -70,12 +71,11 @@ void pio_set_pins(pio_reg_t *port, uint32_t pin_numbers, uint8_t level) {
 }
 
 void pio_set_port(pio_reg_t *port, uint32_t levels) {
-
 	port->PIO_SODR = levels;
 }
 
-uint8_t pio_read_pin(pio_reg_t *port, uint8_t pin_number) {
-	uint8_t ret = ((pio_read_port(&port) & (1<<pin_number)) >> pin_number);
+uint8_t pio_read_pin(pio_reg_t *port, uint32_t pin_number) {
+	uint8_t ret = ((pio_read_port(port) & (1U << pin_number)) >> pin_number);
 	return ret;
 }
 

@@ -42,6 +42,7 @@ void run_tests(void) {
 
 	// Run ADC tests
 	Unity.TestFile = "test/test_adc.c";
+	RUN_TEST(test_adc_init, 30);
 	RUN_TEST(test_adc_channel_enabled, 30);
 	RUN_TEST(test_adc_channel_disabled, 30);
 	RUN_TEST(test_adc_channel_status, 30);

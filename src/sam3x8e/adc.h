@@ -1,5 +1,5 @@
 /**
- * @file
+ * @file adc.h
  * @brief Analog-to-Digital Converter (ADC)
  * @details This class is used to read values from the ADC-channels.
  *
@@ -9,7 +9,7 @@
  * @author Mattias Nilsson
  * @author Prince Balabis
  * @author Andreas Drotth
- * @date 27 September 2014
+ * @date 28 September 2014
  *
  * @pre Initiate board and enable peripheral clock for ADC.
  */
@@ -39,28 +39,42 @@
 #define ADC_CHANNEL_13	13
 #define ADC_CHANNEL_14	14
 
-// Valid resolution values
+// Resolution values
 #define ADC_RESOLUTION_10_BIT	1
 #define ADC_RESOLUTION_12_BIT	0
-
-// ADC_ISR: (ADC Offset: 0x0030) Interrupt Status Register
-#define ADC_ISR_DRDY	(0x01 << 24)
 
 // To check if a provided ID is a valid channel
 #define ADC_VALID_CHANNEL(channel) \
 	((channel) >= 0 && (channel) <= 14)
 
-/// @cond
 // ADC_CR: (ADC Offset: 0x0000) Control Register
 #define ADC_CR_START	(0x1u << 1)
 #define ADC_CR_RESET	(0x1u << 0)
 
 // ADC_MR: (ADC Offset: 0x0004) Mode Register
 #define ADC_MR_RESET	(0)
-#define ADC_STARTUP_0	(0 << 16)
-#define ADC_PRESCAL_2	(2 << 8)
+#define ADC_MR_PRES_POS (8)
+#define ADC_MR_SUT0		(0x0u << 16)
+#define ADC_MR_SUT8		(0x1u << 16)
+#define ADC_MR_SUT16	(0x2u << 16)
+#define ADC_MR_SUT24	(0x3u << 16)
+#define ADC_MR_SUT64	(0x4u << 16)
+#define ADC_MR_SUT80	(0x5u << 16)
+#define ADC_MR_SUT96	(0x6u << 16)
+#define ADC_MR_SUT112	(0x7u << 16)
+#define ADC_MR_SUT512	(0x8u << 16)
+#define ADC_MR_SUT576	(0x9u << 16)
+#define ADC_MR_SUT640	(0xAu << 16)
+#define ADC_MR_SUT704	(0xBu << 16)
+#define ADC_MR_SUT768	(0xCu << 16)
+#define ADC_MR_SUT832	(0xDu << 16)
+#define ADC_MR_SUT896	(0xEu << 16)
+#define ADC_MR_SUT960	(0xFu << 16)
 #define ADC_MR_RES(resolution) \
 	((resolution) << 4)
+
+// ADC_ISR: (ADC Offset: 0x0030) Interrupt Status Register
+#define ADC_ISR_DRDY	(0x01 << 24)
 
 /*
  * Mapping of ADC registers
@@ -89,13 +103,28 @@ typedef struct {
 	uint32_t ADC_CDR[0];
 
 } adc_reg_t;
-/// @endcond
+
+typedef struct {
+	/**
+	 * Set the startup time of the ADC.
+	 */
+	uint32_t startup_time;
+
+	/**
+	 * Set the preferred prescaler.
+	 * Valid values are between 0-255.
+	 * ADCClock = MCK / ((PRESCAL+1) * 2)
+	 */
+	uint32_t prescaler;
+
+} adc_settings_t;
 
 /**
  * Initializes the ADC.
+ * @param adc_settings Pointer to settings for the initlization (startuptime, precaler).
  * @return Returns error code, 0 if everything went okay, 1 means illegal values.
  */
-void adc_init(void);
+uint8_t adc_init(adc_settings_t * adc_settings);
 
 /**
  * Starts the ADC.

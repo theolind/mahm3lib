@@ -2,22 +2,30 @@
  * adc.c
  *
  * Author: Hisham Ramish, Mattias Nilsson, Prince Balabis, Andreas Drotth
- * Date: 17 September 2014
+ * Date: 28 September 2014
  */
 
 #include "adc.h"
 
-void adc_init(void) {
+uint8_t adc_init(adc_settings_t * adc_settings) {
+	if (adc_settings->prescaler > 255 || adc_settings->startup_time > 15){
+		return 1;
+	}
+	else {
+		// Software reset
+		adc_reset();
 
-	// Software reset
-	adc_reset();
+		// Reset Mode Register
+		ADC->ADC_MR = ADC_MR_RESET;
 
-	// Reset Mode Register
-	ADC->ADC_MR = ADC_MR_RESET;
+		// Configure prescaler
+		ADC->ADC_MR |= (adc_settings->prescaler << ADC_MR_PRES_POS);
 
-	// Set ADC prescaler to 2
-	// Set startup time to zero
-	ADC->ADC_MR |= ADC_PRESCAL_2 | ADC_STARTUP_0;
+		// Configure startup time
+		ADC->ADC_MR |= adc_settings->startup_time;
+
+		return 0;
+	}
 }
 
 void adc_start(void) {

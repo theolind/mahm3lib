@@ -17,7 +17,7 @@
 #ifndef PIO_H_
 #define PIO_H_
 
-#include <stdint.h>
+#include <inttypes.h>
 
 /** \brief Port A peripheral. Contains all register information about this port. */
 #define PIO_PORTA 	((pio_reg_t *) 0x400E0E00)

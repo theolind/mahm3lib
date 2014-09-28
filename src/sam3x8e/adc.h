@@ -95,7 +95,7 @@ typedef struct {
  * Initializes the ADC.
  * @return Returns error code, 0 if everything went okay, 1 means illegal values.
  */
-uint8_t adc_init(void);
+void adc_init(void);
 
 /**
  * Starts the ADC.

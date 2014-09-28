@@ -7,7 +7,7 @@
 
 #include "adc.h"
 
-uint8_t adc_init(void) {
+void adc_init(void) {
 
 	// Software reset
 	adc_reset();
@@ -17,14 +17,12 @@ uint8_t adc_init(void) {
 
 	// Set ADC clock (prescaler set to 2)
 	// Set start-up time to zero
-	ADC->ADC_MR |= ((0xFFu << 8) & ADC_PRESCAL_2) | (ADC_STARTUP_0 & (0xFu << 8));
+	//ADC->ADC_MR |= ((0xFFu << 8) & ADC_PRESCAL_2) | (ADC_STARTUP_0 & (0xFu << 8));
 
-	//ADC->ADC_MR |= (ADC_PRESCAL_2) | (ADC_STARTUP_0);
+	ADC->ADC_MR |= (ADC_PRESCAL_2) | (ADC_STARTUP_0);
 
 	// Original code
 	//ADC->ADC_MR |= ((0xFFu << 8) & (2 << 8)) | ((0 << 16) & (0xFu << 8));
-
-	return 0;
 }
 
 void adc_start(void) {

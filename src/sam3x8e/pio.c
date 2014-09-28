@@ -9,11 +9,6 @@
 #include "pio.h"
 
 
-void pio_close(void) {
-	uint32_t *p_pmc_pcer0 = (uint32_t *)0x400E0610;
-	*p_pmc_pcer0 &= ~(0b111111<<11);	//clear bit 11 to 16 in PMC_PCER0
-}
-
 void pio_conf_pin(pio_reg_t *port, uint8_t pin_number, uint8_t input, uint8_t pullup) {
 	//use the port function to set a single pin
 	pio_conf_pins(port, (uint32_t)(1<<pin_number), input, pullup);

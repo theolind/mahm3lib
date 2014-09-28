@@ -86,12 +86,6 @@ typedef struct {
 } pio_reg_t;
 
 
-
-/**
- * Deinitialize the clocks in the power management controller, saves power if you don't need to use digital_io_read_* anymore.
- */
-void pio_close(void);
-
 /**
  * Configure a pin to be either an input or an output
  * @param port the port to which the pin belong

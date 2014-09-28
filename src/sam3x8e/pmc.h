@@ -1,28 +1,74 @@
 /**
- * @file
-
+ * @file pmc.h
+ * @brief Power Management Controller
+ * @details The PMC API is used to handle internal clocks on the SAM3XAE.
  * @author Felix Ruponen
  * @author Mattias Nilsson
  * @author Saeed Ghasemi
- * @version 0.2
- * @date 17 sep 2014
+ * @author Mathias Beckius
+ * @date 27 September 2014
+ * @pre Initialize the system clock.
  */
 
 #ifndef PMC_H_
 #define PMC_H_
 
-#include "global_entities.h"
+// Definitions of Peripheral Identifiers
+#include "id.h"
 
+// pointer to registers of the PMC, base address: 0x400E0600
+#define PMC ((pmc_reg_t *) 0x400E0600U)
 
-// Start peripheral clock
-uint8_t pmc_start_peripheral_clock(uint8_t ID_);
+/*
+ * Mapping of PMC registers
+ * Base address: 0x400E0600
+ */
+typedef struct {
+	uint32_t PMC_SCER;
+	uint32_t PMC_SCDR;
+	uint32_t PMC_SCSR;
+	uint32_t reserved1[1];
+	uint32_t PMC_PCER0;
+	uint32_t PMC_PCDR0;
+	uint32_t PMC_PCSR0;
+	uint32_t CKGR_UCKR;
+	uint32_t CKGR_MOR;
+	uint32_t CKGR_MCFR;
+	uint32_t CKGR_PLLAR;
+	uint32_t reserved2[1];
+	uint32_t PMC_MCKR;
+	uint32_t reserved3[3];
+	uint32_t PMC_PCK[3];
+	uint32_t reserved4[5];
+	uint32_t PMC_IER;
+	uint32_t PMC_IDR;
+	uint32_t PMC_SR;
+	uint32_t PMC_IMR;
+	uint32_t PMC_FSMR;
+	uint32_t PMC_FSPR;
+	uint32_t PMC_FOCR;
+	uint32_t reserved5[26];
+	uint32_t PMC_WPMR;
+	uint32_t PMC_WPSR;
+} pmc_reg_t;
 
-// Stop peripheral clock
-uint8_t pmc_stop_peripheral_clock(uint8_t ID_);
+/**
+ * Enable peripheral clock.
+ * @param id Peripheral Identifier
+ */
+void pmc_enable_peripheral_clock(uint32_t id);
 
-// Get peripheral clock status
-uint8_t pmc_status_peripheral_clock(uint8_t ID_);
+/**
+ * Disable peripheral clock.
+ * @param id Peripheral Identifier
+ */
+void pmc_disable_peripheral_clock(uint32_t id);
 
+/**
+ * Is peripheral clock enabled?
+ * @param id Peripheral Identifier
+ * @return If the peripheral clock is enabled, return 1, otherwise 0.
+ */
+uint8_t pmc_peripheral_clock_enabled(uint32_t id);
 
-
-#endif /* PMC_H_ */
+#endif

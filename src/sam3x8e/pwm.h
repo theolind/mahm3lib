@@ -29,10 +29,55 @@
 
 //////////////////////////////////////////////////////////////////////////
 // Externally available typedefs, variables and definitions
+/**
+ * @typedef
+ * This structure is used with pwm_init() to set the settings for the clocks A
+ * and B of the PWM peripheral.
+ * @param clkA {This is the prescaler for clock A. If the clock is not needed
+ * then setting this value to 0 will turn the clock off.
+ * Parameter prefix: PWM_CLK_PRES_}
+ * @param clkB {This is the prescaler for clock B. If the clock is not needed
+ * then setting this value to 0 will turn the clock off.
+ * Parameter prefix: PWM_CLK_PRES_}
+ */
 typedef struct pwm_clk_setting{
-	uint32_t clkA;
-	uint32_t clkB;
+	uint32_t clkA_prescaler;
+	uint32_t clkB_prescaler;
 };
+
+/**
+ * @def
+ * These are parameters used in conjunction with initializing a PWM channel.
+ */
+#define PWM_POLARITY_HIGH		1
+#define PWM_POLARITY_LOW		0
+#define PWM_ALIGN_LEFT			0
+#define PWM_ALIGN_CENTER		1
+
+/**
+ * @typedef
+ * This structure is used with pwm_init_channel() to set the settings of a
+ * channel.
+ * @param polarity {Sets the polarity of the channel.
+ * Parameter prefix: PWM_POLARITY_}
+ * @param alignment {Sets the alignment of the channel.
+ * Parameter prefix: PWM_ALIGN_}
+ * @param prescaler {Sets the channel prescaler.
+ * This can also select clock A and B.
+ * Parameter prefix: PWM_CMRx_SELECTOR_}
+ * @param high_polarity_pin {If set HIGH, the high polarity pin of the channel
+ * will be multiplexed with the PWM.}
+ * @param low_polarity_pin {If set HIGH, the high polarity pin of the channel
+ * will be multiplexed with the PWM.}
+ */
+typedef struct pwm_channel_setting{
+	uint32_t polarity;
+	uint32_t alignment;
+	uint32_t prescaler;
+	uint32_t high_polarity_pin;
+	uint32_t low_polarity_pin;
+};
+
 
 #define PWM_CLK_ID_CLKA			0
 #define PWM_CLK_ID_CLKB			1
@@ -48,15 +93,38 @@ typedef struct pwm_clk_setting{
  * @pre {This function requires the PMC API.}
  */
 uint8_t	 pwm_init(void);
-// Initialize with a structure
+/**
+ * Initialize the PWM peripheral with a structure containing clock_settings.
+ * This function controls clkA and clkB and starts the peripheral clock.
+ * It is recommended to use pwm_set_channel_frequency() to select a clock.
+ *
+ * @return error (0 = FAIL, 1 = SUCCESS)
+ * @pre {This function requires the PMC API.}
+ */
 uint8_t	 pwm_init(struct pwm_clk_setting);
-// Calculates necessary parameters automatically for the given frequency and
-// returnes actual frequency
+/**
+ * Calculates necessary parameters automatically for the given frequency and
+ * returns the achieved frequency and sets the necessary parameters for the
+ * given channel.
+ *
+ * @return The achieved frequency
+ * @pre {This function requires the PMC API.}
+ */
 uint8_t	 pwm_set_channel_frequency(uint8_t channel, uint32_t frequency);
-// Turns of one of two clocks in PWM that are called clkA and clkB.
+/**
+ * Turns off one of two clocks in PWM that are called clkA and clkB.
+ *
+ * @return error (0 = FAIL, 1 = SUCCESS)
+ */
 uint8_t	 pwm_turn_of_clkx(uint8_t clock_id);
-// Initializes the a single channel in the peripheral of 8 in total
-uint8_t  pwm_init_channel(uint32_t channel, uint32_t pin_PWMHx_or_PWMLx);
+//
+/**
+ * Initializes a single channel in the peripheral out of 8 in total.
+ * This function will multiplex the pin to the peripheral channel
+ *
+ * @return error (0 = FAIL, 1 = SUCCESS)
+ */
+uint8_t  pwm_init_channel(struct pwm_channel_setting, uint8_t pin);
 // Set the duty cycle between 0 and resolution
 uint32_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle);
 // This can reverse the duty cycle. Important when using the L pins

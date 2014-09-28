@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Digital IO controller
+ * @brief PIO - Parallel input/output controller
  * @details The functions in this file controls the digital input and output of the processor
  *
  * @author Theodor Lindquist

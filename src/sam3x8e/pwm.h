@@ -107,7 +107,7 @@ uint8_t	 pwm_init(struct pwm_clk_setting);
  * returns the achieved frequency and sets the necessary parameters for the
  * given channel.
  *
- * @return error (0 = FAIL, 1 = SUCCESS)
+ * @return The achieved frequency
  * @pre {This function requires the PMC API.}
  */
 uint8_t	 pwm_set_channel_frequency(uint8_t channel, uint32_t frequency);
@@ -124,7 +124,7 @@ uint8_t	 pwm_turn_of_clkx(uint8_t clock_id);
  *
  * @return error (0 = FAIL, 1 = SUCCESS)
  */
-uint8_t  pwm_init_channel(struct pwm_channel_setting, uint8_t pin)
+uint8_t  pwm_init_channel(struct pwm_channel_setting, uint8_t pin);
 // Set the duty cycle between 0 and resolution
 uint32_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle);
 // This can reverse the duty cycle. Important when using the L pins

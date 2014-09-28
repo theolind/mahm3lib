@@ -1,12 +1,24 @@
-/*
- * global_entities.c
- *
- * This file contains definitions that the developers in this group will at
- * some point use. This file helps us to avoid collision of redefinition of
- * some commonly used defines.
- *
- *
- * Created by: Saeed Ghasemi, 2014-09-18
+/**
+ * @file global_entities.c
+ * @anchor <global_entities>
+ * @brief A storage place for globally used entities
+ * @details {This class holds some globally important definitions and functions.
+ * This file helps us avoid recreating function with the same functionality.
+ * Mostly intended for bitwise operation and other small operations and
+ * generally functions that are common for the different APIs but not linked to
+ * the tasks of any API.
+ * These function can be used both internally and as well as externally by the
+ * end programmer. Its functions fall into the definition of stand-alone and
+ * independent of any API. These are mainly a collection of tested bitwise
+ * operations on registers or memory.}
+ * @author {Saeed Ghasemi}
+ * @version {v0.3}
+ * @since {Since v0.3, first_bit_position_of_mask() has been added. And mask is
+ * the preferred way of editing a register section and the use of start_bit is
+ * deprecated.}
+ * @date {25 sep 2014}
+ * @pre {Since they are stand-alone, there are no preconditions for thier use.}
+ * @bug {Not yet fully tested.}
  */
 
 

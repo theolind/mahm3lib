@@ -15,14 +15,9 @@ void adc_init(void) {
 	// Reset Mode Register
 	ADC->ADC_MR = ADC_MR_RESET;
 
-	// Set ADC clock (prescaler set to 2)
-	// Set start-up time to zero
-	//ADC->ADC_MR |= ((0xFFu << 8) & ADC_PRESCAL_2) | (ADC_STARTUP_0 & (0xFu << 8));
-
-	ADC->ADC_MR |= (ADC_PRESCAL_2) | (ADC_STARTUP_0);
-
-	// Original code
-	//ADC->ADC_MR |= ((0xFFu << 8) & (2 << 8)) | ((0 << 16) & (0xFu << 8));
+	// Set ADC prescaler to 2
+	// Set startup time to zero
+	ADC->ADC_MR |= ADC_PRESCAL_2 | ADC_STARTUP_0;
 }
 
 void adc_start(void) {
@@ -34,7 +29,14 @@ void adc_reset(void) {
 }
 
 void adc_set_resolution(uint32_t resolution) {
-	ADC->ADC_MR |= ADC_MR_RES(resolution);
+	//ADC->ADC_MR |= ADC_MR_RES(resolution);
+
+	if(resolution == 0){
+		ADC->ADC_MR &= ADC_MR_RES(resolution);
+	}
+	else if (resolution == 1){
+		ADC->ADC_MR |= ADC_MR_RES(resolution);
+	}
 }
 
 void adc_enable_channel(uint32_t channel) {

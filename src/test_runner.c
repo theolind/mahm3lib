@@ -30,9 +30,6 @@ void run_tests(void) {
 	RUN_TEST(test_pmc_status_peripheral_clock_when_active, 10);
 	RUN_TEST(test_pmc_stop_peripheral_clock_when_successful, 10);
 
-	pmc_start_peripheral_clock(37); //temp, but needed for adc tests
-	//pmc_start_peripheral_clock(38); //temp, but needed for dacc tests
-
 	// Run DACC tests
 	Unity.TestFile = "test/test_dacc.c";
 	RUN_TEST(test_dacc_init, 20);

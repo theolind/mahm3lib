@@ -1,7 +1,8 @@
 /**
  * @file
  * @brief Digital IO controller
- * @details The functions in this file controls the digital input and output of the processor
+ * @details {The functions in this file controls the digital input and output
+ * of the processor.}
  *
  * @author Theodor Lindquist
  * @author Soded Alatia

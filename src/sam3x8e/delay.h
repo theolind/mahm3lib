@@ -28,6 +28,8 @@
 #ifndef DELAY_H_
 #define DELAY_H_
 
+#include <inttypes.h>
+
 /**
  * This function will delay in microseconds.
  * This function is tested to perform fairly accurate within 15 to 20000 us.

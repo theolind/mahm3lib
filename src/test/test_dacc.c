@@ -3,16 +3,14 @@
 #include "unity/unity.h"
 
 void test_dacc_init() {
-
-	struct dacc_settings_t dacc_settings_t;
-
-	dacc_settings_t.speed_mode = 0;
-	dacc_settings_t.refresh = 1;
-	dacc_settings_t.startup_time = 0;
-	dacc_settings_t.trigger_mode = 0;
-	dacc_settings_t.word_transfer = 0;
-
-	TEST_ASSERT_TRUE(dacc_init(&dacc_settings_t));
+	const dacc_settings_t dacc_settings = {
+		.speed_mode = 0,
+		.refresh = 1,
+		.startup_time = 0,
+		.trigger_mode = 0,
+		.word_transfer = 0
+	};
+	TEST_ASSERT_TRUE(dacc_init(&dacc_settings));
 }
 
 void test_dacc_channel_0_enable() {

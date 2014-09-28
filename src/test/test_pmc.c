@@ -8,23 +8,19 @@
  * @date 17 sep 2014
  */
 
-#include "sam3x8e/global_entities.h"
 #include "unity/unity.h"
 #include "test/test_pmc.h"
-
 #include "sam3x8e/pmc.h"
 
-void test_pmc_setup(){
-
-
+void test_pmc_setup() {
 }
 
 void test_pmc_tear_down(){
 
-	uint8_t status = pmc_status_peripheral_clock(ID_ADC);
+	uint8_t status = pmc_peripheral_clock_enabled(ID_ADC);
 
 	if(status == 1)
-		pmc_stop_peripheral_clock(ID_ADC);
+		pmc_disable_peripheral_clock(ID_ADC);
 }
 
 void test_pmc_reset(){
@@ -42,7 +38,7 @@ void test_pmc(){
 void test_pmc_status_peripheral_clock_when_inactive(void){
 	test_pmc_reset();
 
-	uint8_t status = pmc_status_peripheral_clock(ID_ADC);
+	uint8_t status = pmc_peripheral_clock_enabled(ID_ADC);
 
 	TEST_ASSERT_FALSE(status);
 
@@ -52,12 +48,12 @@ void test_pmc_status_peripheral_clock_when_active(void){
 	uint8_t status;
 	test_pmc_reset();
 
-	status = pmc_status_peripheral_clock(ID_ADC);
+	status = pmc_peripheral_clock_enabled(ID_ADC);
 	TEST_ASSERT_FALSE(status);
 
-	pmc_start_peripheral_clock(ID_ADC);
+	pmc_enable_peripheral_clock(ID_ADC);
 
-	status = pmc_status_peripheral_clock(ID_ADC);
+	status = pmc_peripheral_clock_enabled(ID_ADC);
 	TEST_ASSERT_TRUE(status);
 }
 
@@ -65,14 +61,14 @@ void test_pmc_stop_peripheral_clock_when_successful(void){
 	uint8_t status;
 	test_pmc_reset();
 
-	pmc_start_peripheral_clock(ID_ADC);
+	pmc_enable_peripheral_clock(ID_ADC);
 
-	status = pmc_status_peripheral_clock(ID_ADC);
+	status = pmc_peripheral_clock_enabled(ID_ADC);
 	TEST_ASSERT_TRUE(status);
 
-	pmc_stop_peripheral_clock(ID_ADC);
+	pmc_disable_peripheral_clock(ID_ADC);
 
-	status = pmc_status_peripheral_clock(ID_ADC);
+	status = pmc_peripheral_clock_enabled(ID_ADC);
 	TEST_ASSERT_FALSE(status);
 }
 
@@ -80,15 +76,15 @@ void test_pmc_start_peripheral_clock_when_successful(void){
 	uint8_t status;
 	test_pmc_reset();
 
-	status = pmc_status_peripheral_clock(ID_ADC);
+	status = pmc_peripheral_clock_enabled(ID_ADC);
 	TEST_ASSERT_FALSE(status);
 
-	pmc_start_peripheral_clock(ID_ADC);
+	pmc_enable_peripheral_clock(ID_ADC);
 
-	status = pmc_status_peripheral_clock(ID_ADC);
+	status = pmc_peripheral_clock_enabled(ID_ADC);
 	TEST_ASSERT_TRUE(status);
 
-	pmc_stop_peripheral_clock(ID_ADC);
+	pmc_disable_peripheral_clock(ID_ADC);
 }
 
 void test_pmc_set_master_clock_when_successful(void) {

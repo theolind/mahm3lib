@@ -1,0 +1,30 @@
+--- Manual tests for the UART ---
+Since Unity is depending on the UART functions, the only possibility to test
+the UART API when not running the Unity framework.
+
+--- Send and receive a character in loopback mode -------
+Test of the API has been performed by sending/receiving a character with the
+existing functions:
+	void uart_init(const uart_settings_t *);
+	uint8_t uart_tx_ready(void);
+	uint8_t uart_rx_ready(void);
+	void uart_write_char(uint8_t);
+	char uart_read_char(void);
+
+If these two conditions are satisfied, then the internal LED is turned on:
+	1) Send 'A', receive 'A'
+	2) Send 'A', don't receive 'B'
+
+Code:
+const uart_settings_t uart_settings = {
+	.baud_rate = 115200,
+	.parity = UART_PARITY_NO,
+	.ch_mode = UART_CHMODE_LOCAL_LOOPBACK
+};
+uart_init(&uart_settings);
+
+
+pio_conf_pin(PIO_PORTB,27,1,0); // Turn LED on if success
+}else{
+pio_conf_pin(PIO_PORTB, 27,0,0); // Turn LED off if unsuccessful
+}

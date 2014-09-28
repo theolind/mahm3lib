@@ -27,4 +27,6 @@ void test_pmc(void);
 void test_pmc_status_peripheral_clock_when_inactive(void);
 void test_pmc_status_peripheral_clock_when_active(void);
 
+void test_pmc_enable_peripheral_clock(void);
+
 #endif /* TEST_PMC_H_ */

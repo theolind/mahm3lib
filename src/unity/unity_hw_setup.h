@@ -10,15 +10,11 @@
 
 #include <setjmp.h>
 #include <stdio.h>
-//#include <stdio_serial.h>
 
 // EEFC Flash Mode Register 0
 #define EEFC_FMR_0 (*p_EEFC_FMR_0)
 // EEFC Flash Mode Register 1
 #define EEFC_FMR_1 (*p_EEFC_FMR_1)
-
-
-#define PMC_SR (*((volatile uint32_t *)0x400E0668U))
 
 /* -------- EEFC_FMR : (EFC Offset: 0x00) EEFC Flash Mode Register -------- */
 #define EEFC_FMR_FRDY (0x1u << 0) /**< \brief (EEFC_FMR) Ready Interrupt Enable */

@@ -49,7 +49,7 @@ typedef struct pwm_clk_setting{
  */
 uint8_t	 pwm_init(void);
 // Initialize with a structure
-uint8_t	 pwm_init(struct clock_settings);
+uint8_t	 pwm_init(struct pwm_clk_setting);
 // Calculates necessary parameters automatically for the given frequency and
 // returnes actual frequency
 uint8_t	 pwm_set_channel_frequency(uint8_t channel, uint32_t frequency);

@@ -21,8 +21,7 @@
 
 // Default initialization
 uint8_t	 pwm_init(void);
-// Initialize with a struct
-uint8_t	 pwm_init(struct clock_settings);
+
 // Initializes the a single channel in the peripheral of 8 in total
 uint8_t  pwm_init_channel(uint32_t channel, uint32_t pin_PWMHx_or_PWMLx);
 // Set the duty cycle between 0 and resolution

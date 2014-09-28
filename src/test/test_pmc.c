@@ -99,3 +99,9 @@ void test_pmc_set_master_clock_when_successful(void) {
 	TEST_ASSERT(1);
 }
 
+void test_pmc_enable_peripheral_clock(void) {
+	//enable clock for ID_PIOA
+	//is clock enabled?
+	//enable clock for ID_PIOB
+	//is clock enabled for both?
+}

@@ -1,4 +1,4 @@
-#include "global_entities.h"
+#include "pmc.h"
 #include "dacc.h"
 
 uint32_t *const p_dacc_cr   = (uint32_t *) 0x400C8000U;
@@ -11,7 +11,7 @@ uint32_t *const p_dacc_isr  = (uint32_t *) 0x400C8030U;
 uint32_t *const p_dacc_wrmr = (uint32_t *) 0x400C80E4U;
 uint32_t *const p_dacc_wpsr = (uint32_t *) 0x400C80E8U;
 
-uint8_t dacc_init(dacc_settings_t *settings){
+uint8_t dacc_init(const dacc_settings_t *settings){
 
 	// Check for illegal values
 	if(settings->trigger_mode>1||
@@ -22,7 +22,7 @@ uint8_t dacc_init(dacc_settings_t *settings){
 	}
 
 	// Enable Peripheral clock for DACC
-	pmc_start_peripheral_clock(ID_DACC);
+	pmc_enable_peripheral_clock(ID_DACC);
 
 	// Software reset
 	DACC_CR = (0x1u << 0);
@@ -45,7 +45,7 @@ uint8_t dacc_init(dacc_settings_t *settings){
 	return 1;
 }
 
-uint8_t dacc_enable_channel(uint8_t dacc_channel) {
+uint8_t dacc_enable_channel(uint32_t dacc_channel) {
 
 	if (dacc_channel > 1) {
 		return 0;
@@ -60,7 +60,7 @@ uint8_t dacc_enable_channel(uint8_t dacc_channel) {
 	}
 }
 
-uint8_t dacc_disable_channel(uint8_t dacc_channel){
+uint8_t dacc_disable_channel(uint32_t dacc_channel){
 
 	if (dacc_channel > 1) {
 		return 0;
@@ -75,7 +75,7 @@ uint8_t dacc_disable_channel(uint8_t dacc_channel){
 	}
 }
 
-uint8_t dacc_get_channel_status(uint8_t dacc_channel){
+uint8_t dacc_get_channel_status(uint32_t dacc_channel){
 
 	if (dacc_channel > 1) {
 		return 0;
@@ -88,7 +88,7 @@ uint8_t dacc_get_channel_status(uint8_t dacc_channel){
 	}
 }
 
-uint8_t dacc_write(uint8_t dacc_channel, uint32_t value){
+uint8_t dacc_write(uint32_t dacc_channel, uint32_t value){
 
 	if (dacc_channel > 1 || value > DACC_MAX_RESOLUTION) {
 		return 0;

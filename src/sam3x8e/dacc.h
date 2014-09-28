@@ -32,33 +32,33 @@
 
 #define DACC_MAX_RESOLUTION 4095	///<The DACC has a 12 bit resolution
 
-typedef struct dacc_settings_t {
+typedef struct dacc_settings {
 	/**
 	 * 0: External trigger mode disabled, DACC in free running mode
 	 * 1: External trigger mode enabled
 	 */
-	uint8_t trigger_mode;
+	uint32_t trigger_mode;
 
 	/**
 	 * 0: Half-Word transfer
 	 * 1: Word transfer
 	 */
-	uint8_t word_transfer;
+	uint32_t word_transfer;
 
 	/** Refresh Period = 1024*refresh/DACC Clock */
-	uint8_t refresh;
+	uint32_t refresh;
 
 	/**
 	 * 0: Normal mode
 	 * 1: Max speed mode
 	 */
-	uint8_t speed_mode;
+	uint32_t speed_mode;
 
 	/**
 	 * A value in the range of 0-63 that describes the length of the startup time.
 	 * The length for each corresponding value can be found in the datasheet.
 	 */
-	uint8_t startup_time;
+	uint32_t startup_time;
 
 } dacc_settings_t;
 
@@ -68,7 +68,7 @@ typedef struct dacc_settings_t {
  * should be a struct of type dacc_settings_t.
  * @return Return 0 if settings contain illegal values. Otherwise return 1.
  */
-uint8_t dacc_init(dacc_settings_t *settings);
+uint8_t dacc_init(const dacc_settings_t *settings);
 
 /**
  * Enables a specified DACC channel.
@@ -76,7 +76,7 @@ uint8_t dacc_init(dacc_settings_t *settings);
  * Either DACC_CHANNEL_0 or DACC_CHANNEl_1.
  * @return Return 1 if the function executed correctly, otherwise 0.
  */
-uint8_t dacc_enable_channel(uint8_t dacc_channel);
+uint8_t dacc_enable_channel(uint32_t dacc_channel);
 
 /**
  * Disables a specified DACC channel.
@@ -84,7 +84,7 @@ uint8_t dacc_enable_channel(uint8_t dacc_channel);
  * Either DACC_CHANNEL_0 or DACC_CHANNEl_1.
  * @return Return 1 if the function executed correctly.
  */
-uint8_t dacc_disable_channel(uint8_t dacc_channel);
+uint8_t dacc_disable_channel(uint32_t dacc_channel);
 
 /**
  * Checks if the specified channel is enabled.
@@ -92,7 +92,7 @@ uint8_t dacc_disable_channel(uint8_t dacc_channel);
  * Either DACC_CHANNEL_0 or DACC_CHANNEl_1.
  * @return Return 1 if the function executed correctly, otherwise 0.
  */
-uint8_t dacc_get_channel_status(uint8_t dacc_channel);
+uint8_t dacc_get_channel_status(uint32_t dacc_channel);
 
 /**
  * Converts a 12-bit digital value to corresponding analog
@@ -106,6 +106,6 @@ uint8_t dacc_get_channel_status(uint8_t dacc_channel);
  * @param value The value to convert.
  * @return Return 1 if the function executed correctly, otherwise 0.
  */
-uint8_t dacc_write(uint8_t dacc_channel, uint32_t value);
+uint8_t dacc_write(uint32_t dacc_channel, uint32_t value);
 
 #endif

@@ -18,12 +18,12 @@
 #include <stdint.h>
 
 // addresses to ports
-#define PIO_PORTA 0x400E0E00
-#define PIO_PORTB 0x400E1000
-#define PIO_PORTC 0x400E1200
-#define PIO_PORTD 0x400E1400
-#define PIO_PORTE 0x400E1600
-#define PIO_PORTF 0x400E1800
+#define PIO_PORTA (0x400E0E00U)
+#define PIO_PORTB (0x400E1000U)
+#define PIO_PORTC (0x400E1200U)
+#define PIO_PORTD (0x400E1400U)
+#define PIO_PORTE (0x400E1600U)
+#define PIO_PORTF (0x400E1800U)
 
 // port register offsets
 #define PIO_PER 0x0000	//PIO enable register
@@ -119,7 +119,7 @@ void pio_set_port(uint32_t port, uint32_t levels);
  * @param pin_number the pin number (on the port) to check
  * @return 1 if high, 0 if low
  */
-uint8_t pio_read_pin(uint32_t port, uint8_t pin_number);
+uint8_t pio_read_pin(uint32_t port, uint32_t pin_number);
 
 /**
  * Check the levels of an entire port

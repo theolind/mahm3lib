@@ -54,7 +54,7 @@ void pio_init(pio_init_param *param) {
 
 void pio_close(void) {
 	uint32_t *p_pmc_pcer0 = (uint32_t *)0x400E0610;
-	*p_pmc_pcer0 &= ~(0b111111<<11);	//clear bit 11 to 16 in PMC_PCER0
+	*p_pmc_pcer0 &= ~(16u << 11);	//clear bit 11 to 16 in PMC_PCER0
 }
 
 void pio_conf_pin(uint32_t port, uint8_t pin_number, uint8_t input, uint8_t pullup) {
@@ -94,7 +94,7 @@ void pio_conf_port(uint32_t port, uint32_t inputs, uint32_t pullups) {
 	//TODO move this to init ?
 	//enable the pins of the port
 	p_reg = (uint32_t *)(port+PIO_PER);	//point to PIO enable register
-	*p_reg = ~(0);
+	*p_reg = ~(0x0u);
 
 	//set output/input
 	p_reg = (uint32_t *)(port+PIO_ODR);	//point to Output enable register
@@ -132,9 +132,8 @@ void pio_set_port(uint32_t port, uint32_t levels) {
 	*p_reg = levels;
 }
 
-uint8_t pio_read_pin(uint32_t port, uint8_t pin_number) {
-	uint8_t ret = ((pio_read_port(port) & (1<<pin_number)) >> pin_number);
-	return ret;
+uint8_t pio_read_pin(uint32_t port, uint32_t pin_nr) {
+	return (uint8_t)((pio_read_port(port) & (0x1u << pin_nr)) >> pin_nr);
 }
 
 uint32_t pio_read_port(uint32_t port) {

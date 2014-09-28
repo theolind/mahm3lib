@@ -19,11 +19,11 @@
 
 // Bit mask for Peripheral Identifier, to be used with register 0.
 #define REG_0_BIT_MASK(id) 	\
-	(1 << (id))
+	(0x1u << (id))
 
 // Bit mask for Peripheral Identifier, to be used with register 1.
 #define REG_1_BIT_MASK(id) 	\
-	(1 << (id - 32))
+	(0x1u << ((id) - 32))
 
 ///@endcond
 
@@ -53,8 +53,8 @@ void pmc_disable_peripheral_clock(uint32_t id) {
 
 uint8_t pmc_peripheral_clock_enabled(uint32_t id) {
 	if (id <= REG_0_ID_MAX) {
-		return (PMC->PMC_PCSR0 & REG_0_BIT_MASK(id));
+		return (uint8_t)(PMC->PMC_PCSR0 & REG_0_BIT_MASK(id));
 	} else {
-		return (PMC->PMC_PCSR1 & REG_1_BIT_MASK(id));
+		return (uint8_t)(PMC->PMC_PCSR1 & REG_1_BIT_MASK(id));
 	}
 }

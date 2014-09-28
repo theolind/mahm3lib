@@ -242,8 +242,8 @@ typedef UNITY_DOUBLE_TYPE _UD;
 //putchar(a)
 //removed 'putchar(a)' - modified by Beckius 2014-09-07
 #define UNITY_OUTPUT_CHAR(a) {			\
-	while (!uart_tx_ready(UART));	\
-	uart_write_chr(UART, a);					\
+	while (!uart_tx_ready());	\
+	uart_write_chr(a);					\
 }
 	
 #else

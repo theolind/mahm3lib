@@ -150,7 +150,7 @@ void pio_set_port(pio_reg_t *port, uint32_t levels);
  * @param pin_number the pin number (on the port) to check
  * @return 1 if high, 0 if low
  */
-uint8_t pio_read_pin(pio_reg_t *port, uint32_t pin_number);
+uint32_t pio_read_pin(pio_reg_t *port, uint32_t pin_number);
 
 /**
  * Check the levels of an entire port

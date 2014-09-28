@@ -74,8 +74,8 @@ void pio_set_port(pio_reg_t *port, uint32_t levels) {
 	port->PIO_SODR = levels;
 }
 
-uint8_t pio_read_pin(pio_reg_t *port, uint32_t pin_number) {
-	uint8_t ret = ((pio_read_port(port) & (1U << pin_number)) >> pin_number);
+uint32_t pio_read_pin(pio_reg_t *port, uint32_t pin_number) {
+	uint32_t ret = ((pio_read_port(port) & (1U << pin_number)) >> pin_number);
 	return ret;
 }
 

@@ -1098,8 +1098,8 @@ void UnityIgnore(const char* msg, const UNITY_LINE_TYPE line)
 }
 
 //-----------------------------------------------
-void setUp(void);
-void tearDown(void);
+//void setUp(void);
+//void tearDown(void);
 void UnityDefaultTestRun(UnityTestFunction Func, const char* FuncName, const int FuncLineNum)
 {
     Unity.CurrentTestName = FuncName;
@@ -1107,12 +1107,12 @@ void UnityDefaultTestRun(UnityTestFunction Func, const char* FuncName, const int
     Unity.NumberOfTests++;
     if (TEST_PROTECT())
     {
-        setUp();
+        //setUp();
         Func();
     }
     if (TEST_PROTECT() && !(Unity.CurrentTestIgnored))
     {
-        tearDown();
+        //tearDown();
     }
     UnityConcludeTest();
 }

@@ -53,7 +53,7 @@
  * Macro for setting parity. The value will be filtered with a bit mask,
  * to avoid invalid values.
  */
-#define UART_MR_PAR(parity)				((0x7u & (parity)) << 9)
+#define UART_MR_PAR(parity)				((7u & (parity)) << 9)
 /// Even Parity
 #define UART_PARITY_EVEN 				(0)
 /// Odd Parity
@@ -70,7 +70,7 @@
  * Macro for setting channel mode. The value will be filtered with a bit mask,
  * to avoid invalid values.
  */
-#define UART_MR_CHMODE(mode)			((0x3u & (mode)) << 14)
+#define UART_MR_CHMODE(mode)			((3u & (mode)) << 14)
 /// Normal Mode
 #define UART_CHMODE_NORMAL 				(0)
 /// Automatic Echo

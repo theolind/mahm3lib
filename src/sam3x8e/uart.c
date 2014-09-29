@@ -11,13 +11,13 @@
 
 void uart_init(const uart_settings_t *settings) {
 	// reset and disable receiver & transmitter, reset status bits
-	UART->UART_CR = UART_CR_RSTRX | UART_CR_RSTTX | UART_CR_RSTSTA |
+	UART->UART_CR = UART_CR_RSTRX | UART_CR_RSTTX |// UART_CR_RSTSTA |
 					UART_CR_RXDIS | UART_CR_TXDIS;
 	// configure baud rate
-	UART->UART_BRGR = UART_BRGR_CD(settings->baud_rate);
+	UART->UART_BRGR = (84000000UL >> 4) / settings->baud_rate;//45;//UART_BRGR_CD(settings->baud_rate);
 	// configure mode
-	UART->UART_MR = UART_MR_PAR(settings->parity) |
-					UART_MR_CHMODE(settings->ch_mode);
+	UART->UART_MR = settings->parity;// | UART_MR_CHMODE_NORMAL;//0;/*UART_MR_PAR(settings->parity) |
+					//UART_MR_CHMODE(settings->ch_mode);*/
 	// enable receiver and transmitter
 	UART->UART_CR = UART_CR_RXEN | UART_CR_TXEN;
 }

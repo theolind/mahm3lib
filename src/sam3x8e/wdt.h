@@ -23,7 +23,7 @@
 // WDT_MR: Watchdog disable
 #define WDT_MR_WDDIS (1 << 15)
 
-typedef struct {
+typedef struct wdt_reg {
 	// Control register, offset 0x0000
 	uint32_t WDT_CR;
 	// Mode Register, offset 0x0004

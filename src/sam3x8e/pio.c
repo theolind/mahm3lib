@@ -115,13 +115,14 @@ void pio_set_pin(uint32_t port, uint8_t pin_number, uint8_t level) {
 
 void pio_set_pins(uint32_t port, uint32_t pin_numbers, uint8_t level) {
 	uint32_t *p_reg;
-	p_reg = (uint32_t *)(port+PIO_SODR);
 	if(level == 1) {
+		p_reg = (uint32_t *)(port+PIO_SODR);
 		//set pins high
 		*p_reg |= pin_numbers;
 	} else {
+		p_reg = (uint32_t *)(port+PIO_CODR);
 		//set pins low
-		*p_reg &= ~pin_numbers;
+		*p_reg |= pin_numbers;
 	}
 }
 

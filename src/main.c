@@ -8,7 +8,7 @@
 #include "sam3x8e/pmc.h"
 #include "sam3x8e/delay_soft.h"
 
-
+/*
 int main(void) {
 	// basic initialization of hardware and UART communication.
 	unity_hw_setup();
@@ -18,3 +18,4 @@ int main(void) {
 	return 0;
 }
 
+*/

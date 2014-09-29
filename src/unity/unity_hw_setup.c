@@ -140,8 +140,10 @@ static void systemclock_init(void)
 void unity_hw_setup(void) {
 	// originally this was a call to the ASF function 'sysclk_init()'
 	systemclock_init();
+
 	// disable the watchdog timer
 	wdt_disable();
+
 	// configure UART so Unity can use USB/RS-232 as output
 	configure_uart();
 }

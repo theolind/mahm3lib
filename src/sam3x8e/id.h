@@ -5,9 +5,6 @@
  * peripheral interrupt with the Nested Vectored Interrupt Controller
  * and for the control of the peripheral clock with the
  * Power Management Controller.
- * This file contains definitions that the developers in this group will at
- * some point use. This file helps us to avoid collision of redefinition of
- * some commonly used defines.
  * @details This file is automatically included in pmc.h.
  *
  * @author Saeed Ghasemi
@@ -64,7 +61,7 @@
 #define ID_CAN0 		(43) 	///<CAN Controller 0
 #define ID_CAN1 		(44) 	///<CAN Controller 1
 
-#define VALID_PERIPHERAL_ID(id)	\
-	((id) >= 0 && (id) <= 44)
+#define ID_MIN			(0)
+#define ID_MAX			(44)
 
 #endif

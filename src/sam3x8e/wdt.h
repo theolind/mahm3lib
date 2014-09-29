@@ -16,7 +16,7 @@
 
 #include <inttypes.h>
 
-/// Watchdog Timer Base register
+// Pointer to registers of the Watchdog peripheral.
 #define WDT	 ((wdt_reg_t *) 0x400E1A50U)
 
 ///@cond
@@ -24,6 +24,10 @@
 // WDT_MR: Watchdog disable
 #define WDT_MR_WDDIS (1 << 15)
 
+/*
+ * Mapping of WDT registers
+ * Base address: 0x400E1A50
+ */
 typedef struct wdt_reg {
 	// Control register, offset 0x0000
 	uint32_t WDT_CR;

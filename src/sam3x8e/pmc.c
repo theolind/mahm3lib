@@ -30,7 +30,7 @@
 void pmc_enable_peripheral_clock(uint32_t id) {
 	if (id <= REG_0_ID_MAX) {
 		PMC->PMC_PCER0 = REG_0_BIT_MASK(id);
-	} else {
+	} else if (id <= ID_MAX) {
 		PMC->PMC_PCER1 = REG_1_BIT_MASK(id);
 	}
 }
@@ -42,7 +42,7 @@ void pmc_enable_peripheral_clock(uint32_t id) {
 void pmc_disable_peripheral_clock(uint32_t id) {
 	if (id <= REG_0_ID_MAX) {
 		PMC->PMC_PCDR0 = REG_0_BIT_MASK(id);
-	} else {
+	} else if (id <= ID_MAX) {
 		PMC->PMC_PCDR1 = REG_1_BIT_MASK(id);
 	}
 }
@@ -50,7 +50,9 @@ void pmc_disable_peripheral_clock(uint32_t id) {
 uint32_t pmc_peripheral_clock_enabled(uint32_t id) {
 	if (id <= REG_0_ID_MAX) {
 		return (PMC->PMC_PCSR0 & REG_0_BIT_MASK(id));
-	} else {
+	} else if (id <= ID_MAX) {
 		return (PMC->PMC_PCSR1 & REG_1_BIT_MASK(id));
+	} else {
+		return 0;
 	}
 }

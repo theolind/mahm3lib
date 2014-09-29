@@ -17,7 +17,7 @@
 #include <inttypes.h>
 #include "id.h"				// Definitions of Peripheral Identifiers
 
-// pointer to registers of the PMC, base address: 0x400E0600
+// Pointer to registers of the PMC peripheral.
 #define PMC ((pmc_reg_t *) 0x400E0600U)
 
 /*
@@ -96,12 +96,14 @@ typedef struct {
 /**
  * Enable peripheral clock.
  * @param id Peripheral Identifier
+ * Nothing will happen if the specified Peripheral Identifier is out of bounds.
  */
 void pmc_enable_peripheral_clock(uint32_t id);
 
 /**
  * Disable peripheral clock.
  * @param id Peripheral Identifier
+ * Nothing will happen if the specified Peripheral Identifier is out of bounds.
  */
 void pmc_disable_peripheral_clock(uint32_t id);
 
@@ -109,6 +111,8 @@ void pmc_disable_peripheral_clock(uint32_t id);
  * Is peripheral clock enabled?
  * @param id Peripheral Identifier
  * @return If the peripheral clock is enabled, return 1, otherwise 0.
+ * @return 0 is also returned if the specified Peripheral Identifier
+ * is out of bounds.
  */
 uint32_t pmc_peripheral_clock_enabled(uint32_t id);
 

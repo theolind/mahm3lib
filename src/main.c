@@ -2,10 +2,11 @@
  * main.c
  *
  * Author:	Mathias Beckius
+ *
  * Date:	29 September, 2014
  */
 
-#include "unity/unity_hw_setup.h"
+#include "unity/unity.h"
 #include "test_runner.h"
 
 int main(void) {

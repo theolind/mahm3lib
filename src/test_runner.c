@@ -3,7 +3,7 @@
  *
  * Author:	Theodor Lindquist
  *
- * Date: 10 September 2014
+ * Date: 	29 September 2014
  */
 
 #include "unity/unity.h"
@@ -22,13 +22,7 @@ void run_tests(void) {
 	// Run UART tests
 	Unity.TestFile = "test/test_uart.c";
 	RUN_TEST(test_uart_send_receive_char_local_loopback_mode, 0);
-
-	// Run PIO tests
-	Unity.TestFile = "test/test_pio.c";
-	RUN_TEST(test_pio_pullup, 10);
-	RUN_TEST(test_pio_output, 10);
-	RUN_TEST(test_pio_read_pin, 10);
-	RUN_TEST(test_pio_set_output, 10);
+	HORIZONTAL_LINE_BREAK();
 
 	// Run PMC tests
 	Unity.TestFile = "test/test_pmc.c";
@@ -37,8 +31,16 @@ void run_tests(void) {
 	RUN_TEST(test_pmc_PIOB_enabled, 20);
 	RUN_TEST(test_pmc_disable_PIOB, 20);
 	RUN_TEST(test_pmc_PIOB_disabled2, 20);
+	HORIZONTAL_LINE_BREAK();
 
-/*
+	// Run PIO tests
+	Unity.TestFile = "test/test_pio.c";
+	RUN_TEST(test_pio_pullup, 10);
+	RUN_TEST(test_pio_output, 10);
+	RUN_TEST(test_pio_read_pin, 10);
+	RUN_TEST(test_pio_set_output, 10);
+	HORIZONTAL_LINE_BREAK();
+
 	// Run DACC tests
 	Unity.TestFile = "test/test_dacc.c";
 	RUN_TEST(test_dacc_init, 30);
@@ -48,6 +50,7 @@ void run_tests(void) {
 	RUN_TEST(test_dacc_channel_1_write, 30);
 	RUN_TEST(test_dacc_channel_0_disable, 30);
 	RUN_TEST(test_dacc_channel_1_disable, 30);
+	HORIZONTAL_LINE_BREAK();
 
 	// Run ADC tests
 	Unity.TestFile = "test/test_adc.c";
@@ -57,6 +60,6 @@ void run_tests(void) {
 	RUN_TEST(test_adc_channel_status, 30);
 	RUN_TEST(test_adc_set_resolution_12_bit, 30);
 	RUN_TEST(test_adc_set_resolution_10_bit, 30);
-*/
+
 	UnityEnd();
 }

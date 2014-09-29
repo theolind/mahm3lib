@@ -8,6 +8,7 @@
  * 	-	make this file totally dependent of the SAM3X8E library!
  *
  * Author:	Mathias Beckius
+ *
  * Date:	29 September, 2014
  */
 

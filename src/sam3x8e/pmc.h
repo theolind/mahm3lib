@@ -109,6 +109,6 @@ void pmc_disable_peripheral_clock(uint32_t id);
  * @param id Peripheral Identifier
  * @return If the peripheral clock is enabled, return 1, otherwise 0.
  */
-uint8_t pmc_peripheral_clock_enabled(uint32_t id);
+uint32_t pmc_peripheral_clock_enabled(uint32_t id);
 
 #endif

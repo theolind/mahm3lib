@@ -7,7 +7,7 @@
 #ifndef UNITY_INTERNALS_H
 #define UNITY_INTERNALS_H
 
-//#include <stdio.h>
+#include <stdio.h>
 #include <setjmp.h>
 #include "sam3x8e/uart.h"		// modified by Mathias Beckius 2014-09-07
 

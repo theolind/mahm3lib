@@ -32,14 +32,12 @@ void run_tests(void) {
 */
 	// Run PMC tests
 	Unity.TestFile = "test/test_pmc.c";
-	RUN_TEST(test_pmc_PIOB_disabled, 20);
-	RUN_TEST(test_pmc_enabled_function_OK, 20);
-	RUN_TEST(test_pmc_disable_function_OK, 20);
-	/*
-	RUN_TEST(test_pmc_status_peripheral_clock_when_inactive, 20);
-	RUN_TEST(test_pmc_status_peripheral_clock_when_active, 20);
-	RUN_TEST(test_pmc_stop_peripheral_clock_when_successful, 20);
-	*/
+	RUN_TEST(test_pmc_PIOB_disabled1, 20);
+	RUN_TEST(test_pmc_enable_PIOB, 20);
+	RUN_TEST(test_pmc_PIOB_enabled, 20);
+	RUN_TEST(test_pmc_disable_PIOB, 20);
+	RUN_TEST(test_pmc_PIOB_disabled2, 20);
+
 /*
 	// Run DACC tests
 	Unity.TestFile = "test/test_dacc.c";

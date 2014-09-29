@@ -24,11 +24,11 @@ void uart_init(const uart_settings_t *settings) {
 	UART->UART_CR = UART_CR_RXEN | UART_CR_TXEN;
 }
 
-uint8_t uart_tx_ready(void) {
+uint32_t uart_tx_ready(void) {
 	return (UART->UART_SR & UART_SR_TXRDY);
 }
 
-uint8_t uart_rx_ready(void) {
+uint32_t uart_rx_ready(void) {
 	return (UART->UART_SR & UART_SR_RXRDY);
 }
 

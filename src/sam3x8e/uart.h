@@ -154,14 +154,14 @@ void uart_init(const uart_settings_t *settings);
  * @return 1 is returned when a character is ready to be sent,
  * otherwise 0 is returned.
  */
-uint8_t uart_tx_ready(void);
+uint32_t uart_tx_ready(void);
 
 /**
  * Checks if a character has received to the UART.
  * @return 1 is returned when a character has received,
  * otherwise 0 is returned.
  */
-uint8_t uart_rx_ready(void);
+uint32_t uart_rx_ready(void);
 
 /**
  * Sends a character to the UART.

@@ -2,6 +2,7 @@
  * @file adc.h
  * @brief Analog-to-Digital Converter (ADC)
  * @details This class is used to read values from the ADC-channels.
+ * @pre Initiate board and enable peripheral clock for ADC.
  *
  * Important: Not all functionality of the ADC is implemented in this API yet.
  *
@@ -11,7 +12,6 @@
  * @author Andreas Drotth
  * @date 28 September 2014
  *
- * @pre Initiate board and enable peripheral clock for ADC.
  */
 
 #ifndef ADC_H_

@@ -32,7 +32,7 @@
 /** \brief Port F peripheral. Contains all register information about this port. */
 #define PIOF ((pio_reg_t *) 0x400E1800)
 
-///\cond
+///@cond
 /*
  * Mapping of PIO registers
  * Base address differs from different ports
@@ -136,7 +136,7 @@ typedef struct {
 	// Write Protect Status Register, offset: 0x00E8
 	uint32_t PIO_WPSR;
 } pio_reg_t;
-///\endcond
+///@endcond
 
 /**
 * Enable the PIO to control the pin (disable peripheral control of the pin).

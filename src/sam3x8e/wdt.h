@@ -19,7 +19,7 @@
 /// Watchdog Timer Base register
 #define WDT	 ((wdt_reg_t *) 0x400E1A50U)
 
-///\cond
+///@cond
 
 // WDT_MR: Watchdog disable
 #define WDT_MR_WDDIS (1 << 15)
@@ -33,7 +33,7 @@ typedef struct wdt_reg {
 	uint32_t WDT_SR;
 } wdt_reg_t;
 
-///\endcond
+///@endcond
 
 /**
  * Disables the Watchdog Timer.

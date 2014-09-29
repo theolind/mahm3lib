@@ -2,12 +2,13 @@
  * @file pmc.h
  * @brief Power Management Controller
  * @details The PMC API is used to handle internal clocks on the SAM3XAE.
+ * @pre Initialize the system clock.
+ *
  * @author Felix Ruponen
  * @author Mattias Nilsson
  * @author Saeed Ghasemi
  * @author Mathias Beckius
  * @date 27 September 2014
- * @pre Initialize the system clock.
  */
 
 #ifndef PMC_H_

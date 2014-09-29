@@ -57,7 +57,10 @@ inline void timer_delay_software_ms(uint32_t ms);
  */
 inline void timer_delay_software_us(float us){
 	volatile uint32_t count; // Volatile to avoid compiler optimization
-	count = (uint32_t)(0.322922871*us); // Calibration function
+//	count = (uint32_t)(0.322922871*us); // Calibration function
+//	count = (uint32_t)(3.22922871*us); // Calibration function
+	count = (uint32_t)(7.99618534*us); // Calibration function
+
 	while (count != 0){
 		count--;
 	}

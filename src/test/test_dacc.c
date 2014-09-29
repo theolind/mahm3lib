@@ -1,4 +1,5 @@
 #include "test/test_dacc.h"
+#include "sam3x8e/pmc.h"
 #include "sam3x8e/dacc.h"
 #include "unity/unity.h"
 
@@ -10,6 +11,9 @@ void test_dacc_init() {
 		.trigger_mode = 0,
 		.word_transfer = 0
 	};
+	// Enable Peripheral clock for DACC
+	pmc_enable_peripheral_clock(ID_DACC);
+
 	TEST_ASSERT_TRUE(dacc_init(&dacc_settings));
 }
 

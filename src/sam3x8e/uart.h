@@ -23,7 +23,7 @@
 
 #include <inttypes.h>
 
-/// Pointer to registers of the UART peripheral, base address: 0x400E0800
+// Pointer to registers of the UART peripheral.
 #define UART ((uart_reg_t *) 0x400E0800U)
 
 ///@cond

@@ -9,9 +9,10 @@
 *
 * @date 18 September 2014
 *
-* @pre First initialize the board, if you want to read inputs,
-* @pre you need to call pmc_enable_peripheral_clock() for the
-* @pre correct peripheral. See pmc.h for details
+* @pre Initialize the system clock.
+* @pre If want to use all of the PIO peripheral features, then you must enable
+* the Peripheral Clock for the corresponding port (PIOA-PIOF). See data sheet
+* for more details.
 */
 
 #ifndef PIO_H_
@@ -19,17 +20,17 @@
 
 #include <inttypes.h>
 
-/** \brief Port A peripheral. Contains all register information about this port. */
+/** \brief Pointer to registers of the PIOA peripheral. */
 #define PIOA ((pio_reg_t *) 0x400E0E00)
-/** \brief Port B peripheral. Contains all register information about this port. */
+/** \brief Pointer to registers of the PIOB peripheral. */
 #define PIOB ((pio_reg_t *) 0x400E1000)
-/** \brief Port C peripheral. Contains all register information about this port. */
+/** \brief Pointer to registers of the PIOC peripheral. */
 #define PIOC ((pio_reg_t *) 0x400E1200)
-/** \brief Port D peripheral. Contains all register information about this port. */
+/** \brief Pointer to registers of the PIOD peripheral. */
 #define PIOD ((pio_reg_t *) 0x400E1400)
-/** \brief Port E peripheral. Contains all register information about this port. */
+/** \brief Pointer to registers of the PIOE peripheral. */
 #define PIOE ((pio_reg_t *) 0x400E1600)
-/** \brief Port F peripheral. Contains all register information about this port. */
+/** \brief Pointer to registers of the PIOF peripheral. */
 #define PIOF ((pio_reg_t *) 0x400E1800)
 
 ///\cond

@@ -21,14 +21,8 @@ uint8_t dacc_init(const dacc_settings_t *settings){
 		return 0;
 	}
 
-	// Enable Peripheral clock for DACC
-	pmc_enable_peripheral_clock(ID_DACC);
-
 	// Software reset
 	DACC_CR = (0x1u << 0);
-
-	// Trigger mode
-	DACC_MR |= (settings->trigger_mode << 0);
 
 	// Word transfer
 	DACC_MR |= (settings->word_transfer << 4);
@@ -45,57 +39,37 @@ uint8_t dacc_init(const dacc_settings_t *settings){
 	return 1;
 }
 
-uint8_t dacc_enable_channel(uint32_t dacc_channel) {
-
-	if (dacc_channel > 1) {
-		return 0;
+void dacc_enable_channel(uint32_t channel) {
+	if (channel <= DACC_CHANNEL_MAX) {
+		DACC->DACC_CHER |= (0x1u << channel);
 	}
+}
 
-	DACC_CHER |= (0x1u << dacc_channel);
+void dacc_disable_channel(uint32_t channel) {
+	if (channel <= DACC_CHANNEL_MAX) {
+		DACC->DACC_CHDR |= (0x1u << channel);
+	}
+}
 
-	if ( DACC_CHSR & (0x1u << dacc_channel) ) {
-		return 1;
+uint32_t dacc_channel_enabled(uint32_t channel) {
+	if (channel <= DACC_CHANNEL_MAX) {
+		return (DACC->DACC_CHSR & (0x1u << channel));
 	} else {
 		return 0;
 	}
 }
 
-uint8_t dacc_disable_channel(uint32_t dacc_channel){
-
-	if (dacc_channel > 1) {
-		return 0;
-	}
-
-	DACC_CHDR |= (0x1u << dacc_channel);
-
-	if ( !( DACC_CHSR & (0x1u << dacc_channel)) ) {
-		return 1;
-	} else {
-		return 0;
+void dacc_select_channel(uint32_t channel) {
+	if (channel <= DACC_CHANNEL_MAX) {
+		DACC->DACC_MR |= (channel << DACC_MR_USER_SEL_POS);
 	}
 }
 
-uint8_t dacc_get_channel_status(uint32_t dacc_channel){
-
-	if (dacc_channel > 1) {
-		return 0;
-	}
-
-	if ( DACC_CHSR & (0x1u << dacc_channel) ) {
-		return 1;
-	} else {
-		return 0;
-	}
-}
-
-uint8_t dacc_write(uint32_t dacc_channel, uint32_t value){
+void dacc_write(uint32_t value){
 
 	if (dacc_channel > 1 || value > DACC_MAX_RESOLUTION) {
 		return 0;
 	}
-
-	//TODO: Fix conversion warning
-	DACC_MR |= (dacc_channel << 16);
 
 	//Check if converter is ready before sending new data
 	while ( !( DACC_ISR & 0x1u << 0) );

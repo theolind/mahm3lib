@@ -22,14 +22,14 @@ void run_tests(void) {
 	// Run UART tests
 	Unity.TestFile = "test/test_uart.c";
 	RUN_TEST(test_uart_send_receive_char_local_loopback_mode, 0);
-/*
+
 	// Run PIO tests
 	Unity.TestFile = "test/test_pio.c";
 	RUN_TEST(test_pio_pullup, 10);
 	RUN_TEST(test_pio_output, 10);
 	RUN_TEST(test_pio_read_pin, 10);
 	RUN_TEST(test_pio_set_output, 10);
-*/
+
 	// Run PMC tests
 	Unity.TestFile = "test/test_pmc.c";
 	RUN_TEST(test_pmc_PIOB_disabled, 20);

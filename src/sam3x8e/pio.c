@@ -9,6 +9,22 @@
 
 #include "pio.h"
 
+/*
+ * This register can only be written if the WPEN bit is cleared in
+ * "PIO Write Protect Mode Register".
+ */
+void pio_enable_pin(pio_reg_t *port, uint32_t pin) {
+	port->PIO_PER = (1u << pin);
+}
+
+/*
+ * This register can only be written if the WPEN bit is cleared in
+ * "PIO Write Protect Mode Register".
+ */
+void pio_disable_pin(pio_reg_t *port, uint32_t pin) {
+	port->PIO_PDR = (1u << pin);
+}
+
 void pio_conf_pin(pio_reg_t *port, uint32_t pin, uint32_t input, uint32_t pullup) {
 	pio_conf_pins(port, (0x1u << pin), input, pullup);
 }

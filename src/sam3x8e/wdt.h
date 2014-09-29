@@ -5,7 +5,8 @@
 * @details a function for disabling the Watchdog at the moment.
 *
 * @author Mathias Beckius
-* @date September 21, 2014
+* @author Felix Ruponen
+* @date 29 September, 2014
 *
 * @pre Initialize system clock.
 */

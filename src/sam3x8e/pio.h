@@ -20,17 +20,17 @@
 #include <inttypes.h>
 
 /** \brief Port A peripheral. Contains all register information about this port. */
-#define PIO_PORTA ((pio_reg_t *) 0x400E0E00)
+#define PIOA ((pio_reg_t *) 0x400E0E00)
 /** \brief Port B peripheral. Contains all register information about this port. */
-#define PIO_PORTB ((pio_reg_t *) 0x400E1000)
+#define PIOB ((pio_reg_t *) 0x400E1000)
 /** \brief Port C peripheral. Contains all register information about this port. */
-#define PIO_PORTC ((pio_reg_t *) 0x400E1200)
+#define PIOC ((pio_reg_t *) 0x400E1200)
 /** \brief Port D peripheral. Contains all register information about this port. */
-#define PIO_PORTD ((pio_reg_t *) 0x400E1400)
+#define PIOD ((pio_reg_t *) 0x400E1400)
 /** \brief Port E peripheral. Contains all register information about this port. */
-#define PIO_PORTE ((pio_reg_t *) 0x400E1600)
+#define PIOE ((pio_reg_t *) 0x400E1600)
 /** \brief Port F peripheral. Contains all register information about this port. */
-#define PIO_PORTF ((pio_reg_t *) 0x400E1800)
+#define PIOF ((pio_reg_t *) 0x400E1800)
 
 ///\cond
 /** \brief Pio hardware registers */
@@ -91,6 +91,20 @@ typedef struct pio_reg {
 	uint32_t PIO_WPSR; /**< \brief (Pio Offset: 0x00E8) Write Protect Status Register */
 } pio_reg_t;
 ///\endcond
+
+/**
+* Enable the PIO to control the pin (disable peripheral control of the pin).
+* @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
+* @param pin the pin to enable
+*/
+void pio_enable_pin(pio_reg_t *port, uint32_t pin);
+
+/**
+* Disable the PIO from controlling the pin (enable peripheral control of the pin).
+* @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
+* @param pin the pin to disable
+*/
+void pio_disable_pin(pio_reg_t *port, uint32_t pin);
 
 /**
 * Configure a pin to be either an input or an output

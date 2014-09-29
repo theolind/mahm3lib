@@ -14,7 +14,7 @@
 #define PMC_H_
 
 #include <inttypes.h>
-#include "id.h"			// Definitions of Peripheral Identifiers
+#include "id.h"				// Definitions of Peripheral Identifiers
 
 // pointer to registers of the PMC, base address: 0x400E0600
 #define PMC ((pmc_reg_t *) 0x400E0600U)
@@ -24,41 +24,71 @@
  * Base address: 0x400E0600
  */
 typedef struct {
+	// System Clock Enable Register, offset 0x0000
 	uint32_t PMC_SCER;
+	// System Clock Disable Register, offset 0x0004
 	uint32_t PMC_SCDR;
+	// System Clock Status Register, offset 0x0008
 	uint32_t PMC_SCSR;
-	uint32_t reserved1;
+	// reserved, offset 0x000C
+	uint32_t reserved1[1];
+	// Peripheral Clock Enable Register 0, offset 0x0010
 	uint32_t PMC_PCER0;
+	// Peripheral Clock Disable Register 0, offset 0x0014
 	uint32_t PMC_PCDR0;
+	// Peripheral Clock Status Register 0, offset 0x0018
 	uint32_t PMC_PCSR0;
+	// UTMI Clock Register, offset 0x001C
 	uint32_t CKGR_UCKR;
+	// Main Oscillator Register, offset 0x0020
 	uint32_t CKGR_MOR;
+	// Main Clock Frequency Register, offset 0x0024
 	uint32_t CKGR_MCFR;
+	// PLLA Register, offset 0x0028
 	uint32_t CKGR_PLLAR;
-	uint32_t reserved2;
+	// reserved, offset 0x002C
+	uint32_t reserved2[1];
+	// Master Clock Register, offset 0x0030
 	uint32_t PMC_MCKR;
-	uint32_t reserved3;
+	// reserved, offset 0x0034
+	uint32_t reserved3[1];
+	// USB Clock Register, offset 0x0038
 	uint32_t PMC_USB;
-	uint32_t reserved4;
+	// reserved, 0x003C
+	uint32_t reserved4[1];
+	// Programmable Clock 0-2 Register, offset 0x0040-0x0048
 	uint32_t PMC_PCK[3];
-	// Reserved, offset 0x004C-0x005C
+	// reserved, offset 0x004C-0x005C
 	uint32_t reserved5[5];
+	// Interrupt Enable Register, offset 0x0060
 	uint32_t PMC_IER;
+	// Interrupt Disable Register, offset 0x0064
 	uint32_t PMC_IDR;
+	// Status Register, offset 0x0068
 	uint32_t PMC_SR;
+	// Interrupt Mask Register, offset 0x006C
 	uint32_t PMC_IMR;
+	// Fast Startup Mode Register, offset 0x0070
 	uint32_t PMC_FSMR;
+	// Fast Startup Polarity Register, offset 0x0074
 	uint32_t PMC_FSPR;
+	// Fault Output Clear Register, offset 0x0078
 	uint32_t PMC_FOCR;
-	// Reserved, offset 0x007C-0x00E0
+	// reserved, offset 0x007C-0x00E0
 	uint32_t reserved6[30];
+	// Write Protect Mode Register, offset 0x00E4
 	uint32_t PMC_WPMR;
+	// Write Protect Status Register, offset 0x00E8
 	uint32_t PMC_WPSR;
 	// Reserved, offset 0x00EC-0x00FC
 	uint32_t reserved7[5];
+	// Peripheral Clock Enable Register 1, offset 0x0100
 	uint32_t PMC_PCER1;
+	// Peripheral Clock Disable Register 1, offset 0x0104
 	uint32_t PMC_PCDR1;
+	// Peripheral Clock Status Register 1, offset 0x0108
 	uint32_t PMC_PCSR1;
+	// Peripheral Control Register, offset 0x010C
 	uint32_t PMC_PCR;
 } pmc_reg_t;
 

@@ -4,7 +4,7 @@
 * @details With the UART API you can configure UART communication.
 * @details Important! The API is currently limited. Not all features are
 * @details implemented!
-* @pre Initialize system clock
+* @pre Initialize the system clock
 *
 * Important! Atmel SAM3X8E ARM Cortex-M3 works with 3.3V. To achieve full USB
 * speed, Arduino Due has been designed to provide 5V power supply to the 16U2
@@ -15,7 +15,7 @@
 *
 * @author Mathias Beckius
 * @author Felix Ruponen
-* @date 28 September 2014
+* @date 29 September 2014
 */
 
 #ifndef UART_H_
@@ -34,19 +34,19 @@
 #define CPU_HZ	(84000000UL)
 
 // UART Control Register - Reset Receiver
-#define UART_CR_RSTRX 					(0x1u << 2)
+#define UART_CR_RSTRX 					(1u << 2)
 // UART Control Register - Reset Transmitter
-#define UART_CR_RSTTX 					(0x1u << 3)
+#define UART_CR_RSTTX 					(1u << 3)
 // UART Control Register - Receiver Enable
-#define UART_CR_RXEN 					(0x1u << 4)
+#define UART_CR_RXEN 					(1u << 4)
 // UART Control Register - Receiver Disable
-#define UART_CR_RXDIS					(0x1u << 5)
+#define UART_CR_RXDIS					(1u << 5)
 // UART Control Register - Transmitter Enable
-#define UART_CR_TXEN 					(0x1u << 6)
+#define UART_CR_TXEN 					(1u << 6)
 // UART Control Register - Transmitter Disable
-#define UART_CR_TXDIS 					(0x1u << 7)
+#define UART_CR_TXDIS 					(1u << 7)
 // UART Control Register - Reset Status Bits
-#define UART_CR_RSTSTA 					(0x1u << 8)
+#define UART_CR_RSTSTA 					(1u << 8)
 
 /*
  * UART Mode Register - Parity setting
@@ -82,9 +82,9 @@
 
 // Defines for the UART Status Register
 // Receiver Ready?
-#define UART_SR_RXRDY 					(0x1u << 0)
+#define UART_SR_RXRDY 					(1u << 0)
 // Transmitter Ready?
-#define UART_SR_TXRDY 					(0x1u << 1)
+#define UART_SR_TXRDY 					(1u << 1)
 
 /*
  * UART Baud Rate Generator Register - Clock Divisor
@@ -92,7 +92,7 @@
  * to avoid invalid values. Clock Divisor is calculated according to:
  * 		(MCK / (16 x Baud rate))
  */
-#define UART_BRGR_CD(baud) 				(0xFFFFu & ((CPU_HZ >> 4) / (baud)))
+#define UART_BRGR_CD(baud)				(0xFFFFu & ((CPU_HZ >> 4) / (baud)))
 
 /*
  * Mapping of UART registers

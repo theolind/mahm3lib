@@ -1,73 +1,85 @@
 ﻿/*
  * unity_hw_setup.c
  *
- * Created: 2014-09-07 15:43:47
- *  Author: m11p0910
- */ 
+ * This file still needs some "cleaning":
+ * 	- 	eliminate the need for memory mapping in this file
+ * 		(create new functions, etc)
+ *
+ * 	-	make this file totally dependent of the SAM3X8E library!
+ *
+ * Author:	Mathias Beckius
+ * Date:	29 September, 2014
+ */
 
 #include "unity_hw_setup.h"
+#include "sam3x8e/pmc.h"
+#include "sam3x8e/pio.h"
 #include "sam3x8e/uart.h"
 #include "sam3x8e/wdt.h"
 
+// ---------------------------------------------------------------------------
+// BAD CODE!
+// THIS CODE MUST BE REMOVED WHEN THE FUNCTIONS BELOW ARE IN GOOD SHAPE
+// ---------------------------------------------------------------------------
 // EEFC Flash Mode Register 0
-uint32_t *const p_EEFC_FMR_0 = (uint32_t *) 0x400E0A00U;
+#define EEFC_FMR_0 (*p_EEFC_FMR_0)
 // EEFC Flash Mode Register 1
-uint32_t *const p_EEFC_FMR_1 = (uint32_t *) 0x400E0C00U;
+#define EEFC_FMR_1 (*p_EEFC_FMR_1)
+//keep this until PMC->PMC_SR is fully working!
+#define PMC_SR_ (*((volatile uint32_t *)0x400E0668U))
+/* -------- EEFC_FMR : (EFC Offset: 0x00) EEFC Flash Mode Register -------- */
+#define EEFC_FMR_FRDY (0x1u << 0) /**< \brief (EEFC_FMR) Ready Interrupt Enable */
+#define EEFC_FMR_FWS_Pos 8
+#define EEFC_FMR_FWS_Msk (0xfu << EEFC_FMR_FWS_Pos) /**< \brief (EEFC_FMR) Flash Wait State */
+#define EEFC_FMR_FWS(value) ((EEFC_FMR_FWS_Msk & ((value) << EEFC_FMR_FWS_Pos)))
+// ---------------------------------------------------------------------------
+// END OF BAD CODE...
+// ---------------------------------------------------------------------------
 
 static void configure_uart(void) {
-	// Peripheral Clock Enable Register 0 ---- REMOVE WHEN DONE!
-	uint32_t *const p_PMC_PCER0 = (uint32_t *) 0x400E0610U;
-	// PIO Controller PIO Disable Register - PIOA ---- REMOVE WHEN DONE!
-	uint32_t *const p_PIO_PDR = (uint32_t *) 0x400E0E04U;
-	// PIO Pull Up Enable Register (PIOA) ---- REMOVE WHEN DONE!
-	uint32_t *const p_PIO_PUER = (uint32_t *) 0x400E0E64U;
-
 	const uart_settings_t uart_settings = {
 		.baud_rate = 115200,
-		.parity = (0x4u << 9),//UART_PARITY_NO,
+		.parity = UART_PARITY_NO,
 		.ch_mode = UART_CHMODE_NORMAL
 	};
-	// Enable Peripheral Clock for UART.
-	// This register can only be written if the WPEN bit is cleared in �PMC Write Protect Mode Register� .
-	*p_PMC_PCER0 = (1 << 8);
 
-	/* Configure UART pins */
-	// Remove the pins from under the control of PIO
-	// This register can only be written if the WPEN bit is cleared in �PIO Write Protect Mode Register� .
-	*p_PIO_PDR = (1 << 8) | (1 << 9);
-	// configure RX0 pin as input/pull-up
-	*p_PIO_PUER = (1 << 8);
+	// enable Peripheral Clock for UART.
+	pmc_enable_peripheral_clock(ID_UART);
 
-	//initialize UART
+	// remove the pins from under the control of PIO
+	pio_disable_pin(PIOA, 8);	//RX0
+	pio_disable_pin(PIOA, 9);	//TX0
+
+	// initialize UART
 	uart_init(&uart_settings);
 }
 
-/**
-* \brief Switch master clock source selection to PLLA clock.
-*
-* \param ul_pres Processor clock prescaler.
-*
-* \retval 0 Success.
-* \retval 1 Timeout error.
-*/
+/*
+ * Switch master clock source selection to PLLA clock.
+ *
+ * param: ul_pres Processor clock prescaler.
+ *
+ * ret 0 Success.
+ * ret 1 Timeout error.
+ *
+ * Important!
+ * When everything's working, clean up and move this function to PMC API.
+ * PMC->PMC_SR might still be a little unreliable, won't work in
+ * systemclock_init().
+ */
 static uint32_t pmc_switch_mclk_to_pllack(uint32_t ul_pres)
 {
-	// PMC Master Clock Register
-	uint32_t *const p_PMC_MCKR	= (uint32_t *) 0x400E0630U;
-	// PMC Status Register
-	//uint32_t *const p_PMC_SR = (uint32_t *) 0x400E0668U;
 	uint32_t ul_timeout;
-
-	*p_PMC_MCKR = (*p_PMC_MCKR & (~(0x7u << 4))) | ul_pres;
-	//for (ul_timeout = 2048; !(PMC->PMC_SR & (1 << 3)); --ul_timeout) {
-	for (ul_timeout = 2048; (PMC_SR & (1 << 3)) == 0; --ul_timeout) {
+	PMC->PMC_MCKR = (PMC->PMC_MCKR & (~(0x7u << 4))) | ul_pres;
+	for (ul_timeout = 2048; !(PMC->PMC_SR & (1 << 3)); --ul_timeout) {
+	//for (ul_timeout = 2048; (PMC_SR_ & (1 << 3)) == 0; --ul_timeout) {
 		if (ul_timeout == 0) {
 			return 1;
 		}
 	}
-	*p_PMC_MCKR = (*p_PMC_MCKR & (~(0x3u))) | 2;
-	//for (ul_timeout = 2048; !(PMC->PMC_SR & (1 << 3)); --ul_timeout) {
-	for (ul_timeout = 2048; (PMC_SR & (1 << 3)) == 0; --ul_timeout) {
+	PMC->PMC_MCKR = (PMC->PMC_MCKR & (~(0x3u))) | 2;
+	for (ul_timeout = 2048; !(PMC->PMC_SR & (1 << 3)); --ul_timeout) {
+	//for (ul_timeout = 2048; (PMC_SR_ & (1 << 3)) == 0; --ul_timeout) {
 		if (ul_timeout == 0) {
 			return 1;
 		}
@@ -75,14 +87,16 @@ static uint32_t pmc_switch_mclk_to_pllack(uint32_t ul_pres)
 	return 0;
 }
 
+/*
+ * Important!
+ * PMC->PMC_SR might still be a little unreliable, won't work!
+ */
 static void systemclock_init(void)
 {
-	// PMC Clock Generator Main Oscillator Register
-	uint32_t *const p_PMC_CKGR_MOR	= (uint32_t *) 0x400E0620U;
-	// PMC Status Register
-	//uint32_t *const p_PMC_SR = (uint32_t *) 0x400E0668U;
-	// PMC Clock Generator PLLA Register
-	uint32_t *const p_CKGR_PLLAR	= (uint32_t *) 0x400E0628U;
+	// EEFC Flash Mode Register 0
+	uint32_t *const p_EEFC_FMR_0 = (uint32_t *) 0x400E0A00U;
+	// EEFC Flash Mode Register 1
+	uint32_t *const p_EEFC_FMR_1 = (uint32_t *) 0x400E0C00U;
 
 	/*
 	 * Set flash wait state, based upon 84 MHz CPU frequency.
@@ -94,46 +108,39 @@ static void systemclock_init(void)
 
 	/* Config system clock setting - Already running from SYSCLK_SRC_MAINCK_4M_RC */
 	//Internal 4MHz RC oscillator as master source clock
-	/* Enable Main Xtal oscillator */
-	*p_PMC_CKGR_MOR = (*p_PMC_CKGR_MOR & ~2) | (0x37 << 16) | 1 | (62 << 8);
+	/* Enable Main XTAL oscillator */
+	PMC->CKGR_MOR = (PMC->CKGR_MOR & ~2u) | (0x37u << 16) | 1 | (62u << 8);
+
 	// Wait to the Main XTAL oscillator is stabilized
-	while ((PMC_SR & 1) == 0);
-	//while (!(PMC->PMC_SR & 1));
+	while ((PMC_SR_ & 1) == 0);
+	//while (!(PMC->PMC_SR & 0x1u));
+
 	// select the Main Crystal Oscillator
-	*p_PMC_CKGR_MOR |= (0x37 << 16) | (1 << 24);
+	PMC->CKGR_MOR |= (0x37 << 16) | (1 << 24);
+
 	// oscillator ready? Main Oscillator Selection Status - Selection is in progress
-	while ((PMC_SR & (1 << 16)) == 0);
+	while ((PMC_SR_ & (1 << 16)) == 0);
 	//while (!(PMC->PMC_SR & (1 << 16)));
+
 	// Disable PLLA clock - Always stop PLL first!
-	*p_CKGR_PLLAR = (1 << 29);
+	PMC->CKGR_PLLAR = (1 << 29);
 	// set PMC clock generator
-	*p_CKGR_PLLAR = (1 << 29) | (13 << 16) | 1 | (0x3fU << 8);
+	PMC->CKGR_PLLAR = (1 << 29) | (13 << 16) | 1 | (0x3fU << 8);
+
 	// wait for PLL to be locked
-	while ((PMC_SR & 2) == 0);
+	while ((PMC_SR_ & 2) == 0);
 	//while (!(PMC->PMC_SR & 2));
+
 	// Switch master clock source selection to PLLA clock,
 	// selected clock divided by 2
 	pmc_switch_mclk_to_pllack(1 << 4);
 }
 
 void unity_hw_setup(void) {
-	// Watchdog Timer Mode Register
-	uint32_t *const p_WDT_MR = (uint32_t *) 0x400E1A54U;
-	// Peripheral Clock Enable Register 0
-	uint32_t *const p_PMC_PCER0 = (uint32_t *) 0x400E0610U;
-
-	//sysclk_init();
+	// originally this was a call to the ASF function 'sysclk_init()'
 	systemclock_init();
-	// Disable the watchdog timer
-	*p_WDT_MR = (1 << 15);
-
-	/*
-	 * Enables peripheral clocks for Parallel I/O Controller A-F.
-	 * This a standard initialization before using peripherals.
-	 */
-	*p_PMC_PCER0 =	(1 << 11) | (1 << 12) | (1 << 13) |
-					(1 << 14) | (1 << 15) | (1 << 16);
-	
+	// disable the watchdog timer
+	wdt_disable();
 	// configure UART so Unity can use USB/RS-232 as output
 	configure_uart();
 }

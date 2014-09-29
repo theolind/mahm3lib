@@ -36,7 +36,7 @@
 ///\cond
 /*
  * Mapping of PIO registers
- * Base address differs from different ports
+ * Base address differs from different ports.
  */
 typedef struct {
 	// PIO Enable Register, offset: 0x0000
@@ -97,7 +97,10 @@ typedef struct {
 	uint32_t PIO_SCIFSR;
 	// Debouncing Input Filter Select Register, offset: 0x0084
 	uint32_t PIO_DIFSR;
-	// Glitch or Debouncing Input Filter Clock Selection Status Register, offset: 0x0088
+	/*
+	 * Glitch or Debouncing Input Filter Clock Selection Status Register,
+	 * offset: 0x0088
+	 */
 	uint32_t PIO_IFDGSR;
 	// Slow Clock Divider Debouncing Register, offset: 0x008C
 	uint32_t PIO_SCDR;

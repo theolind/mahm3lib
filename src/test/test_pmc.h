@@ -1,10 +1,7 @@
 /*
  * PMC unit tests
  *
- * Author:	Felix Ruponen
- * 			Mattias Nilsson
- * 			Saeed Ghasemi
- * 			Mathias Beckius
+ * Author:	Mathias Beckius
  *
  * Date:	29 September 2014
  */

@@ -7,7 +7,7 @@
 * @author Soded Alatia
 * @author Felix Ruponen
 *
-* @date 18 September 2014
+* @date 29 September 2014
 *
 * @pre Initialize the system clock.
 * @pre If want to use all of the PIO peripheral features, then you must enable

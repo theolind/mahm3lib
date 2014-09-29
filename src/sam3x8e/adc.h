@@ -43,10 +43,6 @@
 #define ADC_RESOLUTION_10_BIT	1
 #define ADC_RESOLUTION_12_BIT	0
 
-// To check if a provided ID is a valid channel
-#define ADC_VALID_CHANNEL(channel) \
-	((channel) >= 0 && (channel) <= 14)
-
 // ADC_CR: (ADC Offset: 0x0000) Control Register
 #define ADC_CR_START	(0x1u << 1)
 #define ADC_CR_RESET	(0x1u << 0)

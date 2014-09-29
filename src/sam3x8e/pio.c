@@ -1,10 +1,11 @@
 /*
 * pio.c
 *
-* Created on: Sep 18, 2014
-* Author: Theodor Lindquist
-* Author: Soded Alatia
-* Author: Felix Ruponen
+* Author: 	Theodor Lindquist
+*			Soded Alatia
+* 			Felix Ruponen
+*
+* Date:		29 September 2014
 */
 
 #include "pio.h"
@@ -71,7 +72,7 @@ void pio_set_pins(pio_reg_t *port, uint32_t pins, uint32_t level) {
 		port->PIO_SODR |= pins;
 	} else {
 		//set pins low
-		port->PIO_SODR &= ~pins;
+		port->PIO_CODR &= ~pins;
 	}
 }
 

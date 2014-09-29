@@ -4,6 +4,7 @@
  * @details This file provides basic functionality for usage of the DACC.
  * @author Andreas Drotth
  * @author Jonathan Bjarnason
+ * @author Mathias Beckius
  *
  * @date 29 September 2014
  * @pre Initialize the system clock.
@@ -14,6 +15,7 @@
 
 #include <inttypes.h>
 
+// some of these defines should be hidden from the Doxygen documentation.
 // Pointer to registers of the DACC peripheral.
 #define DACC ((dacc_reg_t *) 0x400C8000U)
 
@@ -23,7 +25,13 @@
 
 #define DACC_MAX_RESOLUTION 4095	///<The DACC has a 12 bit resolution
 
+#define DACC_MR_WORD_POS		(4)
+#define DACC_MR_REFRESH_POS		(8)
 #define DACC_MR_USER_SEL_POS	(16)
+#define DACC_MR_MAXS_POS		(21)
+#define DACC_MR_STARTUP_POS		(24)
+
+#define DACC_ISR_TXRDY_MSK		(1u)
 
 /*
  * Mapping of DACC registers
@@ -92,21 +100,21 @@ typedef struct dacc_settings {
  * should be a struct of type dacc_settings_t.
  * @return Return 0 if settings contain illegal values. Otherwise return 1.
  */
-uint8_t dacc_init(const dacc_settings_t *settings);
+void dacc_init(const dacc_settings_t *settings);
 
 /**
  * Enables a specified DACC channel.
  * @param channel The channel to enable (DACC_CHANNEL_0 or DACC_CHANNEl_1).
  * Nothing will happen if the specified channel is out of bounds.
  */
-uint8_t dacc_enable_channel(uint32_t channel);
+void dacc_enable_channel(uint32_t channel);
 
 /**
  * Disables a specified DACC channel.
  * @param channel The channel to disable (DACC_CHANNEL_0 or DACC_CHANNEl_1).
  * Nothing will happen if the specified channel is out of bounds.
  */
-uint8_t dacc_disable_channel(uint32_t channel);
+void dacc_disable_channel(uint32_t channel);
 
 /**
  * Checks if the specified channel is enabled.
@@ -116,20 +124,30 @@ uint8_t dacc_disable_channel(uint32_t channel);
  */
 uint32_t dacc_channel_enabled(uint32_t channel);
 
+/**
+ * Select DACC channel.
+ * @param channel Channel (DACC_CHANNEL_0 or DACC_CHANNEl_1).
+ * Nothing will happen if the specified channel is out of bounds.
+ */
 void dacc_select_channel(uint32_t channel);
+
+/**
+ * Checks if a new value can be converted by the DACC.
+ * @return 1 is returned when new a value can be converted,
+ * otherwise 0 is returned.
+ */
+uint32_t dacc_tx_ready(void);
 
 /**
  * Converts a 12-bit digital value to corresponding analog
  * value on a specified channel.
- * If transfer mode is set to HALF-WORD then only DACC_CHR[15:0]
- * is used whereby [11:0] make up the actual output data.
- * If transfer mode is set to WORD then all bits are used whereby
- * [15:0] is converted first and afterwards the [31:16] bits.
- * @param dacc_channel The channel to output the converted value.
- * Either DACC_CHANNEL_0 or DACC_CHANNEl_1.
+ * If transfer mode is set to HALF-WORD, then only bits 0-11 is used for
+ * output data. If transfer mode is set to WORD, then bits 16-31 will also
+ * be used.
+ * The least significant bits are converted first in WORD transfer mode.
  * @param value The value to convert.
- * @return Return 1 if the function executed correctly, otherwise 0.
+ * @pre Call dacc_tx_ready() to check if a new value can be converted.
  */
-void dacc_write(uint32_t dacc_channel, uint32_t value);
+void dacc_write(uint32_t value);
 
 #endif

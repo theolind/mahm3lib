@@ -43,13 +43,14 @@ void run_tests(void) {
 
 	// Run DACC tests
 	Unity.TestFile = "test/test_dacc.c";
-	RUN_TEST(test_dacc_init, 30);
-	RUN_TEST(test_dacc_channel_0_enable, 30);
-	RUN_TEST(test_dacc_channel_1_enable, 30);
-	RUN_TEST(test_dacc_channel_0_write, 30);
-	RUN_TEST(test_dacc_channel_1_write, 30);
-	RUN_TEST(test_dacc_channel_0_disable, 30);
-	RUN_TEST(test_dacc_channel_1_disable, 30);
+	RUN_TEST(test_dacc_channel_0_disabled1, 30);
+	RUN_TEST(test_dacc_channel_1_disabled1, 30);
+	RUN_TEST(test_dacc_enable_channel_0, 30);
+	RUN_TEST(test_dacc_enable_channel_1, 30);
+	RUN_TEST(test_dacc_disable_channel_0, 30);
+	RUN_TEST(test_dacc_disable_channel_1, 30);
+	RUN_TEST(test_dacc_channel_0_disabled2, 30);
+	RUN_TEST(test_dacc_channel_1_disabled2, 30);
 	HORIZONTAL_LINE_BREAK();
 
 	// Run ADC tests

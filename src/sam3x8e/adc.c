@@ -1,14 +1,18 @@
 /*
  * adc.c
  *
- * Author: Hisham Ramish, Mattias Nilsson, Prince Balabis, Andreas Drotth
+ * Author:	Hisham Ramish,
+ * 			Mattias Nilsson,
+ * 			Prince Balabis,
+ * 			Andreas Drotth
+ *
  * Date: 28 September 2014
  */
 
 #include "adc.h"
 
 uint8_t adc_init(adc_settings_t * adc_settings) {
-	if (adc_settings->prescaler > 255 || adc_settings->startup_time > 15){
+	if (adc_settings->prescaler > 255 || adc_settings->startup_time > 15) {
 		return 1;
 	}
 	else {

@@ -1,10 +1,10 @@
-/*!
- * @author Theodor Lindquist
- * @author Soded Alatia
+/*
+ * PIO unit tests
  *
- * @version 0.2
- * @date Sep 18, 2014
+ * Author:	Theodor Lindquist
+ * 			Soded Alatia
  *
+ * Date:	18 September 2014
  */
 
 #ifndef TEST_PIO_H_

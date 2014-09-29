@@ -1,9 +1,15 @@
-/* test_pio.c
-*
-*  Created on: Sep 18, 2014
-*      Author: Theodor Lindquist
-*      Author: Soded Alatia
-*/
+/*
+ * PIO unit tests
+ *
+ * Author:	Theodor Lindquist
+ * 			Soded Alatia
+ *
+ * Date:	18 September 2014
+ *
+ * Comment from Mathias B:
+ * The tests could verify a little bit more. Should be improved when
+ * extending the API.
+ */
 
 #include "unity/unity.h"
 #include "sam3x8e/pmc.h"

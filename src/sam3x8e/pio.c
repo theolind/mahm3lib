@@ -71,7 +71,7 @@ void pio_conf_pins(uint32_t port, uint32_t pin_numbers, uint8_t input, uint8_t p
 		p_reg = (uint32_t *)(port+PIO_ODR);
 		*p_reg = pin_numbers;
 	} else {
-		//use the output enable register to enalbe outputs
+		//use the output enable register to enable outputs
 		p_reg = (uint32_t *)(port+PIO_OER);
 		*p_reg = pin_numbers;
 	}

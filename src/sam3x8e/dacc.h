@@ -2,12 +2,13 @@
  * @file dacc.h
  * @brief Digital-to-Analog Conversion Controller
  * @details This file provides basic functionality for usage of the DACC.
+ * @pre First Initialize the board.
+ *
  * @author Andreas Drotth
  * @author Jonathan Bjarnason
  * @author Mathias Beckius
  *
  * @date 29 September 2014
- * @pre Initialize the system clock.
  */
 
 #ifndef DACC_H

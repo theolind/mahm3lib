@@ -119,7 +119,7 @@ typedef struct uart_reg {
 	uint32_t UART_BRGR;
 } uart_reg_t;
 
-///\endcond
+///@endcond
 
 /**
  * Input parameters when initializing RS232 and similar modes.

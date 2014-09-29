@@ -53,8 +53,8 @@ void pmc_disable_peripheral_clock(uint32_t id) {
 
 uint8_t pmc_peripheral_clock_enabled(uint32_t id) {
 	if (id <= REG_0_ID_MAX) {
-		return (uint8_t)(PMC->PMC_PCSR0 & REG_0_BIT_MASK(id));
+		return (uint8_t) (PMC->PMC_PCSR0 & REG_0_BIT_MASK(id));
 	} else {
-		return (uint8_t)(PMC->PMC_PCSR1 & REG_1_BIT_MASK(id));
+		return (uint8_t) (PMC->PMC_PCSR1 & REG_1_BIT_MASK(id));
 	}
 }

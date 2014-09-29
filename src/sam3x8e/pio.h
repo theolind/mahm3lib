@@ -34,62 +34,108 @@
 #define PIOF ((pio_reg_t *) 0x400E1800)
 
 ///\cond
-/** \brief Pio hardware registers */
-typedef struct pio_reg {
-	uint32_t PIO_PER; /**< \brief (Pio Offset: 0x0000) PIO Enable Register */
-	uint32_t PIO_PDR; /**< \brief (Pio Offset: 0x0004) PIO Disable Register */
-	uint32_t PIO_PSR; /**< \brief (Pio Offset: 0x0008) PIO Status Register */
+/*
+ * Mapping of PIO registers
+ * Base address differs from different ports
+ */
+typedef struct {
+	// PIO Enable Register, offset: 0x0000
+	uint32_t PIO_PER;
+	// PIO Disable Register, offset: 0x0004
+	uint32_t PIO_PDR;
+	// PIO Status Register, offset: 0x0008
+	uint32_t PIO_PSR;
 	uint32_t reserved1;
-	uint32_t PIO_OER; /**< \brief (Pio Offset: 0x0010) Output Enable Register */
-	uint32_t PIO_ODR; /**< \brief (Pio Offset: 0x0014) Output Disable Register */
-	uint32_t PIO_OSR; /**< \brief (Pio Offset: 0x0018) Output Status Register */
+	// PIO Output Enable Register, offset: 0x0010
+	uint32_t PIO_OER;
+	// PIO Output Disable Register, offset: 0x0014
+	uint32_t PIO_ODR;
+	// Output Status Register, offset: 0x0018
+	uint32_t PIO_OSR;
 	uint32_t reserved2;
-	uint32_t PIO_IFER; /**< \brief (Pio Offset: 0x0020) Glitch Input Filter Enable Register */
-	uint32_t PIO_IFDR; /**< \brief (Pio Offset: 0x0024) Glitch Input Filter Disable Register */
-	uint32_t PIO_IFSR; /**< \brief (Pio Offset: 0x0028) Glitch Input Filter Status Register */
+	// Glitch Input Filter Enable Register, offset: 0x0020
+	uint32_t PIO_IFER;
+	// Glitch Input Filter Disable Register, offset: 0x0024
+	uint32_t PIO_IFDR;
+	// Glitch Input Filter Status Register, offset: 0x0028
+	uint32_t PIO_IFSR;
 	uint32_t reserved3;
-	uint32_t PIO_SODR; /**< \brief (Pio Offset: 0x0030) Set Output Data Register */
-	uint32_t PIO_CODR; /**< \brief (Pio Offset: 0x0034) Clear Output Data Register */
-	uint32_t PIO_ODSR; /**< \brief (Pio Offset: 0x0038) Output Data Status Register */
-	uint32_t PIO_PDSR; /**< \brief (Pio Offset: 0x003C) Pin Data Status Register */
-	uint32_t PIO_IER; /**< \brief (Pio Offset: 0x0040) Interrupt Enable Register */
-	uint32_t PIO_IDR; /**< \brief (Pio Offset: 0x0044) Interrupt Disable Register */
-	uint32_t PIO_IMR; /**< \brief (Pio Offset: 0x0048) Interrupt Mask Register */
-	uint32_t PIO_ISR; /**< \brief (Pio Offset: 0x004C) Interrupt Status Register */
-	uint32_t PIO_MDER; /**< \brief (Pio Offset: 0x0050) Multi-driver Enable Register */
-	uint32_t PIO_MDDR; /**< \brief (Pio Offset: 0x0054) Multi-driver Disable Register */
-	uint32_t PIO_MDSR; /**< \brief (Pio Offset: 0x0058) Multi-driver Status Register */
+	// Set Output Data Register, offset: 0x0030
+	uint32_t PIO_SODR;
+	// Clear Output Data Register, offset: 0x0034
+	uint32_t PIO_CODR;
+	// Output Data Status Register, offset: 0x0038
+	uint32_t PIO_ODSR;
+	// Pin Data Status Register, offset: 0x003C
+	uint32_t PIO_PDSR;
+	// Interrupt Enable Register, offset: 0x0040
+	uint32_t PIO_IER;
+	// Interrupt Disable Register, offset: 0x0044
+	uint32_t PIO_IDR;
+	// Interrupt Mask Register, offset: 0x0048
+	uint32_t PIO_IMR;
+	// Interrupt Status Register, offset: 0x004C
+	uint32_t PIO_ISR;
+	// Multi-driver Enable Register, offset: 0x0050
+	uint32_t PIO_MDER;
+	// Multi-driver Disable Register, offset: 0x0054
+	uint32_t PIO_MDDR;
+	// Multi-driver Status Register, offset: 0x0058
+	uint32_t PIO_MDSR;
 	uint32_t reserved4;
-	uint32_t PIO_PUDR; /**< \brief (Pio Offset: 0x0060) Pull-up Disable Register */
-	uint32_t PIO_PUER; /**< \brief (Pio Offset: 0x0064) Pull-up Enable Register */
-	uint32_t PIO_PUSR; /**< \brief (Pio Offset: 0x0068) Pad Pull-up Status Register */
+	// Pull-up Disable Register, offset: 0x0060
+	uint32_t PIO_PUDR;
+	// Pull-up Enable Register, offset: 0x0064
+	uint32_t PIO_PUER;
+	// Pad Pull-up Status Register, offset: 0x0068
+	uint32_t PIO_PUSR;
 	uint32_t reserved5;
-	uint32_t PIO_ABSR; /**< \brief (Pio Offset: 0x0070) Peripheral AB Select Register */
+	// Peripheral AB Select Register, offset: 0x0070
+	uint32_t PIO_ABSR;
 	uint32_t reserved6[3];
-	uint32_t PIO_SCIFSR; /**< \brief (Pio Offset: 0x0080) System Clock Glitch Input Filter Select Register */
-	uint32_t PIO_DIFSR; /**< \brief (Pio Offset: 0x0084) Debouncing Input Filter Select Register */
-	uint32_t PIO_IFDGSR; /**< \brief (Pio Offset: 0x0088) Glitch or Debouncing Input Filter Clock Selection Status Register */
-	uint32_t PIO_SCDR; /**< \brief (Pio Offset: 0x008C) Slow Clock Divider Debouncing Register */
+	// System Clock Glitch Input Filter Select Register, offset: 0x0080
+	uint32_t PIO_SCIFSR;
+	// Debouncing Input Filter Select Register, offset: 0x0084
+	uint32_t PIO_DIFSR;
+	// Glitch or Debouncing Input Filter Clock Selection Status Register, offset: 0x0088
+	uint32_t PIO_IFDGSR;
+	// Slow Clock Divider Debouncing Register, offset: 0x008C
+	uint32_t PIO_SCDR;
 	uint32_t reserved7[4];
-	uint32_t PIO_OWER; /**< \brief (Pio Offset: 0x00A0) Output Write Enable */
-	uint32_t PIO_OWDR; /**< \brief (Pio Offset: 0x00A4) Output Write Disable */
-	uint32_t PIO_OWSR; /**< \brief (Pio Offset: 0x00A8) Output Write Status Register */
+	// Output Write Enable, offset: 0x00A0
+	uint32_t PIO_OWER;
+	// Output Write Disable, offset: 0x00A4
+	uint32_t PIO_OWDR;
+	// Output Write Status Register, offset: 0x00A8
+	uint32_t PIO_OWSR;
 	uint32_t reserved8;
-	uint32_t PIO_AIMER; /**< \brief (Pio Offset: 0x00B0) Additional Interrupt Modes Enable Register */
-	uint32_t PIO_AIMDR; /**< \brief (Pio Offset: 0x00B4) Additional Interrupt Modes Disables Register */
-	uint32_t PIO_AIMMR; /**< \brief (Pio Offset: 0x00B8) Additional Interrupt Modes Mask Register */
+	// Additional Interrupt Modes Enable Register, offset: 0x00B0
+	uint32_t PIO_AIMER;
+	// Additional Interrupt Modes Disables Register, offset: 0x00B4
+	uint32_t PIO_AIMDR;
+	// Additional Interrupt Modes Mask Register, offset: 0x00B8
+	uint32_t PIO_AIMMR;
 	uint32_t reserved9;
-	uint32_t PIO_ESR; /**< \brief (Pio Offset: 0x00C0) Edge Select Register */
-	uint32_t PIO_LSR; /**< \brief (Pio Offset: 0x00C4) Level Select Register */
-	uint32_t PIO_ELSR; /**< \brief (Pio Offset: 0x00C8) Edge/Level Status Register */
+	// Edge Select Register, offset: 0x00C0
+	uint32_t PIO_ESR;
+	// Level Select Register, offset: 0x00C4
+	uint32_t PIO_LSR;
+	// Edge/Level Status Register, offset: 0x00C8
+	uint32_t PIO_ELSR;
 	uint32_t reserved10;
-	uint32_t PIO_FELLSR; /**< \brief (Pio Offset: 0x00D0) Falling Edge/Low Level Select Register */
-	uint32_t PIO_REHLSR; /**< \brief (Pio Offset: 0x00D4) Rising Edge/ High Level Select Register */
-	uint32_t PIO_FRLHSR; /**< \brief (Pio Offset: 0x00D8) Fall/Rise - Low/High Status Register */
+	// Falling Edge/Low Level Select Register, offset: 0x00D0
+	uint32_t PIO_FELLSR;
+	// Rising Edge/ High Level Select Register, offset: 0x00D4
+	uint32_t PIO_REHLSR;
+	// Fall/Rise - Low/High Status Register, offset: 0x00D8
+	uint32_t PIO_FRLHSR;
 	uint32_t reserved11;
-	uint32_t PIO_LOCKSR; /**< \brief (Pio Offset: 0x00E0) Lock Status */
-	uint32_t PIO_WPMR; /**< \brief (Pio Offset: 0x00E4) Write Protect Mode Register */
-	uint32_t PIO_WPSR; /**< \brief (Pio Offset: 0x00E8) Write Protect Status Register */
+	// Lock Status, offset: 0x00E0
+	uint32_t PIO_LOCKSR;
+	// Write Protect Mode Register, offset: 0x00E4
+	uint32_t PIO_WPMR;
+	// Write Protect Status Register, offset: 0x00E8
+	uint32_t PIO_WPSR;
 } pio_reg_t;
 ///\endcond
 

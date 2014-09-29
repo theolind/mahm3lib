@@ -119,7 +119,7 @@ void pio_set_pins(uint32_t port, uint32_t pin_numbers, uint8_t level);
 /**
  * Set an entire port to either high or low levels
  * @param port the port to set levels on
- * @param levels set a bit to 1 to set a high level for the correspondingpin, 0 to set a low level
+ * @param levels set a bit to 1 to set a high level for the corresponding pin, 0 to set a low level
  */
 void pio_set_port(uint32_t port, uint32_t levels);
 

@@ -92,7 +92,7 @@ typedef struct pwm_channel_setting{
  * @return error (0 = FAIL, 1 = SUCCESS)
  * @pre {This function requires the PMC API.}
  */
-uint8_t	 pwm_init(void);
+uint8_t	 pwm_init_default(void);
 /**
  * Initialize the PWM peripheral with a structure containing clock_settings.
  * This function controls clkA and clkB and starts the peripheral clock.

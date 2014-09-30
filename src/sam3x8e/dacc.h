@@ -1,6 +1,6 @@
 /**
  * @file dacc.h
- * @brief Digital-to-Analog Conversion Controller
+ * @brief DACC - Digital-to-Analog Conversion Controller
  * @details This file provides basic functionality for usage of the DACC.
  * @pre First Initialize the board.
  *
@@ -16,13 +16,18 @@
 
 #include <inttypes.h>
 
-// some of these defines should be hidden from the Doxygen documentation.
+
+///@cond
 // Pointer to registers of the DACC peripheral.
 #define DACC ((dacc_reg_t *) 0x400C8000U)
+///@endcond
+
 
 #define DACC_CHANNEL_0		(0)			///<DACC Channel 0
 #define DACC_CHANNEL_1		(1)			///<DACC Channel 1
 #define DACC_CHANNEL_MAX	(1)
+
+///@cond
 
 #define DACC_MAX_RESOLUTION 4095	///<The DACC has a 12 bit resolution
 
@@ -33,6 +38,7 @@
 #define DACC_MR_STARTUP_POS		(24)
 
 #define DACC_ISR_TXRDY_MSK		(1u)
+
 
 /*
  * Mapping of DACC registers
@@ -74,6 +80,8 @@ typedef struct {
 	// Write Protect Status register, offset 0x00E8
 	uint32_t DACC_WPSR;
 } dacc_reg_t;
+
+///@endcond
 
 typedef struct dacc_settings {
 	/**

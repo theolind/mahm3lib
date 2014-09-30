@@ -1,6 +1,6 @@
 /**
  * @file adc.h
- * @brief Analog-to-Digital Converter (ADC)
+ * @brief ADC - Analog-to-Digital Converter
  * @details This class is used to read values from the ADC-channels.
  * @pre Initiate board and enable peripheral clock for ADC.
  *
@@ -19,8 +19,10 @@
 
 #include <inttypes.h>
 
+///@cond
 // pointer to registers of ADC, base address: 0x400C0000
 #define ADC ((adc_reg_t *) 0x400C0000U)
+///@endcond
 
 // Valid DACC channels
 #define ADC_CHANNEL_0 	0
@@ -42,6 +44,8 @@
 // Resolution values
 #define ADC_RESOLUTION_10_BIT	1
 #define ADC_RESOLUTION_12_BIT	0
+
+///@cond
 
 // ADC_CR: (ADC Offset: 0x0000) Control Register
 #define ADC_CR_START	(0x1u << 1)
@@ -72,6 +76,7 @@
 // ADC_ISR: (ADC Offset: 0x0030) Interrupt Status Register
 #define ADC_ISR_DRDY	(0x01 << 24)
 
+
 /*
  * Mapping of ADC registers
  * Base address: 0x400E0800
@@ -99,6 +104,8 @@ typedef struct {
 	uint32_t ADC_CDR[0];
 
 } adc_reg_t;
+
+///@endcond
 
 typedef struct {
 	/**

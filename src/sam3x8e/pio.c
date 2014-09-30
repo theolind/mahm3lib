@@ -4,8 +4,10 @@
  *  Created on: Sep 18, 2014
  *      Author: Theodor Lindquist
  *      Author: Soded Alatia
+ *      Author: Saeed Ghasemi
  */
 
+#include "global_entities.h"
 #include "pio.h"
 
 void pio_init(pio_init_param *param) {
@@ -143,4 +145,151 @@ uint32_t pio_read_port(uint32_t port) {
 
 	p_reg = (uint32_t *)(port+PIO_PDSR);
 	return *p_reg;
+}
+
+
+////////////////////////////////////////////////////////
+// Internal (not for user)
+#define PERIPH_A			100
+#define PERIPH_B			200
+////////////////////////////////////////////////////////
+// Internal (not for user)
+#define PORT_A			1000
+#define PORT_B			2000
+#define PORT_C			3000
+#define PORT_D			4000
+#define PORT_E			5000
+#define PORT_F			6000
+////////////////////////////////////////////////////////
+// External (to be used by the user)
+//Physical pin mapping
+//PIO_PIN_[package pin number]_[port and bit number]
+#define PIN_1_PB26		(PIO_PORTB + 26)
+#define PIN_101_PBC19	(PIO_PORTB + 19)
+#define PIN_99_PC17		(PIO_PORTC + 17)
+#define PIN_97_PC15		(PIO_PORTC + 15)
+#define PIN_95_PC13		(PIO_PORTC + 13)
+#define PIN_59_PC2		(PIO_PORTC + 2)
+#define PIN_116_PC4		(PIO_PORTC + 4)
+#define PIN_63_PC5		(PIO_PORTC + 5)
+#define PIN_60_PC3		(PIO_PORTC + 3)
+#define PIN_65_PC7		(PIO_PORTC + 7)
+#define PIN_67_PC9		(PIO_PORTC + 9)
+#define PIN_72_PA20		(PIO_PORTA + 20)
+#define PIN_100_PC18		(PIO_PORTC + 18)
+#define PIN_140_PB14		(PIO_PORTB + 14)
+#define PIN_64_PC6		(PIO_PORTC + 6)
+#define PIN_66_PC8		(PIO_PORTC + 8)
+#define PIN_42_PA19		(PIO_PORTA + 19)
+
+////////////////////////////////////////////////////////
+// External (to be used by the user)
+#define PIN_PWMH0_60	(PIO_PIN_35_PC3 + PERIPH_B)
+#define PIN_PWML0_59	(PIO_PIN_34_PC2 + PERIPH_B)
+
+////////////////////////////////////////////////////////
+
+/**
+ * This function will set the multiplexer inside the PIO peripheral to point
+ * one of its pins to an embedded peripheral inside the MCU. The pin will after
+ * this configuration no longer be controllable by the PIO.
+ *
+ * There is only one parameter to this function and that is the pin in question.
+ * You can't use any pin for any purpose. Every pin has a digital function (PIO)
+ * and a peripheral function. The pin mapping of this API includes all pins and
+ * their secondary function. These pins are predefined. Start by writing
+ * PIN_[peripheral][additional property and numbering]_[package pin number]
+ * example:
+ * PIN_PWMH0_60    or    PIN_PWML0_59
+ * (These refer to the board independent pin mapping)
+ *
+ * The numbering contains information within themselves that make it possible
+ * for the function to determine PIO port and how to set the multiplexer.
+ *
+ * This function will not work with any other parameter than those that are
+ * predefined!
+ *
+ * @author {Saeed Ghasemi}
+ * @param pin {This is the pin to be multiplexed to the peripheral.
+ * Start with prefix: PIN_[peripheral] to get to predefined pins.}
+ * @return
+ * @bug {not yet tested. and a work in progress. All ports will be included
+ * after initial testing.}
+ */
+uint8_t pio_conf_pin_to_peripheral(uint32_t pin){
+	uint32_t *p_reg;
+	uint32_t j = 0,
+			calc_port;
+	int8_t i;
+
+	// Figure out which port this pin belongs to:
+	for(i = 1; i < 7; i++){
+		if(pin >= 1000 * i){
+			j++;
+		}
+	}
+	calc_port = j * 1000;
+	pin -= calc_port;
+	j = 0;
+
+	switch (calc_port) {
+	case PORT_A:
+
+				break;
+	/////////////////////////////////////////////////////////////////////
+	case PORT_B:
+
+				break;
+	/////////////////////////////////////////////////////////////////////
+	case PORT_C:
+		// Figure out which peripheral this pin belongs to:
+		for(i = 1; i < 3; i++){
+			if(pin >= 100 * i){
+				j++;
+			}
+		}
+		calc_port = j * 100;
+		pin -= calc_port;
+		switch (calc_port) {
+		case PERIPH_A:
+			// The pin is now in peripheral mode (not controlled by PIO)
+			p_reg = (uint32_t *) (PIO_PORTC + PIO_PDR);
+			p_reg = (1 << pin);
+			// The pin is now set to peripheral B
+			p_reg = (uint32_t *) (PIO_PORTC + PIO_ABSR);
+			p_reg &= ~(1 << pin);
+			break;
+		case PERIPH_B:
+			// The pin is now in peripheral mode (not controlled by PIO)
+			p_reg = (uint32_t *) (PIO_PORTC + PIO_PDR);
+			p_reg = (1 << pin);
+			// The pin is now set to peripheral B
+			p_reg = (uint32_t *) (PIO_PORTC + PIO_ABSR);
+			p_reg |= (1 << pin);
+			break;
+		default:
+			break;
+		}
+				break;
+	/////////////////////////////////////////////////////////////////////
+	case PORT_D:
+
+				break;
+	/////////////////////////////////////////////////////////////////////
+	case PORT_E:
+
+				break;
+	/////////////////////////////////////////////////////////////////////
+	case PORT_F:
+
+				break;
+	/////////////////////////////////////////////////////////////////////
+	default:
+		return FAIL;
+			break;
+	}
+
+
+
+	return SUCCESS;
 }

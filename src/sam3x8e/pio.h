@@ -6,8 +6,10 @@
  *
  * @author Theodor Lindquist
  * @author Soded Alatia
+ * @author Saeed Ghasemi
  *
- * @version 0.2
+ * @version 0.3
+ * @since {The peripheral multiplexing is added since version 0.3}
  * @date 18-09-2014
  *
  * @pre First initialize the board, if you want to read inputs, you need to call digital_io_init()
@@ -38,12 +40,18 @@
 #define PIO_SODR 0x0030	//set output data register
 #define PIO_CODR 0x0034	//clear output data register
 #define PIO_ODSR 0x0038 //output data status register
+#define PIO_PDSR 0x003C	//pin data status register
 
-#define PIO_PUER 0x0064	//pull-up enable register
 #define PIO_PUDR 0x0060	//pull-up disable register
+#define PIO_PUER 0x0064	//pull-up enable register
 #define PIO_PUSR 0x0068	//pull-up status register
 
-#define PIO_PDSR 0x003C	//pin data status register
+#define PIO_ABSR 0x0070	//Peripheral AB Select Register
+
+#define PIO_OWER 0x00A0	//Output Write Enable
+#define PIO_OWDR 0x00A4	//Output Write Disable
+#define PIO_OWSR 0x00A8	//Output Write Status Register
+
 
 typedef enum {OFF, ON} pio_init_setting;
 typedef struct pio_init_param {

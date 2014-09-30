@@ -12,7 +12,7 @@
 #define UNITY_IGNORE_AND_BAIL { Unity.CurrentTestIgnored = 1; UNITY_OUTPUT_CHAR('\n'); longjmp(Unity.AbortFrame, 1); }
 /// return prematurely if we are already in failure or ignore state
 #define UNITY_SKIP_EXECUTION  { if ((Unity.CurrentTestFailed != 0) || (Unity.CurrentTestIgnored != 0)) {return;} }
-#define UNITY_PRINT_EOL       { UNITY_OUTPUT_CHAR('\n'); }
+#define UNITY_PRINT_EOL       { UNITY_OUTPUT_CHAR('\r'); UNITY_OUTPUT_CHAR('\n'); }
 
 struct _Unity Unity = { 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , { 0 } };
 
@@ -1101,12 +1101,12 @@ void UnityDefaultTestRun(UnityTestFunction Func, const char* FuncName, const int
     Unity.NumberOfTests++;
     if (TEST_PROTECT())
     {
-        setUp();
+        //setUp();
         Func();
     }
     if (TEST_PROTECT() && !(Unity.CurrentTestIgnored))
     {
-        tearDown();
+        //tearDown();
     }
     UnityConcludeTest();
 }

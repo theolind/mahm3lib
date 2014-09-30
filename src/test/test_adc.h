@@ -10,7 +10,6 @@
 
 #include "sam3x8e/adc.h"
 
-void test_adc_init(void);
 void test_adc_channel_enabled(void);
 void test_adc_channel_disabled(void);
 void test_adc_channel_status(void);

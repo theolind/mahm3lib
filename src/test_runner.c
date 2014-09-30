@@ -58,12 +58,11 @@ void run_tests(void) {
 
 	// Run ADC tests
 	Unity.TestFile = "test/test_adc.c";
-	RUN_TEST(test_adc_init, 30);
 	RUN_TEST(test_adc_channel_enabled, 30);
 	RUN_TEST(test_adc_channel_disabled, 30);
 	RUN_TEST(test_adc_channel_status, 30);
-	RUN_TEST(test_adc_set_resolution_12_bit, 30);
 	RUN_TEST(test_adc_set_resolution_10_bit, 30);
+	RUN_TEST(test_adc_set_resolution_12_bit, 30);
 
 	UnityEnd();
 }

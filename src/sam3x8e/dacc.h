@@ -39,7 +39,6 @@
 
 #define DACC_ISR_TXRDY_MSK		(1u)
 
-
 /*
  * Mapping of DACC registers
  * Base address: 0x400C8000

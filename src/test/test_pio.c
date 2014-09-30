@@ -5,10 +5,6 @@
  * 			Soded Alatia
  *
  * Date:	18 September 2014
- *
- * Comment from Mathias B:
- * The tests could verify a little bit more. Should be improved when
- * extending the API.
  */
 
 #include "unity/unity.h"

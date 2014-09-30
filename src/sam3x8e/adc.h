@@ -46,6 +46,17 @@
 #define ADC_RESOLUTION_12_BIT	0	///< ADC 12 bit resolution
 
 ///@cond
+/*
+ * Set specified bit levels in a register at specified position.
+ * The bit mask should consist of a number of high bits. The number of bits
+ * is determined of the length of bits to set.
+ * This macro function could be of common use.....
+ */
+#define _SET_BIT_LEVELS(reg, levels, bit_mask, pos)	\
+	((reg & ~((bit_mask) << (pos))) | ((levels) << (pos)))
+
+#define ADC_MR_SET_RESOLUTION(reg, bits)			\
+	_SET_BIT_LEVELS(reg, bits, 0x1u, 4)
 
 // Highest channel ID
 #define ADC_CHANNEL_MAX	(15)
@@ -78,7 +89,6 @@
 
 // ADC_ISR: (ADC Offset: 0x0030) Interrupt Status Register
 #define ADC_ISR_DRDY	(0x01 << 24)
-
 
 /*
  * Mapping of ADC registers

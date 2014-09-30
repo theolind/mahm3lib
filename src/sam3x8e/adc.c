@@ -5,6 +5,7 @@
  * 			Mattias Nilsson,
  * 			Prince Balabis,
  * 			Andreas Drotth
+ * 			Mathias Beckius
  *
  * Date: 30 September 2014
  */
@@ -34,10 +35,9 @@ void adc_reset(void) {
 }
 
 void adc_set_resolution(uint32_t resolution) {
-	if (resolution == 0) {
-		ADC->ADC_MR &= ADC_MR_RES(resolution);
-	} else if (resolution == 1) {
-		ADC->ADC_MR |= ADC_MR_RES(resolution);
+	if (resolution == ADC_RESOLUTION_10_BIT ||
+		resolution == ADC_RESOLUTION_12_BIT) {
+		ADC->ADC_MR = ADC_MR_SET_RESOLUTION(ADC->ADC_MR, resolution);
 	}
 }
 

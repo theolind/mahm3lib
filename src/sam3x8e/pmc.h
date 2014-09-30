@@ -8,7 +8,8 @@
  * @author Mattias Nilsson
  * @author Saeed Ghasemi
  * @author Mathias Beckius
- * @date 27 September 2014
+ * @author Andreas Drotth
+ * @date 30 September 2014
  */
 
 #ifndef PMC_H_

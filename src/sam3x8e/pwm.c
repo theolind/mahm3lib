@@ -140,6 +140,101 @@
 #define PWM_CMRx_POLARITY_LOW			0
 //////////////////////////////////
 
+/**
+ * Start pmc clock
+ *
+ * @return
+ */
+uint8_t pwm_init(){
+
+}
+
+/**
+ * disable channel
+ * set parameters
+ * enable channel
+ * @return
+ */
+uint8_t pwm_init_channel(){
+
+}
+
+/**
+ * Set the channel prescaler
+ * @return
+ */
+uint8_t pwm_set_channel_prescaler(){
+
+}
+
+/**
+ * Set the channel polarity
+ * @return
+ */
+uint8_t pwm_set_channel_polarity(){
+
+}
+
+/**
+ * Set the channel alignment
+ * @return
+ */
+uint8_t pwm_set_channel_alignment(){
+
+}
+
+/**
+ * turn off clock A or B
+ * @param clock_id
+ * @return
+ */
+uint8_t	 pwm_turn_of_clkx(uint8_t clock_id){
+
+}
+
+/**
+ * Set the channel duty cycle
+ * @param channel
+ * @param duty_cycle
+ * @return
+ */
+uint32_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle){
+
+}
+
+/**
+ * Shuts down the peripheral but keeps all settings
+ * @return
+ */
+uint8_t  pwm_shutdown(){
+
+}
+
+/**
+ * Reset and turns off the peripheral
+ * @return
+ */
+uint8_t  pwm_close(){
+
+}
+
+/**
+ * Resets the peripheral and disables all channels
+ * @return
+ */
+uint8_t  pwm_reset(){
+
+}
+
+/**
+ * Read what was earlier written to the channel
+ * @param channel
+ * @return
+ */
+uint32_t pwm_read(uint8_t channel){
+
+}
+
 void function(){
 	/**
 	 * enable the PWM clock in PMC
@@ -152,6 +247,8 @@ void function(){
 	 *
 	 *
 	 */
+
+
 }
 
 

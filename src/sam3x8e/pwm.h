@@ -102,15 +102,7 @@ uint8_t	 pwm_init_default(void);
  * @pre {This function requires the PMC API.}
  */
 uint8_t	 pwm_init(struct pwm_clk_setting);
-/**
- * Calculates necessary parameters automatically for the given frequency and
- * returns the achieved frequency and sets the necessary parameters for the
- * given channel.
- *
- * @return The achieved frequency
- * @pre {This function requires the PMC API.}
- */
-uint8_t	 pwm_set_channel_frequency(uint8_t channel, uint32_t frequency);
+
 /**
  * Turns off one of two clocks in PWM that are called clkA and clkB.
  *
@@ -142,12 +134,8 @@ uint8_t  pwm_close();
 uint8_t  pwm_reset();
 //Read what was earlier written to the channel
 uint32_t pwm_read(uint8_t channel);
-//Writes an output to a given channel
+//Writes an output to a given channel OBS: The same as pwm_set_channel_duty_cycle()
 uint8_t pwm_write(uint8_t channel, uint32_t duty_cycle);
-
-//Turns write protection on or off
-uint8_t  pwm_set_writ_protection(uint8_t state);
-
 
 
 

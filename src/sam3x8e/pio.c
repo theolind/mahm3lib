@@ -68,11 +68,9 @@ void pio_set_pin(pio_reg_t *port, uint32_t pin, uint32_t level) {
 
 void pio_set_pins(pio_reg_t *port, uint32_t pins, uint32_t level) {
 	if (level == 1) {
-		//set pins high
-		port->PIO_SODR |= pins;
+		port->PIO_SODR = pins;	//set pins
 	} else {
-		//set pins low
-		port->PIO_CODR &= ~pins;
+		port->PIO_CODR = pins;	//clear pins
 	}
 }
 

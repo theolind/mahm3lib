@@ -3,8 +3,9 @@
  *
  * Author:	Theodor Lindquist
  * 			Soded Alatia
+ * 			Mathias Beckius
  *
- * Date:	18 September 2014
+ * Date:	30 September 2014
  */
 
 #include "unity/unity.h"
@@ -75,14 +76,17 @@ void test_pio_read_pin(void) {
 	TEST_ASSERT_TRUE(pin);
 }
 
+/*
+ * Tests if both high and low level can be set on a "output pin".
+ */
 void test_pio_set_output(void) {
 	pio_set_pin(PIOB, 17, 1);
-	uint32_t pin = (PIOB->PIO_ODSR & (1<<17));	// Read Output data status register
+	// read Output data status register, the pin should be high.
+	TEST_ASSERT_TRUE(PIOB->PIO_ODSR & (0x1u << 17));
 
-	// Reset
 	pio_set_pin(PIOB, 17, 0);
-
-	TEST_ASSERT_TRUE(pin);
+	// read Output data status register, the pin should be low.
+	TEST_ASSERT_FALSE(PIOB->PIO_ODSR & (0x1u << 17));
 }
 
 void test_pio_conf_multiple_pins(void){

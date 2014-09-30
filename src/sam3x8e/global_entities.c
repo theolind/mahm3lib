@@ -68,10 +68,10 @@ uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value){
  *             {@link #set_section_in_register(uint32_t,uint32_t,uint32_t)}
  */
 uint8_t set_section_in_register2(uint32_t *reg, uint8_t start_bit,
-		uint8_t length, uint32_t value){
+		uint32_t length, uint32_t value){
 	uint32_t mask;
 	// Creating the mask for the section in the register
-	mask = ~(((2^length)-1)<<start_bit);
+	mask = ~(( (2^length)-1) << start_bit);
 	// Retrieving the register and modifying it
 	*reg = (mask & *reg) | (value << start_bit);
 	return SUCCESS;
@@ -80,7 +80,7 @@ uint8_t set_section_in_register2(uint32_t *reg, uint8_t start_bit,
 
 /**
  * This function return the bit-number of the first bit being high in a 32-bit
- * long value. The main porpose of this function is to find the start-bit of a
+ * long value. The main purpose of this function is to find the start-bit of a
  * given mask. The start-bit can then be used to left-bit-shift a value into
  * position relative to a section in a register.
  *
@@ -94,7 +94,7 @@ uint32_t first_bit_position_of_mask(uint32_t mask){
 		mask = (mask << 1);
 		j++;
 	}
-	return (31 - j);
+	return (31U - j);
 }
 
 
@@ -107,6 +107,6 @@ uint32_t first_bit_position_of_mask(uint32_t mask){
  */
 uint8_t get_value_of_register(uint32_t *reg, uint32_t mask){
 
-	return mask; // temp
+	return 1; // temp
 }
 

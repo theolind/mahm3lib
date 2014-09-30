@@ -127,7 +127,7 @@ uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value);
  * @return error Can either be SUCCES or FAIL
  */
 uint8_t set_section_in_register2(uint32_t *reg, uint8_t start_bit,
-		uint8_t length, uint32_t value);
+		uint32_t length, uint32_t value);
 
 /**
  * This function will return the value of a specified section in a given

@@ -25,25 +25,26 @@
 ///@endcond
 
 // Valid DACC channels
-#define ADC_CHANNEL_0 	0
-#define ADC_CHANNEL_1	1
-#define ADC_CHANNEL_2	2
-#define ADC_CHANNEL_3	3
-#define ADC_CHANNEL_4	4
-#define ADC_CHANNEL_5	5
-#define ADC_CHANNEL_6	6
-#define ADC_CHANNEL_7	7
-#define ADC_CHANNEL_8	8
-#define ADC_CHANNEL_9	9
-#define ADC_CHANNEL_10	10
-#define ADC_CHANNEL_11	11
-#define ADC_CHANNEL_12	12
-#define ADC_CHANNEL_13	13
-#define ADC_CHANNEL_14	14
+#define ADC_CHANNEL_0 	0	///< ADC Channel 0
+#define ADC_CHANNEL_1	1	///< ADC Channel 1
+#define ADC_CHANNEL_2	2	///< ADC Channel 2
+#define ADC_CHANNEL_3	3	///< ADC Channel 3
+#define ADC_CHANNEL_4	4	///< ADC Channel 4
+#define ADC_CHANNEL_5	5	///< ADC Channel 5
+#define ADC_CHANNEL_6	6	///< ADC Channel 6
+#define ADC_CHANNEL_7	7	///< ADC Channel 7
+#define ADC_CHANNEL_8	8	///< ADC Channel 8
+#define ADC_CHANNEL_9	9	///< ADC Channel 9
+#define ADC_CHANNEL_10	10	///< ADC Channel 10
+#define ADC_CHANNEL_11	11	///< ADC Channel 11
+#define ADC_CHANNEL_12	12	///< ADC Channel 12
+#define ADC_CHANNEL_13	13	///< ADC Channel 13
+#define ADC_CHANNEL_14	14	///< ADC Channel 14
+#define ADC_CHANNEL_15	15	///< ADC Channel 15
 
 // Resolution values
-#define ADC_RESOLUTION_10_BIT	1
-#define ADC_RESOLUTION_12_BIT	0
+#define ADC_RESOLUTION_10_BIT	1	///< ADC 10 bit resolution
+#define ADC_RESOLUTION_12_BIT	0	///< ADC 12 bit resolution
 
 ///@cond
 
@@ -139,6 +140,9 @@ typedef struct {
 
 ///@endcond
 
+/**
+ * Input parameters when initializing the ADC.
+ */
 typedef struct {
 	/**
 	 * Set the startup time of the ADC.

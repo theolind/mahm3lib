@@ -83,6 +83,9 @@ typedef struct {
 
 ///@endcond
 
+/**
+ * Input parameters when initializing the DAC Controller.
+ */
 typedef struct dacc_settings {
 	/**
 	 * 0: Half-Word transfer

@@ -76,7 +76,7 @@ typedef struct {
 	// Fault Output Clear Register, offset 0x0078
 	uint32_t PMC_FOCR;
 	// reserved, offset 0x007C-0x00E0
-	uint32_t reserved6[30];
+	uint32_t reserved6[26];
 	// Write Protect Mode Register, offset 0x00E4
 	uint32_t PMC_WPMR;
 	// Write Protect Status Register, offset 0x00E8

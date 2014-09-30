@@ -146,6 +146,29 @@ uint8_t pio_read_pin(uint32_t port, uint8_t pin_number);
  */
 uint32_t pio_read_port(uint32_t port);
 
-
+/**
+ * This function will set the multiplexer inside the PIO peripheral to point
+ * one of its pins to an embedded peripheral inside the MCU. The pin will after
+ * this configuration no longer be controllable by the PIO.
+ *
+ * There is only one parameter to this function and that is the pin in question.
+ * You can't use any pin for every purpose. Every pin has a digital function (PIO)
+ * and a peripheral function. The pin mapping of this API includes all pins and
+ * their secondary function. These pins are predefined. Start by writing
+ * PIN_[peripheral][additional property and numbering]_[package pin number]
+ * example:
+ * PIN_PWMH0_60    or    PIN_PWML0_59
+ * (These refer to the board independent pin mapping and will be available when
+ * the API is included.)
+ *
+ * @author {Saeed Ghasemi}
+ * @param port {This is the pio port of the pin to be multiplexed.}
+ * @param pin_number {This is the pin number in the port register.
+ * Start with prefix: PIN_[peripheral] to get to predefined pins.}
+ * @return error (1  = SUCCESS, 0 = FAIL)
+ * @bug {not yet tested. All ports will be included after initial testing.}
+ */
+uint8_t pio_conf_pin_to_peripheral(uint32_t port,
+		uint32_t periph, uint32_t pin_number);
 
 #endif /* PIO_H_ */

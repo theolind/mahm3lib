@@ -81,22 +81,54 @@ typedef struct {
 	uint32_t ADC_CR;
 	// Mode Register, offset 0x0004
 	uint32_t ADC_MR;
-	uint32_t unused1[2];
+	// Channel Sequence Register 1, offset 0x0008
+	uint32_t ADC_SEQR1;
+	// Channel Sequence Register 2, offset 0x00C
+	uint32_t ADC_SEQR2;
 	// Channel Enable Register, offset 0x0010
 	uint32_t ADC_CHER;
 	// Channel Disable Register, offset 0x0014
 	uint32_t ADC_CHDR;
 	// Channel Status Register, offset 0x0018
 	uint32_t ADC_CHSR;
-	uint32_t reserved[1];
+	// Reserved, offset 0x001C
+	uint32_t reserved1[1];
 	// Last Converted Data Register, offset 0x0020
 	uint32_t ADC_LCDR;
-	uint32_t unused2[3];
+	// Interrupt Enable Register, offset 0x0024
+	uint32_t ADC_IER;
+	// Interrupt Disable Register, offset 0x0028
+	uint32_t ADC_IDR;
+	// Interrupt Mask Register, offset 0x002C
+	uint32_t ADC_IMR;
 	// Interrupt Status Register, offset 0x0030
 	uint32_t ADC_ISR;
-	uint32_t unused3[7];
-	// Channel Data Register, offset 0x0050
-	uint32_t ADC_CDR[0];
+	// Reserved, offset 0x0034 and 0x0038
+	uint32_t reserved2[2];
+	// Overrun Status Register, offset 0x003C
+	uint32_t ADC_OVER;
+	// Extended Mode Register, offset 0x0040
+	uint32_t ADC_EMR;
+	// Compare Window Register, offset 0x0044
+	uint32_t ADC_CWR;
+	// Channel Gain Register, offset 0x0048
+	uint32_t ADC_CGR;
+	// Channel Offset Register, offset 0x004C
+	uint32_t ADC_COR;
+	// Channel Data Register, offset 0x0050 to 0x008C
+	uint32_t ADC_CDR[16];
+	// Reserved, offset 0x90
+	uint32_t reserved3;
+	// Analog Control Register, offset 0x0094
+	uint32_t ADC_ACR;
+	// Reserved, offset 0x0098 to 0x00E0
+	uint32_t reserved4[19];
+	// Write Protect Mode Register, offset 0x00E4
+	uint32_t ADC_WPMR;
+	// Write Protect Status Register, offset 0x00E8
+	uint32_t ADC_WPSR;
+	// Reserved, offset 0x00EC to 0x00FC
+	uint32_t reserved5[5];
 
 } adc_reg_t;
 
@@ -120,7 +152,7 @@ typedef struct {
  * @param adc_settings Pointer to settings for the initlization (startuptime, precaler).
  * @return Returns error code, 0 if everything went okay, 1 means illegal values.
  */
-uint8_t adc_init(adc_settings_t * adc_settings);
+void adc_init(adc_settings_t * adc_settings);
 
 /**
  * Starts the ADC.

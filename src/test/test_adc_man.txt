@@ -1,0 +1,55 @@
+-----Manual tests for the ADC API-----
+
+DON'T FORGET TO INCLUDE:
+#include "sam3x8e/adc.h"
+#include "sam3x8e/pmc.h"
+
+
+
+	pmc_enable_peripheral_clock(37);
+
+	adc_settings_t adc_settings = {
+		.startup_time = 0,
+		.prescaler = 0
+	};
+	adc_init(&adc_settings);
+
+	uint32_t channel = ADC_CHANNEL_0;
+	adc_enable_channel(channel);
+	adc_start();
+
+	while(1){
+		uint16_t data;
+
+		while(!(ADC->ADC_ISR & ADC_ISR_DRDY));
+		data = (uint16_t) adc_read_channel(channel);
+
+		// Print value through serial communication
+		uint16_t first, second, third, fourth;
+
+		first = (data - (data % 1000)) / 1000;
+		data = (data - first * 1000);
+		second = (data - (data % 100)) / 100;
+		data = (data - second * 100);
+		third = (data - (data % 10)) / 10;
+		data = (data - second * 10);
+		fourth = data % 10;
+
+		char dataprint[4];
+		dataprint[0] = (char) first;
+		dataprint[1] = (char) second;
+		dataprint[2] = (char) third;
+		dataprint[3] = (char) fourth;
+
+		for (int i = 0; i < 4; i++) {
+			UNITY_OUTPUT_CHAR(dataprint[i] + 48);
+		}
+
+		UNITY_OUTPUT_CHAR('\r');
+		UNITY_OUTPUT_CHAR('\n');
+
+		// Delay
+		for (int i = 0; i < 10000000; i++);
+
+		adc_start();
+	}

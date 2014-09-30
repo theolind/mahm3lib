@@ -11,25 +11,18 @@
 
 #include "adc.h"
 
-uint8_t adc_init(adc_settings_t * adc_settings) {
-	if (adc_settings->prescaler > 255 || adc_settings->startup_time > 15) {
-		return 1;
-	}
-	else {
-		// Software reset
-		adc_reset();
+void adc_init(adc_settings_t * adc_settings) {
+	// Software reset
+	adc_reset();
 
-		// Reset Mode Register
-		ADC->ADC_MR = ADC_MR_RESET;
+	// Reset Mode Register
+	ADC->ADC_MR = ADC_MR_RESET;
 
-		// Configure prescaler
-		ADC->ADC_MR |= (adc_settings->prescaler << ADC_MR_PRES_POS);
+	// Configure prescaler
+	ADC->ADC_MR |= (adc_settings->prescaler << ADC_MR_PRES_POS);
 
-		// Configure startup time
-		ADC->ADC_MR |= adc_settings->startup_time;
-
-		return 0;
-	}
+	// Configure startup time
+	ADC->ADC_MR |= adc_settings->startup_time;
 }
 
 void adc_start(void) {
@@ -41,8 +34,6 @@ void adc_reset(void) {
 }
 
 void adc_set_resolution(uint32_t resolution) {
-	//ADC->ADC_MR |= ADC_MR_RES(resolution);
-
 	if(resolution == 0){
 		ADC->ADC_MR &= ADC_MR_RES(resolution);
 	}

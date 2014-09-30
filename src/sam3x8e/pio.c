@@ -212,13 +212,13 @@ uint8_t pio_conf_pin_to_peripheral(uint32_t port,
 
 	// The pin is now in peripheral mode (not controlled by PIO)
 	p_reg = (uint32_t *) (port + PIO_PDR);
-	*p_reg = (1 << pin_number);
+	*p_reg = (0x1U << pin_number);
 	// The pin is now set to peripheral B
 	p_reg = (uint32_t *) (port + PIO_ABSR);
 	if(periph){
-		*p_reg |= (1 << pin_number);
+		*p_reg |= (0x1U << pin_number);
 	}else{
-		*p_reg &= ~(1 << pin_number);
+		*p_reg &= ~(0x1U << pin_number);
 	}
 	return SUCCESS;
 }

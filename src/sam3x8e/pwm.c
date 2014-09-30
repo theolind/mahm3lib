@@ -101,17 +101,17 @@
 #define PWM_CLK_PRES_1024				(0b1010)
 
 // Parameters for easy selecting of clocks within each channel
-#define PWM_CMRx_SELECTOR_MCK/1			(0b0000)
-#define PWM_CMRx_SELECTOR_MCK/2			(0b0001)
-#define PWM_CMRx_SELECTOR_MCK/4			(0b0010)
-#define PWM_CMRx_SELECTOR_MCK/8			(0b0011)
-#define PWM_CMRx_SELECTOR_MCK/16		(0b0100)
-#define PWM_CMRx_SELECTOR_MCK/32		(0b0101)
-#define PWM_CMRx_SELECTOR_MCK/64		(0b0110)
-#define PWM_CMRx_SELECTOR_MCK/128		(0b0111)
-#define PWM_CMRx_SELECTOR_MCK/256		(0b1000)
-#define PWM_CMRx_SELECTOR_MCK/512		(0b1001)
-#define PWM_CMRx_SELECTOR_MCK/1024		(0b1010)
+#define PWM_CMRx_SELECTOR_DIV_1			(0b0000)
+#define PWM_CMRx_SELECTOR_DIV_2			(0b0001)
+#define PWM_CMRx_SELECTOR_DIV_4			(0b0010)
+#define PWM_CMRx_SELECTOR_DIV_8			(0b0011)
+#define PWM_CMRx_SELECTOR_DIV_16		(0b0100)
+#define PWM_CMRx_SELECTOR_DIV_32		(0b0101)
+#define PWM_CMRx_SELECTOR_DIV_64		(0b0110)
+#define PWM_CMRx_SELECTOR_DIV_128		(0b0111)
+#define PWM_CMRx_SELECTOR_DIV_256		(0b1000)
+#define PWM_CMRx_SELECTOR_DIV_512		(0b1001)
+#define PWM_CMRx_SELECTOR_DIV_1024		(0b1010)
 #define PWM_CMRx_SELECTOR_CLOCK_A		(0b1011)
 #define PWM_CMRx_SELECTOR_CLOCK_B		(0b1111)
 
@@ -140,7 +140,7 @@
 #define PWM_CMRx_POLARITY_LOW			0
 //////////////////////////////////
 
-void function(){
+void function(void){
 	/**
 	 * enable the PWM clock in PMC
 	 * See status for channel

@@ -43,7 +43,7 @@
 typedef struct pwm_clk_setting{
 	uint32_t clkA_prescaler;
 	uint32_t clkB_prescaler;
-};
+}pwm_clk_setting;
 
 /**
  * @def
@@ -76,7 +76,7 @@ typedef struct pwm_channel_setting{
 	uint32_t prescaler;
 	uint32_t high_polarity_pin;
 	uint32_t low_polarity_pin;
-};
+}pwm_channel_setting;
 
 
 #define PWM_CLK_ID_CLKA			0
@@ -135,11 +135,11 @@ uint8_t  pwm_set_channel_clocksource(uint32_t channel, uint32_t pwm_clock_source
 uint8_t  pwm_set_channel_alignment(uint32_t channel, uint32_t PWM_ALIGN_LEFT_CENTER);
 
 //Shuts down the peripheral but keeps all settings
-uint8_t  pwm_shutdown();
+uint8_t  pwm_shutdown(void);
 //Reset and turns off the peripheral
-uint8_t  pwm_close();
+uint8_t  pwm_close(void);
 //Resets the peripheral and disables all channels
-uint8_t  pwm_reset();
+uint8_t  pwm_reset(void);
 //Read what was earlier written to the channel
 uint32_t pwm_read(uint8_t channel);
 //Writes an output to a given channel
@@ -153,5 +153,7 @@ uint8_t  pwm_set_writ_protection(uint8_t state);
 
 //////////////////////////////////////////////////////////////////////////
 
+//test functions (to be cleaned later)
+void function(void);
 
 #endif /* PWM_H_ */

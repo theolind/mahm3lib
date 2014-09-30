@@ -1,6 +1,6 @@
 /**
  * @file dacc.h
- * @brief Digital-to-Analog Conversion Controller
+ * @brief DACC - Digital-to-Analog Conversion Controller
  * @details This file provides basic functionality for usage of the DACC.
  * @pre First Initialize the board.
  *

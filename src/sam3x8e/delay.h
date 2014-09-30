@@ -1,6 +1,6 @@
 /**
  * @file delay.h
- * @brief Software delay API
+ * @brief Delay - Software delay API
  * @details The API contains two functions for delaying. One for microseconds
  * and one for milliseconds.
  * This library introduces a software implementation of two delay functions

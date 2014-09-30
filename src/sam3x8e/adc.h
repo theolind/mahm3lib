@@ -1,6 +1,6 @@
 /**
  * @file adc.h
- * @brief Analog-to-Digital Converter (ADC)
+ * @brief ADC - Analog-to-Digital Converter
  * @details This class is used to read values from the ADC-channels.
  * @pre Initiate board and enable peripheral clock for ADC.
  *

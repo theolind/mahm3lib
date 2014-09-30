@@ -1,6 +1,6 @@
 /**
  * @file delay.h
- * @brief Software delay API
+ * @brief Delay - Software delay API
  * @details The API contains two functions for delaying. One for microseconds
  * and one for milliseconds.
  * This library introduces a software implementation of two delay functions
@@ -12,6 +12,8 @@
  * one for milliseconds as shown below. Both functions must be invoked
  * with integers or float without any fractional part.
  *
+ * @pre Initialize the board
+ *
  * Word of caution: There are disadvantages and shortcomings to a software
  * delay. Such delay use CPU-time and make the code inefficient, at the
  * same time interrupts will interfere with the length of the delay and
@@ -21,7 +23,6 @@
  * @author Saeed Ghasemi
  * @date 28 September 2014
  *
- * @pre Initialize the board
  */
 
 

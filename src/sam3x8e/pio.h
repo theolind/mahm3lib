@@ -3,16 +3,17 @@
 * @brief PIO - Parallel input/output controller
 * @details The functions in this file controls the digital input and output of the processor
 *
+* @pre Initialize the system clock.
+* @pre If want to use all of the PIO peripheral features, then you must enable
+* the Peripheral Clock for the corresponding port (PIOA-PIOF). See data sheet
+* for more details.
+*
 * @author Theodor Lindquist
 * @author Soded Alatia
 * @author Felix Ruponen
 *
 * @date 29 September 2014
 *
-* @pre Initialize the system clock.
-* @pre If want to use all of the PIO peripheral features, then you must enable
-* the Peripheral Clock for the corresponding port (PIOA-PIOF). See data sheet
-* for more details.
 */
 
 #ifndef PIO_H_

@@ -1,6 +1,6 @@
 /**
 * @file wdt.h
-* @brief With the Watchdog API you can configure the Watchdog Timer
+* @brief WDT - With the Watchdog API you can configure the Watchdog Timer
 * @details Important! The API is currently very limited. There's only
 * @details a function for disabling the Watchdog at the moment.
 *

@@ -10,8 +10,7 @@
  * @author Mattias Nilsson
  * @author Prince Balabis
  * @author Andreas Drotth
- * @date 28 September 2014
- *
+ * @date 30 September 2014
  */
 
 #ifndef ADC_H_
@@ -47,6 +46,9 @@
 #define ADC_RESOLUTION_12_BIT	0	///< ADC 12 bit resolution
 
 ///@cond
+
+// Highest channel ID
+#define ADC_CHANNEL_MAX	(15)
 
 // ADC_CR: (ADC Offset: 0x0000) Control Register
 #define ADC_CR_START	(0x1u << 1)
@@ -161,41 +163,37 @@ typedef struct {
 /**
  * Initializes the ADC.
  * @param adc_settings Pointer to settings for the initlization (startuptime, precaler).
- * @return Returns error code, 0 if everything went okay, 1 means illegal values.
  */
 void adc_init(adc_settings_t * adc_settings);
 
 /**
  * Starts the ADC.
- * @return Return 1 if started.
  */
 void adc_start(void);
 
 /**
  * Resets the ADC.
- * @return Return 1 if stopped.
  */
 void adc_reset(void);
 
 /**
  * Sets ADC resolution to 10 bits or 12 bits. 12 bits is default after initiation.
  * @param resolution The resolution of the ADC.
- * @return Returns 1 if correctly set or 0 if not correct set (10 or 12-bit not used as input).
  */
 void adc_set_resolution(uint32_t resolution);
 
 /**
- * Enables a specific channel. Channel 0 - 15 is available.
+ * Enables a specific channel.
  * Channel 15 is used for temperature-reader.
  * @param channel The channel (0-15) that is to be enabled.
- * @return If not in the range 0-15 or channel does not become enabled, 0 is returned. Otherwise 1.
+ * Nothing will happen if the specified channel is out of bounds.
  */
 void adc_enable_channel(uint32_t channel);
 
 /**
- * Disables a specific channel. Channel 0-15 is available.
+ * Disables a specific channel.
  * @param channel The channel (0-15) that is to be disabled.
- * @return If not in the range 0-15 or channel does not become disabled, 0 is returned. Otherwise 1.
+ * Nothing will happen if the specified channel is out of bounds.
  */
 void adc_disable_channel(uint32_t channel);
 
@@ -203,6 +201,7 @@ void adc_disable_channel(uint32_t channel);
  * Reads the status for a specific channel. Channel 0-15 is available for readout.
  * @param channel The channel (0-15) that the status is asked for.
  * @return If the channel is enabled, returns 1. Otherwise returns 0.
+ * @return 0 is also returned if the specified channel is out of bounds.
  */
 uint32_t adc_channel_enabled(uint32_t channel);
 

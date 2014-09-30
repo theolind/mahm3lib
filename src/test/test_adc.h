@@ -5,7 +5,7 @@
  *
  * @author Prince Balabis
  * @author Andreas Drotth
- * @date 28 September 2014
+ * @date 30 September 2014
  */
 
 #include "sam3x8e/adc.h"

@@ -2,7 +2,7 @@
  * Analog-to-Digital Converter (ADC) unit tests
  *
  * Author: Prince Balabis, Andreas Drotth
- * Date: 28 September 2014
+ * Date: 30 September 2014
  */
 
 #include "unity/unity.h"

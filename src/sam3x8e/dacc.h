@@ -110,7 +110,6 @@ typedef struct dacc_settings {
  * Initiates the DACC with provided settings.
  * @param settings Settings for DACC mode register,
  * should be a struct of type dacc_settings_t.
- * @return Return 0 if settings contain illegal values. Otherwise return 1.
  */
 void dacc_init(const dacc_settings_t *settings);
 

@@ -21,6 +21,7 @@
  * This is however not entirely avoided using hardware timers either.
  *
  * @author Saeed Ghasemi
+ * @author Andreas Drotth
  * @date 28 September 2014
  *
  */

@@ -1,7 +1,7 @@
 /*
  * delay.c
  *
- * Author: Saeed Ghasemi
+ * Author: Saeed Ghasemi, Andreas Drotth
  * Date: 28 September 2014
  */
 

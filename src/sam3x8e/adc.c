@@ -6,7 +6,7 @@
  * 			Prince Balabis,
  * 			Andreas Drotth
  *
- * Date: 28 September 2014
+ * Date: 30 September 2014
  */
 
 #include "adc.h"
@@ -34,24 +34,31 @@ void adc_reset(void) {
 }
 
 void adc_set_resolution(uint32_t resolution) {
-	if(resolution == 0){
+	if (resolution == 0) {
 		ADC->ADC_MR &= ADC_MR_RES(resolution);
-	}
-	else if (resolution == 1){
+	} else if (resolution == 1) {
 		ADC->ADC_MR |= ADC_MR_RES(resolution);
 	}
 }
 
 void adc_enable_channel(uint32_t channel) {
-	ADC->ADC_CHER = (0x1u << channel);
+	if (channel <= ADC_CHANNEL_MAX) {
+		ADC->ADC_CHER = (0x1u << channel);
+	}
 }
 
 void adc_disable_channel(uint32_t channel) {
-	ADC->ADC_CHDR = (0x1u << channel);
+	if (channel <= ADC_CHANNEL_MAX) {
+		ADC->ADC_CHDR = (0x1u << channel);
+	}
 }
 
 uint32_t adc_channel_enabled(uint32_t channel) {
-	return (ADC->ADC_CHSR & (0x1u << channel));
+	if (channel <= ADC_CHANNEL_MAX) {
+		return (ADC->ADC_CHSR & (0x1u << channel));
+	} else {
+		return 0;
+	}
 }
 
 uint32_t adc_read_channel(uint32_t channel) {

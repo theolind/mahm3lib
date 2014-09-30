@@ -35,10 +35,13 @@ void run_tests(void) {
 
 	// Run PIO tests
 	Unity.TestFile = "test/test_pio.c";
+	RUN_TEST(test_pio_enable_pin, 10);
+	RUN_TEST(test_pio_disable_pin, 10);
 	RUN_TEST(test_pio_pullup, 10);
 	RUN_TEST(test_pio_output, 10);
 	RUN_TEST(test_pio_read_pin, 10);
 	RUN_TEST(test_pio_set_output, 10);
+	RUN_TEST(test_pio_conf_multiple_pins, 10);
 	HORIZONTAL_LINE_BREAK();
 
 	// Run DACC tests

@@ -17,7 +17,7 @@ int main(void) {
 	// basic initialization of hardware and UART communication.
 	unity_hw_setup();
 	// run unit tests
-	//run_tests();
+	run_tests();
 
 	const dacc_settings_t dacc_settings = {
 		.speed_mode = 0,

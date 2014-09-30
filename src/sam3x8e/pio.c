@@ -201,7 +201,6 @@ uint32_t pio_read_port(uint32_t port) {
  *
  * @author {Saeed Ghasemi}
  * @param port {This is the pio port of the pin to be multiplexed.}
- *
  * @param pin_number {This is the pin number in the port register.
  * Start with prefix: PIN_[peripheral] to get to predefined pins.}
  * @return error (1  = SUCCESS, 0 = FAIL)

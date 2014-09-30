@@ -158,22 +158,17 @@ uint32_t pio_read_port(uint32_t port);
  * PIN_[peripheral][additional property and numbering]_[package pin number]
  * example:
  * PIN_PWMH0_60    or    PIN_PWML0_59
- * (These refer to the board independent pin mapping)
- *
- * The numbering contains information within themselves that make it possible
- * for the function to determine PIO port and how to set the multiplexer for the
- * indicated peripheral.
- *
- * This function will not work with any other parameter than those that are
- * predefined!
+ * (These refer to the board independent pin mapping and will be available when
+ * the API is included.)
  *
  * @author {Saeed Ghasemi}
- * @param pin {This is the pin to be multiplexed to the peripheral.
+ * @param port {This is the pio port of the pin to be multiplexed.}
+ * @param pin_number {This is the pin number in the port register.
  * Start with prefix: PIN_[peripheral] to get to predefined pins.}
- * @return
- * @bug {not yet tested. and a work in progress. All ports will be included
- * after initial testing.}
+ * @return error (1  = SUCCESS, 0 = FAIL)
+ * @bug {not yet tested. All ports will be included after initial testing.}
  */
-uint8_t pio_conf_pin_to_peripheral(uint32_t pin);
+uint8_t pio_conf_pin_to_peripheral(uint32_t port,
+		uint32_t periph, uint32_t pin_number);
 
 #endif /* PIO_H_ */

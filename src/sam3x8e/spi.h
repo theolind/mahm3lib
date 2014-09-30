@@ -65,10 +65,18 @@ void spi_select_slave(spi_reg_t *spi, uint8_t slave, uint8_t baud);
 //since spi cannot transmit without receiving, it makes sense to combine
 //transmission and reception in the same function
 //alternate names: transact, execute, step, work, network, act, operate, perform, do
-uint8_t spi_write_char(spi_reg_t *spi, uint8_t data);
+void spi_write_char(spi_reg_t *spi, uint8_t data);
+uint8_t spi_read_char(spi_reg_t *spi);
 
 //spi also seems to be able to send and receive 16 bit data chunks
 uint16_t spi_write_16_bits(spi_reg_t *spi, uint16_t data);
+uint16_t spi_read_16_bits(spi_reg_t *spi);
+
+//we want to be able to test if we have sent our data
+uint8_t spi_write_ready(spi_reg_t *spi);
+
+//we want to test if we have any data received but not read yet
+uint8_t spi_read_ready(spi_reg_t *spi);
 
 
 

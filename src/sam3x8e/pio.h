@@ -91,7 +91,7 @@ typedef struct pio_init_param {
 #define PIN_PIO_101_PBC19		(19)
 #define PIN_PIO_116_PC4			(4)
 #define PIN_PIO_140_PB14		(14)
-
+// These should be extended (These are MCU pin mappings and not arduino pin mappings)
 ////////////////////////////////////////////////////////
 
 /**

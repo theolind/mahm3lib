@@ -1,23 +1,21 @@
-/**
- * @file
- * @brief Test file for the DACC functions.
- * @details This file provides tests for the DACC using Unity framework.
- * @author Stefan Angelov
+/*
+ * DACC unit tests
  *
- * @version 0.1
- * @date 2014-09-19
- * @pre
+ * Author:	Mathias Beckius
+ *
+ * Date:	29 September 2014
  */
 
 #ifndef TEST_DACC_H_
 #define TEST_DACC_H_
 
-void test_dacc_init(void);
-void test_dacc_channel_0_enable(void);
-void test_dacc_channel_1_enable(void);
-void test_dacc_channel_0_write(void);
-void test_dacc_channel_1_write(void);
-void test_dacc_channel_0_disable(void);
-void test_dacc_channel_1_disable(void);
+void test_dacc_channel_0_disabled1(void);
+void test_dacc_channel_1_disabled1(void);
+void test_dacc_enable_channel_0(void);
+void test_dacc_enable_channel_1(void);
+void test_dacc_disable_channel_0(void);
+void test_dacc_disable_channel_1(void);
+void test_dacc_channel_0_disabled2(void);
+void test_dacc_channel_1_disabled2(void);
 
 #endif

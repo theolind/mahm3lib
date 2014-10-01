@@ -9,7 +9,7 @@
 
 #include <stdio.h>
 #include <setjmp.h>
-#include "sam3x8e/uart.h"		//modified by Beckius 2014-09-07
+#include "sam3x8e/uart.h"		// modified by Mathias Beckius 2014-09-07
 
 // Unity attempts to determine sizeof(various types)
 // based on UINT_MAX, ULONG_MAX, etc. These are typically
@@ -238,12 +238,14 @@ typedef UNITY_DOUBLE_TYPE _UD;
 //-------------------------------------------------------
 
 #ifndef UNITY_OUTPUT_CHAR
-//Default to using putchar, which is defined in stdio.h above 
-//putchar(a)
-//removed 'putchar(a)' - modified by Beckius 2014-09-07
-#define UNITY_OUTPUT_CHAR(a) {			\
+/*
+ * Originally this macro function was using 'putchar()',
+ * which is defined in stdio.h
+ * Modified by Mathias Beckius 2014-09-28
+ */
+#define UNITY_OUTPUT_CHAR(a) {	\
 	while (!uart_tx_ready());	\
-	uart_write_chr(a);					\
+	uart_write_char(a);			\
 }
 	
 #else

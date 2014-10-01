@@ -1,30 +1,18 @@
-/**
- * @brief Power Managment Test Class (PMC)
- * @details This class is used to test the PMC using Unity
- * @author Felix Ruponen
- * @author Mattias Nilsson
- * @author Saeed Ghasemi
- * @version 0.5
- * @date 17 sep 2014
+/*
+ * PMC unit tests
+ *
+ * Author:	Mathias Beckius
+ *
+ * Date:	29 September 2014
  */
 
 #ifndef TEST_PMC_H_
 #define TEST_PMC_H_
 
+void test_pmc_PIOB_disabled1(void);
+void test_pmc_enable_PIOB(void);
+void test_pmc_PIOB_enabled(void);
+void test_pmc_disable_PIOB(void);
+void test_pmc_PIOB_disabled2(void);
 
-
-void test_pmc_start_peripheral_clock_when_successful(void);
-void test_pmc_status_peripheral_clock_when_inactive(void);
-void test_pmc_status_peripheral_clock_when_active(void);
-void test_pmc_stop_peripheral_clock_when_successful(void);
-
-void test_pmc_set_master_clock_when_successful(void);
-
-void test_pmc_setup(void);
-void test_pmc_tear_down(void);
-void test_pmc_reset(void);
-void test_pmc(void);
-void test_pmc_status_peripheral_clock_when_inactive(void);
-void test_pmc_status_peripheral_clock_when_active(void);
-
-#endif /* TEST_PMC_H_ */
+#endif

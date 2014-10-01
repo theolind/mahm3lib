@@ -118,7 +118,7 @@
 #define PWM_CMRx_DTHI_MASK				(1 << 17)
 #define PWM_CMRx_DTLI_MASK				(1 << 18)
 
-#define PWM_CDTYx_CDTY__MASK			(0x0000FFFF)
+#define PWM_CDTYx_CDTY_MASK				(0x0000FFFF)
 #define PWM_CDTYUPDx_CDTYUPD_MASK		(0x0000FFFF)
 
 #define PWM_CPRDx_CPRD_MASK				(0x0000FFFF)
@@ -181,29 +181,79 @@
 //////////////////////////////////
 
 /**
- * Start pmc clock
+ * Initialize the PWM peripheral with minimum requirements.
  *
  * @return
  */
-uint8_t pwm_init_default() {
+uint8_t pwm_init_default(){
 	pwm_reset();
 	pmc_start_peripheral_clock(ID_PWM);
 	return SUCCESS;
 }
 
 /**
- * disable channel
- * set parameters
- * enable channel
+ * Initialize the PWM peripheral and set the prescalers and divers of clock A
+ * or B. This function will also start the peripheral clock in the
+ * Power Management Controller (PMC).
+ *
+ * @param channel {The channel to initialize using a channel-instance of type
+ * pwm_channel_setting}
  * @return
  */
-uint8_t pwm_init_channel(struct pwm_channel_setting instance) {
+uint8_t pwm_init_channel(struct pwm_channel_setting channel) {
+	pwm_reset();
+	pmc_start_peripheral_clock(ID_PWM);
+	/**
+	 * disable channel
+	 * set parameters
+	 * enable channel
+	 */
+	return SUCCESS;
+}
 
+/**
+ * This functino will enable the selected channel, identified with predefined
+ * values, like: PWM_CHANNEL_x_MASK
+ *
+ * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
+ * @return error (1 = SUCCESS and 0 = FAIL)
+ */
+uint8_t pwm_channel_enable(uint32_t channel){
+	switch (channel) {
+		case PWM_CHANNEL_0_MASK:
+			set_section_in_register(&PWM_ENA, PWM_CHANNEL_0_MASK, HIGH);
+			break;
+		case PWM_CHANNEL_1_MASK:
+			set_section_in_register(&PWM_ENA, PWM_CHANNEL_1_MASK, HIGH);
+			break;
+		case PWM_CHANNEL_2_MASK:
+			set_section_in_register(&PWM_ENA, PWM_CHANNEL_2_MASK, HIGH);
+			break;
+		case PWM_CHANNEL_3_MASK:
+			set_section_in_register(&PWM_ENA, PWM_CHANNEL_3_MASK, HIGH);
+			break;
+		case PWM_CHANNEL_4_MASK:
+			set_section_in_register(&PWM_ENA, PWM_CHANNEL_4_MASK, HIGH);
+			break;
+		case PWM_CHANNEL_5_MASK:
+			set_section_in_register(&PWM_ENA, PWM_CHANNEL_5_MASK, HIGH);
+			break;
+		case PWM_CHANNEL_6_MASK:
+			set_section_in_register(&PWM_ENA, PWM_CHANNEL_6_MASK, HIGH);
+			break;
+		case PWM_CHANNEL_7_MASK:
+			set_section_in_register(&PWM_ENA, PWM_CHANNEL_7_MASK, HIGH);
+			break;
+		default:
+			return FAIL;
+			break;
+		}
 	return SUCCESS;
 }
 
 /**
  * Set the channel prescaler
+ * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
  * @return
  */
 uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
@@ -243,6 +293,8 @@ uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
 
 /**
  * Set the channel polarity
+ *
+ * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
  * @return
  */
 uint8_t pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity) {
@@ -281,6 +333,8 @@ uint8_t pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity) {
 
 /**
  * Set the channel alignment
+ *
+ * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
  * @return
  */
 uint8_t pwm_set_channel_alignment(uint32_t channel, uint32_t pwm_alignment) {
@@ -320,7 +374,6 @@ uint8_t pwm_set_channel_alignment(uint32_t channel, uint32_t pwm_alignment) {
 /**
  * Turns off clock A or B.
  *
- *
  * @param clock_id {Must be 0 for clkA and 1 for clkB}
  * @return
  */
@@ -340,7 +393,8 @@ uint8_t pwm_turn_of_clkx(uint8_t clock_id) {
 
 /**
  * Set the channel duty cycle
- * @param channel
+ *
+ * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
  * @param duty_cycle
  * @return
  */
@@ -387,6 +441,20 @@ uint32_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
 }
 
 /**
+ * Writes an output to a given channel
+ * OBS: The same as pwm_set_channel_duty_cycle()
+ *
+ * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
+ * @param duty_cycle
+ * @return
+ */
+uint8_t pwm_write(uint8_t channel, uint32_t duty_cycle){
+
+	return 1;
+}
+
+
+/**
  * Shuts down the peripheral but keeps all settings
  * @return
  */
@@ -422,11 +490,42 @@ uint8_t pwm_close() {
 
 /**
  * Read what was earlier written to the channel
- * @param channel The channel mask, ex. PWM_CHANNEL_2_MASK
- * @return
+ *
+ * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
+ * @return {Previously set duty cycle (if 0 is received then it could mean
+ * error)}
  */
-uint32_t pwm_read(uint8_t channel) {
-	//&PWM_CMR1;
+uint32_t pwm_read(uint8_t channel){
+	uint32_t *reg;
+		switch (channel) {
+		case PWM_CHANNEL_0_MASK:
+			return get_section_in_register(&PWM_CDTY0, PWM_CDTYx_CDTY_MASK);
+			break;
+		case PWM_CHANNEL_1_MASK:
+			return get_section_in_register(&PWM_CDTY1, PWM_CDTYx_CDTY_MASK);
+			break;
+		case PWM_CHANNEL_2_MASK:
+			return get_section_in_register(&PWM_CDTY2, PWM_CDTYx_CDTY_MASK);
+			break;
+		case PWM_CHANNEL_3_MASK:
+			return get_section_in_register(&PWM_CDTY3, PWM_CDTYx_CDTY_MASK);
+			break;
+		case PWM_CHANNEL_4_MASK:
+			return get_section_in_register(&PWM_CDTY4, PWM_CDTYx_CDTY_MASK);
+			break;
+		case PWM_CHANNEL_5_MASK:
+			return get_section_in_register(&PWM_CDTY5, PWM_CDTYx_CDTY_MASK);
+			break;
+		case PWM_CHANNEL_6_MASK:
+			return get_section_in_register(&PWM_CDTY6, PWM_CDTYx_CDTY_MASK);
+			break;
+		case PWM_CHANNEL_7_MASK:
+			return get_section_in_register(&PWM_CDTY7, PWM_CDTYx_CDTY_MASK);
+			break;
+		default:
+			return FAIL;
+			break;
+		}
 	return SUCCESS;
 }
 

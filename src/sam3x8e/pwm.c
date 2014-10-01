@@ -21,7 +21,6 @@
  * @bug {Manual and automated testing are being designed.}
  */
 
-
 #include "global_entities.h"
 #include "sam3x8e/pmc.h"
 #include "pwm.h"
@@ -84,7 +83,6 @@
 #define PWM_CPRDUPD5 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*5)) // PWM Channel Period Update Register
 #define PWM_CPRDUPD6 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*6)) // PWM Channel Period Update Register
 #define PWM_CPRDUPD7 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*7)) // PWM Channel Period Update Register
-
 
 ///\endcond
 /////////////////////////////////////////////////////////////////////////////
@@ -182,13 +180,12 @@
 #define PWM_CLK_DIVx_PREx				1
 //////////////////////////////////
 
-
 /**
  * Start pmc clock
  *
  * @return
  */
-uint8_t pwm_init_default(){
+uint8_t pwm_init_default() {
 	pwm_reset();
 	pmc_start_peripheral_clock(ID_PWM);
 	return SUCCESS;
@@ -200,7 +197,7 @@ uint8_t pwm_init_default(){
  * enable channel
  * @return
  */
-uint8_t  pwm_init_channel(struct pwm_channel_setting instance, uint8_t pin){
+uint8_t pwm_init_channel(struct pwm_channel_setting instance) {
 
 	return SUCCESS;
 }
@@ -209,35 +206,36 @@ uint8_t  pwm_init_channel(struct pwm_channel_setting instance, uint8_t pin){
  * Set the channel prescaler
  * @return
  */
-uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler){
+uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
 	uint32_t *reg;
 	switch (channel) {
 	case PWM_CHANNEL_0_MASK:
-				set_section_in_register(&PWM_CMR0, PWM_CMRx_CPRE_MASK, prescaler);
-				break;
+		set_section_in_register(&PWM_CMR0, PWM_CMRx_CPRE_MASK, prescaler);
+		break;
 	case PWM_CHANNEL_1_MASK:
-				set_section_in_register(&PWM_CMR1, PWM_CMRx_CPRE_MASK, prescaler);
-				break;
+		set_section_in_register(&PWM_CMR1, PWM_CMRx_CPRE_MASK, prescaler);
+		break;
 	case PWM_CHANNEL_2_MASK:
-				set_section_in_register(&PWM_CMR2, PWM_CMRx_CPRE_MASK, prescaler);
-				break;
+		set_section_in_register(&PWM_CMR2, PWM_CMRx_CPRE_MASK, prescaler);
+		break;
 	case PWM_CHANNEL_3_MASK:
-				set_section_in_register(&PWM_CMR3, PWM_CMRx_CPRE_MASK, prescaler);
-				break;
+		set_section_in_register(&PWM_CMR3, PWM_CMRx_CPRE_MASK, prescaler);
+		break;
 	case PWM_CHANNEL_4_MASK:
-				set_section_in_register(&PWM_CMR4, PWM_CMRx_CPRE_MASK, prescaler);
-				break;
+		set_section_in_register(&PWM_CMR4, PWM_CMRx_CPRE_MASK, prescaler);
+		break;
 	case PWM_CHANNEL_5_MASK:
-				set_section_in_register(&PWM_CMR5, PWM_CMRx_CPRE_MASK, prescaler);
-				break;
+		set_section_in_register(&PWM_CMR5, PWM_CMRx_CPRE_MASK, prescaler);
+		break;
 	case PWM_CHANNEL_6_MASK:
-				set_section_in_register(&PWM_CMR6, PWM_CMRx_CPRE_MASK, prescaler);
-				break;
+		set_section_in_register(&PWM_CMR6, PWM_CMRx_CPRE_MASK, prescaler);
+		break;
 	case PWM_CHANNEL_7_MASK:
-				set_section_in_register(&PWM_CMR7, PWM_CMRx_CPRE_MASK, prescaler);
-				break;
-		default:
-			break;
+		set_section_in_register(&PWM_CMR7, PWM_CMRx_CPRE_MASK, prescaler);
+		break;
+	default:
+		return FAIL;
+		break;
 	}
 
 	return SUCCESS;
@@ -247,8 +245,37 @@ uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler){
  * Set the channel polarity
  * @return
  */
-uint8_t  pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity){
-
+uint8_t pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity) {
+	uint32_t *reg;
+	switch (channel) {
+	case PWM_CHANNEL_0_MASK:
+		set_section_in_register(&PWM_CMR0, PWM_CMRx_CPOL_MASK, pwm_polarity);
+		break;
+	case PWM_CHANNEL_1_MASK:
+		set_section_in_register(&PWM_CMR1, PWM_CMRx_CPOL_MASK, pwm_polarity);
+		break;
+	case PWM_CHANNEL_2_MASK:
+		set_section_in_register(&PWM_CMR2, PWM_CMRx_CPOL_MASK, pwm_polarity);
+		break;
+	case PWM_CHANNEL_3_MASK:
+		set_section_in_register(&PWM_CMR3, PWM_CMRx_CPOL_MASK, pwm_polarity);
+		break;
+	case PWM_CHANNEL_4_MASK:
+		set_section_in_register(&PWM_CMR4, PWM_CMRx_CPOL_MASK, pwm_polarity);
+		break;
+	case PWM_CHANNEL_5_MASK:
+		set_section_in_register(&PWM_CMR5, PWM_CMRx_CPOL_MASK, pwm_polarity);
+		break;
+	case PWM_CHANNEL_6_MASK:
+		set_section_in_register(&PWM_CMR6, PWM_CMRx_CPOL_MASK, pwm_polarity);
+		break;
+	case PWM_CHANNEL_7_MASK:
+		set_section_in_register(&PWM_CMR7, PWM_CMRx_CPOL_MASK, pwm_polarity);
+		break;
+	default:
+		return FAIL;
+		break;
+	}
 	return SUCCESS;
 }
 
@@ -256,8 +283,37 @@ uint8_t  pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity){
  * Set the channel alignment
  * @return
  */
-uint8_t  pwm_set_channel_alignment(uint32_t channel, uint32_t PWM_ALIGN_){
-
+uint8_t pwm_set_channel_alignment(uint32_t channel, uint32_t pwm_alignment) {
+	uint32_t *reg;
+	switch (channel) {
+	case PWM_CHANNEL_0_MASK:
+		set_section_in_register(&PWM_CMR0, PWM_CMRx_CALG_MASK, pwm_alignment);
+		break;
+	case PWM_CHANNEL_1_MASK:
+		set_section_in_register(&PWM_CMR1, PWM_CMRx_CALG_MASK, pwm_alignment);
+		break;
+	case PWM_CHANNEL_2_MASK:
+		set_section_in_register(&PWM_CMR2, PWM_CMRx_CALG_MASK, pwm_alignment);
+		break;
+	case PWM_CHANNEL_3_MASK:
+		set_section_in_register(&PWM_CMR3, PWM_CMRx_CALG_MASK, pwm_alignment);
+		break;
+	case PWM_CHANNEL_4_MASK:
+		set_section_in_register(&PWM_CMR4, PWM_CMRx_CALG_MASK, pwm_alignment);
+		break;
+	case PWM_CHANNEL_5_MASK:
+		set_section_in_register(&PWM_CMR5, PWM_CMRx_CALG_MASK, pwm_alignment);
+		break;
+	case PWM_CHANNEL_6_MASK:
+		set_section_in_register(&PWM_CMR6, PWM_CMRx_CALG_MASK, pwm_alignment);
+		break;
+	case PWM_CHANNEL_7_MASK:
+		set_section_in_register(&PWM_CMR7, PWM_CMRx_CALG_MASK, pwm_alignment);
+		break;
+	default:
+		return FAIL;
+		break;
+	}
 	return SUCCESS;
 }
 
@@ -268,12 +324,14 @@ uint8_t  pwm_set_channel_alignment(uint32_t channel, uint32_t PWM_ALIGN_){
  * @param clock_id {Must be 0 for clkA and 1 for clkB}
  * @return
  */
-uint8_t	 pwm_turn_of_clkx(uint8_t clock_id){
-	if(clock_id == 0){
-		set_section_in_register(&PWM_CLK, PWM_CLK_PREA_MASK, PWM_CLK_DIVx_TURNOFF);
+uint8_t pwm_turn_of_clkx(uint8_t clock_id) {
+	if (clock_id == 0) {
+		set_section_in_register(&PWM_CLK, PWM_CLK_PREA_MASK,
+				PWM_CLK_DIVx_TURNOFF);
 		return SUCCESS;
-	}else if(clock_id == 1){
-		set_section_in_register(&PWM_CLK, PWM_CLK_PREB_MASK, PWM_CLK_DIVx_TURNOFF);
+	} else if (clock_id == 1) {
+		set_section_in_register(&PWM_CLK, PWM_CLK_PREB_MASK,
+				PWM_CLK_DIVx_TURNOFF);
 		return SUCCESS;
 	}
 
@@ -286,8 +344,45 @@ uint8_t	 pwm_turn_of_clkx(uint8_t clock_id){
  * @param duty_cycle
  * @return
  */
-uint32_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle){
-
+uint32_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
+	uint32_t *reg;
+	switch (channel) {
+	case PWM_CHANNEL_0_MASK:
+		set_section_in_register(&PWM_CDTYUPD0, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_1_MASK:
+		set_section_in_register(&PWM_CDTYUPD1, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_2_MASK:
+		set_section_in_register(&PWM_CDTYUPD2, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_3_MASK:
+		set_section_in_register(&PWM_CDTYUPD3, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_4_MASK:
+		set_section_in_register(&PWM_CDTYUPD4, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_5_MASK:
+		set_section_in_register(&PWM_CDTYUPD5, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_6_MASK:
+		set_section_in_register(&PWM_CDTYUPD6, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_7_MASK:
+		set_section_in_register(&PWM_CDTYUPD7, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	default:
+		return FAIL;
+		break;
+	}
 	return SUCCESS;
 }
 
@@ -295,17 +390,16 @@ uint32_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle){
  * Shuts down the peripheral but keeps all settings
  * @return
  */
-uint8_t  pwm_shutdown(){
+uint8_t pwm_shutdown() {
 	pmc_stop_peripheral_clock(ID_PWM);
 	return SUCCESS;
 }
-
 
 /**
  * Resets the peripheral and disables all channels
  * @return error
  */
-uint8_t  pwm_reset(){
+uint8_t pwm_reset() {
 	clear_register(&PWM_CLK);
 	set_register(&PWM_DIS);
 	clear_register(&PWM_CMR0);
@@ -320,7 +414,7 @@ uint8_t  pwm_reset(){
  * Reset and turns off the peripheral
  * @return
  */
-uint8_t  pwm_close(){
+uint8_t pwm_close() {
 	pwm_reset();
 	pwm_shutdown();
 	return SUCCESS;
@@ -331,13 +425,12 @@ uint8_t  pwm_close(){
  * @param channel The channel mask, ex. PWM_CHANNEL_2_MASK
  * @return
  */
-uint32_t pwm_read(uint8_t channel){
+uint32_t pwm_read(uint8_t channel) {
 	//&PWM_CMR1;
 	return SUCCESS;
 }
 
-
-void function(void){
+void function(void) {
 	/**
 	 * enable the PWM clock in PMC
 	 * See status for channel
@@ -350,9 +443,5 @@ void function(void){
 	 *
 	 */
 
-
 }
-
-
-
 

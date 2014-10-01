@@ -7,6 +7,22 @@
 
 #include "delay.h"
 
+void delay_microseconds(uint32_t us){
+	for (uint32_t i = 0; i < us; i++){
+		uint8_t j = 0;
+		while (j < 7){
+			asm volatile("NOP\n\t" "NOP\n\t");
+			j++;
+		}
+	}
+
+}
+
+void delay_milliseconds(uint32_t ms){
+	delay_microseconds(ms * 1000);
+}
+
+/*
 void delay_us(float us) {
 	volatile uint32_t count; // Volatile to avoid compiler optimization
 	count = (uint32_t)(0.322922871*us); // Calibration function
@@ -22,3 +38,4 @@ void delay_ms(uint32_t ms) {
 		count--;
 	}
 }
+*/

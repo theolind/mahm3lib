@@ -32,17 +32,17 @@
  *  register-specific offset.
  */
 // The first register in the Power Management Controller
-#define p_PWM_BASE_ADD = (uint32_t *) 0x40094000U;
+#define p_PWM_BASE_ADD			0x40094000U
 
-#define PWM_CLK 	*(p_PWM_BASE_ADD + 0x000) // PWM Clock Register
-#define PWM_ENA 	*(p_PWM_BASE_ADD + 0x004) // PWM Enable Register
-#define PWM_DIS 	*(p_PWM_BASE_ADD + 0x008) // PWM Disable Register
-#define PWM_SR 		*(p_PWM_BASE_ADD + 0x00C) // PWM Status Register
-#define PWM_CMR 	*(p_PWM_BASE_ADD + 0x200) // PWM Channel Mode Register
-#define PWM_CDTY 	*(p_PWM_BASE_ADD + 0x204) // PWM Channel Duty Cycle Register
-#define PWM_CDTYUPD *(p_PWM_BASE_ADD + 0x208) // PWM Channel Duty Cycle Update Register
-#define PWM_CPRD 	*(p_PWM_BASE_ADD + 0x20C) // PWM Channel Period Register
-#define PWM_CPRDUPD *(p_PWM_BASE_ADD + 0x210) // PWM Channel Period Update Register
+#define PWM_CLK 	*((uint32_t*)(p_PWM_BASE_ADD + 0x000)) // PWM Clock Register
+#define PWM_ENA 	*((uint32_t*)(p_PWM_BASE_ADD + 0x004)) // PWM Enable Register
+#define PWM_DIS 	*((uint32_t*)(p_PWM_BASE_ADD + 0x008)) // PWM Disable Register
+#define PWM_SR 		*((uint32_t*)(p_PWM_BASE_ADD + 0x00C)) // PWM Status Register
+#define PWM_CMR1 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200)) // PWM Channel Mode Register
+#define PWM_CDTY 	*((uint32_t*)(p_PWM_BASE_ADD + 0x204)) // PWM Channel Duty Cycle Register
+#define PWM_CDTYUPD *((uint32_t*)(p_PWM_BASE_ADD + 0x208)) // PWM Channel Duty Cycle Update Register
+#define PWM_CPRD 	*((uint32_t*)(p_PWM_BASE_ADD + 0x20C)) // PWM Channel Period Register
+#define PWM_CPRDUPD *((uint32_t*)(p_PWM_BASE_ADD + 0x210)) // PWM Channel Period Update Register
 ///\endcond
 /////////////////////////////////////////////////////////////////////////////
 /**
@@ -145,8 +145,8 @@
  *
  * @return
  */
-uint8_t pwm_init(){
-
+uint8_t pwm_init_default(){
+	pmc_start_peripheral_clock(ID_PWM);
 }
 
 /**
@@ -155,41 +155,55 @@ uint8_t pwm_init(){
  * enable channel
  * @return
  */
-uint8_t pwm_init_channel(){
+uint8_t  pwm_init_channel(struct pwm_channel_setting instance, uint8_t pin){
 
+	return SUCCESS;
 }
 
 /**
  * Set the channel prescaler
  * @return
  */
-uint8_t pwm_set_channel_prescaler(){
+uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler){
 
+	return SUCCESS;
 }
 
 /**
  * Set the channel polarity
  * @return
  */
-uint8_t pwm_set_channel_polarity(){
+uint8_t  pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity){
 
+	return SUCCESS;
 }
 
 /**
  * Set the channel alignment
  * @return
  */
-uint8_t pwm_set_channel_alignment(){
+uint8_t  pwm_set_channel_alignment(uint32_t channel, uint32_t PWM_ALIGN_){
 
+	return SUCCESS;
 }
 
 /**
- * turn off clock A or B
- * @param clock_id
+ * Turns off clock A or B.
+ *
+ *
+ * @param clock_id {Must be 0 for clkA and 1 for clkB}
  * @return
  */
 uint8_t	 pwm_turn_of_clkx(uint8_t clock_id){
+	if(clock_id == 0){
+		set_section_in_register(&PWM_CLK, PWM_CLK_PREA_MASK, 0);
+		return SUCCESS;
+	}else if(clock_id == 1){
+		set_section_in_register(&PWM_CLK, PWM_CLK_PREB_MASK, 0);
+		return SUCCESS;
+	}
 
+	return FAIL;
 }
 
 /**
@@ -200,6 +214,7 @@ uint8_t	 pwm_turn_of_clkx(uint8_t clock_id){
  */
 uint32_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle){
 
+	return SUCCESS;
 }
 
 /**
@@ -207,7 +222,23 @@ uint32_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle){
  * @return
  */
 uint8_t  pwm_shutdown(){
+	pmc_stop_peripheral_clock(ID_PWM);
+}
 
+
+/**
+ * Resets the peripheral and disables all channels
+ * @return error
+ */
+uint8_t  pwm_reset(){
+	clear_register(&PWM_CLK);
+	set_register(&PWM_DIS);
+	clear_register(&PWM_CMR1);
+	clear_register(&PWM_CDTY);
+	clear_register(&PWM_CDTYUPD);
+	clear_register(&PWM_CPRD);
+	clear_register(&PWM_CPRDUPD);
+	return SUCCESS;
 }
 
 /**
@@ -215,15 +246,9 @@ uint8_t  pwm_shutdown(){
  * @return
  */
 uint8_t  pwm_close(){
-
-}
-
-/**
- * Resets the peripheral and disables all channels
- * @return
- */
-uint8_t  pwm_reset(){
-
+	pwm_reset();
+	pwm_shutdown();
+	return SUCCESS;
 }
 
 /**
@@ -232,7 +257,8 @@ uint8_t  pwm_reset(){
  * @return
  */
 uint32_t pwm_read(uint8_t channel){
-
+	&PWM_CMR1
+	return SUCCESS;
 }
 
 void function(){

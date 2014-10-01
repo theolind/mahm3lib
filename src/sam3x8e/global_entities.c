@@ -50,6 +50,28 @@ uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value){
 	return SUCCESS;
 }
 
+uint8_t clear_register(uint32_t *reg){
+	set_section_in_register(reg, 0xFFFFFFFFU, 0x0U);
+	if(*reg == 0x0U){
+		return SUCCESS;
+	}else{
+		return FAIL;
+	}
+}
+
+uint8_t set_register(uint32_t *reg){
+	set_section_in_register(reg, 0xFFFFFFFFU, 0xFFFFFFFFU);
+	if(*reg == 0xFFFFFFFFU){
+		return SUCCESS;
+	}else{
+		return FAIL;
+	}
+	//return FAIL; // Should not get to here
+}
+
+
+
+
 /**
  * This function modifies a section of a register, reg, defined by 'mask' with
  * the value in 'value'.
@@ -62,9 +84,8 @@ uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value){
  * @param start_bit Position of the first bit of the section in the register
  * @param length The length of the section
  * @param value The value to be inserted in the register-section
- * @return
- * @deprecated (see How and When To Deprecate APIs)
- * @deprecated  As of JDK 1.1, replaced by
+ * @return error (1 = SUCCESS and 0 = FAIL)
+ * @deprecated  As of v0.3, replaced by
  *             {@link #set_section_in_register(uint32_t,uint32_t,uint32_t)}
  */
 uint8_t set_section_in_register2(uint32_t *reg, uint8_t start_bit,
@@ -80,33 +101,40 @@ uint8_t set_section_in_register2(uint32_t *reg, uint8_t start_bit,
 
 /**
  * This function return the bit-number of the first bit being high in a 32-bit
- * long value. The main porpose of this function is to find the start-bit of a
+ * long value. The main purpose of this function is to find the start-bit of a
  * given mask. The start-bit can then be used to left-bit-shift a value into
  * position relative to a section in a register.
  *
+ * Be sure not to pass mask = 0 into this function, the output will be
+ * misleading and equal to 0.
+ *
  * @param mask The mask to be examined
- * @return Bit-number of the first position
+ * @return bit-number of the first position (0 could indicate error)
  */
 uint32_t first_bit_position_of_mask(uint32_t mask){
 	uint8_t j = 0;
-	// 0x80000000 has one bit to the far left only
-	while(mask != 0x80000000){
-		mask = (mask << 1);
-		j++;
+	if(mask != 0x0U){
+		// 0x80000000 has one bit to the far left only
+		while(mask != 0x80000000){
+			mask = (mask << 1);
+			j++;
+		}
+		return (31 - j);
 	}
-	return (31 - j);
+	return 0;
 }
 
 
-/*
+/**
  * This function will only return the value of a specified section in a given
- * register.
+ * register. The value in the section will be right-shifted so that the value
+ * returned is the value stored in the section.
+ *
  * @param reg This specifies a pointer to the register
  * @param mask The area for which the value must be returned (high bit are read)
  * @return The value of the section in the register
  */
-uint8_t get_value_of_register(uint32_t *reg, uint32_t mask){
-
-	return mask; // temp
+uint32_t get_value_of_register(uint32_t *reg, uint32_t mask){
+	return (*reg & mask >> first_bit_position_of_mask(mask));
 }
 

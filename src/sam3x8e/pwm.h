@@ -124,14 +124,16 @@ uint8_t  pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity);
 // Choose one of two clocks to be the source
 uint8_t  pwm_set_channel_clocksource(uint32_t channel, uint32_t pwm_clock_source);
 // Set different alignments for the channel
-uint8_t  pwm_set_channel_alignment(uint32_t channel, uint32_t PWM_ALIGN_LEFT_CENTER);
+uint8_t  pwm_set_channel_alignment(uint32_t channel, uint32_t PWM_ALIGN_);
+
+uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler);
 
 //Shuts down the peripheral but keeps all settings
-uint8_t  pwm_shutdown();
+uint8_t  pwm_shutdown(void);
 //Reset and turns off the peripheral
-uint8_t  pwm_close();
+uint8_t  pwm_close(void);
 //Resets the peripheral and disables all channels
-uint8_t  pwm_reset();
+uint8_t  pwm_reset(void);
 //Read what was earlier written to the channel
 uint32_t pwm_read(uint8_t channel);
 //Writes an output to a given channel OBS: The same as pwm_set_channel_duty_cycle()

@@ -94,7 +94,8 @@
 
 // Prototypes
 /**
- * This function will test to see if a specified bit in a register is set high.
+ * This function will test to see if the specified bit in a register is set
+ * high.
  *
  * @param reg This specifies a pointer to the register
  * @param bit Specifies the bit-number in the register
@@ -104,7 +105,7 @@ uint8_t is_bit_high(uint32_t *reg, uint8_t bit);
 
 /**
  * This function will modify a section of a given register as indicated by
- * start_bit and length with the value specified with 'value'.
+ * mask with the value specified in 'value'.
  *
  * @param reg This specifies a pointer to the register
  * @param mask It must have the same length as the register, with ones across the section
@@ -115,7 +116,7 @@ uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value);
 
 /**
  * This function will modify a section of a given register as indicated by
- * start_bit and length with the value specified with 'value'.
+ * start_bit and length with the value specified in 'value'.
  *
  * Define the parameters like this:
  * Ex: Having -> 0b00011000 -> start_bit = 3, length = 2
@@ -129,15 +130,6 @@ uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value);
 uint8_t set_section_in_register2(uint32_t *reg, uint8_t start_bit,
 		uint8_t length, uint32_t value);
 
-/**
- * This function will return the value of a specified section in a given
- * register.
- *
- * @param reg The pointer to the register (not its value)
- * @param mask The area for which the value must be returned (high bit are read)
- * @return The value of the section in the register
- */
-uint8_t get_value_of_register2(uint32_t *reg, uint32_t mask);
 
 /**
  * This function return the bit-number of the first bit being high in a 32-bit
@@ -149,4 +141,31 @@ uint8_t get_value_of_register2(uint32_t *reg, uint32_t mask);
  * @return Bit-number of the first position
  */
 uint32_t first_bit_position_of_mask(uint32_t mask);
+
+/**
+ * This function will only return the value of a specified section in a given
+ * register. The value in the section will be right-shifted so that the value
+ * returned is the value stored in the section.
+ *
+ * @param reg This specifies a pointer to the register
+ * @param mask The area for which the value must be returned (high bit are read)
+ * @return The value of the section in the register
+ */
+uint32_t get_section_in_register(uint32_t *reg, uint32_t mask);
+
+/**
+ * This function will clear the entire register.
+ *
+ * @param reg The pointer to the register to be cleared.
+ * @return error (1 = SUCCESS and 0 = FAIL)
+ */
+uint8_t clear_register(uint32_t *reg);
+
+/**
+ * This function will set the entire register.
+ *
+ * @param reg The pointer to the register to be set.
+ * @return error (1 = SUCCESS and 0 = FAIL)
+ */
+uint8_t set_register(uint32_t *reg);
 #endif

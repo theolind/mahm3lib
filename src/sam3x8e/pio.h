@@ -63,6 +63,37 @@ typedef struct pio_init_param {
 	pio_init_setting portf;
 } pio_init_param;
 
+//////////////////////////////////////
+
+////////////////////////////////////////////////////////
+// Internal (not for user)
+#define PERIPH_A			0
+#define PERIPH_B			1
+
+////////////////////////////////////////////////////////
+// External (to be used by the user)
+//Physical pin mapping
+//PIO_PIN_[package pin number]_[port and bit number]
+#define PIN_PIO_1_PB26			(26)
+#define PIN_PIO_42_PA19			(19)
+#define PIN_PIO_59_PC2			(2)
+#define PIN_PIO_60_PC3			(3)
+#define PIN_PIO_63_PC5			(5)
+#define PIN_PIO_64_PC6			(6)
+#define PIN_PIO_65_PC7			(7)
+#define PIN_PIO_66_PC8			(8)
+#define PIN_PIO_67_PC9			(9)
+#define PIN_PIO_72_PA20			(20)
+#define PIN_PIO_95_PC13			(13)
+#define PIN_PIO_97_PC15			(15)
+#define PIN_PIO_99_PC17			(17)
+#define PIN_PIO_100_PC18		(18)
+#define PIN_PIO_101_PBC19		(19)
+#define PIN_PIO_116_PC4			(4)
+#define PIN_PIO_140_PB14		(14)
+
+////////////////////////////////////////////////////////
+
 /**
  * Initialize the clocks in the power management controller, necessary for
  * using digital_io_read_*.

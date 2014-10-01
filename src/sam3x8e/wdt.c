@@ -1,9 +1,11 @@
 /*
  * wdt.c
+ *
  * API for the Watchdog Timer.
  *
- * Author: Mathias Beckius
- * Date: September 21, 2014
+ * Author: 	Mathias Beckius
+ * 			Felix Ruponen
+ * Date: 	29 September, 2014
  */
 
 #include "wdt.h"

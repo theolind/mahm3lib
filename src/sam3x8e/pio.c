@@ -148,41 +148,6 @@ uint32_t pio_read_port(uint32_t port) {
 }
 
 
-////////////////////////////////////////////////////////
-// Internal (not for user)
-#define PERIPH_A			0
-#define PERIPH_B			1
-
-////////////////////////////////////////////////////////
-// External (to be used by the user)
-//Physical pin mapping
-//PIO_PIN_[package pin number]_[port and bit number]
-#define PIN_PIO_1_PB26			(26)
-#define PIN_PIO_42_PA19			(19)
-#define PIN_PIO_59_PC2			(2)
-#define PIN_PIO_60_PC3			(3)
-#define PIN_PIO_63_PC5			(5)
-#define PIN_PIO_64_PC6			(6)
-#define PIN_PIO_65_PC7			(7)
-#define PIN_PIO_66_PC8			(8)
-#define PIN_PIO_67_PC9			(9)
-#define PIN_PIO_72_PA20			(20)
-#define PIN_PIO_95_PC13			(13)
-#define PIN_PIO_97_PC15			(15)
-#define PIN_PIO_99_PC17			(17)
-#define PIN_PIO_100_PC18		(18)
-#define PIN_PIO_101_PBC19		(19)
-#define PIN_PIO_116_PC4			(4)
-#define PIN_PIO_140_PB14		(14)
-
-////////////////////////////////////////////////////////
-// External (to be used by the user)
-#define PIN_PWMH0_60			PIN_PIO_60_PC3
-#define PIN_PWML0_59			PIN_PIO_59_PC2
-
-////////////////////////////////////////////////////////
-
-
 
 /**
  * This function will set the multiplexer inside the PIO peripheral to point
@@ -201,10 +166,11 @@ uint32_t pio_read_port(uint32_t port) {
  *
  * @author {Saeed Ghasemi}
  * @param port {This is the pio port of the pin to be multiplexed.}
+ * @param periph {Point to your chosen peripheral. PERIPH_A or B}
  * @param pin_number {This is the pin number in the port register.
  * Start with prefix: PIN_[peripheral] to get to predefined pins.}
  * @return error (1  = SUCCESS, 0 = FAIL)
- * @bug {not yet tested. All ports will be included after initial testing.}
+ * @bug {Not yet tested. All ports will be included after initial testing.}
  */
 uint8_t pio_conf_pin_to_peripheral(uint32_t port,
 		uint32_t periph, uint32_t pin_number){

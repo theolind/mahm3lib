@@ -101,22 +101,14 @@ uint8_t	 pwm_init_default(void);
  * @return error (0 = FAIL, 1 = SUCCESS)
  * @pre {This function requires the PMC API.}
  */
-uint8_t	 pwm_init(struct pwm_clk_setting);
-/**
- * Calculates necessary parameters automatically for the given frequency and
- * returns the achieved frequency and sets the necessary parameters for the
- * given channel.
- *
- * @return The achieved frequency
- * @pre {This function requires the PMC API.}
- */
-uint8_t	 pwm_set_channel_frequency(uint8_t channel, uint32_t frequency);
+uint8_t	pwm_init(struct pwm_clk_setting clk_settings);
+
 /**
  * Turns off one of two clocks in PWM that are called clkA and clkB.
  *
  * @return error (0 = FAIL, 1 = SUCCESS)
  */
-uint8_t	 pwm_turn_of_clkx(uint8_t clock_id);
+uint8_t pwm_turn_of_clkx(uint8_t clock_id);
 //
 /**
  * Initializes a single channel in the peripheral out of 8 in total.
@@ -124,15 +116,17 @@ uint8_t	 pwm_turn_of_clkx(uint8_t clock_id);
  *
  * @return error (0 = FAIL, 1 = SUCCESS)
  */
-uint8_t  pwm_init_channel(struct pwm_channel_setting, uint8_t pin);
+uint8_t pwm_init_channel(struct pwm_channel_setting, uint8_t pin);
 // Set the duty cycle between 0 and resolution
 uint32_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle);
 // This can reverse the duty cycle. Important when using the L pins
-uint8_t  pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity);
+uint8_t pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity);
 // Choose one of two clocks to be the source
-uint8_t  pwm_set_channel_clocksource(uint32_t channel, uint32_t pwm_clock_source);
+uint8_t pwm_set_channel_clocksource(uint32_t channel, uint32_t pwm_clock_source);
 // Set different alignments for the channel
-uint8_t  pwm_set_channel_alignment(uint32_t channel, uint32_t PWM_ALIGN_LEFT_CENTER);
+uint8_t pwm_set_channel_alignment(uint32_t channel, uint32_t PWM_ALIGN_);
+
+uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler);
 
 //Shuts down the peripheral but keeps all settings
 uint8_t  pwm_shutdown(void);
@@ -142,12 +136,8 @@ uint8_t  pwm_close(void);
 uint8_t  pwm_reset(void);
 //Read what was earlier written to the channel
 uint32_t pwm_read(uint8_t channel);
-//Writes an output to a given channel
+//Writes an output to a given channel OBS: The same as pwm_set_channel_duty_cycle()
 uint8_t pwm_write(uint8_t channel, uint32_t duty_cycle);
-
-//Turns write protection on or off
-uint8_t  pwm_set_writ_protection(uint8_t state);
-
 
 
 

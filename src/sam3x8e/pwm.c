@@ -189,6 +189,7 @@
  * @return
  */
 uint8_t pwm_init_default(){
+	pwm_reset();
 	pmc_start_peripheral_clock(ID_PWM);
 	return SUCCESS;
 }

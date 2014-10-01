@@ -32,6 +32,9 @@
 
 #include <inttypes.h>
 
+void delay_microseconds(uint32_t us);
+void delay_milliseconds(uint32_t ms);
+
 /**
  * This function will delay in microseconds.
  * This function is tested to perform fairly accurate within 15 to 20000 us.
@@ -42,7 +45,7 @@
  *
  * @param us Amount of time in us to delay
  */
-void delay_us(float us);
+//void delay_us(float us);
 
 /**
  * This function will delay in milliseconds.
@@ -52,6 +55,6 @@ void delay_us(float us);
  *
  * @param ms Amount of time in ms to delay
  */
-void delay_ms(uint32_t ms);
+//void delay_ms(uint32_t ms);
 
 #endif

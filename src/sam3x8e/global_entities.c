@@ -89,10 +89,10 @@ uint8_t set_register(uint32_t *reg){
  *             {@link #set_section_in_register(uint32_t,uint32_t,uint32_t)}
  */
 uint8_t set_section_in_register2(uint32_t *reg, uint8_t start_bit,
-		uint8_t length, uint32_t value){
+		uint32_t length, uint32_t value){
 	uint32_t mask;
 	// Creating the mask for the section in the register
-	mask = ~(((2^length)-1)<<start_bit);
+	mask = ~(( (2^length)-1) << start_bit);
 	// Retrieving the register and modifying it
 	*reg = (mask & *reg) | (value << start_bit);
 	return SUCCESS;

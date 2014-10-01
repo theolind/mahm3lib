@@ -43,7 +43,7 @@
 typedef struct pwm_clk_setting{
 	uint32_t clkA_prescaler;
 	uint32_t clkB_prescaler;
-};
+}pwm_clk_setting;
 
 /**
  * @def
@@ -76,7 +76,7 @@ typedef struct pwm_channel_setting{
 	uint32_t prescaler;
 	uint32_t high_polarity_pin;
 	uint32_t low_polarity_pin;
-};
+}pwm_channel_setting;
 
 
 #define PWM_CLK_ID_CLKA			0
@@ -143,5 +143,7 @@ uint8_t pwm_write(uint8_t channel, uint32_t duty_cycle);
 
 //////////////////////////////////////////////////////////////////////////
 
+//test functions (to be cleaned later)
+void function(void);
 
 #endif /* PWM_H_ */

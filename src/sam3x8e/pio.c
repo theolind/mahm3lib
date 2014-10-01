@@ -150,97 +150,39 @@ uint32_t pio_read_port(uint32_t port) {
 
 ////////////////////////////////////////////////////////
 // Internal (not for user)
-#define PERIPH_A			100
-#define PERIPH_B			200
-////////////////////////////////////////////////////////
-// Internal (not for user)
-#define PORT_A			1000
-#define PORT_B			2000
-#define PORT_C			3000
-#define PORT_D			4000
-#define PORT_E			5000
-#define PORT_F			6000
+#define PERIPH_A			0
+#define PERIPH_B			1
+
 ////////////////////////////////////////////////////////
 // External (to be used by the user)
 //Physical pin mapping
 //PIO_PIN_[package pin number]_[port and bit number]
-#define PIN_PIO_1_PB26		(PORT_B + 26)
-#define PIN_PIO_42_PA19		(PORT_A + 19)
-#define PIN_PIO_59_PC2		(PORT_C + 2)
-#define PIN_PIO_60_PC3		(PORT_C + 3)
-#define PIN_PIO_63_PC5		(PORT_C + 5)
-#define PIN_PIO_64_PC6		(PORT_C + 6)
-#define PIN_PIO_65_PC7		(PORT_C + 7)
-#define PIN_PIO_66_PC8		(PORT_C + 8)
-#define PIN_PIO_67_PC9		(PORT_C + 9)
-#define PIN_PIO_72_PA20		(PORT_A + 20)
-#define PIN_PIO_95_PC13		(PORT_C + 13)
-#define PIN_PIO_97_PC15		(PORT_C + 15)
-#define PIN_PIO_99_PC17		(PORT_C + 17)
-#define PIN_PIO_100_PC18	(PORT_C + 18)
-#define PIN_PIO_101_PBC19	(PORT_B + 19)
-#define PIN_PIO_116_PC4		(PORT_C + 4)
-#define PIN_PIO_140_PB14	(PORT_B + 14)
+#define PIN_PIO_1_PB26			(26)
+#define PIN_PIO_42_PA19			(19)
+#define PIN_PIO_59_PC2			(2)
+#define PIN_PIO_60_PC3			(3)
+#define PIN_PIO_63_PC5			(5)
+#define PIN_PIO_64_PC6			(6)
+#define PIN_PIO_65_PC7			(7)
+#define PIN_PIO_66_PC8			(8)
+#define PIN_PIO_67_PC9			(9)
+#define PIN_PIO_72_PA20			(20)
+#define PIN_PIO_95_PC13			(13)
+#define PIN_PIO_97_PC15			(15)
+#define PIN_PIO_99_PC17			(17)
+#define PIN_PIO_100_PC18		(18)
+#define PIN_PIO_101_PBC19		(19)
+#define PIN_PIO_116_PC4			(4)
+#define PIN_PIO_140_PB14		(14)
 
 ////////////////////////////////////////////////////////
 // External (to be used by the user)
-#define PIN_PWMH0_60	(PIN_35_PC3 + PERIPH_B)
-#define PIN_PWML0_59	(PIN_34_PC2 + PERIPH_B)
+#define PIN_PWMH0_60			PIN_PIO_60_PC3
+#define PIN_PWML0_59			PIN_PIO_59_PC2
 
 ////////////////////////////////////////////////////////
 
-/*
- * This function is only used internally. It was created to avoid a long
- * function.
- *
- * The inner workings of this function is designed to break down the calc_port
- * and identify the peripheral that must be multiplexed to and do the actual
- * register modifications needed by the parent function.
- *
- * This function is very specific and may not be usable within any other
- * context.
- *
- * @param pin {The internal pin-variable of the calling function}
- * @return error (1 = SUCESS, 0 = FAIL)
- */
-static uint8_t multiplex_peripheral(uint32_t port, uint32_t pin){
-	uint32_t *p_reg;
-	uint32_t j = 0, calc_port;
-	uint8_t i;
 
-	// Figure out which peripheral this pin belongs to:
-	for(i = 1; i < 3; i++){
-		if(pin >= 100 * i){
-			j++;
-		}
-	}
-	// identified peripheral
-	calc_port = j * 100;
-	// Create pin reference within register
-	pin -= calc_port;
-	// Modify registers
-	switch (calc_port) {
-	case PERIPH_A:
-		// The pin is now in peripheral mode (not controlled by PIO)
-		p_reg = (uint32_t *) (port + PIO_PDR);
-		*p_reg = (1 << pin);
-		// The pin is now set to peripheral B
-		p_reg = (uint32_t *) (port + PIO_ABSR);
-		*p_reg &= ~(1 << pin);
-		break;
-	case PERIPH_B:
-		// The pin is now in peripheral mode (not controlled by PIO)
-		p_reg = (uint32_t *) (port + PIO_PDR);
-		*p_reg = (1 << pin);
-		// The pin is now set to peripheral B
-		p_reg = (uint32_t *) (port + PIO_ABSR);
-		*p_reg |= (1 << pin);
-		break;
-	default:
-		break;
-	}
-	return SUCCESS;
-}
 
 /**
  * This function will set the multiplexer inside the PIO peripheral to point
@@ -254,74 +196,30 @@ static uint8_t multiplex_peripheral(uint32_t port, uint32_t pin){
  * PIN_[peripheral][additional property and numbering]_[package pin number]
  * example:
  * PIN_PWMH0_60    or    PIN_PWML0_59
- * (These refer to the board independent pin mapping)
- *
- * The numbering contains information within themselves that make it possible
- * for the function to determine PIO port and how to set the multiplexer for the
- * indicated peripheral.
- *
- * This function will not work with any other parameter than those that are
- * predefined!
- *
- * Probably inconsistent with the API. This will be modified to be consistent.
+ * (These refer to the board independent pin mapping and will be available when
+ * the API is included.)
  *
  * @author {Saeed Ghasemi}
- * @param pin {This is the pin to be multiplexed to the peripheral.
+ * @param port {This is the pio port of the pin to be multiplexed.}
+ * @param pin_number {This is the pin number in the port register.
  * Start with prefix: PIN_[peripheral] to get to predefined pins.}
- * @return
- * @bug {not yet tested. and a work in progress. All ports will be included
- * after initial testing.}
+ * @return error (1  = SUCCESS, 0 = FAIL)
+ * @bug {not yet tested. All ports will be included after initial testing.}
  */
-uint8_t pio_conf_pin_to_peripheral(uint32_t pin){
+uint8_t pio_conf_pin_to_peripheral(uint32_t port,
+		uint32_t periph, uint32_t pin_number){
+	uint32_t *p_reg;
 
-	uint32_t j = 0,
-			calc_port;
-	uint8_t i;
-
-	// Figure out which port this pin belongs to:
-	for(i = 1; i < 7; i++){
-		if(pin >= 1000 * i){
-			j++;
-		}
+	// The pin is now in peripheral mode (not controlled by PIO)
+	p_reg = (uint32_t *) (port + PIO_PDR);
+	*p_reg = (0x1U << pin_number);
+	// The pin is now set to peripheral B
+	p_reg = (uint32_t *) (port + PIO_ABSR);
+	if(periph){
+		*p_reg |= (0x1U << pin_number);
+	}else{
+		*p_reg &= ~(0x1U << pin_number);
 	}
-	// Identified PIO port
-	calc_port = j * 1000;
-	// Remove port reference from input
-	pin -= calc_port;
-	j = 0;
-	// Switch to correct port and multiplex to the right peripheral
-	switch (calc_port) {
-	case PORT_A:
-		multiplex_peripheral(PIO_PORTA, pin);
-				break;
-	/////////////////////////////////////////////////////////////////////
-	case PORT_B:
-		multiplex_peripheral(PIO_PORTB, pin);
-				break;
-	/////////////////////////////////////////////////////////////////////
-	case PORT_C:
-		multiplex_peripheral(PIO_PORTC, pin);
-				break;
-	/////////////////////////////////////////////////////////////////////
-	case PORT_D:
-		multiplex_peripheral(PIO_PORTD, pin);
-				break;
-	/////////////////////////////////////////////////////////////////////
-	case PORT_E:
-		multiplex_peripheral(PIO_PORTE, pin);
-				break;
-	/////////////////////////////////////////////////////////////////////
-	case PORT_F:
-		multiplex_peripheral(PIO_PORTF, pin);
-				break;
-	/////////////////////////////////////////////////////////////////////
-	default:
-		return FAIL;
-			break;
-	}
-
-
-
 	return SUCCESS;
 }
 

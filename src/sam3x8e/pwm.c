@@ -23,6 +23,7 @@
 
 
 #include "global_entities.h"
+#include "sam3x8e/pmc.h"
 #include "pwm.h"
 
 /////////////////////////////////////////////////////////////////////////////
@@ -38,7 +39,16 @@
 #define PWM_ENA 	*((uint32_t*)(p_PWM_BASE_ADD + 0x004)) // PWM Enable Register
 #define PWM_DIS 	*((uint32_t*)(p_PWM_BASE_ADD + 0x008)) // PWM Disable Register
 #define PWM_SR 		*((uint32_t*)(p_PWM_BASE_ADD + 0x00C)) // PWM Status Register
-#define PWM_CMR1 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200)) // PWM Channel Mode Register
+
+#define PWM_CMR0 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*0)) // PWM Channel Mode Register
+#define PWM_CMR1 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*1)) // PWM Channel Mode Register
+#define PWM_CMR2 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*2)) // PWM Channel Mode Register
+#define PWM_CMR3 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*3)) // PWM Channel Mode Register
+#define PWM_CMR4 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*4)) // PWM Channel Mode Register
+#define PWM_CMR5 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*5)) // PWM Channel Mode Register
+#define PWM_CMR6 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*6)) // PWM Channel Mode Register
+#define PWM_CMR7 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*7)) // PWM Channel Mode Register
+
 #define PWM_CDTY 	*((uint32_t*)(p_PWM_BASE_ADD + 0x204)) // PWM Channel Duty Cycle Register
 #define PWM_CDTYUPD *((uint32_t*)(p_PWM_BASE_ADD + 0x208)) // PWM Channel Duty Cycle Update Register
 #define PWM_CPRD 	*((uint32_t*)(p_PWM_BASE_ADD + 0x20C)) // PWM Channel Period Register
@@ -101,17 +111,17 @@
 #define PWM_CLK_PRES_1024				(0b1010)
 
 // Parameters for easy selecting of clocks within each channel
-#define PWM_CMRx_SELECTOR_MCK/1			(0b0000)
-#define PWM_CMRx_SELECTOR_MCK/2			(0b0001)
-#define PWM_CMRx_SELECTOR_MCK/4			(0b0010)
-#define PWM_CMRx_SELECTOR_MCK/8			(0b0011)
-#define PWM_CMRx_SELECTOR_MCK/16		(0b0100)
-#define PWM_CMRx_SELECTOR_MCK/32		(0b0101)
-#define PWM_CMRx_SELECTOR_MCK/64		(0b0110)
-#define PWM_CMRx_SELECTOR_MCK/128		(0b0111)
-#define PWM_CMRx_SELECTOR_MCK/256		(0b1000)
-#define PWM_CMRx_SELECTOR_MCK/512		(0b1001)
-#define PWM_CMRx_SELECTOR_MCK/1024		(0b1010)
+#define PWM_CMRx_SELECTOR_DIV_1			(0b0000)
+#define PWM_CMRx_SELECTOR_DIV_2			(0b0001)
+#define PWM_CMRx_SELECTOR_DIV_4			(0b0010)
+#define PWM_CMRx_SELECTOR_DIV_8			(0b0011)
+#define PWM_CMRx_SELECTOR_DIV_16		(0b0100)
+#define PWM_CMRx_SELECTOR_DIV_32		(0b0101)
+#define PWM_CMRx_SELECTOR_DIV_64		(0b0110)
+#define PWM_CMRx_SELECTOR_DIV_128		(0b0111)
+#define PWM_CMRx_SELECTOR_DIV_256		(0b1000)
+#define PWM_CMRx_SELECTOR_DIV_512		(0b1001)
+#define PWM_CMRx_SELECTOR_DIV_1024		(0b1010)
 #define PWM_CMRx_SELECTOR_CLOCK_A		(0b1011)
 #define PWM_CMRx_SELECTOR_CLOCK_B		(0b1111)
 
@@ -140,6 +150,7 @@
 #define PWM_CMRx_POLARITY_LOW			0
 //////////////////////////////////
 
+
 /**
  * Start pmc clock
  *
@@ -147,6 +158,7 @@
  */
 uint8_t pwm_init_default(){
 	pmc_start_peripheral_clock(ID_PWM);
+	return SUCCESS;
 }
 
 /**
@@ -223,6 +235,7 @@ uint32_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle){
  */
 uint8_t  pwm_shutdown(){
 	pmc_stop_peripheral_clock(ID_PWM);
+	return SUCCESS;
 }
 
 
@@ -253,15 +266,16 @@ uint8_t  pwm_close(){
 
 /**
  * Read what was earlier written to the channel
- * @param channel
+ * @param channel The channel mask, ex. PWM_CHANNEL_2_MASK
  * @return
  */
 uint32_t pwm_read(uint8_t channel){
-	&PWM_CMR1
+	//&PWM_CMR1;
 	return SUCCESS;
 }
 
-void function(){
+
+void function(void){
 	/**
 	 * enable the PWM clock in PMC
 	 * See status for channel

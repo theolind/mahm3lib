@@ -21,7 +21,6 @@
  * @bug {Manual and automated testing are being designed.}
  */
 
-#include "global_entities.h"
 
 
 #ifndef PWM_H_

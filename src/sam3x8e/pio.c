@@ -8,7 +8,6 @@
 * Date:		29 September 2014
 */
 
-#include "global_entities.h"
 #include "pio.h"
 
 /*
@@ -112,6 +111,7 @@ uint32_t pio_read_port(pio_reg_t *port) {
  * @return error (1  = SUCCESS, 0 = FAIL)
  * @bug {Not yet tested. All ports will be included after initial testing.}
  */
+/*
 uint8_t pio_conf_pin_to_peripheral(uint32_t port,
 		uint32_t periph, uint32_t pin_number){
 	uint32_t *p_reg;
@@ -129,4 +129,4 @@ uint8_t pio_conf_pin_to_peripheral(uint32_t port,
 	return SUCCESS;
 }
 
-
+*/

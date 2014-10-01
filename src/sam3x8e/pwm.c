@@ -22,7 +22,6 @@
  */
 
 
-#include "global_entities.h"
 #include "sam3x8e/pmc.h"
 #include "pwm.h"
 
@@ -191,7 +190,7 @@
 uint8_t pwm_init_default(){
 	pwm_reset();
 	pmc_start_peripheral_clock(ID_PWM);
-	return SUCCESS;
+	return 1;
 }
 
 /**
@@ -202,7 +201,7 @@ uint8_t pwm_init_default(){
  */
 uint8_t  pwm_init_channel(struct pwm_channel_setting instance, uint8_t pin){
 
-	return SUCCESS;
+	return 1;
 }
 
 /**
@@ -240,7 +239,7 @@ uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler){
 			break;
 	}
 
-	return SUCCESS;
+	return 1;
 }
 
 /**
@@ -249,7 +248,7 @@ uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler){
  */
 uint8_t  pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity){
 
-	return SUCCESS;
+	return 1;
 }
 
 /**
@@ -258,7 +257,7 @@ uint8_t  pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity){
  */
 uint8_t  pwm_set_channel_alignment(uint32_t channel, uint32_t PWM_ALIGN_){
 
-	return SUCCESS;
+	return 1;
 }
 
 /**
@@ -271,13 +270,13 @@ uint8_t  pwm_set_channel_alignment(uint32_t channel, uint32_t PWM_ALIGN_){
 uint8_t	 pwm_turn_of_clkx(uint8_t clock_id){
 	if(clock_id == 0){
 		set_section_in_register(&PWM_CLK, PWM_CLK_PREA_MASK, PWM_CLK_DIVx_TURNOFF);
-		return SUCCESS;
+		return 1;
 	}else if(clock_id == 1){
 		set_section_in_register(&PWM_CLK, PWM_CLK_PREB_MASK, PWM_CLK_DIVx_TURNOFF);
-		return SUCCESS;
+		return 1;
 	}
 
-	return FAIL;
+	return 0;
 }
 
 /**
@@ -288,7 +287,7 @@ uint8_t	 pwm_turn_of_clkx(uint8_t clock_id){
  */
 uint32_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle){
 
-	return SUCCESS;
+	return 1;
 }
 
 /**
@@ -297,7 +296,7 @@ uint32_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle){
  */
 uint8_t  pwm_shutdown(){
 	pmc_stop_peripheral_clock(ID_PWM);
-	return SUCCESS;
+	return 1;
 }
 
 
@@ -313,7 +312,7 @@ uint8_t  pwm_reset(){
 	clear_register(&PWM_CDTYUPD0);
 	clear_register(&PWM_CPRD0);
 	clear_register(&PWM_CPRDUPD0);
-	return SUCCESS;
+	return 1;
 }
 
 /**
@@ -323,7 +322,7 @@ uint8_t  pwm_reset(){
 uint8_t  pwm_close(){
 	pwm_reset();
 	pwm_shutdown();
-	return SUCCESS;
+	return 1;
 }
 
 /**
@@ -333,7 +332,7 @@ uint8_t  pwm_close(){
  */
 uint32_t pwm_read(uint8_t channel){
 	//&PWM_CMR1;
-	return SUCCESS;
+	return 1;
 }
 
 

@@ -92,6 +92,10 @@
 
 //////////////////////////
 
+#define SYS_CLK_FREQ		84000000
+
+//////////////////////////
+
 // Prototypes
 /**
  * This function will test to see if the specified bit in a register is set

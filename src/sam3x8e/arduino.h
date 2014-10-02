@@ -10,8 +10,8 @@
  */
 
 
-#ifndef ARDUINO_DUE_PIN_MAPPING_H_
-#define ARDUINO_DUE_PIN_MAPPING_H_
+#ifndef ARDUINO_H_
+#define ARDUINO_H_
 
 #include <inttypes.h>
 
@@ -138,4 +138,4 @@
 
 
 
-#endif /* ARDUINO_DUE_PIN_MAPPING_H_ */
+#endif

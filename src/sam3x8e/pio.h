@@ -34,6 +34,14 @@
 // \brief Pointer to registers of the PIOF peripheral.
 #define PIOF ((pio_reg_t *) 0x400E1800)
 
+/**
+ * @def
+ * These definitions are used in connection with multiplexing pins to their
+ * secondary function which are the peripherals that they are connected to.
+ */
+#define PERIPH_A			0
+#define PERIPH_B			1
+
 /*
 // port register offsets
 #define PIO_PER 0x0000	//PIO enable register
@@ -65,6 +73,10 @@
 // External (to be used by the user) (temporarily)
 //Physical pin mapping
 //PIO_PIN_[package pin number]_[port and bit number]
+/**
+ * @def
+ * These are mapped pins of the MCU relative to their respective package number.
+ */
 #define PIN_PIO_1_PB26			(26)
 #define PIN_PIO_42_PA19			(19)
 #define PIN_PIO_59_PC2			(2)

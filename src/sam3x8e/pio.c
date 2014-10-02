@@ -11,9 +11,7 @@
 
 #include "pio.h"
 
-// Internally used (not for user)
-#define PERIPH_A			0
-#define PERIPH_B			1
+
 
 /*
  * This register can only be written if the WPEN bit is cleared in

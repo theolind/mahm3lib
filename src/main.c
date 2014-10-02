@@ -11,7 +11,7 @@ int main(void) {
 	// run unit tests
 	//run_tests();
 
-	test_delay_pin_33(1000);
+	test_delay_pin_33(1);
 
 	return 0;
 }

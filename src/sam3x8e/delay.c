@@ -14,23 +14,17 @@ void delay_micros(uint32_t us){
 			__asm__ volatile("NOP\n" "NOP\n" "NOP\n");
 			__asm__ volatile("NOP\n" "NOP\n" "NOP\n");
 			__asm__ volatile("NOP\n" "NOP\n" "NOP\n");
-			__asm__ volatile("NOP\n" "NOP\n" "NOP\n");
-			__asm__ volatile("NOP\n" "NOP\n" "NOP\n");
-			__asm__ volatile("NOP\n" "NOP\n" "NOP\n");
-			__asm__ volatile("NOP\n" "NOP\n" "NOP\n");
-			__asm__ volatile("NOP\n" "NOP\n" "NOP\n");
-			__asm__ volatile("NOP\n" "NOP\n" "NOP\n");
-			__asm__ volatile("NOP\n" "NOP\n" "NOP\n");
 			__asm__ volatile("NOP\n");
 
 			if(us >1 && us <= 5){
 				__asm__ volatile("NOP\n" "NOP\n" "NOP\n");
 				__asm__ volatile("NOP\n" "NOP\n" "NOP\n");
 				__asm__ volatile("NOP\n" "NOP\n" "NOP\n");
-			} else{
+			}
+			if( us <= 10){
 				__asm__ volatile("NOP\n" "NOP\n" "NOP\n");
-				__asm__ volatile("NOP\n" "NOP\n" "NOP\n");
-				__asm__ volatile("NOP\n" "NOP\n" "NOP\n");
+			}
+			if( us <= 100){
 				__asm__ volatile("NOP\n" "NOP\n" "NOP\n");
 			}
 		}

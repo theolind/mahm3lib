@@ -10,12 +10,11 @@
 void delay_us(uint32_t us){
 	for (uint32_t i = 0; i < us; i++){
 		uint8_t j = 0;
-		while (j < 7){
-			asm volatile("NOP\n\t" "NOP\n\t");
+		while (j < 6){
+			__asm__ volatile("NOP\n\t" "NOP\n\t" "NOP\n\t" "NOP\n\t");
 			j++;
 		}
 	}
-
 }
 
 void delay_ms(uint32_t ms){

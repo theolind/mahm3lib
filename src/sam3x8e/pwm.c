@@ -26,66 +26,6 @@
 #include "sam3x8e/pwm.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-///\cond
-/*
- *  Necessary registers addressed by incrementing the base address by an
- *  register-specific offset.
- */
-// The first register in the Power Management Controller
-#define p_PWM_BASE_ADD			0x40094000U
-
-#define PWM_CLK 	*((uint32_t*)(p_PWM_BASE_ADD + 0x000)) // PWM Clock Register
-#define PWM_ENA 	*((uint32_t*)(p_PWM_BASE_ADD + 0x004)) // PWM Enable Register
-#define PWM_DIS 	*((uint32_t*)(p_PWM_BASE_ADD + 0x008)) // PWM Disable Register
-#define PWM_SR 		*((uint32_t*)(p_PWM_BASE_ADD + 0x00C)) // PWM Status Register
-
-#define PWM_CMR0 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*0)) // PWM Channel Mode Register
-#define PWM_CMR1 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*1)) // PWM Channel Mode Register
-#define PWM_CMR2 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*2)) // PWM Channel Mode Register
-#define PWM_CMR3 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*3)) // PWM Channel Mode Register
-#define PWM_CMR4 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*4)) // PWM Channel Mode Register
-#define PWM_CMR5 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*5)) // PWM Channel Mode Register
-#define PWM_CMR6 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*6)) // PWM Channel Mode Register
-#define PWM_CMR7 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*7)) // PWM Channel Mode Register
-
-#define PWM_CDTY0 	*((uint32_t*)(p_PWM_BASE_ADD + 0x204 + 0x020*0)) // PWM Channel Duty Cycle Register
-#define PWM_CDTY1 	*((uint32_t*)(p_PWM_BASE_ADD + 0x204 + 0x020*1)) // PWM Channel Duty Cycle Register
-#define PWM_CDTY2 	*((uint32_t*)(p_PWM_BASE_ADD + 0x204 + 0x020*2)) // PWM Channel Duty Cycle Register
-#define PWM_CDTY3 	*((uint32_t*)(p_PWM_BASE_ADD + 0x204 + 0x020*3)) // PWM Channel Duty Cycle Register
-#define PWM_CDTY4 	*((uint32_t*)(p_PWM_BASE_ADD + 0x204 + 0x020*4)) // PWM Channel Duty Cycle Register
-#define PWM_CDTY5 	*((uint32_t*)(p_PWM_BASE_ADD + 0x204 + 0x020*5)) // PWM Channel Duty Cycle Register
-#define PWM_CDTY6 	*((uint32_t*)(p_PWM_BASE_ADD + 0x204 + 0x020*6)) // PWM Channel Duty Cycle Register
-#define PWM_CDTY7 	*((uint32_t*)(p_PWM_BASE_ADD + 0x204 + 0x020*7)) // PWM Channel Duty Cycle Register
-
-#define PWM_CDTYUPD0 *((uint32_t*)(p_PWM_BASE_ADD + 0x208 + 0x020*0)) // PWM Channel Duty Cycle Update Register
-#define PWM_CDTYUPD1 *((uint32_t*)(p_PWM_BASE_ADD + 0x208 + 0x020*1)) // PWM Channel Duty Cycle Update Register
-#define PWM_CDTYUPD2 *((uint32_t*)(p_PWM_BASE_ADD + 0x208 + 0x020*2)) // PWM Channel Duty Cycle Update Register
-#define PWM_CDTYUPD3 *((uint32_t*)(p_PWM_BASE_ADD + 0x208 + 0x020*3)) // PWM Channel Duty Cycle Update Register
-#define PWM_CDTYUPD4 *((uint32_t*)(p_PWM_BASE_ADD + 0x208 + 0x020*4)) // PWM Channel Duty Cycle Update Register
-#define PWM_CDTYUPD5 *((uint32_t*)(p_PWM_BASE_ADD + 0x208 + 0x020*5)) // PWM Channel Duty Cycle Update Register
-#define PWM_CDTYUPD6 *((uint32_t*)(p_PWM_BASE_ADD + 0x208 + 0x020*6)) // PWM Channel Duty Cycle Update Register
-#define PWM_CDTYUPD7 *((uint32_t*)(p_PWM_BASE_ADD + 0x208 + 0x020*7)) // PWM Channel Duty Cycle Update Register
-
-#define PWM_CPRD0 	*((uint32_t*)(p_PWM_BASE_ADD + 0x20C + 0x020*0)) // PWM Channel Period Register
-#define PWM_CPRD1 	*((uint32_t*)(p_PWM_BASE_ADD + 0x20C + 0x020*1)) // PWM Channel Period Register
-#define PWM_CPRD2 	*((uint32_t*)(p_PWM_BASE_ADD + 0x20C + 0x020*2)) // PWM Channel Period Register
-#define PWM_CPRD3 	*((uint32_t*)(p_PWM_BASE_ADD + 0x20C + 0x020*3)) // PWM Channel Period Register
-#define PWM_CPRD4 	*((uint32_t*)(p_PWM_BASE_ADD + 0x20C + 0x020*4)) // PWM Channel Period Register
-#define PWM_CPRD5 	*((uint32_t*)(p_PWM_BASE_ADD + 0x20C + 0x020*5)) // PWM Channel Period Register
-#define PWM_CPRD6 	*((uint32_t*)(p_PWM_BASE_ADD + 0x20C + 0x020*6)) // PWM Channel Period Register
-#define PWM_CPRD7 	*((uint32_t*)(p_PWM_BASE_ADD + 0x20C + 0x020*7)) // PWM Channel Period Register
-
-#define PWM_CPRDUPD0 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*0)) // PWM Channel Period Update Register
-#define PWM_CPRDUPD1 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*1)) // PWM Channel Period Update Register
-#define PWM_CPRDUPD2 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*2)) // PWM Channel Period Update Register
-#define PWM_CPRDUPD3 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*3)) // PWM Channel Period Update Register
-#define PWM_CPRDUPD4 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*4)) // PWM Channel Period Update Register
-#define PWM_CPRDUPD5 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*5)) // PWM Channel Period Update Register
-#define PWM_CPRDUPD6 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*6)) // PWM Channel Period Update Register
-#define PWM_CPRDUPD7 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*7)) // PWM Channel Period Update Register
-
-///\endcond
 
 
 /**
@@ -94,8 +34,9 @@
  * @return
  */
 uint8_t pwm_init_default() {
-	pwm_reset();
 	pmc_enable_peripheral_clock(ID_PWM);
+	pwm_reset();
+	pwm_channel_disable(PWM_CHANNEL_ALL_MASK);
 	return 1;
 }
 
@@ -123,42 +64,28 @@ uint8_t pwm_init_channel(struct pwm_channel_setting channel) {
  * This function will enable the selected channel, identified with predefined
  * values, like: PWM_CHANNEL_x_MASK
  *
+ * Alternatively use PWM_CHANNEL_ALL_MASK to enable all channel at once.
+ *
  * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
- * @return error (1 = SUCCESS and 0 = FAIL)
+ * @return error Will always return 1 = SUCCESS
  */
 uint8_t pwm_channel_enable(uint32_t channel) {
-	switch (channel) {
-	case PWM_CHANNEL_0_MASK:
-		set_section_in_register(&PWM_ENA, PWM_CHANNEL_0_MASK, 1);
-		break;
-	case PWM_CHANNEL_1_MASK:
-		set_section_in_register(&PWM_ENA, PWM_CHANNEL_1_MASK, 1);
-		break;
-	case PWM_CHANNEL_2_MASK:
-		set_section_in_register(&PWM_ENA, PWM_CHANNEL_2_MASK, 1);
-		break;
-	case PWM_CHANNEL_3_MASK:
-		set_section_in_register(&PWM_ENA, PWM_CHANNEL_3_MASK, 1);
-		break;
-	case PWM_CHANNEL_4_MASK:
-		set_section_in_register(&PWM_ENA, PWM_CHANNEL_4_MASK, 1);
-		break;
-	case PWM_CHANNEL_5_MASK:
-		set_section_in_register(&PWM_ENA, PWM_CHANNEL_5_MASK, 1);
-		break;
-	case PWM_CHANNEL_6_MASK:
-		set_section_in_register(&PWM_ENA, PWM_CHANNEL_6_MASK, 1);
-		break;
-	case PWM_CHANNEL_7_MASK:
-		set_section_in_register(&PWM_ENA, PWM_CHANNEL_7_MASK, 1);
-		break;
-	default:
-		return 0;
-		break;
-	}
+	set_section_in_register(&PWM_ENA, channel, 1);
 	return 1;
 }
-
+/**
+ * This function will disable the selected channel, identified with predefined
+ * values, like: PWM_CHANNEL_x_MASK.
+ *
+ * Alternatively use PWM_CHANNEL_ALL_MASK to disable all channel at once.
+ *
+ * @param channel {The channel to be disabled, use prefix: PWM_CHANNEL_}
+ * @return error (1 = SUCCESS and 0 = FAIL)
+ */
+uint8_t pwm_channel_disable(uint32_t channel){
+	set_section_in_register(&PWM_DIS, channel, 1);
+	return 1;
+}
 /**
  * Set the channel prescaler
  * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}

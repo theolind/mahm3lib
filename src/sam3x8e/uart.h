@@ -47,6 +47,7 @@
 #define UART_CR_TXDIS 					(1u << 7)
 // UART Control Register - Reset Status Bits
 #define UART_CR_RSTSTA 					(1u << 8)
+///@endcond
 
 /*
  * UART Mode Register - Parity setting
@@ -80,6 +81,7 @@
 /// Remote Loopback
 #define UART_CHMODE_REMOTE_LOOPBACK 	(3)
 
+///@cond
 // Defines for the UART Status Register
 // Receiver Ready?
 #define UART_SR_RXRDY 					(1u << 0)

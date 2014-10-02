@@ -187,11 +187,13 @@
  *
  * @return
  */
+/*
 uint8_t pwm_init_default(){
 	pwm_reset();
 	pmc_start_peripheral_clock(ID_PWM);
 	return 1;
 }
+*/
 
 /**
  * disable channel
@@ -199,16 +201,18 @@ uint8_t pwm_init_default(){
  * enable channel
  * @return
  */
+/*
 uint8_t  pwm_init_channel(struct pwm_channel_setting instance, uint8_t pin){
 
 	return 1;
 }
-
+*/
 /**
  * Set the channel prescaler
  * @return
  */
-uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler){
+/*
+uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
 	uint32_t *reg;
 	switch (channel) {
 	case PWM_CHANNEL_0_MASK:
@@ -241,25 +245,27 @@ uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler){
 
 	return 1;
 }
-
+*/
 /**
  * Set the channel polarity
  * @return
  */
+/*
 uint8_t  pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity){
 
 	return 1;
 }
-
+*/
 /**
  * Set the channel alignment
  * @return
  */
+/*
 uint8_t  pwm_set_channel_alignment(uint32_t channel, uint32_t PWM_ALIGN_){
 
 	return 1;
 }
-
+*/
 /**
  * Turns off clock A or B.
  *
@@ -267,7 +273,9 @@ uint8_t  pwm_set_channel_alignment(uint32_t channel, uint32_t PWM_ALIGN_){
  * @param clock_id {Must be 0 for clkA and 1 for clkB}
  * @return
  */
+/*
 uint8_t	 pwm_turn_of_clkx(uint8_t clock_id){
+
 	if(clock_id == 0){
 		set_section_in_register(&PWM_CLK, PWM_CLK_PREA_MASK, PWM_CLK_DIVx_TURNOFF);
 		return 1;
@@ -278,24 +286,26 @@ uint8_t	 pwm_turn_of_clkx(uint8_t clock_id){
 
 	return 0;
 }
-
+*/
 /**
  * Set the channel duty cycle
  * @param channel
  * @param duty_cycle
  * @return
  */
+/*
 uint32_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle){
 
 	return 1;
 }
+*/
 
 /**
  * Shuts down the peripheral but keeps all settings
  * @return
  */
 uint8_t  pwm_shutdown(){
-	pmc_stop_peripheral_clock(ID_PWM);
+	//pmc_stop_peripheral_clock(ID_PWM);
 	return 1;
 }
 
@@ -305,6 +315,7 @@ uint8_t  pwm_shutdown(){
  * @return error
  */
 uint8_t  pwm_reset(){
+	/*
 	clear_register(&PWM_CLK);
 	set_register(&PWM_DIS);
 	clear_register(&PWM_CMR0);
@@ -312,6 +323,7 @@ uint8_t  pwm_reset(){
 	clear_register(&PWM_CDTYUPD0);
 	clear_register(&PWM_CPRD0);
 	clear_register(&PWM_CPRDUPD0);
+	*/
 	return 1;
 }
 
@@ -330,11 +342,12 @@ uint8_t  pwm_close(){
  * @param channel The channel mask, ex. PWM_CHANNEL_2_MASK
  * @return
  */
+/*
 uint32_t pwm_read(uint8_t channel){
 	//&PWM_CMR1;
 	return 1;
 }
-
+*/
 
 void function(void){
 	/**

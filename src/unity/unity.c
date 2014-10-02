@@ -556,7 +556,8 @@ void UnityAssertEqualFloatArray(UNITY_PTR_ATTRIBUTE const _UF* expected,
             tol = 0.0f - tol;
 
         //This first part of this condition will catch any NaN or Infinite values
-        if ((diff * 0.0f != 0.0f) || (diff > tol))
+        //if ((diff * 0.0f != 0.0f) || (diff > tol)) - ORIGINAL LINE OF CODE, edited by MB, October 1, 2014
+        if (((diff * 0.0f < 0.0f) || (diff * 0.0f > 0.0f)) || (diff > tol))
         {
             UnityTestResultsFailBegin(lineNumber);
             UnityPrint(UnityStrElement);
@@ -600,7 +601,9 @@ void UnityAssertFloatsWithin(const _UF delta,
     }
 
     //This first part of this condition will catch any NaN or Infinite values
-    if ((diff * 0.0f != 0.0f) || (pos_delta < diff))
+    //if ((diff * 0.0f != 0.0f) || (pos_delta < diff)) - ORIGINAL LINE OF CODE, edited by MB, October 1, 2014
+    if (((diff * 0.0f < 0.0f) || (diff * 0.0f > 0.0f)) || (pos_delta < diff))
+
     {
         UnityTestResultsFailBegin(lineNumber);
 #ifdef UNITY_FLOAT_VERBOSE
@@ -628,7 +631,8 @@ void UnityAssertFloatIsInf(const _UF actual,
     // produces
     //   error C2124: divide or mod by zero
     // As a workaround, place 0 into a variable.
-    if ((1.0f / f_zero) != actual)
+    //if ((1.0f / f_zero) != actual) - ORIGINAL LINE OF CODE, edited by MB, October 1, 2014
+    if (((1.0f / f_zero) < actual) || ((1.0f / f_zero) > actual))
     {
         UnityTestResultsFailBegin(lineNumber);
 #ifdef UNITY_FLOAT_VERBOSE
@@ -652,7 +656,8 @@ void UnityAssertFloatIsNegInf(const _UF actual,
     UNITY_SKIP_EXECUTION;
 
     // The rationale for not using 1.0f/0.0f is given in UnityAssertFloatIsInf's body.
-    if ((-1.0f / f_zero) != actual)
+    //if ((-1.0f / f_zero) != actual) - ORIGINAL LINE OF CODE, edited by MB, October 1, 2014
+    if (((-1.0f / f_zero) < actual) || ((-1.0f / f_zero) > actual))
     {
         UnityTestResultsFailBegin(lineNumber);
 #ifdef UNITY_FLOAT_VERBOSE
@@ -675,7 +680,8 @@ void UnityAssertFloatIsNaN(const _UF actual,
 {
     UNITY_SKIP_EXECUTION;
 
-    if (actual == actual)
+    //if (actual == actual)  - ORIGINAL LINE OF CODE, edited by MB, October 1, 2014
+    if (!((actual < actual) || (actual > actual)))
     {
         UnityTestResultsFailBegin(lineNumber);
 #ifdef UNITY_FLOAT_VERBOSE

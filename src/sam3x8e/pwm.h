@@ -103,6 +103,15 @@ uint8_t	 pwm_init_default(void);
 uint8_t	 pwm_init(struct pwm_clk_setting clk_settings);
 
 /**
+ * This function will enable the selected channel, identified with predefined
+ * values, like: PWM_CHANNEL_x_MASK
+ *
+ * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
+ * @return error (1 = SUCCESS and 0 = FAIL)
+ */
+uint8_t pwm_channel_enable(uint32_t channel);
+
+/**
  * Turns off one of two clocks in PWM that are called clkA and clkB.
  *
  * @return error (0 = FAIL, 1 = SUCCESS)

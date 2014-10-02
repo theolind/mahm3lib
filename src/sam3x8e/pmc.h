@@ -18,6 +18,7 @@
 #include <inttypes.h>
 #include "id.h"				// Definitions of Peripheral Identifiers
 
+///@cond
 // Pointer to registers of the PMC peripheral.
 #define PMC ((pmc_reg_t *) 0x400E0600U)
 
@@ -93,6 +94,7 @@ typedef struct {
 	// Peripheral Control Register, offset 0x010C
 	uint32_t PMC_PCR;
 } pmc_reg_t;
+///@endcond
 
 /**
  * Enable peripheral clock.

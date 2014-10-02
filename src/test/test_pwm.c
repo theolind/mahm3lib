@@ -8,7 +8,6 @@
 
 #include "unity/unity.h"
 #include "test_pwm.h"
-#include "pwm.c"
 
 
 /*
@@ -17,11 +16,11 @@
 void test_pwm_channel_enabled(void) {
 	pwm_reset();
 	pwm_channel_enable(PWM_CHANNEL_3_MASK);
-	TEST_ASSERT_BITS_HIGH(PWM_CHANNEL_3_MASK, PWM_ENA);
+	TEST_ASSERT_BITS_HIGH(PWM_CHANNEL_3_MASK, PWM_SR);
 }
 
-void test_pwm_channel_enabled(void) {
+void test_pwm_channel_disabled(void){
 	pwm_reset();
-	pwm_channel_enable(PWM_CHANNEL_3_MASK);
-	TEST_ASSERT_BITS_HIGH(PWM_CHANNEL_3_MASK, PWM_ENA);
+	pwm_channel_disable(PWM_CHANNEL_3_MASK);
+	TEST_ASSERT_BITS_LOW(PWM_CHANNEL_3_MASK, PWM_SR);
 }

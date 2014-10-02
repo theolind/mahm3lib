@@ -4,6 +4,7 @@
 * Author: 	Theodor Lindquist
 *			Soded Alatia
 * 			Felix Ruponen
+* 			Mathias Beckius
 *
 * Date:		29 September 2014
 */

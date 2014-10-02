@@ -1,23 +1,12 @@
-#include "unity/unity.h"
-#include "test_runner.h"
+-----Manual tests for the Delay API-----
+Copy selected function to main.c and call the function from int main(void).
+test_l_led will blink the L-LED.
+test_pin_46 will turn pin 46 on and off and the delay can be read out by an
+oscilloscope.
 
+DON'T FORGET TO INCLUDE:
 #include "sam3x8e/pio.h"
 #include "sam3x8e/delay.h"
-
-
-int main(void) {
-	// basic initialization of hardware and UART communication.
-	unity_hw_setup();
-
-	// run unit tests
-	//run_tests();
-
-	// run delay tests
-	//test_delay_l_led(5000000);
-	test_delay_pin_46(1);
-
-	return 0;
-}
 
 void test_delay_l_led(uint32_t delay){
 	pio_conf_pin(PIOB, 27, 0, 0);

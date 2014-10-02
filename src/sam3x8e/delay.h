@@ -32,8 +32,8 @@
 
 #include <inttypes.h>
 
-void delay_microseconds(uint32_t us);
-void delay_milliseconds(uint32_t ms);
+void delay_micros(uint32_t us);
+void delay_ms(uint32_t ms);
 
 /**
  * This function will delay in microseconds.

@@ -7,19 +7,19 @@
 
 #include "delay.h"
 
-void delay_microseconds(uint32_t us){
+void delay_micros(uint32_t us){
 	for (uint32_t i = 0; i < us; i++){
 		uint8_t j = 0;
-		while (j < 7){
-			asm volatile("NOP\n\t" "NOP\n\t");
+		while (j < 6){
+			__asm__ volatile("NOP\n\t" "NOP\n\t" "NOP\n\t" "NOP\n\t");
 			j++;
 		}
 	}
 
 }
 
-void delay_milliseconds(uint32_t ms){
-	delay_microseconds(ms * 1000);
+void delay_ms(uint32_t ms){
+	delay_micros(ms * 1000);
 }
 
 /*

@@ -6,6 +6,7 @@
  */
 
 #include "sam3x8e/pio.h"
+#include "sam3x8e/delay.h"
 
 void test_delay_l_led(uint32_t delay){
 	pio_conf_pin(PIOB, 27, 0, 0);

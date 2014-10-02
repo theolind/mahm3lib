@@ -21,9 +21,10 @@
  * @bug {Manual and automated testing are being designed.}
  */
 
-
+#include "sam3x8e/bitwise_operations.h"
 #include "sam3x8e/pmc.h"
-#include "pwm.h"
+#include "sam3x8e/pwm.h"
+
 
 /////////////////////////////////////////////////////////////////////////////
 ///\cond
@@ -84,7 +85,6 @@
 #define PWM_CPRDUPD6 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*6)) // PWM Channel Period Update Register
 #define PWM_CPRDUPD7 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*7)) // PWM Channel Period Update Register
 
-
 ///\endcond
 /////////////////////////////////////////////////////////////////////////////
 /**
@@ -119,7 +119,7 @@
 #define PWM_CMRx_DTHI_MASK				(1 << 17)
 #define PWM_CMRx_DTLI_MASK				(1 << 18)
 
-#define PWM_CDTYx_CDTY__MASK			(0x0000FFFF)
+#define PWM_CDTYx_CDTY_MASK				(0x0000FFFF)
 #define PWM_CDTYUPDx_CDTYUPD_MASK		(0x0000FFFF)
 
 #define PWM_CPRDx_CPRD_MASK				(0x0000FFFF)
@@ -181,141 +181,287 @@
 #define PWM_CLK_DIVx_PREx				1
 //////////////////////////////////
 
-
 /**
- * Start pmc clock
+ * Initialize the PWM peripheral with minimum requirements.
  *
  * @return
  */
-/*
-uint8_t pwm_init_default(){
+uint8_t pwm_init_default() {
 	pwm_reset();
-	pmc_start_peripheral_clock(ID_PWM);
+	pmc_enable_peripheral_clock(ID_PWM);
 	return 1;
 }
-*/
 
 /**
- * disable channel
- * set parameters
- * enable channel
+ * Initialize the PWM peripheral and set the prescalers and divers of clock A
+ * or B. This function will also start the peripheral clock in the
+ * Power Management Controller (PMC).
+ *
+ * @param channel {The channel to initialize using a channel-instance of type
+ * pwm_channel_setting}
  * @return
  */
-/*
-uint8_t  pwm_init_channel(struct pwm_channel_setting instance, uint8_t pin){
-
+uint8_t pwm_init_channel(struct pwm_channel_setting channel) {
+	pwm_reset();
+	pmc_enable_peripheral_clock(ID_PWM);
+	/**
+	 * disable channel
+	 * set parameters
+	 * enable channel
+	 */
 	return 1;
 }
-*/
+
 /**
- * Set the channel prescaler
- * @return
+ * This function will enable the selected channel, identified with predefined
+ * values, like: PWM_CHANNEL_x_MASK
+ *
+ * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
+ * @return error (1 = SUCCESS and 0 = FAIL)
  */
-/*
-uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
-	uint32_t *reg;
+uint8_t pwm_channel_enable(uint32_t channel) {
 	switch (channel) {
 	case PWM_CHANNEL_0_MASK:
-				set_section_in_register(&PWM_CMR0, PWM_CMRx_CPRE_MASK, prescaler);
-				break;
+		set_section_in_register(&PWM_ENA, PWM_CHANNEL_0_MASK, 1);
+		break;
 	case PWM_CHANNEL_1_MASK:
-				set_section_in_register(&PWM_CMR1, PWM_CMRx_CPRE_MASK, prescaler);
-				break;
+		set_section_in_register(&PWM_ENA, PWM_CHANNEL_1_MASK, 1);
+		break;
 	case PWM_CHANNEL_2_MASK:
-				set_section_in_register(&PWM_CMR2, PWM_CMRx_CPRE_MASK, prescaler);
-				break;
+		set_section_in_register(&PWM_ENA, PWM_CHANNEL_2_MASK, 1);
+		break;
 	case PWM_CHANNEL_3_MASK:
-				set_section_in_register(&PWM_CMR3, PWM_CMRx_CPRE_MASK, prescaler);
-				break;
+		set_section_in_register(&PWM_ENA, PWM_CHANNEL_3_MASK, 1);
+		break;
 	case PWM_CHANNEL_4_MASK:
-				set_section_in_register(&PWM_CMR4, PWM_CMRx_CPRE_MASK, prescaler);
-				break;
+		set_section_in_register(&PWM_ENA, PWM_CHANNEL_4_MASK, 1);
+		break;
 	case PWM_CHANNEL_5_MASK:
-				set_section_in_register(&PWM_CMR5, PWM_CMRx_CPRE_MASK, prescaler);
-				break;
+		set_section_in_register(&PWM_ENA, PWM_CHANNEL_5_MASK, 1);
+		break;
 	case PWM_CHANNEL_6_MASK:
-				set_section_in_register(&PWM_CMR6, PWM_CMRx_CPRE_MASK, prescaler);
-				break;
+		set_section_in_register(&PWM_ENA, PWM_CHANNEL_6_MASK, 1);
+		break;
 	case PWM_CHANNEL_7_MASK:
-				set_section_in_register(&PWM_CMR7, PWM_CMRx_CPRE_MASK, prescaler);
-				break;
-		default:
-			break;
+		set_section_in_register(&PWM_ENA, PWM_CHANNEL_7_MASK, 1);
+		break;
+	default:
+		return 0;
+		break;
 	}
-
 	return 1;
 }
-*/
+
+/**
+ * Set the channel prescaler
+ * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
+ * @return
+ */
+uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
+	switch (channel) {
+	case PWM_CHANNEL_0_MASK:
+		set_section_in_register(&PWM_CMR0, PWM_CMRx_CPRE_MASK, prescaler);
+		break;
+	case PWM_CHANNEL_1_MASK:
+		set_section_in_register(&PWM_CMR1, PWM_CMRx_CPRE_MASK, prescaler);
+		break;
+	case PWM_CHANNEL_2_MASK:
+		set_section_in_register(&PWM_CMR2, PWM_CMRx_CPRE_MASK, prescaler);
+		break;
+	case PWM_CHANNEL_3_MASK:
+		set_section_in_register(&PWM_CMR3, PWM_CMRx_CPRE_MASK, prescaler);
+		break;
+	case PWM_CHANNEL_4_MASK:
+		set_section_in_register(&PWM_CMR4, PWM_CMRx_CPRE_MASK, prescaler);
+		break;
+	case PWM_CHANNEL_5_MASK:
+		set_section_in_register(&PWM_CMR5, PWM_CMRx_CPRE_MASK, prescaler);
+		break;
+	case PWM_CHANNEL_6_MASK:
+		set_section_in_register(&PWM_CMR6, PWM_CMRx_CPRE_MASK, prescaler);
+		break;
+	case PWM_CHANNEL_7_MASK:
+		set_section_in_register(&PWM_CMR7, PWM_CMRx_CPRE_MASK, prescaler);
+		break;
+	default:
+		return 0;
+		break;
+	}
+	return 1;
+}
+
 /**
  * Set the channel polarity
+ *
+ * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
  * @return
  */
-/*
-uint8_t  pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity){
-
+uint8_t pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity) {
+	switch (channel) {
+	case PWM_CHANNEL_0_MASK:
+		set_section_in_register(&PWM_CMR0, PWM_CMRx_CPOL_MASK, pwm_polarity);
+		break;
+	case PWM_CHANNEL_1_MASK:
+		set_section_in_register(&PWM_CMR1, PWM_CMRx_CPOL_MASK, pwm_polarity);
+		break;
+	case PWM_CHANNEL_2_MASK:
+		set_section_in_register(&PWM_CMR2, PWM_CMRx_CPOL_MASK, pwm_polarity);
+		break;
+	case PWM_CHANNEL_3_MASK:
+		set_section_in_register(&PWM_CMR3, PWM_CMRx_CPOL_MASK, pwm_polarity);
+		break;
+	case PWM_CHANNEL_4_MASK:
+		set_section_in_register(&PWM_CMR4, PWM_CMRx_CPOL_MASK, pwm_polarity);
+		break;
+	case PWM_CHANNEL_5_MASK:
+		set_section_in_register(&PWM_CMR5, PWM_CMRx_CPOL_MASK, pwm_polarity);
+		break;
+	case PWM_CHANNEL_6_MASK:
+		set_section_in_register(&PWM_CMR6, PWM_CMRx_CPOL_MASK, pwm_polarity);
+		break;
+	case PWM_CHANNEL_7_MASK:
+		set_section_in_register(&PWM_CMR7, PWM_CMRx_CPOL_MASK, pwm_polarity);
+		break;
+	default:
+		return 0;
+		break;
+	}
 	return 1;
 }
-*/
+
 /**
  * Set the channel alignment
+ *
+ * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
  * @return
  */
-/*
-uint8_t  pwm_set_channel_alignment(uint32_t channel, uint32_t PWM_ALIGN_){
-
+uint8_t pwm_set_channel_alignment(uint32_t channel, uint32_t pwm_alignment) {
+	switch (channel) {
+	case PWM_CHANNEL_0_MASK:
+		set_section_in_register(&PWM_CMR0, PWM_CMRx_CALG_MASK, pwm_alignment);
+		break;
+	case PWM_CHANNEL_1_MASK:
+		set_section_in_register(&PWM_CMR1, PWM_CMRx_CALG_MASK, pwm_alignment);
+		break;
+	case PWM_CHANNEL_2_MASK:
+		set_section_in_register(&PWM_CMR2, PWM_CMRx_CALG_MASK, pwm_alignment);
+		break;
+	case PWM_CHANNEL_3_MASK:
+		set_section_in_register(&PWM_CMR3, PWM_CMRx_CALG_MASK, pwm_alignment);
+		break;
+	case PWM_CHANNEL_4_MASK:
+		set_section_in_register(&PWM_CMR4, PWM_CMRx_CALG_MASK, pwm_alignment);
+		break;
+	case PWM_CHANNEL_5_MASK:
+		set_section_in_register(&PWM_CMR5, PWM_CMRx_CALG_MASK, pwm_alignment);
+		break;
+	case PWM_CHANNEL_6_MASK:
+		set_section_in_register(&PWM_CMR6, PWM_CMRx_CALG_MASK, pwm_alignment);
+		break;
+	case PWM_CHANNEL_7_MASK:
+		set_section_in_register(&PWM_CMR7, PWM_CMRx_CALG_MASK, pwm_alignment);
+		break;
+	default:
+		return 0;
+		break;
+	}
 	return 1;
 }
-*/
+
 /**
  * Turns off clock A or B.
- *
  *
  * @param clock_id {Must be 0 for clkA and 1 for clkB}
  * @return
  */
-/*
-uint8_t	 pwm_turn_of_clkx(uint8_t clock_id){
-
-	if(clock_id == 0){
-		set_section_in_register(&PWM_CLK, PWM_CLK_PREA_MASK, PWM_CLK_DIVx_TURNOFF);
+uint8_t pwm_turn_of_clkx(uint8_t clock_id) {
+	if (clock_id == 0) {
+		set_section_in_register(&PWM_CLK, PWM_CLK_PREA_MASK,
+		PWM_CLK_DIVx_TURNOFF);
 		return 1;
-	}else if(clock_id == 1){
-		set_section_in_register(&PWM_CLK, PWM_CLK_PREB_MASK, PWM_CLK_DIVx_TURNOFF);
+	} else if (clock_id == 1) {
+		set_section_in_register(&PWM_CLK, PWM_CLK_PREB_MASK,
+		PWM_CLK_DIVx_TURNOFF);
 		return 1;
 	}
-
 	return 0;
 }
-*/
+
 /**
  * Set the channel duty cycle
- * @param channel
+ *
+ * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
  * @param duty_cycle
  * @return
  */
-/*
-uint32_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle){
+uint32_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
+	switch (channel) {
+	case PWM_CHANNEL_0_MASK:
+		set_section_in_register(&PWM_CDTYUPD0, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_1_MASK:
+		set_section_in_register(&PWM_CDTYUPD1, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_2_MASK:
+		set_section_in_register(&PWM_CDTYUPD2, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_3_MASK:
+		set_section_in_register(&PWM_CDTYUPD3, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_4_MASK:
+		set_section_in_register(&PWM_CDTYUPD4, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_5_MASK:
+		set_section_in_register(&PWM_CDTYUPD5, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_6_MASK:
+		set_section_in_register(&PWM_CDTYUPD6, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_7_MASK:
+		set_section_in_register(&PWM_CDTYUPD7, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	default:
+		return 0;
+		break;
+	}
+	return 1;
+}
+
+/**
+ * Writes an output to a given channel
+ * OBS: The same as pwm_set_channel_duty_cycle()
+ *
+ * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
+ * @param duty_cycle
+ * @return
+ */
+uint8_t pwm_write(uint8_t channel, uint32_t duty_cycle) {
 
 	return 1;
 }
-*/
 
 /**
  * Shuts down the peripheral but keeps all settings
  * @return
  */
-uint8_t  pwm_shutdown(){
-	//pmc_stop_peripheral_clock(ID_PWM);
+uint8_t pwm_shutdown() {
+	pmc_disable_peripheral_clock(ID_PWM);
 	return 1;
 }
-
 
 /**
  * Resets the peripheral and disables all channels
  * @return error
  */
-uint8_t  pwm_reset(){
-	/*
+uint8_t pwm_reset() {
 	clear_register(&PWM_CLK);
 	set_register(&PWM_DIS);
 	clear_register(&PWM_CMR0);
@@ -323,7 +469,6 @@ uint8_t  pwm_reset(){
 	clear_register(&PWM_CDTYUPD0);
 	clear_register(&PWM_CPRD0);
 	clear_register(&PWM_CPRDUPD0);
-	*/
 	return 1;
 }
 
@@ -331,7 +476,7 @@ uint8_t  pwm_reset(){
  * Reset and turns off the peripheral
  * @return
  */
-uint8_t  pwm_close(){
+uint8_t pwm_close() {
 	pwm_reset();
 	pwm_shutdown();
 	return 1;
@@ -339,17 +484,45 @@ uint8_t  pwm_close(){
 
 /**
  * Read what was earlier written to the channel
- * @param channel The channel mask, ex. PWM_CHANNEL_2_MASK
- * @return
+ *
+ * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
+ * @return {Previously set duty cycle (if 0 is received then it could mean
+ * error)}
  */
-/*
-uint32_t pwm_read(uint8_t channel){
-	//&PWM_CMR1;
+uint32_t pwm_read(uint8_t channel) {
+	switch (channel) {
+	case PWM_CHANNEL_0_MASK:
+		return get_section_in_register(&PWM_CDTY0, PWM_CDTYx_CDTY_MASK);
+		break;
+	case PWM_CHANNEL_1_MASK:
+		return get_section_in_register(&PWM_CDTY1, PWM_CDTYx_CDTY_MASK);
+		break;
+	case PWM_CHANNEL_2_MASK:
+		return get_section_in_register(&PWM_CDTY2, PWM_CDTYx_CDTY_MASK);
+		break;
+	case PWM_CHANNEL_3_MASK:
+		return get_section_in_register(&PWM_CDTY3, PWM_CDTYx_CDTY_MASK);
+		break;
+	case PWM_CHANNEL_4_MASK:
+		return get_section_in_register(&PWM_CDTY4, PWM_CDTYx_CDTY_MASK);
+		break;
+	case PWM_CHANNEL_5_MASK:
+		return get_section_in_register(&PWM_CDTY5, PWM_CDTYx_CDTY_MASK);
+		break;
+	case PWM_CHANNEL_6_MASK:
+		return get_section_in_register(&PWM_CDTY6, PWM_CDTYx_CDTY_MASK);
+		break;
+	case PWM_CHANNEL_7_MASK:
+		return get_section_in_register(&PWM_CDTY7, PWM_CDTYx_CDTY_MASK);
+		break;
+	default:
+		return 0;
+		break;
+	}
 	return 1;
 }
-*/
 
-void function(void){
+void function(void) {
 	/**
 	 * enable the PWM clock in PMC
 	 * See status for channel
@@ -362,9 +535,5 @@ void function(void){
 	 *
 	 */
 
-
 }
-
-
-
 

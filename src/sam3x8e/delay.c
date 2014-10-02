@@ -7,7 +7,7 @@
 
 #include "delay.h"
 
-void delay_micros(uint32_t us){
+void delay_us(uint32_t us){
 	for (uint32_t i = 0; i < us; i++){
 		uint8_t j = 0;
 		while (j < 6){
@@ -15,11 +15,10 @@ void delay_micros(uint32_t us){
 			j++;
 		}
 	}
-
 }
 
 void delay_ms(uint32_t ms){
-	delay_micros(ms * 1000);
+	delay_us(ms * 1000);
 }
 
 /*

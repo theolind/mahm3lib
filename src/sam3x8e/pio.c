@@ -11,6 +11,10 @@
 
 #include "pio.h"
 
+// Internally used (not for user)
+#define PERIPH_A			0
+#define PERIPH_B			1
+
 /*
  * This register can only be written if the WPEN bit is cleared in
  * "PIO Write Protect Mode Register".
@@ -88,46 +92,20 @@ uint32_t pio_read_port(pio_reg_t *port) {
 }
 
 
-
-/**
- * This function will set the multiplexer inside the PIO peripheral to point
- * one of its pins to an embedded peripheral inside the MCU. The pin will after
- * this configuration no longer be controllable by the PIO.
- *
- * There is only one parameter to this function and that is the pin in question.
- * You can't use any pin for every purpose. Every pin has a digital function (PIO)
- * and a peripheral function. The pin mapping of this API includes all pins and
- * their secondary function. These pins are predefined. Start by writing
- * PIN_[peripheral][additional property and numbering]_[package pin number]
- * example:
- * PIN_PWMH0_60    or    PIN_PWML0_59
- * (These refer to the board independent pin mapping and will be available when
- * the API is included.)
- *
- * @author {Saeed Ghasemi}
- * @param port {This is the pio port of the pin to be multiplexed.}
- * @param periph {Point to your chosen peripheral. PERIPH_A or B}
- * @param pin_number {This is the pin number in the port register.
- * Start with prefix: PIN_[peripheral] to get to predefined pins.}
- * @return error (1  = SUCCESS, 0 = FAIL)
- * @bug {Not yet tested. All ports will be included after initial testing.}
- */
-/*
-uint8_t pio_conf_pin_to_peripheral(uint32_t port,
+uint8_t pio_conf_pin_to_peripheral(pio_reg_t *port,
 		uint32_t periph, uint32_t pin_number){
-	uint32_t *p_reg;
+	//uint32_t *p_reg;
 
-	// The pin is now in peripheral mode (not controlled by PIO)
-	p_reg = (uint32_t *) (port + PIO_PDR);
-	*p_reg = (0x1U << pin_number);
-	// The pin is now set to peripheral B
-	p_reg = (uint32_t *) (port + PIO_ABSR);
+	// The will be set in peripheral mode (not controllable by PIO)
+	//p_reg = (uint32_t *) (port + PIO_PDR);
+	port->PIO_PDR = (0x1U << pin_number);
+	// The will be set to peripheral B
+	//p_reg = (uint32_t *) (port + PIO_ABSR);
 	if(periph){
-		*p_reg |= (0x1U << pin_number);
+		port->PIO_ABSR |= (0x1U << pin_number);
 	}else{
-		*p_reg &= ~(0x1U << pin_number);
+		port->PIO_ABSR &= ~(0x1U << pin_number);
 	}
-	return SUCCESS;
+	return 1;
 }
 
-*/

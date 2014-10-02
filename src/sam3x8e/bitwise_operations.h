@@ -81,16 +81,6 @@ uint8_t set_section_in_register2(uint32_t *reg, uint8_t start_bit,
  * @param mask The area for which the value must be returned (high bit are read)
  * @return The value of the section in the register
  */
-uint32_t get_value_of_register(uint32_t *reg, uint32_t mask);
-/**
- * This function will only return the value of a specified section in a given
- * register. The value in the section will be right-shifted so that the value
- * returned is the value stored in the section.
- *
- * @param reg This specifies a pointer to the register
- * @param mask The area for which the value must be returned (high bit are read)
- * @return The value of the section in the register
- */
 uint32_t get_section_in_register(uint32_t *reg, uint32_t mask);
 /**
  * This function will clear the entire register.

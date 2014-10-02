@@ -291,9 +291,10 @@ uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
 }
 
 /**
- * Set the channel polarity
+ * Set the channel polarity.
+ * This can reverse the duty cycle. Important when using the PWMLx pins.
  *
- * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
+ * @param channel {The channel to set the polarity for. ex PWM_CHANNEL_0_MASK}
  * @return
  */
 uint8_t pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity) {
@@ -388,63 +389,50 @@ uint8_t pwm_turn_of_clkx(uint8_t clock_id) {
 }
 
 /**
- * Set the channel duty cycle
+ * Writes an output to a given channel by setting the channel duty cycle.
  *
  * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
- * @param duty_cycle
- * @return
- */
-uint32_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
-	switch (channel) {
-	case PWM_CHANNEL_0_MASK:
-		set_section_in_register(&PWM_CDTYUPD0, PWM_CDTYUPDx_CDTYUPD_MASK,
-				duty_cycle);
-		break;
-	case PWM_CHANNEL_1_MASK:
-		set_section_in_register(&PWM_CDTYUPD1, PWM_CDTYUPDx_CDTYUPD_MASK,
-				duty_cycle);
-		break;
-	case PWM_CHANNEL_2_MASK:
-		set_section_in_register(&PWM_CDTYUPD2, PWM_CDTYUPDx_CDTYUPD_MASK,
-				duty_cycle);
-		break;
-	case PWM_CHANNEL_3_MASK:
-		set_section_in_register(&PWM_CDTYUPD3, PWM_CDTYUPDx_CDTYUPD_MASK,
-				duty_cycle);
-		break;
-	case PWM_CHANNEL_4_MASK:
-		set_section_in_register(&PWM_CDTYUPD4, PWM_CDTYUPDx_CDTYUPD_MASK,
-				duty_cycle);
-		break;
-	case PWM_CHANNEL_5_MASK:
-		set_section_in_register(&PWM_CDTYUPD5, PWM_CDTYUPDx_CDTYUPD_MASK,
-				duty_cycle);
-		break;
-	case PWM_CHANNEL_6_MASK:
-		set_section_in_register(&PWM_CDTYUPD6, PWM_CDTYUPDx_CDTYUPD_MASK,
-				duty_cycle);
-		break;
-	case PWM_CHANNEL_7_MASK:
-		set_section_in_register(&PWM_CDTYUPD7, PWM_CDTYUPDx_CDTYUPD_MASK,
-				duty_cycle);
-		break;
-	default:
-		return 0;
-		break;
-	}
-	return 1;
-}
-
-/**
- * Writes an output to a given channel
- * OBS: The same as pwm_set_channel_duty_cycle()
- *
- * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
- * @param duty_cycle
- * @return
+ * @param duty_cycle {must be between 0 and period as in CPRD in the register PWM_CPRDx.}
+ * @return error (1 = SCCESS and 0 = FAIL)
  */
 uint8_t pwm_write(uint8_t channel, uint32_t duty_cycle) {
-
+	switch (channel) {
+		case PWM_CHANNEL_0_MASK:
+			set_section_in_register(&PWM_CDTYUPD0, PWM_CDTYUPDx_CDTYUPD_MASK,
+					duty_cycle);
+			break;
+		case PWM_CHANNEL_1_MASK:
+			set_section_in_register(&PWM_CDTYUPD1, PWM_CDTYUPDx_CDTYUPD_MASK,
+					duty_cycle);
+			break;
+		case PWM_CHANNEL_2_MASK:
+			set_section_in_register(&PWM_CDTYUPD2, PWM_CDTYUPDx_CDTYUPD_MASK,
+					duty_cycle);
+			break;
+		case PWM_CHANNEL_3_MASK:
+			set_section_in_register(&PWM_CDTYUPD3, PWM_CDTYUPDx_CDTYUPD_MASK,
+					duty_cycle);
+			break;
+		case PWM_CHANNEL_4_MASK:
+			set_section_in_register(&PWM_CDTYUPD4, PWM_CDTYUPDx_CDTYUPD_MASK,
+					duty_cycle);
+			break;
+		case PWM_CHANNEL_5_MASK:
+			set_section_in_register(&PWM_CDTYUPD5, PWM_CDTYUPDx_CDTYUPD_MASK,
+					duty_cycle);
+			break;
+		case PWM_CHANNEL_6_MASK:
+			set_section_in_register(&PWM_CDTYUPD6, PWM_CDTYUPDx_CDTYUPD_MASK,
+					duty_cycle);
+			break;
+		case PWM_CHANNEL_7_MASK:
+			set_section_in_register(&PWM_CDTYUPD7, PWM_CDTYUPDx_CDTYUPD_MASK,
+					duty_cycle);
+			break;
+		default:
+			return 0;
+			break;
+		}
 	return 1;
 }
 
@@ -461,14 +449,37 @@ uint8_t pwm_shutdown() {
  * Resets the peripheral and disables all channels
  * @return error
  */
-uint8_t pwm_reset() {
-	clear_register(&PWM_CLK);
+uint8_t pwm_reset(){
 	set_register(&PWM_DIS);
+
+	clear_register(&PWM_CLK);
+
 	clear_register(&PWM_CMR0);
-	clear_register(&PWM_CDTY0);
+	clear_register(&PWM_CMR1);
+	clear_register(&PWM_CMR2);
+	clear_register(&PWM_CMR3);
+	clear_register(&PWM_CMR4);
+	clear_register(&PWM_CMR5);
+	clear_register(&PWM_CMR6);
+	clear_register(&PWM_CMR7);
+
 	clear_register(&PWM_CDTYUPD0);
-	clear_register(&PWM_CPRD0);
+	clear_register(&PWM_CDTYUPD1);
+	clear_register(&PWM_CDTYUPD2);
+	clear_register(&PWM_CDTYUPD3);
+	clear_register(&PWM_CDTYUPD4);
+	clear_register(&PWM_CDTYUPD5);
+	clear_register(&PWM_CDTYUPD6);
+	clear_register(&PWM_CDTYUPD7);
+
 	clear_register(&PWM_CPRDUPD0);
+	clear_register(&PWM_CPRDUPD1);
+	clear_register(&PWM_CPRDUPD2);
+	clear_register(&PWM_CPRDUPD3);
+	clear_register(&PWM_CPRDUPD4);
+	clear_register(&PWM_CPRDUPD5);
+	clear_register(&PWM_CPRDUPD6);
+	clear_register(&PWM_CPRDUPD7);
 	return 1;
 }
 
@@ -482,13 +493,6 @@ uint8_t pwm_close() {
 	return 1;
 }
 
-/**
- * Read what was earlier written to the channel
- *
- * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
- * @return {Previously set duty cycle (if 0 is received then it could mean
- * error)}
- */
 uint32_t pwm_read(uint8_t channel) {
 	switch (channel) {
 	case PWM_CHANNEL_0_MASK:

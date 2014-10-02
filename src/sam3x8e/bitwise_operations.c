@@ -134,7 +134,7 @@ uint32_t get_position_of_first_highbit(uint32_t mask){
  * @param mask The area for which the value must be returned (high bit are read)
  * @return The value of the section in the register
  */
-uint32_t get_value_of_register(uint32_t *reg, uint32_t mask){
+uint32_t get_section_in_register(uint32_t *reg, uint32_t mask){
 	return (*reg & mask >> get_position_of_first_highbit(mask));
 }
 

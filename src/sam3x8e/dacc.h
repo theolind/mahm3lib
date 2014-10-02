@@ -1,7 +1,7 @@
 /**
  * @file dacc.h
  * @brief DACC - Digital-to-Analog Conversion Controller
- * @details This file provides basic functionality for usage of the DACC.
+ * @details This API provides basic functionality for usage of the DACC.
  * @pre First Initialize the board.
  *
  * @author Andreas Drotth

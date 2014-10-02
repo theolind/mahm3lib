@@ -8,7 +8,7 @@
 * @author Felix Ruponen
 * @date 29 September, 2014
 *
-* @pre Initialize system clock.
+* @pre Initialize the system clock.
 */
 
 #ifndef WDT_H

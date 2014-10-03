@@ -14,6 +14,9 @@
 uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings) {
 	spi->SPI_CR = 1; //same as (1<<0); //enabling SPI
 	spi->SPI_MR = settings->master;
+	spi->SPI_CSR0 = settings->CPOL | (settings->NCPHA<<1) | (settings->bits[0]<<4)
+					| (settings->baud[0]<<8) | settings->start_delay[0]
+					| settings->end_delay[0];
 }
 
 void spi_select_slave(spi_reg_t *spi, uint8_t slave, uint8_t baud) {

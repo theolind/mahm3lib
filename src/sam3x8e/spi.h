@@ -54,6 +54,11 @@ typedef struct {
 
 //this would start configure the pins etc.
 //return 0 (1 as error code in the future)
+
+/**
+ * Initialize SPI
+ * @param spi
+ */
 uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings);
 
 // deselects the current slave then selects a new slave

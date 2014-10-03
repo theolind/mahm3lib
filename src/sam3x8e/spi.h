@@ -46,9 +46,12 @@ typedef struct spi_reg_t {
 
 typedef struct {
 	uint32_t master;
-	uint32_t mode;	//1-4
-	uint32_t start_delay;
-	uint32_t end_delay;
+	uint32_t CPOL;
+	uint32_t NCPHA;
+	uint32_t start_delay[4];
+	uint32_t end_delay[4];
+	uint32_t baud[4];
+	uint32_t bits[4];
 } spi_settings_t;
 
 //this would start configure the pins etc.

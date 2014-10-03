@@ -22,7 +22,7 @@ void run_tests(void) {
 
 	// Run UART tests
 	Unity.TestFile = "test/test_uart.c";
-	//RUN_TEST(test_uart_send_receive_char_local_loopback_mode, 0);
+	RUN_TEST(test_uart_send_receive_char_local_loopback_mode, 0);
 	HORIZONTAL_LINE_BREAK();
 
 	// Run PMC tests
@@ -69,7 +69,7 @@ void run_tests(void) {
 	// Run SPI tests
 	// Have yet to run tests due to error messages
 	Unity.TestFile = "test/test_spi.c";
-	/*RUN_TEST(test_spi_0_init, 30);
+	RUN_TEST(test_spi_0_init, 30);
 	RUN_TEST(test_spi_1_init, 30);
 	RUN_TEST(test_spi_select_slave, 30);
 	RUN_TEST(test_spi_0_write_char, 30);
@@ -79,7 +79,7 @@ void run_tests(void) {
 	RUN_TEST(test_spi_0_write_16_bit, 30);
 	RUN_TEST(test_spi_1_read_16_bit, 30);
 	RUN_TEST(test_spi_1_write_16_bit, 30);
-	RUN_TEST(test_spi_0_read_16_bit, 30);*/
+	RUN_TEST(test_spi_0_read_16_bit, 30);
 
 	UnityEnd();
 }

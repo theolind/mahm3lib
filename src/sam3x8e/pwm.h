@@ -24,7 +24,166 @@
 #ifndef PWM_H_
 #define PWM_H_
 
+/////////////////////////////////////////////////////////////////////////////
+///\cond
+/*
+ *  Necessary registers addressed by incrementing the base address by an
+ *  register-specific offset.
+ */
+// The first register in the Power Management Controller
+#define p_PWM_BASE_ADD			0x40094000U
+
+#define PWM_CLK 	*((uint32_t*)(p_PWM_BASE_ADD + 0x000)) // PWM Clock Register
+#define PWM_ENA 	*((uint32_t*)(p_PWM_BASE_ADD + 0x004)) // PWM Enable Register
+#define PWM_DIS 	*((uint32_t*)(p_PWM_BASE_ADD + 0x008)) // PWM Disable Register
+#define PWM_SR 		*((uint32_t*)(p_PWM_BASE_ADD + 0x00C)) // PWM Status Register
+
+#define PWM_CMR0 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*0)) // PWM Channel Mode Register
+#define PWM_CMR1 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*1)) // PWM Channel Mode Register
+#define PWM_CMR2 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*2)) // PWM Channel Mode Register
+#define PWM_CMR3 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*3)) // PWM Channel Mode Register
+#define PWM_CMR4 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*4)) // PWM Channel Mode Register
+#define PWM_CMR5 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*5)) // PWM Channel Mode Register
+#define PWM_CMR6 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*6)) // PWM Channel Mode Register
+#define PWM_CMR7 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*7)) // PWM Channel Mode Register
+
+#define PWM_CDTY0 	*((uint32_t*)(p_PWM_BASE_ADD + 0x204 + 0x020*0)) // PWM Channel Duty Cycle Register
+#define PWM_CDTY1 	*((uint32_t*)(p_PWM_BASE_ADD + 0x204 + 0x020*1)) // PWM Channel Duty Cycle Register
+#define PWM_CDTY2 	*((uint32_t*)(p_PWM_BASE_ADD + 0x204 + 0x020*2)) // PWM Channel Duty Cycle Register
+#define PWM_CDTY3 	*((uint32_t*)(p_PWM_BASE_ADD + 0x204 + 0x020*3)) // PWM Channel Duty Cycle Register
+#define PWM_CDTY4 	*((uint32_t*)(p_PWM_BASE_ADD + 0x204 + 0x020*4)) // PWM Channel Duty Cycle Register
+#define PWM_CDTY5 	*((uint32_t*)(p_PWM_BASE_ADD + 0x204 + 0x020*5)) // PWM Channel Duty Cycle Register
+#define PWM_CDTY6 	*((uint32_t*)(p_PWM_BASE_ADD + 0x204 + 0x020*6)) // PWM Channel Duty Cycle Register
+#define PWM_CDTY7 	*((uint32_t*)(p_PWM_BASE_ADD + 0x204 + 0x020*7)) // PWM Channel Duty Cycle Register
+
+#define PWM_CDTYUPD0 *((uint32_t*)(p_PWM_BASE_ADD + 0x208 + 0x020*0)) // PWM Channel Duty Cycle Update Register
+#define PWM_CDTYUPD1 *((uint32_t*)(p_PWM_BASE_ADD + 0x208 + 0x020*1)) // PWM Channel Duty Cycle Update Register
+#define PWM_CDTYUPD2 *((uint32_t*)(p_PWM_BASE_ADD + 0x208 + 0x020*2)) // PWM Channel Duty Cycle Update Register
+#define PWM_CDTYUPD3 *((uint32_t*)(p_PWM_BASE_ADD + 0x208 + 0x020*3)) // PWM Channel Duty Cycle Update Register
+#define PWM_CDTYUPD4 *((uint32_t*)(p_PWM_BASE_ADD + 0x208 + 0x020*4)) // PWM Channel Duty Cycle Update Register
+#define PWM_CDTYUPD5 *((uint32_t*)(p_PWM_BASE_ADD + 0x208 + 0x020*5)) // PWM Channel Duty Cycle Update Register
+#define PWM_CDTYUPD6 *((uint32_t*)(p_PWM_BASE_ADD + 0x208 + 0x020*6)) // PWM Channel Duty Cycle Update Register
+#define PWM_CDTYUPD7 *((uint32_t*)(p_PWM_BASE_ADD + 0x208 + 0x020*7)) // PWM Channel Duty Cycle Update Register
+
+#define PWM_CPRD0 	*((uint32_t*)(p_PWM_BASE_ADD + 0x20C + 0x020*0)) // PWM Channel Period Register
+#define PWM_CPRD1 	*((uint32_t*)(p_PWM_BASE_ADD + 0x20C + 0x020*1)) // PWM Channel Period Register
+#define PWM_CPRD2 	*((uint32_t*)(p_PWM_BASE_ADD + 0x20C + 0x020*2)) // PWM Channel Period Register
+#define PWM_CPRD3 	*((uint32_t*)(p_PWM_BASE_ADD + 0x20C + 0x020*3)) // PWM Channel Period Register
+#define PWM_CPRD4 	*((uint32_t*)(p_PWM_BASE_ADD + 0x20C + 0x020*4)) // PWM Channel Period Register
+#define PWM_CPRD5 	*((uint32_t*)(p_PWM_BASE_ADD + 0x20C + 0x020*5)) // PWM Channel Period Register
+#define PWM_CPRD6 	*((uint32_t*)(p_PWM_BASE_ADD + 0x20C + 0x020*6)) // PWM Channel Period Register
+#define PWM_CPRD7 	*((uint32_t*)(p_PWM_BASE_ADD + 0x20C + 0x020*7)) // PWM Channel Period Register
+
+#define PWM_CPRDUPD0 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*0)) // PWM Channel Period Update Register
+#define PWM_CPRDUPD1 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*1)) // PWM Channel Period Update Register
+#define PWM_CPRDUPD2 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*2)) // PWM Channel Period Update Register
+#define PWM_CPRDUPD3 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*3)) // PWM Channel Period Update Register
+#define PWM_CPRDUPD4 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*4)) // PWM Channel Period Update Register
+#define PWM_CPRDUPD5 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*5)) // PWM Channel Period Update Register
+#define PWM_CPRDUPD6 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*6)) // PWM Channel Period Update Register
+#define PWM_CPRDUPD7 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*7)) // PWM Channel Period Update Register
+
+///\endcond
+
+// Move the above registers to C upon release
+////////////////////////////////////////////////////////////////////////
+
+/**
+ * MASKs are being defined like this:
+ * [PERIPHERAL]_[REGISTER]_[SECTION]_MASK
+ */
+#define PWM_CLK_PREA_MASK				(0x00000F00)
+#define PWM_CLK_PREB_MASK				(0x0F000000)
+#define PWM_CLK_DIVA_MASK				(0x000000FF)
+#define PWM_CLK_DIVB_MASK				(0x00FF0000)
+
+// Enable disable bit masts for the individual channels
+/**
+ * @def <defines>
+ * These defines are masks for the PWM channels and can be used on
+ * PWM_ENA, PWM_DIS and PWM_SR.
+ */
+#define PWM_CHANNEL_0_MASK				(1<<0)
+#define PWM_CHANNEL_1_MASK				(1<<1)
+#define PWM_CHANNEL_2_MASK				(1<<2)
+#define PWM_CHANNEL_3_MASK				(1<<3)
+#define PWM_CHANNEL_4_MASK				(1<<4)
+#define PWM_CHANNEL_5_MASK				(1<<5)
+#define PWM_CHANNEL_6_MASK				(1<<6)
+#define PWM_CHANNEL_7_MASK				(1<<7)
+#define PWM_CHANNEL_ALL_MASK			(0xFF)
+
+#define PWM_CMRx_CPRE_MASK				(0x0000000F)
+#define PWM_CMRx_CALG_MASK				(1 << 8)
+#define PWM_CMRx_CPOL_MASK				(1 << 9)
+#define PWM_CMRx_CES_MASK				(1 << 10)
+#define PWM_CMRx_DTE_MASK				(1 << 16)
+#define PWM_CMRx_DTHI_MASK				(1 << 17)
+#define PWM_CMRx_DTLI_MASK				(1 << 18)
+
+#define PWM_CDTYx_CDTY_MASK				(0x0000FFFF)
+#define PWM_CDTYUPDx_CDTYUPD_MASK		(0x0000FFFF)
+
+#define PWM_CPRDx_CPRD_MASK				(0x0000FFFF)
+#define PWM_CPRDUPDx_CPRDUPD_MASK		(0x0000FFFF)
+/////////////////////////////////////////////////////////////////////////////
+/**
+ * Parameters are being defined like this:
+ * [PERIPHERAL]_[REGISTER]_[SECTION]_VALUE    (IF ANY NUMBER)
+ */
+//PESCALLERS FOR CLOCK REGISTER
+#define PWM_CLK_PRES_1					(0b0000)
+#define PWM_CLK_PRES_2					(0b0001)
+#define PWM_CLK_PRES_4					(0b0010)
+#define PWM_CLK_PRES_8					(0b0011)
+#define PWM_CLK_PRES_16					(0b0100)
+#define PWM_CLK_PRES_32					(0b0101)
+#define PWM_CLK_PRES_64					(0b0110)
+#define PWM_CLK_PRES_128				(0b0111)
+#define PWM_CLK_PRES_256				(0b1000)
+#define PWM_CLK_PRES_512				(0b1001)
+#define PWM_CLK_PRES_1024				(0b1010)
+// Parameters for easy selecting of clocks within each channel
+#define PWM_CMRx_SELECTOR_DIV_1			(0b0000)
+#define PWM_CMRx_SELECTOR_DIV_2			(0b0001)
+#define PWM_CMRx_SELECTOR_DIV_4			(0b0010)
+#define PWM_CMRx_SELECTOR_DIV_8			(0b0011)
+#define PWM_CMRx_SELECTOR_DIV_16		(0b0100)
+#define PWM_CMRx_SELECTOR_DIV_32		(0b0101)
+#define PWM_CMRx_SELECTOR_DIV_64		(0b0110)
+#define PWM_CMRx_SELECTOR_DIV_128		(0b0111)
+#define PWM_CMRx_SELECTOR_DIV_256		(0b1000)
+#define PWM_CMRx_SELECTOR_DIV_512		(0b1001)
+#define PWM_CMRx_SELECTOR_DIV_1024		(0b1010)
+#define PWM_CMRx_SELECTOR_CLOCK_A		(0b1011)
+#define PWM_CMRx_SELECTOR_CLOCK_B		(0b1111)
+//PESCALLERS FOR CHANNEL MODE REGISTER
+#define PWM_CMRx_PRES_1					(0b0000)
+#define PWM_CMRx_PRES_2					(0b0001)
+#define PWM_CMRx_PRES_4					(0b0010)
+#define PWM_CMRx_PRES_8					(0b0011)
+#define PWM_CMRx_PRES_16				(0b0100)
+#define PWM_CMRx_PRES_32				(0b0101)
+#define PWM_CMRx_PRES_64				(0b0110)
+#define PWM_CMRx_PRES_128				(0b0111)
+#define PWM_CMRx_PRES_256				(0b1000)
+#define PWM_CMRx_PRES_512				(0b1001)
+#define PWM_CMRx_PRES_1024				(0b1010)
+#define PWM_CMRx_PRES_CLOCKA			(0b1011)
+#define PWM_CMRx_PRES_CLOCKB			(0b1100)
+// PARAMETERS FOR THE ALIGNMENT
+#define PWM_CMRx_ALIGN_LEFT				0
+#define PWM_CMRx_ALIGN_CENTER			1
+// PARAMETERS FOR THE POLARITY
+#define PWM_CMRx_POLARITY_HIGH			1
+#define PWM_CMRx_POLARITY_LOW			0
+
+//DIVIDERS FOR CLKA AND CLKB
+#define PWM_CLK_DIVx_TURNOFF			0
+#define PWM_CLK_DIVx_PREx				1
+
 //////////////////////////////////////////////////////////////////////////
+
 // Externally available typedefs, variables and definitions
 /**
  * @typedef
@@ -106,10 +265,22 @@ uint8_t	 pwm_init(struct pwm_clk_setting clk_settings);
  * This function will enable the selected channel, identified with predefined
  * values, like: PWM_CHANNEL_x_MASK
  *
+ * Alternatively use PWM_CHANNEL_ALL_MASK to enable all channel at once.
+ *
  * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
- * @return error (1 = SUCCESS and 0 = FAIL)
+ * @return error Will always return 1 = SUCCESS
  */
 uint8_t pwm_channel_enable(uint32_t channel);
+/**
+ * This function will disable the selected channel, identified with predefined
+ * values, like: PWM_CHANNEL_x_MASK.
+ *
+ * Alternatively use PWM_CHANNEL_ALL_MASK to disable all channel at once.
+ *
+ * @param channel {The channel to be disabled, use prefix: PWM_CHANNEL_}
+ * @return error (1 = SUCCESS and 0 = FAIL)
+ */
+uint8_t pwm_channel_disable(uint32_t channel);
 /**
  * Turns off one of two clocks in PWM that are called clkA and clkB.
  *

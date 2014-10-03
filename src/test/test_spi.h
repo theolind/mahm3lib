@@ -32,13 +32,8 @@
 void test_spi_0_init(void);
 void test_spi_1_init(void);
 void test_spi_select_slave(void);
-void test_spi_0_write_char(void);
-void test_spi_1_read_char(void);
-void test_spi_1_write_char(void);
-void test_spi_0_read_char(void);
-void test_spi_0_write_16_bit(void);
-void test_spi_1_read_16_bit(void);
-void test_spi_1_write_16_bit(void);
-void test_spi_0_read_16_bit(void);
-
+void test_spi_0_write(void);
+void test_spi_1_read(void);
+void test_spi_1_write(void);
+void test_spi_0_read(void);
 #endif

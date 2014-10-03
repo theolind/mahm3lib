@@ -72,14 +72,10 @@ void run_tests(void) {
 	RUN_TEST(test_spi_0_init, 30);
 	RUN_TEST(test_spi_1_init, 30);
 	RUN_TEST(test_spi_select_slave, 30);
-	RUN_TEST(test_spi_0_write_char, 30);
-	RUN_TEST(test_spi_1_read_char, 30);
-	RUN_TEST(test_spi_1_write_char, 30);
-	RUN_TEST(test_spi_0_read_char, 30);
-	RUN_TEST(test_spi_0_write_16_bit, 30);
-	RUN_TEST(test_spi_1_read_16_bit, 30);
-	RUN_TEST(test_spi_1_write_16_bit, 30);
-	RUN_TEST(test_spi_0_read_16_bit, 30);
+	RUN_TEST(test_spi_0_write, 30);
+	RUN_TEST(test_spi_1_read, 30);
+	RUN_TEST(test_spi_1_write, 30);
+	RUN_TEST(test_spi_0_read, 30);
 
 	UnityEnd();
 }

@@ -19,6 +19,9 @@
  * their use should therefore be avoided in timing critical applications.
  * This is however not entirely avoided using hardware timers either.
  *
+ * The delays are not accurate enough for real time applications, however
+ *
+ *
  * @author Mattias Nilsson
  * @date 2 October 2014
  *
@@ -32,5 +35,10 @@
 
 void delay_micros(uint32_t us);
 void delay_ms(uint32_t ms);
+
+void delay_1000(uint32_t us_1000);
+void delay_100(uint32_t us_100);
+void delay_10(uint32_t us_10);
+void delay_1(uint32_t us_1);
 
 #endif

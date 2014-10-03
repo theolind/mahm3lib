@@ -72,7 +72,7 @@ void spi_select_slave(spi_reg_t *spi, uint8_t slave, uint8_t baud);
  * @param spi
  * @param data the data to send
  */
-void spi_write_char(spi_reg_t *spi, uint8_t data);
+void spi_write(spi_reg_t *spi, uint8_t data);
 
 /**
  * Reads data that has been received
@@ -80,23 +80,7 @@ void spi_write_char(spi_reg_t *spi, uint8_t data);
  * @pre You need to spi_write_char before you can spi_read_char
  * @return received char
  */
-uint8_t spi_read_char(spi_reg_t *spi);
-
-
-/**
- * Write 16 bits of data. This also fills up the receive register with data sent to the processor
- * @param spi
- * @param data the data to send
- */
-void spi_write_16_bits(spi_reg_t *spi, uint16_t data);
-
-/**
- * Read data thas has been received
- * @param spi
- * @pre You need to spi_write_16_bits before you can spi_read_16_bits
- * @return received 16 bits
- */
-uint16_t spi_read_16_bits(spi_reg_t *spi);
+uint8_t spi_read(spi_reg_t *spi);
 
 /**
  * Test if we are able to send data

@@ -67,6 +67,7 @@ void run_tests(void) {
 	HORIZONTAL_LINE_BREAK();
 
 	// Run SPI tests
+	// Have yet to run tests due to error messages
 	Unity.TestFile = "test/test_spi.c";
 	RUN_TEST(test_spi_0_init, 30);
 	RUN_TEST(test_spi_1_init, 30);

@@ -67,14 +67,35 @@ uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings);
 // or the two functions could be in one: spi_select_periphial(uint8_t old, uint8_t new)
 void spi_select_slave(spi_reg_t *spi, uint8_t slave, uint8_t baud);
 
-//since spi cannot transmit without receiving, it makes sense to combine
-//transmission and reception in the same function
-//alternate names: transact, execute, step, work, network, act, operate, perform, do
+/*
+ * Write 8 bits of data (a char). This fills the receive register with data sent to the processor
+ * @param spi
+ * @param data the data to send
+ */
 void spi_write_char(spi_reg_t *spi, uint8_t data);
+
+/**
+ * Reads data that has been received
+ * @param spi
+ * @pre You need to spi_write_char before you can spi_read_char
+ * @return received char
+ */
 uint8_t spi_read_char(spi_reg_t *spi);
 
-//spi also seems to be able to send and receive 16 bit data chunks
-uint16_t spi_write_16_bits(spi_reg_t *spi, uint16_t data);
+
+/**
+ * Write 16 bits of data. This also fills up the receive register with data sent to the processor
+ * @param spi
+ * @param data the data to send
+ */
+void spi_write_16_bits(spi_reg_t *spi, uint16_t data);
+
+/**
+ * Read data thas has been received
+ * @param spi
+ * @pre You need to spi_write_16_bits before you can spi_read_16_bits
+ * @return received 16 bits
+ */
 uint16_t spi_read_16_bits(spi_reg_t *spi);
 
 /**
@@ -85,7 +106,7 @@ uint16_t spi_read_16_bits(spi_reg_t *spi);
 uint8_t spi_write_ready(spi_reg_t *spi);
 
 /**
- * We want to test if we are able to receive data
+ * We want to test if we are able to read data. It is good to do this before you read data.
  * @param spi
  * @return true if we have no data in the receive register
  */

@@ -13,6 +13,8 @@
 
 uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings) {
 	//to set master write 1 in MSTR bit (bit 0) in settings->SPI_MR;
+	spi->SPI_CR = 1; //same as (1<<0);
+	spi->SPI_MR = settings->master;
 }
 
 void spi_select_slave(spi_reg_t *spi, uint8_t slave, uint8_t baud) {

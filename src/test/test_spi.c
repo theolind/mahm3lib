@@ -44,7 +44,6 @@ void test_spi_1_init(void){
 	const spi_settings_t spi_settings_t = {
 			.master = 0,
 			.mode = 0,
-			.baud = 0,
 			.start_delay = 0,
 			.end_delay = 0
 	};

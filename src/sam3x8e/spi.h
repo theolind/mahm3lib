@@ -47,7 +47,6 @@ typedef struct spi_reg_t {
 typedef struct {
 	uint32_t master;
 	uint32_t mode;	//1-4
-	uint32_t baud;
 	uint32_t start_delay;
 	uint32_t end_delay;
 } spi_settings_t;

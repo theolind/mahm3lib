@@ -7,10 +7,10 @@
  * @date 2 October 2014
  */
 
-#include "sam3x8e/spi.h"
 #include "unity/unity.h"
-#include "test/test_spi.h"
 #include "sam3x8e/id.h"
+#include "sam3x8e/spi.h"
+#include "test/test_spi.h"
 
 /*
  * Initialize SPI0 as master and other necessary settings.

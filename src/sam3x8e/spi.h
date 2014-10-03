@@ -58,6 +58,7 @@ typedef struct {
 /**
  * Initialize SPI
  * @param spi
+ * @param settings
  */
 uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings);
 
@@ -77,10 +78,18 @@ uint8_t spi_read_char(spi_reg_t *spi);
 uint16_t spi_write_16_bits(spi_reg_t *spi, uint16_t data);
 uint16_t spi_read_16_bits(spi_reg_t *spi);
 
-//we want to be able to test if we have sent our data
+/**
+ * Test if we are able to send data
+ * @param spi
+ * @return true if all data has been sent and we are ready to send new data
+ */
 uint8_t spi_write_ready(spi_reg_t *spi);
 
-//we want to test if we have any data received but not read yet
+/**
+ * We want to test if we are able to receive data
+ * @param spi
+ * @return true if we have no data in the receive register
+ */
 uint8_t spi_read_ready(spi_reg_t *spi);
 
 

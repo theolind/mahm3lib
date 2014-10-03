@@ -15,6 +15,7 @@
 #include "test/test_adc.h"
 #include "test/test_dacc.h"
 #include "test/test_uart.h"
+#include "test/test_spi.h"
 
 void run_tests(void) {
 	UnityBegin();
@@ -63,6 +64,10 @@ void run_tests(void) {
 	RUN_TEST(test_adc_channel_status, 30);
 	RUN_TEST(test_adc_set_resolution_10_bit, 30);
 	RUN_TEST(test_adc_set_resolution_12_bit, 30);
+	HORIZONTAL_LINE_BREAK();
+
+	// Run SPI tests
+	Unity.TestFile = "test/test_spi.c";
 
 	UnityEnd();
 }

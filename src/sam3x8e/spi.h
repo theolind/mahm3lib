@@ -68,10 +68,11 @@ uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings);
 // this either requires a global variable,
 // or it requires another function spi_deselect_periphial(uint8_t periphial)
 // or the two functions could be in one: spi_select_periphial(uint8_t old, uint8_t new)
-void spi_select_slave(spi_reg_t *spi, uint8_t slave, uint8_t baud);
+void spi_select_slave(spi_reg_t *spi, uint8_t slave);
 
 /*
  * Write 8 bits of data (a char). This fills the receive register with data sent to the processor
+ * After each write a spi_read has to be performed to clear the receive register
  * @param spi
  * @param data the data to send
  */

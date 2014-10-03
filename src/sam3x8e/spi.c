@@ -14,10 +14,14 @@
 uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings) {
 	spi->SPI_CR = 1; //same as (1<<0); //enabling SPI
 	spi->SPI_MR = settings->master;
+	spi->SPI_MR |= (1<<5);	//Wait Data Read Before Transfer - prevents overrun of SPI_RDR
+	spi->SPI_MR |= (1<<1);	//Fixed periphial select
 }
 
-void spi_select_slave(spi_reg_t *spi, uint8_t slave, uint8_t baud) {
-
+void spi_select_slave(spi_reg_t *spi, uint8_t slave) {
+	// shift 0b111 3 steps right if slave 0 is selected, then shift the result 19 steps
+	//left to get it to the correct position in the register
+	spi->SPI_MR |= (0b111 >> (3-slave)) << 19;
 }
 
 void spi_write(spi_reg_t *spi, uint8_t data) {

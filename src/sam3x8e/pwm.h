@@ -24,8 +24,6 @@
 #ifndef PWM_H_
 #define PWM_H_
 
-
-
 /**
  * MASKs are being defined like this:
  * [PERIPHERAL]_[REGISTER]_[SECTION]_MASK
@@ -35,11 +33,10 @@
 #define PWM_CLK_DIVA_MASK				(0x000000FF)
 #define PWM_CLK_DIVB_MASK				(0x00FF0000)
 
-// Enable disable bit masts for the individual channels
 /**
  * @def <defines>
- * These defines are masks for the PWM channels and can be used on
- * PWM_ENA, PWM_DIS and PWM_SR.
+ * These defines are masks for the PWM channels and can be used as the channel
+ * input of every function.
  */
 #define PWM_CHANNEL_0_MASK				(1<<0)
 #define PWM_CHANNEL_1_MASK				(1<<1)
@@ -67,7 +64,7 @@
 /////////////////////////////////////////////////////////////////////////////
 /**
  * Parameters are being defined like this:
- * [PERIPHERAL]_[REGISTER]_[SECTION]_VALUE    (IF ANY NUMBER)
+ * [PERIPHERAL]_[REGISTER]_[SECTION]_VALUE
  */
 //PESCALLERS FOR CLOCK REGISTER
 #define PWM_CLK_PRES_1					(0b0000)
@@ -81,20 +78,6 @@
 #define PWM_CLK_PRES_256				(0b1000)
 #define PWM_CLK_PRES_512				(0b1001)
 #define PWM_CLK_PRES_1024				(0b1010)
-// Parameters for easy selecting of clocks within each channel
-#define PWM_CMRx_SELECTOR_DIV_1			(0b0000)
-#define PWM_CMRx_SELECTOR_DIV_2			(0b0001)
-#define PWM_CMRx_SELECTOR_DIV_4			(0b0010)
-#define PWM_CMRx_SELECTOR_DIV_8			(0b0011)
-#define PWM_CMRx_SELECTOR_DIV_16		(0b0100)
-#define PWM_CMRx_SELECTOR_DIV_32		(0b0101)
-#define PWM_CMRx_SELECTOR_DIV_64		(0b0110)
-#define PWM_CMRx_SELECTOR_DIV_128		(0b0111)
-#define PWM_CMRx_SELECTOR_DIV_256		(0b1000)
-#define PWM_CMRx_SELECTOR_DIV_512		(0b1001)
-#define PWM_CMRx_SELECTOR_DIV_1024		(0b1010)
-#define PWM_CMRx_SELECTOR_CLOCK_A		(0b1011)
-#define PWM_CMRx_SELECTOR_CLOCK_B		(0b1111)
 //PESCALLERS FOR CHANNEL MODE REGISTER
 #define PWM_CMRx_PRES_1					(0b0000)
 #define PWM_CMRx_PRES_2					(0b0001)
@@ -200,7 +183,7 @@ uint8_t	 pwm_init_peripheral_default(void);
  * @return error (0 = FAIL, 1 = SUCCESS)
  * @pre {This function requires the PMC API.}
  */
-uint8_t	 pwm_init(struct pwm_clk_setting clk_settings);
+uint8_t	 pwm_init_peripheral(struct pwm_clk_setting clk_settings);
 /**
  * This function will enable the selected channel, identified with predefined
  * values, like: PWM_CHANNEL_x_MASK
@@ -224,17 +207,19 @@ uint8_t pwm_channel_disable(uint32_t channel);
 /**
  * Turns off one of two clocks in PWM that are called clkA and clkB.
  *
+ * @param clock_id
  * @return error (0 = FAIL, 1 = SUCCESS)
  */
-uint8_t  pwm_turn_of_clkx(uint8_t clock_id);
+uint8_t  pwm_turn_off_clkx(uint8_t clock_id);
 /**
  * Initializes a single channel in the peripheral out of 8 in total.
  * This function will not multiplex the pin to the peripheral channel and
  * neither enable the channel.
  *
+ * @param channel
  * @return error (0 = FAIL, 1 = SUCCESS)
  */
-uint8_t  pwm_init_channel(struct pwm_channel_setting);
+uint8_t  pwm_init_channel(struct pwm_channel_setting channel);
 /**
  * Set the channel polarity.
  * This can reverse the duty cycle. Important when using the PWMLx pins.
@@ -305,6 +290,29 @@ uint8_t  pwm_write(uint8_t channel, uint32_t duty_cycle);
  * @return 1 if the channel is enabled, 0 if it is disabled
  */
 uint32_t pwm_get_channel_status(uint8_t channel);
+
+/**
+ * This function will automatically select the necessary prescaler and divider
+ * for the chosen clock. The clocks can be either clkA or clkB.
+ * This function also update the necessary register for this setting.
+ * This function will not change the state of the channel. The channel may not
+ * be enabled when invoking this function.
+ *
+ * The frequency set will be the nearest to the chosen frequency as possible
+ * but not exactly.
+ *
+ * This function will return an error if it can't find a setting for the frequency.
+ * In case of error, the function will not have modified any registers.
+ *
+ * @param channel {The channel to set the frequency for}
+ * @param frequency {The frequency to calculate for}
+ * @param pwm_clk_id {the ID for the clock you want to modify,
+ * ex: PWM_CLK_ID_CLKA}
+ * @return {error, this will indicate whether a setting could be found for the chosen frequency.}
+ */
+uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency,
+		uint32_t pwm_clk_id);
+
 
 //////////////////////////////////////////////////////////////////////////
 

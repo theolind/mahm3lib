@@ -276,7 +276,7 @@ uint8_t pwm_set_channel_alignment(uint32_t channel, uint32_t pwm_alignment) {
  * @param clock_id {Must be 0 for clkA and 1 for clkB}
  * @return
  */
-uint8_t pwm_turn_of_clkx(uint8_t clock_id) {
+uint8_t pwm_turn_off_clkx(uint8_t clock_id) {
 	if (clock_id == 0) {
 		set_section_in_register(&PWM_CLK, PWM_CLK_PREA_MASK,
 		PWM_CLK_DIVx_TURNOFF);
@@ -284,6 +284,20 @@ uint8_t pwm_turn_of_clkx(uint8_t clock_id) {
 	} else if (clock_id == 1) {
 		set_section_in_register(&PWM_CLK, PWM_CLK_PREB_MASK,
 		PWM_CLK_DIVx_TURNOFF);
+		return 1;
+	}
+	return 0;
+}
+
+//TODO prototype and comment
+uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divider){
+	if (clock_id == PWM_CLK_ID_CLKA){
+		set_section_in_register(&PWM_CLK, PWM_CLK_PREA_MASK, prescaler);
+		set_section_in_register(&PWM_CLK, PWM_CLK_DIVA_MASK, divider);
+		return 1;
+	}else if(clock_id == PWM_CLK_ID_CLKB){
+		set_section_in_register(&PWM_CLK, PWM_CLK_PREB_MASK, prescaler);
+		set_section_in_register(&PWM_CLK, PWM_CLK_DIVB_MASK, divider);
 		return 1;
 	}
 	return 0;
@@ -429,4 +443,35 @@ uint32_t pwm_read(uint8_t channel) {
 
 uint8_t pwm_get_channel_status(uint8_t channel){
 	return is_bit_high(&PWM_SR, get_position_of_first_highbit(channel));
+}
+
+
+uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency,
+		uint32_t pwm_clk_id){
+    uint32_t divisors[11] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024};
+    uint8_t divisor = 0;
+    uint32_t prescaler;
+
+    if (frequency > SYS_CLK_FREQ){
+		return 0; // Error
+	}
+
+    //TODO
+
+    // Find prescaler and divisor values for clk
+    prescaler = (SYS_CLK_FREQ / divisors[divisor]) / frequency;
+    while ((prescaler > 255) && (divisor < 11)) {
+
+        divisor++;
+        prescaler = (SYS_CLK_FREQ / divisors[divisor]) / frequency;
+    }
+
+    // Implement result
+    if ( divisor < 11 ){
+        return prescaler | (divisor << 8);
+
+        pwm_set_channel_prescaler(channel, );
+    }else{
+        return 0 ;
+    }
 }

@@ -119,7 +119,7 @@ uint8_t get_position_of_first_highbit(uint32_t mask){
 			mask = (mask << 1);
 			j++;
 		}
-		return (0x1F - j); // = (31 - j)
+		return (uint8_t)(0x1F - j); // = (31 - j)
 	}
 	return 0;
 }

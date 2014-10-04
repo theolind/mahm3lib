@@ -186,10 +186,9 @@ uint8_t pwm_channel_enable(uint32_t channel) {
  * @return error (1 = SUCCESS and 0 = FAIL)
  */
 uint8_t pwm_channel_disable(uint32_t channel) {
-	if (pwm_get_channel_status(channel)) {
+	if (pwm_channel_status(channel)) {
 		set_section_in_register(&PWM_DIS, channel, 1);
-		while (pwm_get_channel_status(channel))
-			;
+		while (pwm_channel_status(channel));
 	}
 	return 1;
 }

@@ -184,7 +184,7 @@ typedef struct pwm_channel_setting{
  * @return error (0 = FAIL, 1 = SUCCESS)
  * @pre {This function requires the PMC API.}
  */
-uint8_t	 pwm_init_peripheral_default(void);
+uint8_t pwm_init_peripheral_default(void);
 /**
  * Initialize the PWM peripheral with a structure containing clock_settings.
  * This function controls clkA and clkB and starts the peripheral clock.
@@ -193,7 +193,7 @@ uint8_t	 pwm_init_peripheral_default(void);
  * @return error (0 = FAIL, 1 = SUCCESS)
  * @pre {This function requires the PMC API.}
  */
-uint8_t	 pwm_init_peripheral(struct pwm_clk_setting clk_settings);
+uint8_t pwm_init_peripheral(struct pwm_clk_setting clk_settings);
 /**
  * This function will enable the selected channel, identified with predefined
  * values, like: PWM_CHANNEL_x_MASK
@@ -220,7 +220,7 @@ uint8_t pwm_channel_disable(uint32_t channel);
  * @param clock_id
  * @return error (0 = FAIL, 1 = SUCCESS)
  */
-uint8_t  pwm_turn_off_clkx(uint8_t clock_id);
+uint8_t pwm_turn_off_clkx(uint8_t clock_id);
 /**
  * Initializes a single channel in the peripheral out of 8 in total.
  * This function will not multiplex the pin to the peripheral channel and
@@ -229,7 +229,7 @@ uint8_t  pwm_turn_off_clkx(uint8_t clock_id);
  * @param channel
  * @return error (0 = FAIL, 1 = SUCCESS)
  */
-uint8_t  pwm_init_channel(struct pwm_channel_setting channel);
+uint8_t pwm_init_channel(struct pwm_channel_setting channel);
 /**
  * Set the channel polarity.
  * This can reverse the duty cycle. Important when using the PWMLx pins.
@@ -237,7 +237,7 @@ uint8_t  pwm_init_channel(struct pwm_channel_setting channel);
  * @param channel {The channel to set the polarity for. ex PWM_CHANNEL_0_MASK}
  * @return
  */
-uint8_t  pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity);
+uint8_t pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity);
 /**
  * Choose either clkA or B to be the source for the PWM channel.
  *
@@ -245,14 +245,14 @@ uint8_t  pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity);
  * @param pwm_clk_id {Choose one of two predefined values, ex PWM_CLK_ID_CLKA}
  * @return
  */
-uint8_t  pwm_set_channel_clocksource(uint32_t channel, uint32_t pwm_clk_id);
+uint8_t pwm_set_channel_clocksource(uint32_t channel, uint32_t pwm_clk_id);
 /**
  * Set the channel alignment
  *
  * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
  * @return
  */
-uint8_t  pwm_set_channel_alignment(uint32_t channel, uint32_t PWM_ALIGN_);
+uint8_t pwm_set_channel_alignment(uint32_t channel, uint32_t PWM_ALIGN_);
 /**
  * Set the channel prescaler
  *
@@ -261,22 +261,22 @@ uint8_t  pwm_set_channel_alignment(uint32_t channel, uint32_t PWM_ALIGN_);
  * Use one of the predefined. prefix: PWM_CMRx_PRES_}
  * @return error
  */
-uint8_t  pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler);
+uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler);
 /**
  * Shuts down the peripheral but keeps all settings
  * @return
  */
-uint8_t  pwm_shutdown(void);
+uint8_t pwm_shutdown(void);
 /**
  * Reset and turns off the peripheral
  * @return
  */
-uint8_t  pwm_close(void);
+uint8_t pwm_close(void);
 /**
  * Resets the peripheral and disables all channels
  * @return error
  */
-uint8_t  pwm_reset(void);
+uint8_t pwm_reset(void);
 /**
  * Read what was earlier written to the channel
  *
@@ -292,7 +292,7 @@ uint32_t pwm_read(uint32_t channel);
  * @param duty_cycle {must be between 0 and period as in CPRD in the register PWM_CPRDx.}
  * @return error (1 = SCCESS and 0 = FAIL)
  */
-uint8_t  pwm_write(uint32_t channel, uint32_t duty_cycle);
+uint8_t pwm_write(uint32_t channel, uint32_t duty_cycle);
 // Set the duty cycle between 0 and period
 //uint32_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle);
 
@@ -345,6 +345,14 @@ uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency,
  * @return error
  */
 uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor);
+/**
+ * This function will set the period value used by a given PWM channel.
+ *
+ * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
+ * @param period {The period of the channel. t must be between 0 and 65535.}
+ * @return error (1 = SCCESS and 0 = FAIL)
+ */
+uint8_t pwm_set_channel_period(uint32_t channel, uint32_t period);
 
 //////////////////////////////////////////////////////////////////////////
 

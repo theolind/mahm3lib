@@ -110,42 +110,49 @@
  * @typedef
  * This structure is used with pwm_init() to set the settings for the clocks A
  * and B of the PWM peripheral.
- * @param clkA {This is the prescaler for clock A. If the clock is not needed
- * then setting this value to 0 will turn the clock off.
+ * @param clkA_prescaler {This is the prescaler for clock A.
  * Parameter prefix: PWM_CLK_PRES_}
- * @param clkB {This is the prescaler for clock B. If the clock is not needed
- * then setting this value to 0 will turn the clock off.
+ * @param clkA_divisor {This is the divisor for clock A. Set this between 0 and
+ * 255. 0 will turn the clock off.}
+ * @param clkB {This is the prescaler for clock B.
  * Parameter prefix: PWM_CLK_PRES_}
+ * @param clkA_divisor {This is the divisor for clock B. Set this between 0 and
+ * 255. 0 will turn the clock off.}
  */
 typedef struct pwm_clk_setting{
 	uint32_t clkA_prescaler;
+	uint32_t clkA_divisor;
 	uint32_t clkB_prescaler;
+	uint32_t clkB_divisor;
 }pwm_clk_setting;
 
 /**
  * @typedef
  * This structure is used with pwm_init_channel() to set the settings of a
- * channel.
+ * channel. Be aware that either frequency or prescaler must be specified.
+ *
+ * @param channel {The channel to be initialized. Prefix: PWM_CHANNEL_}
  * @param polarity {Sets the polarity of the channel.
  * Parameter prefix: PWM_POLARITY_}
  * @param alignment {Sets the alignment of the channel.
  * Parameter prefix: PWM_ALIGN_}
- * @param prescaler {Sets the channel prescaler.
- * This can also select clock A and B.
- * Parameter prefix: PWM_CMRx_SELECTOR_}
- * @param high_polarity_pin {If set HIGH, the high polarity pin of the channel
- * will be multiplexed with the PWM.}
- * @param low_polarity_pin {If set HIGH, the high polarity pin of the channel
- * will be multiplexed with the PWM.}
+ * @param prescaler {Sets the channel prescaler. This can also select clock A
+ * and B. Parameter prefix: PWM_CMRx_PRES_ (Use this only when frequency it
+ * set to -1)}
+ * @param duty_cycle {The initial duty cycle of the channel. (Optional)}
+ * @param frequency {The frequency of the PWM waveform for this channel.
+ * (Set only if prescaler is set to -1)}
+ * @param clock_ID {In case that frequency is specified, then clock_ID must
+ * specify which CLKx to be used for this purpose. Prefix: PWM_CLK_ID_}
  */
 typedef struct pwm_channel_setting{
 	uint32_t channel;
 	uint32_t polarity;
 	uint32_t alignment;
-	uint32_t prescaler;
+	int32_t prescaler;
 	uint32_t duty_cycle;
-	uint32_t high_polarity_pin;
-	uint32_t low_polarity_pin;
+	int32_t frequency;
+	uint32_t clock_ID;
 }pwm_channel_setting;
 
 /**
@@ -292,7 +299,7 @@ uint8_t  pwm_write(uint8_t channel, uint32_t duty_cycle);
  * @param channel {the channel to get the status for}
  * @return 1 if the channel is enabled, 0 if it is disabled
  */
-uint8_t pwm_get_channel_status(uint8_t channel);
+uint8_t pwm_channel_status(uint8_t channel);
 
 /**
  * This function will automatically select the necessary prescaler and divider

@@ -90,33 +90,74 @@
 /**
  * Initialize the PWM peripheral with minimum requirements.
  *
- * @return
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_init_peripheral_default() {
 	pmc_enable_peripheral_clock(ID_PWM);
 	pwm_reset();
-	pwm_channel_disable(PWM_CHANNEL_ALL_MASK);
 	return 1;
 }
-
 /**
- * Initialize the PWM peripheral and set the prescalers and divers of clock A
- * or B. This function will also start the peripheral clock in the
- * Power Management Controller (PMC).
+ * This initialization function also takes in parameters for the two clocks
+ * called CLK_A and CLK_B.
+ * Starting these clocks consume more power. It is preferred to use the channel
+ * prescalers if possible. All of the 8 channels can use the same clock once it
+ * has been initialized. If these clocks are used, the channels prescalers must
+ * be set to select the output of theses clocks.
  *
- * @param channel {The channel to initialize using a channel-instance of type
- * pwm_channel_setting}
- * @return
+ * @param clk_settings {A structure of type pwm_clk_setting to initialize the
+ * clocks A and B. For more details see description of typedef pwm_clk_setting.}
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
+ */
+uint8_t	pwm_init_peripheral(struct pwm_clk_setting clk_settings){
+	uint8_t error_out = 0;
+	pmc_enable_peripheral_clock(ID_PWM);
+	pwm_reset();
+	if(clk_settings.clkA_divisor != 0){
+		error_out += pwm_set_clkx(PWM_CLK_ID_CLKA, clk_settings.clkA_prescaler,
+				clk_settings.clkA_divisor);
+	}
+	if(clk_settings.clkB_divisor != 0){
+		error_out += pwm_set_clkx(PWM_CLK_ID_CLKB, clk_settings.clkB_prescaler,
+				clk_settings.clkB_divisor);
+	}
+	// output no_error if no error occurred in any of the functions
+	return (error_out == 2)?1:0;
+}
+/**
+ * Initialize the PWM peripheral with channel- polarity, alignment, prescaler
+ * and initial duty cycle. If prescaler is chosen then frequency must be set to
+ * -1, and if a specific frequency is needed, then prescaler must be set to -1.
+ * If both frequency and prescaler is set, then this function will return an
+ * error. Using the prescaler should be considered first, cause setting the
+ * frequency will occupy a CLKx and consume more power.
+ * This function will disable the channel but not enable it.
+ *
+ * The frequency must be set between 322 and 84 MHz.
+ *
+ * @param channel {The channel-instance of type pwm_channel_setting,
+ * (See typedef pwm_channel_setting for more details.)}
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_init_channel(struct pwm_channel_setting channel) {
-	pwm_reset();
-	pmc_enable_peripheral_clock(ID_PWM);
-	pwm_channel_disable(channel.channel);
-	pwm_set_channel_alignment(channel.channel, channel.alignment);
-	pwm_set_channel_polarity(channel.channel, channel.polarity);
-	pwm_set_channel_prescaler(channel.channel, channel.prescaler);
-	pwm_write(channel.channel, channel.duty_cycle);
-	return 1;
+	uint8_t error_out = 0;
+	if (channel.frequency != -1 && channel.prescaler != -1) {
+		return 0; // parameter error
+	}else if (channel.frequency > -1 && channel.prescaler == -1) {
+		error_out += pwm_set_channel_frequency(channel.channel,
+				channel.frequency, channel.clock_ID);
+	}else if (channel.frequency == -1 && channel.prescaler > -1) {
+		error_out += pwm_set_channel_prescaler(channel.channel,
+				channel.prescaler);
+	}else{
+		return 0; // parameter error
+	}
+	error_out += pwm_channel_disable(channel.channel);
+	error_out += pwm_set_channel_alignment(channel.channel, channel.alignment);
+	error_out += pwm_set_channel_polarity(channel.channel, channel.polarity);
+	error_out += pwm_write(channel.channel, channel.duty_cycle);
+	// output no_error if no error occurred in any of the functions
+	return (error_out == 6)?1:0;
 }
 
 /**
@@ -281,11 +322,11 @@ uint8_t pwm_set_channel_alignment(uint32_t channel, uint32_t pwm_alignment) {
  */
 uint8_t pwm_turn_off_clkx(uint8_t clock_id) {
 	if (clock_id == 0) {
-		set_section_in_register(&PWM_CLK, PWM_CLK_PREA_MASK,
+		set_section_in_register(&PWM_CLK, PWM_CLK_DIVA_MASK,
 		PWM_CLK_DIVx_TURNOFF);
 		return 1;
 	} else if (clock_id == 1) {
-		set_section_in_register(&PWM_CLK, PWM_CLK_PREB_MASK,
+		set_section_in_register(&PWM_CLK, PWM_CLK_DIVB_MASK,
 		PWM_CLK_DIVx_TURNOFF);
 		return 1;
 	}
@@ -443,7 +484,7 @@ uint32_t pwm_read(uint8_t channel) {
 	return 1;
 }
 
-uint8_t pwm_get_channel_status(uint8_t channel) {
+uint8_t pwm_channel_status(uint8_t channel) {
 	return is_bit_high(&PWM_SR, get_position_of_first_highbit(channel));
 }
 

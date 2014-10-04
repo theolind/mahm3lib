@@ -33,7 +33,7 @@ int main(void) {
 	channel_0.low_polarity_pin = 0;
 	channel_0.duty_cycle = 0;
 
-	pwm_
+	//pwm_
 
 //	pwm_init_channel()
 

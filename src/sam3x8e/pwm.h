@@ -101,7 +101,7 @@
 
 //DIVIDERS FOR CLKA AND CLKB
 #define PWM_CLK_DIVx_TURNOFF			0
-#define PWM_CLK_DIVx_PREx				1
+
 
 //////////////////////////////////////////////////////////////////////////
 
@@ -245,8 +245,11 @@ uint8_t  pwm_set_channel_clocksource(uint32_t channel, uint32_t pwm_clk_id);
 uint8_t  pwm_set_channel_alignment(uint32_t channel, uint32_t PWM_ALIGN_);
 /**
  * Set the channel prescaler
+ *
  * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
- * @return
+ * @param prescaler {This is the prescaler to be set.
+ * Use one of the predefined. prefix: PWM_CMRx_PRES_}
+ * @return error
  */
 uint8_t  pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler);
 /**
@@ -289,11 +292,11 @@ uint8_t  pwm_write(uint8_t channel, uint32_t duty_cycle);
  * @param channel {the channel to get the status for}
  * @return 1 if the channel is enabled, 0 if it is disabled
  */
-uint32_t pwm_get_channel_status(uint8_t channel);
+uint8_t pwm_get_channel_status(uint8_t channel);
 
 /**
  * This function will automatically select the necessary prescaler and divider
- * for the chosen clock. The clocks can be either clkA or clkB.
+ * for the chosen clock. The clocks can either be clkA or clkB.
  * This function also update the necessary register for this setting.
  * This function will not change the state of the channel. The channel may not
  * be enabled when invoking this function.
@@ -313,6 +316,25 @@ uint32_t pwm_get_channel_status(uint8_t channel);
 uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency,
 		uint32_t pwm_clk_id);
 
+/**
+ * The PWM peripheral has 13 different clocks. Among those, 11 are scaled down
+ * clocks of the system clock and the two others are the more flexible clocks
+ * that can be set to much lower freuencies than the prescalers. These clock go
+ * by the name Clock A and Clock B. They are derived by the SYS_CLK_FREQ which
+ * they prescale and the outcome of that they can furthere divide with a divisor
+ * and achieve lower frequencies for the PWM peripheral. These clocks can be
+ * turned off when not needed.
+ *
+ * This function will set the prescaler and divisor for the indicated clock.
+ * If the prescaler is other than 0, the clock will be turned on.
+ *
+ * @param clock_id {The id for the clock to be set. Use prefix: PWM_CLK_ID_}
+ * @param prescaler {Use one of the predefined prescalers.
+ * Prefix: PWM_CLK_PRES_}
+ * @param divisor {Use a value between 1 and 255.}
+ * @return error
+ */
+uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor);
 
 //////////////////////////////////////////////////////////////////////////
 

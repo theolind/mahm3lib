@@ -46,7 +46,7 @@ uint8_t is_bit_high(uint32_t *reg, uint8_t bit);
  * @param mask The mask to be examined
  * @return Bit-number of the first position
  */
-uint32_t get_position_of_first_highbit(uint32_t mask);
+uint8_t get_position_of_first_highbit(uint32_t mask);
 /**
  * This function will modify a section of a given register as indicated by
  * mask with the value specified in 'value'.

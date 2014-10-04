@@ -145,9 +145,10 @@ uint8_t pwm_channel_enable(uint32_t channel) {
  * @return error (1 = SUCCESS and 0 = FAIL)
  */
 uint8_t pwm_channel_disable(uint32_t channel) {
-	if (pwm_get_channel_status(channel)){
+	if (pwm_get_channel_status(channel)) {
 		set_section_in_register(&PWM_DIS, channel, 1);
-		while (pwm_get_channel_status(channel));
+		while (pwm_get_channel_status(channel))
+			;
 	}
 	return 1;
 }
@@ -156,7 +157,9 @@ uint8_t pwm_channel_disable(uint32_t channel) {
  * Set the channel prescaler
  *
  * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
- * @return
+ * @param prescaler {This is the prescaler to be set.
+ * Use one of the predefined. prefix: PWM_CMRx_PRES_}
+ * @return error
  */
 uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
 	switch (channel) {
@@ -289,15 +292,14 @@ uint8_t pwm_turn_off_clkx(uint8_t clock_id) {
 	return 0;
 }
 
-//TODO prototype and comment
-uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divider){
-	if (clock_id == PWM_CLK_ID_CLKA){
+uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor) {
+	if (clock_id == PWM_CLK_ID_CLKA) {
 		set_section_in_register(&PWM_CLK, PWM_CLK_PREA_MASK, prescaler);
-		set_section_in_register(&PWM_CLK, PWM_CLK_DIVA_MASK, divider);
+		set_section_in_register(&PWM_CLK, PWM_CLK_DIVA_MASK, divisor);
 		return 1;
-	}else if(clock_id == PWM_CLK_ID_CLKB){
+	} else if (clock_id == PWM_CLK_ID_CLKB) {
 		set_section_in_register(&PWM_CLK, PWM_CLK_PREB_MASK, prescaler);
-		set_section_in_register(&PWM_CLK, PWM_CLK_DIVB_MASK, divider);
+		set_section_in_register(&PWM_CLK, PWM_CLK_DIVB_MASK, divisor);
 		return 1;
 	}
 	return 0;
@@ -312,42 +314,42 @@ uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divider){
  */
 uint8_t pwm_write(uint8_t channel, uint32_t duty_cycle) {
 	switch (channel) {
-		case PWM_CHANNEL_0_MASK:
-			set_section_in_register(&PWM_CDTYUPD0, PWM_CDTYUPDx_CDTYUPD_MASK,
-					duty_cycle);
-			break;
-		case PWM_CHANNEL_1_MASK:
-			set_section_in_register(&PWM_CDTYUPD1, PWM_CDTYUPDx_CDTYUPD_MASK,
-					duty_cycle);
-			break;
-		case PWM_CHANNEL_2_MASK:
-			set_section_in_register(&PWM_CDTYUPD2, PWM_CDTYUPDx_CDTYUPD_MASK,
-					duty_cycle);
-			break;
-		case PWM_CHANNEL_3_MASK:
-			set_section_in_register(&PWM_CDTYUPD3, PWM_CDTYUPDx_CDTYUPD_MASK,
-					duty_cycle);
-			break;
-		case PWM_CHANNEL_4_MASK:
-			set_section_in_register(&PWM_CDTYUPD4, PWM_CDTYUPDx_CDTYUPD_MASK,
-					duty_cycle);
-			break;
-		case PWM_CHANNEL_5_MASK:
-			set_section_in_register(&PWM_CDTYUPD5, PWM_CDTYUPDx_CDTYUPD_MASK,
-					duty_cycle);
-			break;
-		case PWM_CHANNEL_6_MASK:
-			set_section_in_register(&PWM_CDTYUPD6, PWM_CDTYUPDx_CDTYUPD_MASK,
-					duty_cycle);
-			break;
-		case PWM_CHANNEL_7_MASK:
-			set_section_in_register(&PWM_CDTYUPD7, PWM_CDTYUPDx_CDTYUPD_MASK,
-					duty_cycle);
-			break;
-		default:
-			return 0;
-			break;
-		}
+	case PWM_CHANNEL_0_MASK:
+		set_section_in_register(&PWM_CDTYUPD0, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_1_MASK:
+		set_section_in_register(&PWM_CDTYUPD1, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_2_MASK:
+		set_section_in_register(&PWM_CDTYUPD2, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_3_MASK:
+		set_section_in_register(&PWM_CDTYUPD3, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_4_MASK:
+		set_section_in_register(&PWM_CDTYUPD4, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_5_MASK:
+		set_section_in_register(&PWM_CDTYUPD5, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_6_MASK:
+		set_section_in_register(&PWM_CDTYUPD6, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	case PWM_CHANNEL_7_MASK:
+		set_section_in_register(&PWM_CDTYUPD7, PWM_CDTYUPDx_CDTYUPD_MASK,
+				duty_cycle);
+		break;
+	default:
+		return 0;
+		break;
+	}
 	return 1;
 }
 
@@ -364,7 +366,7 @@ uint8_t pwm_shutdown() {
  * Resets the peripheral and disables all channels
  * @return error
  */
-uint8_t pwm_reset(){
+uint8_t pwm_reset() {
 	pwm_channel_disable(PWM_CHANNEL_ALL_MASK);
 
 	clear_register(&PWM_CLK);
@@ -441,37 +443,43 @@ uint32_t pwm_read(uint8_t channel) {
 	return 1;
 }
 
-uint8_t pwm_get_channel_status(uint8_t channel){
+uint8_t pwm_get_channel_status(uint8_t channel) {
 	return is_bit_high(&PWM_SR, get_position_of_first_highbit(channel));
 }
 
-
 uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency,
-		uint32_t pwm_clk_id){
-    uint32_t divisors[11] = {1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024};
-    uint8_t divisor = 0;
-    uint32_t prescaler;
+		uint32_t pwm_clk_id) {
+	uint32_t prescalers[11] = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024 };
+	uint8_t prescaler = 0;
+	uint32_t divisor;
+	uint32_t pwm_channel_pres;
 
-    if (frequency > SYS_CLK_FREQ){
-		return 0; // Error
+	// check for frequency error
+	if (frequency > SYS_CLK_FREQ) {
+		return 0; // parameter error
 	}
-
-    //TODO
-
-    // Find prescaler and divisor values for clk
-    prescaler = (SYS_CLK_FREQ / divisors[divisor]) / frequency;
-    while ((prescaler > 255) && (divisor < 11)) {
-
-        divisor++;
-        prescaler = (SYS_CLK_FREQ / divisors[divisor]) / frequency;
-    }
-
-    // Implement result
-    if ( divisor < 11 ){
-        return prescaler | (divisor << 8);
-
-        pwm_set_channel_prescaler(channel, );
-    }else{
-        return 0 ;
-    }
+	// Find prescaler and divisor values for clk
+	divisor = (SYS_CLK_FREQ / prescalers[prescaler]) / frequency;
+	while ((divisor > 255) && (prescaler < 11)) {
+		prescaler++; // Last prescaler was too low, try a higher one
+		divisor = (SYS_CLK_FREQ / prescalers[prescaler]) / frequency;
+	}
+	// Implement result
+	if (prescaler < 11) {
+		// Initialize pwm_clk_id with the correct CLKx prescaler
+		if (pwm_clk_id == PWM_CLK_ID_CLKA) {
+			pwm_channel_pres = PWM_CMRx_PRES_CLOCKA;
+		} else if (pwm_clk_id == PWM_CLK_ID_CLKB) {
+			pwm_channel_pres = PWM_CMRx_PRES_CLOCKB;
+		} else {
+			return 0; // parameter error
+		}
+		// Initialize the CLKx with the found settings
+		pwm_set_clkx(pwm_clk_id, prescaler, divisor);
+		// Set the channel prescaler to the chosen CLKx
+		pwm_set_channel_prescaler(channel, pwm_channel_pres);
+		return 1; // All set (no error)
+	} else {
+		return 0; // parameter error
+	}
 }

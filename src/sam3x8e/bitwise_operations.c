@@ -108,10 +108,10 @@ uint8_t set_section_in_register2(uint32_t *reg, uint8_t start_bit,
  * Be sure not to pass mask = 0 into this function, the output will be
  * misleading and equal to 0.
  *
- * @param mask The mask to be examined
- * @return bit-number of the first position (0 could indicate error)
+ * @param mask {The mask to be examined}
+ * @return {bit-number of the first position (0 could indicate error)}
  */
-uint32_t get_position_of_first_highbit(uint32_t mask){
+uint8_t get_position_of_first_highbit(uint32_t mask){
 	uint8_t j = 0;
 	if(mask != 0x0U){
 		// 0x80000000 has one bit to the far left only
@@ -119,7 +119,7 @@ uint32_t get_position_of_first_highbit(uint32_t mask){
 			mask = (mask << 1);
 			j++;
 		}
-		return (31U - j);
+		return (0x1F - j); // = (31 - j)
 	}
 	return 0;
 }

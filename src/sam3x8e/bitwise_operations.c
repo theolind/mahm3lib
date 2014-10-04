@@ -31,8 +31,8 @@
  * @param bit The bit-number to be examined
  * @return The state of the bit in HIGH or LOW
  */
-uint8_t is_bit_high(uint32_t *reg, uint8_t bit){
-	return ((*reg >> bit) & 0x01U) == 1;
+uint8_t is_bit_high(uint32_t *reg, uint8_t bit) {
+	return (uint8_t) (((*reg >> bit) & 0x01U) == 1);
 }
 
 /**
@@ -44,33 +44,30 @@ uint8_t is_bit_high(uint32_t *reg, uint8_t bit){
  * @param value The value the section must store
  * @return error (1 = SUCCESS and 0 = FAIL)
  */
-uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value){
+uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value) {
 	// Retrieving the register and modifying it
 	*reg = (~mask & *reg) | (value << get_position_of_first_highbit(mask));
 	return 1;
 }
 
-uint8_t clear_register(uint32_t *reg){
+uint8_t clear_register(uint32_t *reg) {
 	set_section_in_register(reg, 0xFFFFFFFFU, 0x0U);
-	if(*reg == 0x0U){
+	if (*reg == 0x0U) {
 		return 1;
-	}else{
+	} else {
 		return 0;
 	}
 }
 
-uint8_t set_register(uint32_t *reg){
+uint8_t set_register(uint32_t *reg) {
 	set_section_in_register(reg, 0xFFFFFFFFU, 0xFFFFFFFFU);
-	if(*reg == 0xFFFFFFFFU){
+	if (*reg == 0xFFFFFFFFU) {
 		return 1;
-	}else{
+	} else {
 		return 0;
 	}
 	//return 0; // Should not get to here
 }
-
-
-
 
 /**
  * This function modifies a section of a register, reg, defined by 'mask' with
@@ -89,15 +86,17 @@ uint8_t set_register(uint32_t *reg){
  *             {@link #set_section_in_register(uint32_t,uint32_t,uint32_t)}
  */
 uint8_t set_section_in_register2(uint32_t *reg, uint8_t start_bit,
-		uint32_t length, uint32_t value){
+		uint8_t length, uint32_t value) {
 	uint32_t mask;
-	// Creating the mask for the section in the register
-	mask = ~(( (2^length)-1) << start_bit);
-	// Retrieving the register and modifying it
-	*reg = (mask & *reg) | (value << start_bit);
-	return 1;
+	if (length > 0) {
+		// Creating the mask for the section in the register
+		mask = ~(((uint32_t) (2 ^ length) - 1) << start_bit);
+		// Retrieving the register and modifying it
+		*reg = (mask & *reg) | (value << start_bit);
+		return 1;
+	}
+	return 0; // parameter error
 }
-
 
 /**
  * This function return the bit-number of the first bit being high in a 32-bit
@@ -111,19 +110,18 @@ uint8_t set_section_in_register2(uint32_t *reg, uint8_t start_bit,
  * @param mask {The mask to be examined}
  * @return {bit-number of the first position (0 could indicate error)}
  */
-uint8_t get_position_of_first_highbit(uint32_t mask){
+uint8_t get_position_of_first_highbit(uint32_t mask) {
 	uint8_t j = 0;
-	if(mask != 0x0U){
+	if (mask != 0x0U) {
 		// 0x80000000 has one bit to the far left only
-		while(mask != 0x80000000){
+		while (mask != 0x80000000) {
 			mask = (mask << 1);
 			j++;
 		}
-		return (uint8_t)(0x1F - j); // = (31 - j)
+		return (uint8_t) (0x1F - j); // = (31 - j)
 	}
 	return 0;
 }
-
 
 /**
  * This function will only return the value of a specified section in a given
@@ -134,7 +132,7 @@ uint8_t get_position_of_first_highbit(uint32_t mask){
  * @param mask The area for which the value must be returned (high bit are read)
  * @return The value of the section in the register
  */
-uint32_t get_section_in_register(uint32_t *reg, uint32_t mask){
+uint32_t get_section_in_register(uint32_t *reg, uint32_t mask) {
 	return (*reg & mask >> get_position_of_first_highbit(mask));
 }
 

@@ -136,12 +136,14 @@ typedef struct pwm_clk_setting{
  * Parameter prefix: PWM_POLARITY_}
  * @param alignment {Sets the alignment of the channel.
  * Parameter prefix: PWM_ALIGN_}
- * @param prescaler {Sets the channel prescaler. This can also select clock A
- * and B. Parameter prefix: PWM_CMRx_PRES_ (Use this only when frequency it
- * set to -1)}
  * @param duty_cycle {The initial duty cycle of the channel. (Optional)}
+ * @param use_prescaler {Must be 1 or 0 to indicate whether prescaler or
+ * frequency must be used.}
+ * @param prescaler {Sets the channel prescaler. This can also select clock A
+ * and B. Parameter prefix: PWM_CMRx_PRES_ (Needed only if use_prescaler it
+ * set to 1)}
  * @param frequency {The frequency of the PWM waveform for this channel.
- * (Set only if prescaler is set to -1)}
+ * (Set only if use_prescaler is set to 0)}
  * @param clock_ID {In case that frequency is specified, then clock_ID must
  * specify which CLKx to be used for this purpose. Prefix: PWM_CLK_ID_}
  */
@@ -149,9 +151,10 @@ typedef struct pwm_channel_setting{
 	uint32_t channel;
 	uint32_t polarity;
 	uint32_t alignment;
-	int32_t prescaler;
 	uint32_t duty_cycle;
-	int32_t frequency;
+	uint32_t use_prescaler;
+	uint32_t prescaler;
+	uint32_t frequency;
 	uint32_t clock_ID;
 }pwm_channel_setting;
 
@@ -281,7 +284,7 @@ uint8_t  pwm_reset(void);
  * @return {Previously set duty cycle (if 0 is received then it could mean
  * error)}
  */
-uint32_t pwm_read(uint8_t channel);
+uint32_t pwm_read(uint32_t channel);
 /**
  * Writes an output to a given channel by setting the channel duty cycle.
  *
@@ -289,7 +292,7 @@ uint32_t pwm_read(uint8_t channel);
  * @param duty_cycle {must be between 0 and period as in CPRD in the register PWM_CPRDx.}
  * @return error (1 = SCCESS and 0 = FAIL)
  */
-uint8_t  pwm_write(uint8_t channel, uint32_t duty_cycle);
+uint8_t  pwm_write(uint32_t channel, uint32_t duty_cycle);
 // Set the duty cycle between 0 and period
 //uint32_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle);
 
@@ -299,7 +302,7 @@ uint8_t  pwm_write(uint8_t channel, uint32_t duty_cycle);
  * @param channel {the channel to get the status for}
  * @return 1 if the channel is enabled, 0 if it is disabled
  */
-uint8_t pwm_channel_status(uint8_t channel);
+uint8_t pwm_channel_status(uint32_t channel);
 
 /**
  * This function will automatically select the necessary prescaler and divider

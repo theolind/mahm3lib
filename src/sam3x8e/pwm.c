@@ -126,10 +126,9 @@ uint8_t	pwm_init_peripheral(struct pwm_clk_setting clk_settings){
 }
 /**
  * Initialize the PWM peripheral with channel- polarity, alignment, prescaler
- * and initial duty cycle. If prescaler is chosen then frequency must be set to
- * -1, and if a specific frequency is needed, then prescaler must be set to -1.
- * If both frequency and prescaler is set, then this function will return an
- * error. Using the prescaler should be considered first, cause setting the
+ * and initial duty cycle. If prescaler is chosen then use_prescaler must be
+ * set to 1, and if a specific frequency is needed, then use_prescaler must be
+ * set to 0. Using the prescaler should be considered first, cause setting the
  * frequency will occupy a CLKx and consume more power.
  * This function will disable the channel but not enable it.
  *
@@ -141,16 +140,12 @@ uint8_t	pwm_init_peripheral(struct pwm_clk_setting clk_settings){
  */
 uint8_t pwm_init_channel(struct pwm_channel_setting channel) {
 	uint8_t error_out = 0;
-	if (channel.frequency != -1 && channel.prescaler != -1) {
-		return 0; // parameter error
-	}else if (channel.frequency > -1 && channel.prescaler == -1) {
-		error_out += pwm_set_channel_frequency(channel.channel,
-				channel.frequency, channel.clock_ID);
-	}else if (channel.frequency == -1 && channel.prescaler > -1) {
+	if (channel.use_prescaler == 1) {
 		error_out += pwm_set_channel_prescaler(channel.channel,
-				channel.prescaler);
+						channel.prescaler);
 	}else{
-		return 0; // parameter error
+		error_out += pwm_set_channel_frequency(channel.channel,
+						channel.frequency, channel.clock_ID);
 	}
 	error_out += pwm_channel_disable(channel.channel);
 	error_out += pwm_set_channel_alignment(channel.channel, channel.alignment);
@@ -202,36 +197,45 @@ uint8_t pwm_channel_disable(uint32_t channel) {
  * @return error
  */
 uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
+	uint8_t error = 0;
 	switch (channel) {
 	case PWM_CHANNEL_0_MASK:
-		set_section_in_register(&PWM_CMR0, PWM_CMRx_CPRE_MASK, prescaler);
+		error = set_section_in_register(&PWM_CMR0, PWM_CMRx_CPRE_MASK,
+				prescaler);
 		break;
 	case PWM_CHANNEL_1_MASK:
-		set_section_in_register(&PWM_CMR1, PWM_CMRx_CPRE_MASK, prescaler);
+		error = set_section_in_register(&PWM_CMR1, PWM_CMRx_CPRE_MASK,
+				prescaler);
 		break;
 	case PWM_CHANNEL_2_MASK:
-		set_section_in_register(&PWM_CMR2, PWM_CMRx_CPRE_MASK, prescaler);
+		error = set_section_in_register(&PWM_CMR2, PWM_CMRx_CPRE_MASK,
+				prescaler);
 		break;
 	case PWM_CHANNEL_3_MASK:
-		set_section_in_register(&PWM_CMR3, PWM_CMRx_CPRE_MASK, prescaler);
+		error = set_section_in_register(&PWM_CMR3, PWM_CMRx_CPRE_MASK,
+				prescaler);
 		break;
 	case PWM_CHANNEL_4_MASK:
-		set_section_in_register(&PWM_CMR4, PWM_CMRx_CPRE_MASK, prescaler);
+		error = set_section_in_register(&PWM_CMR4, PWM_CMRx_CPRE_MASK,
+				prescaler);
 		break;
 	case PWM_CHANNEL_5_MASK:
-		set_section_in_register(&PWM_CMR5, PWM_CMRx_CPRE_MASK, prescaler);
+		error = set_section_in_register(&PWM_CMR5, PWM_CMRx_CPRE_MASK,
+				prescaler);
 		break;
 	case PWM_CHANNEL_6_MASK:
-		set_section_in_register(&PWM_CMR6, PWM_CMRx_CPRE_MASK, prescaler);
+		error = set_section_in_register(&PWM_CMR6, PWM_CMRx_CPRE_MASK,
+				prescaler);
 		break;
 	case PWM_CHANNEL_7_MASK:
-		set_section_in_register(&PWM_CMR7, PWM_CMRx_CPRE_MASK, prescaler);
+		error = set_section_in_register(&PWM_CMR7, PWM_CMRx_CPRE_MASK,
+				prescaler);
 		break;
 	default:
 		return 0;
 		break;
 	}
-	return 1;
+	return error;
 }
 
 /**
@@ -332,6 +336,7 @@ uint8_t pwm_turn_off_clkx(uint8_t clock_id) {
 	return 0;
 }
 
+
 uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor) {
 	if (clock_id == PWM_CLK_ID_CLKA) {
 		set_section_in_register(&PWM_CLK, PWM_CLK_PREA_MASK, prescaler);
@@ -352,7 +357,7 @@ uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor) {
  * @param duty_cycle {must be between 0 and period as in CPRD in the register PWM_CPRDx.}
  * @return error (1 = SCCESS and 0 = FAIL)
  */
-uint8_t pwm_write(uint8_t channel, uint32_t duty_cycle) {
+uint8_t pwm_write(uint32_t channel, uint32_t duty_cycle) {
 	switch (channel) {
 	case PWM_CHANNEL_0_MASK:
 		set_section_in_register(&PWM_CDTYUPD0, PWM_CDTYUPDx_CDTYUPD_MASK,
@@ -387,10 +392,10 @@ uint8_t pwm_write(uint8_t channel, uint32_t duty_cycle) {
 				duty_cycle);
 		break;
 	default:
-		return 0;
+		return (uint8_t)0;
 		break;
 	}
-	return 1;
+	return (uint8_t)1;
 }
 
 /**
@@ -450,7 +455,8 @@ uint8_t pwm_close() {
 	return 1;
 }
 
-uint32_t pwm_read(uint8_t channel) {
+
+uint32_t pwm_read(uint32_t channel) {
 	switch (channel) {
 	case PWM_CHANNEL_0_MASK:
 		return get_section_in_register(&PWM_CDTY0, PWM_CDTYx_CDTY_MASK);
@@ -483,9 +489,11 @@ uint32_t pwm_read(uint8_t channel) {
 	return 1;
 }
 
-uint8_t pwm_channel_status(uint8_t channel) {
+
+uint8_t pwm_channel_status(uint32_t channel) {
 	return is_bit_high(&PWM_SR, get_position_of_first_highbit(channel));
 }
+
 
 uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency,
 		uint32_t pwm_clk_id) {

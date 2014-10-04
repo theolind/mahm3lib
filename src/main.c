@@ -29,8 +29,6 @@ int main(void) {
 	channel_0.alignment = PWM_ALIGN_LEFT;
 	channel_0.polarity = PWM_POLARITY_HIGH;
 	channel_0.prescaler = PWM_CLK_PRES_1024;
-	channel_0.high_polarity_pin = 0;
-	channel_0.low_polarity_pin = 0;
 	channel_0.duty_cycle = 0;
 
 	//pwm_

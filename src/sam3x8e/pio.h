@@ -39,8 +39,8 @@
  * These definitions are used in connection with multiplexing pins to their
  * secondary function which are the peripherals that they are connected to.
  */
-#define PERIPH_A			0
-#define PERIPH_B			1
+#define PIO_PERIPH_A			0
+#define PIO_PERIPH_B			1
 
 /*
 // port register offsets
@@ -302,7 +302,7 @@ uint32_t pio_read_port(pio_reg_t *port);
  *
  * @author {Saeed Ghasemi}
  * @param port {This is the pio port of the pin to be multiplexed.}
- * @param periph {Point to your chosen peripheral. PERIPH_A or B}
+ * @param periph {Point to your chosen peripheral. PIO_PERIPH_A or B}
  * @param pin_number {This is the pin number in the port register.
  * Start with prefix: PIN_[peripheral] to get to predefined pins.}
  * @return error (1  = SUCCESS, 0 = FAIL)

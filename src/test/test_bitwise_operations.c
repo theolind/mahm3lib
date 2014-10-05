@@ -85,23 +85,29 @@ void test_set_section_in_register(void) {
 void test_set_section_in_register2(void) {
 	uint32_t reg;
 	reg = 0x00000000;
-	set_section_in_register2(&reg, 0, 3, 3);
-	TEST_ASSERT_TRUE(reg == 7);
-//	reg = 0x00000000;
-//	set_section_in_register2(&reg, 0, 2, 1);
-//	TEST_ASSERT_TRUE(reg == 0x00000001);
-//	reg = 0x00000000;
-//	set_section_in_register2(&reg, 0, 2, 2);
-//	TEST_ASSERT_TRUE(reg == 0x00000010);
-//	reg = 0x00000000;
-//	set_section_in_register2(&reg, 1, 2, 3);
-//	TEST_ASSERT_TRUE(reg == 0x00000110);
-//	reg = 0x00000000;
-//	set_section_in_register2(&reg, 1, 2, 2);
-//	TEST_ASSERT_TRUE(reg == 0x00000100);
-//	reg = 0x00000000;
-//	set_section_in_register2(&reg, 1, 2, 1);
-//	TEST_ASSERT_TRUE(reg == 0x00000010U);
+	set_section_in_register2(&reg, 0, 2, 3);
+	TEST_ASSERT_TRUE(reg == 0x00000003);
+	reg = 0x00000000;
+	set_section_in_register2(&reg, 0, 2, 1);
+	TEST_ASSERT_TRUE(reg == 0x00000001);
+	reg = 0x00000000;
+	set_section_in_register2(&reg, 0, 2, 2);
+	TEST_ASSERT_TRUE(reg == 0x00000002);
+	reg = 0x00000000;
+	set_section_in_register2(&reg, 1, 2, 3);
+	TEST_ASSERT_TRUE(reg == 0x00000006);
+	reg = 0x00000000;
+	set_section_in_register2(&reg, 1, 2, 2);
+	TEST_ASSERT_TRUE(reg == 0x00000004);
+	reg = 0x00000000;
+	set_section_in_register2(&reg, 1, 2, 1);
+	TEST_ASSERT_TRUE(reg == 0x00000002);
+	reg = 0x00200000;
+	set_section_in_register2(&reg, 1, 2, 1);
+	TEST_ASSERT_TRUE(reg == 0x00200002);
+	reg = 0x00200000; // first bit in nibble = 28 24 20 16 12 8 4 0
+	set_section_in_register2(&reg, 24, 5, 17);
+	TEST_ASSERT_TRUE(reg == 0x11200000);//0001 0001 last two nibbles
 }
 
 void test_clear_register(void) {

@@ -13,7 +13,7 @@
 #include "sam3x8e/uart.h"
 
 #define HORIZONTAL_LINE_BREAK()	\
-	uart_write_str("-----------------------\n\r");
+	uart_write_str("----------------------------------------------\n\r");
 
 void run_tests(void);
 

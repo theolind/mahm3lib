@@ -101,8 +101,6 @@ uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value) {
  * @param length The length of the section
  * @param value The value to be inserted in the register-section
  * @return error (1 = SUCCESS and 0 = FAIL)
- * @deprecated  As of v0.3, replaced by
- *             {@link #set_section_in_register(uint32_t,uint32_t,uint32_t)}
  */
 uint8_t set_section_in_register2(uint32_t *reg, uint32_t start_bit,
 		uint32_t length, uint32_t value) {
@@ -113,11 +111,10 @@ uint8_t set_section_in_register2(uint32_t *reg, uint32_t start_bit,
 		for (i = 0;  i < length; i++) {
 			mask *= 2;
 		}
-		mask = (mask -1);
-		//mask <<= start_bit;
+		mask = ((mask -1) << start_bit);
 		// Retrieving the register and modifying it
-		//*reg = ((~mask) & *reg) | (value << start_bit);
-		*reg = mask;
+		*reg = ((~mask) & *reg) | (value << start_bit);
+		//*reg = mask;
 		return 1;
 	}
 	return 0; // parameter error

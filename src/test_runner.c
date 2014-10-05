@@ -75,6 +75,8 @@ void run_tests(void) {
 	RUN_TEST(test_set_section_in_register2, 30);
 	RUN_TEST(test_clear_register, 30);
 	RUN_TEST(test_set_register, 30);
+	RUN_TEST(test_clear_bit_in_register, 30);
+	RUN_TEST(test_set_bit_in_register, 30);
 	HORIZONTAL_LINE_BREAK();
 
 	UnityEnd();

@@ -16,5 +16,7 @@ void test_set_section_in_register(void);
 void test_set_section_in_register2(void);
 void test_clear_register(void);
 void test_set_register(void);
+void test_clear_bit_in_register(void);
+void test_set_bit_in_register(void);
 
 #endif

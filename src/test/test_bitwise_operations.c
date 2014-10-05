@@ -107,7 +107,7 @@ void test_set_section_in_register2(void) {
 	TEST_ASSERT_TRUE(reg == 0x00200002);
 	reg = 0x00200000; // first bit in nibble = 28 24 20 16 12 8 4 0
 	set_section_in_register2(&reg, 24, 5, 17);
-	TEST_ASSERT_TRUE(reg == 0x11200000);//0001 0001 last two nibbles
+	TEST_ASSERT_TRUE(reg == 0x11200000); //0001 0001 last two nibbles
 }
 
 void test_clear_register(void) {
@@ -136,3 +136,32 @@ void test_set_register(void) {
 	TEST_ASSERT_TRUE(reg == 0xFFFFFFFF);
 }
 
+void test_clear_bit_in_register(void) {
+	uint32_t reg = 0x00000001; // first bit in nibble = 28 24 20 16 12 8 4 0
+	clear_bit_in_register(&reg, 0);
+	TEST_ASSERT_TRUE(reg == 0x00000000);
+	TEST_ASSERT_TRUE(is_bit_high(&reg, 0) == 0);
+	reg = 0x00050000;
+	clear_bit_in_register(&reg, 16);
+	TEST_ASSERT_TRUE(reg == 0x00040000);
+	TEST_ASSERT_TRUE(is_bit_high(&reg, 16) == 0);
+	reg = 0x80080800;
+	clear_bit_in_register(&reg, 31);
+	TEST_ASSERT_TRUE(reg == 0x00080800);
+	TEST_ASSERT_TRUE(is_bit_high(&reg, 31) == 0);
+}
+
+void test_set_bit_in_register(void) {
+	uint32_t reg = 0x00000000; // first bit in nibble = 28 24 20 16 12 8 4 0
+	set_bit_in_register(&reg, 0);
+	TEST_ASSERT_TRUE(reg == 0x00000001);
+	TEST_ASSERT_TRUE(is_bit_high(&reg, 0) == 1);
+	reg = 0x00040000;
+	set_bit_in_register(&reg, 16);
+	TEST_ASSERT_TRUE(reg == 0x00050000);
+	TEST_ASSERT_TRUE(is_bit_high(&reg, 16) == 1);
+	reg = 0x00080800;
+	set_bit_in_register(&reg, 31);
+	TEST_ASSERT_TRUE(reg == 0x80080800);
+	TEST_ASSERT_TRUE(is_bit_high(&reg, 31) == 1);
+}

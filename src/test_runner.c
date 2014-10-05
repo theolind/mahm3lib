@@ -15,6 +15,7 @@
 #include "test/test_adc.h"
 #include "test/test_dacc.h"
 #include "test/test_uart.h"
+#include "test/test_bitwise_operations.h"
 
 void run_tests(void) {
 	UnityBegin();
@@ -22,7 +23,8 @@ void run_tests(void) {
 	// Run UART tests
 	Unity.TestFile = "test/test_uart.c";
 	RUN_TEST(test_uart_send_receive_char_local_loopback_mode, 0);
-	HORIZONTAL_LINE_BREAK();
+	HORIZONTAL_LINE_BREAK()
+	;
 
 	// Run PMC tests
 	Unity.TestFile = "test/test_pmc.c";
@@ -31,7 +33,8 @@ void run_tests(void) {
 	RUN_TEST(test_pmc_PIOB_enabled, 20);
 	RUN_TEST(test_pmc_disable_PIOB, 20);
 	RUN_TEST(test_pmc_PIOB_disabled2, 20);
-	HORIZONTAL_LINE_BREAK();
+	HORIZONTAL_LINE_BREAK()
+	;
 
 	// Run PIO tests
 	Unity.TestFile = "test/test_pio.c";
@@ -42,7 +45,8 @@ void run_tests(void) {
 	RUN_TEST(test_pio_read_pin, 10);
 	RUN_TEST(test_pio_set_output, 10);
 	RUN_TEST(test_pio_conf_multiple_pins, 10);
-	HORIZONTAL_LINE_BREAK();
+	HORIZONTAL_LINE_BREAK()
+	;
 
 	// Run DACC tests
 	Unity.TestFile = "test/test_dacc.c";
@@ -63,6 +67,18 @@ void run_tests(void) {
 	RUN_TEST(test_adc_channel_status, 30);
 	RUN_TEST(test_adc_set_resolution_10_bit, 30);
 	RUN_TEST(test_adc_set_resolution_12_bit, 30);
+	HORIZONTAL_LINE_BREAK();
+
+	// Run bitwise_operations tests
+	Unity.TestFile = "test/test_bitwise_operations.c";
+	RUN_TEST(test_is_bit_high, 30);
+	RUN_TEST(test_get_position_of_first_highbit, 30);
+	RUN_TEST(test_get_section_in_register, 30);
+	RUN_TEST(test_set_section_in_register, 30);
+	RUN_TEST(test_set_section_in_register2, 30);
+	RUN_TEST(test_clear_register, 30);
+	RUN_TEST(test_set_register, 30);
+	HORIZONTAL_LINE_BREAK();
 
 	UnityEnd();
 }

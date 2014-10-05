@@ -9,6 +9,11 @@
 #include "unity/unity.h"
 #include "test_pwm.h"
 
+//TODO define registers
+#define p_PWM_BASE_ADD			0x40094000U
+
+#define PWM_SR 		*((uint32_t*)(p_PWM_BASE_ADD + 0x00C)) // PWM Status Register
+
 
 /*
  * Checking that an ADC channel is enabled.

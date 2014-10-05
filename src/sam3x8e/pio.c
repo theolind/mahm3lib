@@ -11,9 +11,7 @@
 
 #include "pio.h"
 
-// Internally used (not for user)
-#define PERIPH_A			0
-#define PERIPH_B			1
+
 
 /*
  * This register can only be written if the WPEN bit is cleared in
@@ -101,10 +99,10 @@ uint8_t pio_conf_pin_to_peripheral(pio_reg_t *port,
 	port->PIO_PDR = (0x1U << pin_number);
 	// The will be set to peripheral B
 	//p_reg = (uint32_t *) (port + PIO_ABSR);
-	if(periph){
-		port->PIO_ABSR |= (0x1U << pin_number);
+	if(periph){ // 0 is peripheral A and 1 is B
+		port->PIO_ABSR &= ~(0x1U << pin_number); // Clear for peripheral A
 	}else{
-		port->PIO_ABSR &= ~(0x1U << pin_number);
+		port->PIO_ABSR |= (0x1U << pin_number); // Set to peripheral B
 	}
 	return 1;
 }

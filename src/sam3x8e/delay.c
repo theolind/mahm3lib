@@ -2,19 +2,23 @@
  * delay.c
  *
  * Author: Mattias Nilsson
- * Date: 2 October 2014
+ * Date: 6 October 2014
  */
 
 #include "delay.h"
 
 
 void delay_micros(uint32_t us){
-	// Print value through serial communication
 	uint32_t us_1000, us_100, us_10, us_1;
 
 	if(us < 10){
 		delay_1(us);
 	} else{
+		/*
+		 * Splits input time into thousands, hundreds, tens and single of
+		 * microseconds. Used due to, the longer the delay, the longer deviation
+		 * if not logarithmic.
+		 */
 		us_1000 = (us - (us % 1000)) / 1000;
 		us = (us - us_1000 * 1000);
 		us_100 = (us - (us % 100)) / 100;
@@ -23,15 +27,12 @@ void delay_micros(uint32_t us){
 		us = (us - us_10 * 10);
 		us_1 = us % 10;
 
+		// Adds time for every thousand, hundreds, tens and single of microsec.
 		delay_1000(us_1000);
 		delay_100(us_100);
 		delay_10(us_10);
 		delay_1(us_1);
 	}
-
-
-
-
 }
 
 

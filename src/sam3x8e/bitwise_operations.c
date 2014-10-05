@@ -34,7 +34,42 @@
 uint8_t is_bit_high(uint32_t *reg, uint8_t bit) {
 	return (uint8_t) (((*reg >> bit) & 0x01U) == 1);
 }
-
+/**
+ * This function return the bit-number of the first bit being high in a 32-bit
+ * long value. The main purpose of this function is to find the start-bit of a
+ * given mask. The start-bit can then be used to left-bit-shift a value into
+ * position relative to a section in a register.
+ *
+ * Be sure not to pass mask = 0 into this function, the output will be
+ * misleading and equal to 0.
+ *
+ * @param mask {The mask to be examined}
+ * @return {bit-number of the first position (0 could indicate error)}
+ */
+uint8_t get_position_of_first_highbit(uint32_t mask) {
+	uint8_t j = 0;
+	if (mask != 0x0U) {
+		// 0x80000000 has one bit to the far left only
+		while (mask != 0x80000000) {
+			mask = (mask << 1);
+			j++;
+		}
+		return (uint8_t) (0x1F - j); // = (31 - j)
+	}
+	return 0;
+}
+/**
+ * This function will only return the value of a specified section in a given
+ * register. The value in the section will be right-shifted so that the value
+ * returned is the value stored in the section.
+ *
+ * @param reg This specifies a pointer to the register
+ * @param mask The area for which the value must be returned (high bit are read)
+ * @return The value of the section in the register
+ */
+uint32_t get_section_in_register(uint32_t *reg, uint32_t mask) {
+	return (*reg & mask >> get_position_of_first_highbit(mask));
+}
 /**
  * This function will modify a section of a given register as indicated by
  * mask with the value specified in 'value'.
@@ -49,26 +84,6 @@ uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value) {
 	*reg = (~mask & *reg) | (value << get_position_of_first_highbit(mask));
 	return 1;
 }
-
-uint8_t clear_register(uint32_t *reg) {
-	set_section_in_register(reg, 0xFFFFFFFFU, 0x0U);
-	if (*reg == 0x0U) {
-		return 1;
-	} else {
-		return 0;
-	}
-}
-
-uint8_t set_register(uint32_t *reg) {
-	set_section_in_register(reg, 0xFFFFFFFFU, 0xFFFFFFFFU);
-	if (*reg == 0xFFFFFFFFU) {
-		return 1;
-	} else {
-		return 0;
-	}
-	//return 0; // Should not get to here
-}
-
 /**
  * This function modifies a section of a register, reg, defined by 'mask' with
  * the value in 'value'.
@@ -98,41 +113,28 @@ uint8_t set_section_in_register2(uint32_t *reg, uint8_t start_bit,
 	return 0; // parameter error
 }
 
-/**
- * This function return the bit-number of the first bit being high in a 32-bit
- * long value. The main purpose of this function is to find the start-bit of a
- * given mask. The start-bit can then be used to left-bit-shift a value into
- * position relative to a section in a register.
- *
- * Be sure not to pass mask = 0 into this function, the output will be
- * misleading and equal to 0.
- *
- * @param mask {The mask to be examined}
- * @return {bit-number of the first position (0 could indicate error)}
- */
-uint8_t get_position_of_first_highbit(uint32_t mask) {
-	uint8_t j = 0;
-	if (mask != 0x0U) {
-		// 0x80000000 has one bit to the far left only
-		while (mask != 0x80000000) {
-			mask = (mask << 1);
-			j++;
-		}
-		return (uint8_t) (0x1F - j); // = (31 - j)
+uint8_t clear_register(uint32_t *reg) {
+	set_section_in_register(reg, 0xFFFFFFFFU, 0x0U);
+	if (*reg == 0x0U) {
+		return 1;
+	} else {
+		return 0;
 	}
-	return 0;
 }
 
-/**
- * This function will only return the value of a specified section in a given
- * register. The value in the section will be right-shifted so that the value
- * returned is the value stored in the section.
- *
- * @param reg This specifies a pointer to the register
- * @param mask The area for which the value must be returned (high bit are read)
- * @return The value of the section in the register
- */
-uint32_t get_section_in_register(uint32_t *reg, uint32_t mask) {
-	return (*reg & mask >> get_position_of_first_highbit(mask));
+uint8_t set_register(uint32_t *reg) {
+	set_section_in_register(reg, 0xFFFFFFFFU, 0xFFFFFFFFU);
+	if (*reg == 0xFFFFFFFFU) {
+		return 1;
+	} else {
+		return 0;
+	}
+	//return 0; // Should not get to here
 }
+
+
+
+
+
+
 

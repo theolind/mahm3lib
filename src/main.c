@@ -10,7 +10,7 @@ int main(void) {
 	unity_hw_setup();
 
 	// run unit tests
-	//run_tests();
+	run_tests();
 
 	/**
 	 * enable the PWM clock in PMC

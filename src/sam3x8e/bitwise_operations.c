@@ -21,7 +21,10 @@
  * @bug {Not yet fully tested.}
  */
 
+
 #include "bitwise_operations.h"
+
+#include "sam3x8e/uart.h"
 
 /**
  * This function can be used to check for the state of a single bit in a
@@ -32,7 +35,8 @@
  * @return The state of the bit in HIGH or LOW
  */
 uint8_t is_bit_high(uint32_t *reg, uint8_t bit) {
-	return (uint8_t) (((*reg >> bit) & 0x01U) == 1);
+	return (uint8_t) (((*reg >> bit) & 0x01U) == 0x1U);
+//	return (uint8_t) (((*reg & (0x1U << bit))) >= 0x1U);
 }
 /**
  * This function return the bit-number of the first bit being high in a 32-bit
@@ -68,10 +72,10 @@ uint8_t get_position_of_first_highbit(uint32_t mask) {
  * @return The value of the section in the register
  */
 uint32_t get_section_in_register(uint32_t *reg, uint32_t mask) {
-	return (*reg & mask >> get_position_of_first_highbit(mask));
+	return ((*reg & mask) >> get_position_of_first_highbit(mask));
 }
 /**
- * This function will modify a section of a given register as indicated by
+ * This function will modify a section of a given register as indicated by'
  * mask with the value specified in 'value'.
  *
  * @param reg This specifies a pointer to the register
@@ -80,9 +84,10 @@ uint32_t get_section_in_register(uint32_t *reg, uint32_t mask) {
  * @return error (1 = SUCCESS and 0 = FAIL)
  */
 uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value) {
-	// Retrieving the register and modifying it
-	*reg = (~mask & *reg) | (value << get_position_of_first_highbit(mask));
-	return 1;
+	// Retrieving the register and modifying it (Storing error output in shift)
+	uint8_t shift = get_position_of_first_highbit(mask);
+	*reg = ((~mask) & *reg) | (value << shift);
+	return shift; // 0 from shift could means fail
 }
 /**
  * This function modifies a section of a register, reg, defined by 'mask' with

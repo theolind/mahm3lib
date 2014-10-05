@@ -70,8 +70,8 @@ uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value);
  * @param value The value the section must store
  * @return error (1 = SUCCESS and 0 = FAIL)
  */
-uint8_t set_section_in_register2(uint32_t *reg, uint8_t start_bit,
-		uint8_t length, uint32_t value);
+uint8_t set_section_in_register2(uint32_t *reg, uint32_t start_bit,
+		uint32_t length, uint32_t value);
 /**
  * This function will only return the value of a specified section in a given
  * register. The value in the section will be right-shifted so that the value

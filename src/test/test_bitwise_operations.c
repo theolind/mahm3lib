@@ -65,30 +65,43 @@ void test_set_section_in_register(void) {
 	reg = 0x00000000;
 	set_section_in_register(&reg, 0xF0000000, 2);
 	TEST_ASSERT_TRUE(reg == 0x20000000);
-//	set_section_in_register(&reg, 0x00000030, 3);
-//	TEST_ASSERT_TRUE(reg == 0x00000030);
-//	set_section_in_register(&reg, 0x00700000, 2);
-//	TEST_ASSERT_TRUE(reg == 0x00200000);
-//	set_section_in_register(&reg, 0x00000C00, 4);
-//	TEST_ASSERT_TRUE(reg == 0x00000400);
-//	set_section_in_register(&reg, 0x00000C00, 8);
-//	TEST_ASSERT_TRUE(reg == 0x00000800);
+	reg = 0x00000000;
+	set_section_in_register(&reg, 0x00000030, 3);
+	TEST_ASSERT_TRUE(reg == 0x00000030);
+	reg = 0x00000000;
+	set_section_in_register(&reg, 0x00700000, 2);
+	TEST_ASSERT_TRUE(reg == 0x00200000);
+	reg = 0x00000000;
+	set_section_in_register(&reg, 0x00000E00, 4);
+	TEST_ASSERT_TRUE(reg == 0x00000800);
+	reg = 0x00000321; // Register already has data (Not overwriting)
+	set_section_in_register(&reg, 0x00F00000, 8);
+	TEST_ASSERT_TRUE(reg == 0x00800321);
+	reg = 0x00000321; // Register already has data (overwriting)
+	set_section_in_register(&reg, 0x000000F0, 8);
+	TEST_ASSERT_TRUE(reg == 0x00000381);
 }
 
 void test_set_section_in_register2(void) {
-	uint32_t reg = 0x00000000;
-	set_section_in_register2(&reg, 0, 2, 3);
-	TEST_ASSERT_TRUE(reg == 0x00000011);
-	set_section_in_register2(&reg, 0, 2, 1);
-	TEST_ASSERT_TRUE(reg == 0x00000001);
-	set_section_in_register2(&reg, 0, 2, 2);
-	TEST_ASSERT_TRUE(reg == 0x00000010);
-	set_section_in_register2(&reg, 1, 2, 3);
-	TEST_ASSERT_TRUE(reg == 0x00000110);
-	set_section_in_register2(&reg, 1, 2, 2);
-	TEST_ASSERT_TRUE(reg == 0x00000100);
-	set_section_in_register2(&reg, 1, 2, 1);
-	TEST_ASSERT_TRUE(reg == 0x00000010U);
+	uint32_t reg;
+	reg = 0x00000000;
+	set_section_in_register2(&reg, 0, 3, 3);
+	TEST_ASSERT_TRUE(reg == 7);
+//	reg = 0x00000000;
+//	set_section_in_register2(&reg, 0, 2, 1);
+//	TEST_ASSERT_TRUE(reg == 0x00000001);
+//	reg = 0x00000000;
+//	set_section_in_register2(&reg, 0, 2, 2);
+//	TEST_ASSERT_TRUE(reg == 0x00000010);
+//	reg = 0x00000000;
+//	set_section_in_register2(&reg, 1, 2, 3);
+//	TEST_ASSERT_TRUE(reg == 0x00000110);
+//	reg = 0x00000000;
+//	set_section_in_register2(&reg, 1, 2, 2);
+//	TEST_ASSERT_TRUE(reg == 0x00000100);
+//	reg = 0x00000000;
+//	set_section_in_register2(&reg, 1, 2, 1);
+//	TEST_ASSERT_TRUE(reg == 0x00000010U);
 }
 
 void test_clear_register(void) {

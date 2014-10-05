@@ -21,7 +21,6 @@
  * @bug {Not yet fully tested.}
  */
 
-
 #include "bitwise_operations.h"
 
 #include "sam3x8e/uart.h"
@@ -36,7 +35,6 @@
  */
 uint8_t is_bit_high(uint32_t *reg, uint8_t bit) {
 	return (uint8_t) (((*reg >> bit) & 0x01U) == 0x1U);
-//	return (uint8_t) (((*reg & (0x1U << bit))) >= 0x1U);
 }
 /**
  * This function return the bit-number of the first bit being high in a 32-bit
@@ -108,13 +106,12 @@ uint8_t set_section_in_register2(uint32_t *reg, uint32_t start_bit,
 	uint8_t i;
 	if (length > 0) {
 		// Creating the mask for the section in the register
-		for (i = 0;  i < length; i++) {
+		for (i = 0; i < length; i++) {
 			mask *= 2;
 		}
-		mask = ((mask -1) << start_bit);
+		mask = ((mask - 1) << start_bit);
 		// Retrieving the register and modifying it
 		*reg = ((~mask) & *reg) | (value << start_bit);
-		//*reg = mask;
 		return 1;
 	}
 	return 0; // parameter error
@@ -136,12 +133,15 @@ uint8_t set_register(uint32_t *reg) {
 	} else {
 		return 0;
 	}
-	//return 0; // Should not get to here
 }
 
+uint8_t clear_bit_in_register(uint32_t *reg, uint8_t bit_number) {
+	*reg &= ~(1 << bit_number);
+	return 1;
+}
 
-
-
-
-
+uint8_t set_bit_in_register(uint32_t *reg, uint8_t bit_number) {
+	*reg |= (1 << bit_number);
+	return 1;
+}
 

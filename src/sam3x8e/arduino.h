@@ -14,6 +14,7 @@
 #define ARDUINO_H_
 
 #include <inttypes.h>
+#include <pio.h>
 
 /**
  * ADC mappings
@@ -41,12 +42,12 @@
  * PIO mappings
  */
 
-#define PIOA ((pio_reg_t *) 0x400E0E00)
-#define PIOB ((pio_reg_t *) 0x400E1000)
-#define PIOC ((pio_reg_t *) 0x400E1200)
-#define PIOD ((pio_reg_t *) 0x400E1400)
-#define PIOE ((pio_reg_t *) 0x400E1600)
-#define PIOF ((pio_reg_t *) 0x400E1800)
+//#define PIOA ((pio_reg_t *) 0x400E0E00)
+//#define PIOB ((pio_reg_t *) 0x400E1000)
+//#define PIOC ((pio_reg_t *) 0x400E1200)
+//#define PIOD ((pio_reg_t *) 0x400E1400)
+//#define PIOE ((pio_reg_t *) 0x400E1600)
+//#define PIOF ((pio_reg_t *) 0x400E1800)
 
 #define D2_pin		25
 #define D3_pin		28

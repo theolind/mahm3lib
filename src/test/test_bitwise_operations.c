@@ -107,5 +107,3 @@ void test_set_register(void) {
 	TEST_ASSERT_TRUE(reg == 0xFFFFFFFF);
 }
 
-///////////
-

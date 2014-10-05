@@ -114,8 +114,10 @@ void test_clear_register(void) {
 	uint32_t reg = 123;
 	clear_register(&reg);
 	TEST_ASSERT_TRUE(reg == 0x00000000);
+	reg = 0x12454534;
+	clear_register(&reg);
 	TEST_ASSERT_EQUAL_UINT32(0x00000000, reg);
-	reg = 0x12334413;
+	reg = 0xFFFFFFFF;
 	clear_register(&reg);
 	TEST_ASSERT_TRUE(reg == 0x00000000);
 	TEST_ASSERT_EQUAL_UINT32(0, reg);

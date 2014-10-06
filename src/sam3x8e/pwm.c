@@ -387,11 +387,15 @@ uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency) {
 		return 0; // parameter error
 	}
 	// Find a prescaler based while aiming at the highest period possible
+	// The period of center-alignment must be half of that of left-alignment
+	// Initial calculation
 	if (alignment == PWM_CHANNEL_ALIGN_CENTER) {
 		CPRD = SYS_CLK_FREQ / (frequency * prescalers[i] * 2);
 	} else {
 		CPRD = SYS_CLK_FREQ / (frequency * prescalers[i]);
 	}
+	// Test the calculation and continued calculation till values found
+	// or out of bounds.
 	while ((CPRD > 65535) && (i < 10)) {
 		i++;
 		if (alignment == PWM_CHANNEL_ALIGN_CENTER) {
@@ -407,11 +411,15 @@ uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency) {
 			reenable = 1;
 			pwm_channel_disable(channel);
 		}
+		// Implement
 		pwm_set_channel_period(channel, CPRD);
 		pwm_set_channel_prescaler(channel, i);
+		// Reenable if nessessary
 		if (reenable == 1) {
 			pwm_channel_enable(channel);
 		}
+	}else{
+		return 0;
 	}
 	return 1;
 }
@@ -598,9 +606,9 @@ uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
 }
 /**
  * This channel reads the maximum allowed duty cycle for the channel.
- * This is called channel resolution.
+ * This is also called channel resolution.
  */
-uint32_t pwm_get_channel_resolution(uint32_t channel) {
+uint32_t pwm_get_channel_period(uint32_t channel) {
 	switch (channel) {
 	case PWM_CHANNEL_0_MASK:
 		return get_section_in_register(&PWM_CPRD0, PWM_CPRDx_CPRD_MASK);

@@ -149,7 +149,7 @@ uint8_t pwm_init_channel(struct pwm_channel_setting channel) {
 	error += pwm_channel_disable(channel.channel);
 	error += pwm_set_channel_alignment(channel.channel, channel.alignment);
 	error += pwm_set_channel_polarity(channel.channel, channel.polarity);
-	error += pwm_write(channel.channel, channel.duty_cycle);
+	error += pwm_set_channel_duty_cycle(channel.channel, channel.duty_cycle);
 	// output no_error if no error occurred in any of the functions
 	return (error == 6) ? 1 : 0;
 }
@@ -356,7 +356,7 @@ uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor) {
  * @param duty_cycle {must be between 0 and period as in CPRD in the register PWM_CPRDx.}
  * @return error (1 = SCCESS and 0 = FAIL)
  */
-uint8_t pwm_write(uint32_t channel, uint32_t duty_cycle) {
+uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
 	switch (channel) {
 	case PWM_CHANNEL_0_MASK:
 		if (pwm_channel_status(PWM_CHANNEL_0_MASK)) {
@@ -645,6 +645,12 @@ uint8_t pwm_set_clkx_frequency(uint32_t channel, uint32_t frequency,
 		return 0; // parameter error
 	}
 }
+
+uint32_t pwm_get_max_duty_cycle(){
+	return get_section_in_register(PWM_CPRD0, PWM_CPRDx_CPRD_MASK);
+}
+
+
 //TODO write a function to set the period based on a given frequency
 
 //uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t min_resolution,

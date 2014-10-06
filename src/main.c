@@ -38,7 +38,7 @@ int main(void) {
 	pwm_init_channel(channel_0);
 
 	pwm_set_channel_period(PWM_CHANNEL_0_MASK, 65535);
-	pwm_write(PWM_CHANNEL_0_MASK, 30000);
+	pwm_set_channel_duty_cycle(PWM_CHANNEL_0_MASK, 30000);
 	pwm_channel_enable(PWM_CHANNEL_0_MASK);
 
 

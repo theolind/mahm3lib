@@ -25,16 +25,7 @@
 #define PWM_H_
 
 /**
- * MASKs are being defined like this:
- * [PERIPHERAL]_[REGISTER]_[SECTION]_MASK
- */
-#define PWM_CLK_PREA_MASK				(0x00000F00)
-#define PWM_CLK_PREB_MASK				(0x0F000000)
-#define PWM_CLK_DIVA_MASK				(0x000000FF)
-#define PWM_CLK_DIVB_MASK				(0x00FF0000)
-
-/**
- * @def <defines>
+ * @def (PWM channels)
  * These defines are masks for the PWM channels and can be used as the channel
  * input of every function.
  */
@@ -47,7 +38,26 @@
 #define PWM_CHANNEL_6_MASK				(1<<6)
 #define PWM_CHANNEL_7_MASK				(1<<7)
 #define PWM_CHANNEL_ALL_MASK			(0xFF)
-
+/**
+ * @def (Register masks)
+ * These are masks for the PWM_CLK registers two parameter settings controlling
+ * the CLKx (A and B).
+ *
+ * MASKs are being defined like this:
+ * [PERIPHERAL]_[REGISTER]_[SECTION]_MASK
+ */
+#define PWM_CLK_PREA_MASK				(0x00000F00)
+#define PWM_CLK_PREB_MASK				(0x0F000000)
+#define PWM_CLK_DIVA_MASK				(0x000000FF)
+#define PWM_CLK_DIVB_MASK				(0x00FF0000)
+/**
+ * @def (Register masks)
+ * These are masks for the PWM_CMRx registers many parameters that configure a
+ * PWM channel.
+ *
+ * MASKs are being defined like this:
+ * [PERIPHERAL]_[REGISTER]_[SECTION]_MASK
+ */
 #define PWM_CMRx_CPRE_MASK				(0x0000000F)
 #define PWM_CMRx_CALG_MASK				(1 << 8)
 #define PWM_CMRx_CPOL_MASK				(1 << 9)
@@ -55,18 +65,31 @@
 #define PWM_CMRx_DTE_MASK				(1 << 16)
 #define PWM_CMRx_DTHI_MASK				(1 << 17)
 #define PWM_CMRx_DTLI_MASK				(1 << 18)
-
+/**
+ * @def (Register masks)
+ * These are masks for the PWM_CDTYx and PWM_CDTYUPDx's one parameter that can
+ * set the channel duty cycle.
+ *
+ * MASKs are being defined like this:
+ * [PERIPHERAL]_[REGISTER]_[SECTION]_MASK
+ */
 #define PWM_CDTYx_CDTY_MASK				(0x0000FFFF)
 #define PWM_CDTYUPDx_CDTYUPD_MASK		(0x0000FFFF)
-
+/**
+ * @def (Register masks)
+ * These are masks for the PWM_CPRDx and PWM_CPRDUPDx's one parameter that can
+ * set the channel period.
+ *
+ * MASKs are being defined like this:
+ * [PERIPHERAL]_[REGISTER]_[SECTION]_MASK
+ */
 #define PWM_CPRDx_CPRD_MASK				(0x0000FFFF)
 #define PWM_CPRDUPDx_CPRDUPD_MASK		(0x0000FFFF)
-
 /**
+ * @def (Channel and clock prescalers)
  * PESCALLERS FOR CHANNEL MODE AND CLOCK REGISTER.
  * These can be used with both PWM_CMRx and PWM_CLK registers.
- * PWM_CLK can't use the last two defined prescalers as they are meant to point
- * the PWM_CMRx to the PWM_CLK itself.
+ * The last two defined prescalers are exclusively meant for PWM_CMRx.
  *
  * Parameters are being defined like this:
  * [PERIPHERAL]_[SECTION]_VALUE
@@ -85,19 +108,16 @@
 #define PWM_PRES_MCK_DIV_1024			(0b1010)
 #define PWM_PRES_CLOCKA					(0b1011)
 #define PWM_PRES_CLOCKB					(0b1100)
-// PARAMETERS FOR THE ALIGNMENT
-#define PWM_CMRx_ALIGN_LEFT				0
-#define PWM_CMRx_ALIGN_CENTER			1
-// PARAMETERS FOR THE POLARITY
-#define PWM_CMRx_POLARITY_HIGH			1
-#define PWM_CMRx_POLARITY_LOW			0
-
-//DIVIDERS FOR CLKA AND CLKB
+/**
+ * @def
+ * DIVIDERS FOR CLKA AND CLKB.
+ * Dividsors for the CLKx are all values between 0 and 255. But here only the
+ * first is defined.
+ *
+ * Parameters are being defined like this:
+ * [PERIPHERAL]_[REGISTER]_[PARAMETER]_VALUE
+ */
 #define PWM_CLK_DIVx_TURNOFF			0
-
-
-
-// Externally available typedefs, variables and definitions
 /**
  * @typedef
  * This structure is used with pwm_init() to set the settings for the clocks A
@@ -117,7 +137,6 @@ typedef struct pwm_clk_setting{
 	uint32_t clkB_prescaler;
 	uint32_t clkB_divisor;
 }pwm_clk_setting;
-
 /**
  * @typedef
  * This structure is used with pwm_init_channel() to set the settings of a
@@ -145,16 +164,17 @@ typedef struct pwm_channel_setting{
 	uint32_t frequency;
 	uint32_t clock_ID;
 }pwm_channel_setting;
-
 /**
- * @def
+ * @def (Initialization parameters)
  * These are parameters used in conjunction with initializing a PWM channel.
+ *
+ * Parameters are being defined like this:
+ * [PERIPHERAL]_CHANNEL_[PARAMETER]_VALUE
  */
 #define PWM_CHANNEL_POLARITY_HIGH		1
 #define PWM_CHANNEL_POLARITY_LOW		0
 #define PWM_CHANNEL_ALIGN_LEFT			0
 #define PWM_CHANNEL_ALIGN_CENTER		1
-
 /**
  * @def
  * These are parameters used in conjunction with turning of clkA and B.
@@ -168,10 +188,10 @@ typedef struct pwm_channel_setting{
 ///@endcond
 
 /**
- * @typedef
+ * @typedef (Register mapping)
  * This structure defines the register mapping of the PWM peripheral.
  */
-// Currently bugged (be hold, 137 registers. Don't go in there!)
+// Currently bugged (be hold! -> 137 registers. Don't go in there!)
 typedef struct {
 	// PWM Clock Register, offset 0x000
 	uint32_t PWM_CLK;
@@ -602,6 +622,7 @@ uint8_t pwm_channel_status(uint32_t channel);
  *
  * The frequency set will be the nearest to the chosen frequency as possible
  * but not exactly.
+ * Caution: This is the CLKx frequency, not the channel frequency.
  *
  * This function will return an error if it can't find a setting for the
  * frequency. In case of error, the function will not have modified any
@@ -617,8 +638,8 @@ uint8_t pwm_channel_status(uint32_t channel);
 uint8_t pwm_set_clkx_frequency(uint32_t channel, uint32_t frequency,
 		uint32_t pwm_clk_id);
 /**
- * This function will calculate the nesesary register values and set everything
- * up for the given channel if successfull. The function will seek to deliver
+ * This function will calculate the necessary register values and set everything
+ * up for the given channel if successful. The function will seek to deliver
  * the highest resolution possible for the given frequency. It will not use any
  * of the CLKx (A and B) clocks for this purpose.
  * This function will re-enable the channel if it was enabled to begin with.
@@ -628,7 +649,7 @@ uint8_t pwm_set_clkx_frequency(uint32_t channel, uint32_t frequency,
  * Highest frequency achievable is 84MHz.
  *
  * @param channel {The channel to set the frequency for}
- * @param frequency {The wanted channel frequency}
+ * @param frequency {The wanted channel frequency between 2 and 84MHz}
  * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency);
@@ -637,7 +658,7 @@ uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency);
  * clocks of the system clock and the two others are the more flexible clocks
  * that can be set to much lower freuencies than the prescalers. These clock go
  * by the name Clock A and Clock B. They are derived by the SYS_CLK_FREQ which
- * they prescale and the outcome of that they can furthere divide with a divisor
+ * they prescale and the outcome of that they can further divide with a divisor
  * and achieve lower frequencies for the PWM peripheral. These clocks can be
  * turned off when not needed.
  *

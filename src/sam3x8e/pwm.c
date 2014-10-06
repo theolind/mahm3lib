@@ -695,8 +695,8 @@ uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency) {
 	uint32_t CPRD;
 	uint32_t i = 0;
 	uint8_t reenable = 0;
-	uint8_t alignment;
-	// Get alignmnet
+	uint32_t alignment;
+	// Get alignment
 	alignment = pwm_get_channel_alignment(channel);
 
 	// check for frequency error

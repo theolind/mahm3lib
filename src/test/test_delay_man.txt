@@ -1,7 +1,7 @@
 -----Manual tests for the Delay API-----
 Copy selected function to main.c and call the function from int main(void).
 test_l_led will blink the L-LED.
-test_pin_46 will turn pin 46 on and off and the delay can be read out by an
+test_pin_33 will turn pin 33 on and off and the delay can be read out by an
 oscilloscope.
 
 DON'T FORGET TO INCLUDE:
@@ -18,11 +18,12 @@ void test_delay_l_led(uint32_t delay){
 	}
 }
 
-void test_delay_pin_46(uint32_t delay){
-	pio_conf_pin(PIOC, 17,  0, 0);
+void test_delay_pin_33(uint32_t delay){
+	pio_conf_pin(PIOC, 1,  0, 0);
 	for(;;){
-		PIOC->PIO_SODR = (0x1u << 17);	//set pin
+		PIOC->PIO_SODR = 2;//(0x1u << 1);	//set pin
 		delay_micros(delay);
-		PIOC->PIO_CODR = (0x1u << 17);	//clear pin
+		PIOC->PIO_CODR = 2;//(0x1u << 1);	//clear pin
+		delay_micros(delay);
 	}
 }

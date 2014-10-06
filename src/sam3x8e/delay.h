@@ -1,28 +1,20 @@
 /**
  * @file delay.h
- * @brief Delay - Software delay API
- * @details The API contains two functions for delaying. One for microseconds
- * and one for milliseconds.
- * This library introduces a software implementation of two delay functions
- * that do not rely on any hardware peripheral or internal clocks to
- * operate. The solution implements a loop written in C code and it only
- * needs the processor clock speed to be exactly 84MHz such as the one
- * running the ARM Cortex-M3 MCU that this API is developed for. There are
- * two functions included in the API. There is one for microseconds and
- * one for milliseconds as shown below. Both functions must be invoked
- * with integers or float without any fractional part.
+ * @brief Delay - Software delay
+ * @details The delays are not accurate enough for real time applications,
+ * however the delays are accurate enough for most applications. The
+ * largest deviation occures right after 10 microseconds, the
+ * deviation are up to +20%.
+ *
+ * The deviation then gets lower and in the area between 20 - 500
+ * microseconds the average deviation are +/- 5%. Below 10 microseconds the
+ * deviation are down to 10-50 ns and above 500 microseconds the
+ * deviation is between +/- 1-2% off.
  *
  * @pre Initialize the board
  *
- * Word of caution: There are disadvantages and shortcomings to a software
- * delay. Such delay use CPU-time and make the code inefficient, at the
- * same time interrupts will interfere with the length of the delay and
- * their use should therefore be avoided in timing critical applications.
- * This is however not entirely avoided using hardware timers either.
- *
- * @author Saeed Ghasemi
- * @author Andreas Drotth
- * @date 28 September 2014
+ * @author Mattias Nilsson
+ * @date 6 October 2014
  *
  */
 
@@ -32,31 +24,40 @@
 
 #include <inttypes.h>
 
+/**
+ * The function makes a pause in the system.
+ * @param us The length of the pause in microseconds. Range from 1 microsecond
+ * to several seconds
+ */
+void delay_micros(uint32_t us);
 
-void delay_us(uint32_t us);
-
+/**
+ * The function makes a pause in the system.
+ * @param ms The length of the pause in milliseconds. Range from 1 millisecond
+ * to several seconds
+ */
 void delay_ms(uint32_t ms);
 
-/**
- * This function will delay in microseconds.
- * This function is tested to perform fairly accurate within 15 to 20000 us.
- * It can be used perfectly down to 15 us. Below this value there
- * may be fluctuation around the specified value. The maximum fluctuation is
- * close to 1.5us. The lowest delay achievable is 2.6 us with inputs in the
- * range 0-3.
- *
- * @param us Amount of time in us to delay
- */
-//void delay_us(float us);
 
-/**
- * This function will delay in milliseconds.
- * The function is tested to perform fairly accurate within 1 to 100 ms with an
- * accuracy of maximum 300 us in this range which yields 0.3% deviation at
- * 100ms delay.
- *
- * @param ms Amount of time in ms to delay
+///@cond
+
+/*
+ * Adds a pause for every for every 1000 microseconds.
  */
-//void delay_ms(uint32_t ms);
+void delay_1000(uint32_t us_1000);
+/*
+ * Adds a pause for every for every 100 microseconds.
+ */
+void delay_100(uint32_t us_100);
+/*
+ * Adds a pause for every for every 10 microseconds.
+ */
+void delay_10(uint32_t us_10);
+/*
+ * Adds a pause for every for every 1 microseconds.
+ */
+void delay_1(uint32_t us_1);
+
+///@endcond
 
 #endif

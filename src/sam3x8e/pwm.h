@@ -516,13 +516,7 @@ uint8_t pwm_channel_enable(uint32_t channel);
  * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_channel_disable(uint32_t channel);
-/**
- * Turns off one of two clocks in PWM that are called clkA and clkB.
- *
- * @param clock_id
- * @return {error, 1 = SUCCESS and 0 = FAIL}
- */
-uint8_t pwm_turn_off_clkx(uint8_t clock_id);
+
 /**
  * Initialize the PWM peripheral with channel- polarity, alignment, prescaler
  * and initial duty cycle. Set use_CLKx to 1 if you want these clocks to be used
@@ -548,14 +542,6 @@ uint8_t pwm_init_channel(struct pwm_channel_setting channel);
  * @return
  */
 uint8_t pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity);
-/**
- * Choose either clkA or B to be the source for the PWM channel.
- *
- * @param channel {Indicated for which channel the source must be selected.}
- * @param pwm_clk_id {Choose one of two predefined values, ex PWM_CLK_ID_CLKA}
- * @return
- */
-uint8_t pwm_set_channel_clocksource(uint32_t channel, uint32_t pwm_clk_id);
 /**
  * Set the channel alignment
  *
@@ -598,7 +584,7 @@ uint32_t pwm_read(uint32_t channel);
 /**
  * Writes an output to a given channel by setting the channel duty cycle.
  * The duty cycle may not exceed the value of period (CPRD) in PWM_CPRDx.
- * Use pwm_get_max_duty_cyle() to read this register and get the maximum
+ * Use pwm_get_channel_resolution() to read this register and get the maximum
  * duty cycle allowed.
  *
  * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
@@ -623,6 +609,8 @@ uint8_t pwm_channel_status(uint32_t channel);
  * The frequency set will be the nearest to the chosen frequency as possible
  * but not exactly.
  * Caution: This is the CLKx frequency, not the channel frequency.
+ * If you want channel frequency to be exact, then use:
+ * pwm_set_channel_frequency()
  *
  * This function will return an error if it can't find a setting for the
  * frequency. In case of error, the function will not have modified any
@@ -688,6 +676,13 @@ uint8_t pwm_set_channel_period(uint32_t channel, uint32_t period);
  * @return {Maximum value that the channeel duty cycle can be set to.}
  */
 uint32_t pwm_get_channel_resolution(uint32_t channel);
+/**
+ * Turns off one of two clocks in PWM that are called clkA and clkB.
+ *
+ * @param clock_id
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
+ */
+uint8_t pwm_turn_off_clkx(uint8_t clock_id);
 //////////////////////////////////////////////////////////////////////////
 
 #endif /* PWM_H_ */

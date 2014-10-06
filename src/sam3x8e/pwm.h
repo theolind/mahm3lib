@@ -85,6 +85,8 @@
  */
 #define PWM_CPRDx_CPRD_MASK				(0x0000FFFF)
 #define PWM_CPRDUPDx_CPRDUPD_MASK		(0x0000FFFF)
+
+//PESCALLERS FOR CHANNEL MODE AND CLOCK REGISTER
 /**
  * @def (Channel and clock prescalers)
  * PESCALLERS FOR CHANNEL MODE AND CLOCK REGISTER.
@@ -94,8 +96,7 @@
  * Parameters are being defined like this:
  * [PERIPHERAL]_[SECTION]_VALUE
  */
-//PESCALLERS FOR CHANNEL MODE AND CLOCK REGISTER
-#define PWM_PRES_MCK_DIV_1				(0b0000)
+#define PWM_PRES_MCK_DIV_1				(0b0000) ///sdfs
 #define PWM_PRES_MCK_DIV_2				(0b0001)
 #define PWM_PRES_MCK_DIV_4				(0b0010)
 #define PWM_PRES_MCK_DIV_8				(0b0011)
@@ -138,7 +139,7 @@ typedef struct pwm_clk_setting{
 	uint32_t clkB_divisor;
 }pwm_clk_setting;
 /**
- * @typedef
+ * @typedef (pwm_channel_setting)
  * This structure is used with pwm_init_channel() to set the settings of a
  * channel.
  *

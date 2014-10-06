@@ -93,7 +93,7 @@ uint8_t pwm_init_peripheral_default() {
 	pwm_reset();
 	return 1;
 }
-/**
+/*
  * This initialization function also takes in parameters for the two clocks
  * called CLK_A and CLK_B.
  * Starting these clocks consume more power. It is preferred to use the channel
@@ -114,7 +114,7 @@ uint8_t pwm_init_peripheral(struct pwm_clk_setting clk_settings) {
 	}
 	return 1;
 }
-/**
+/*
  * This function initializes a channel of the PWM peripheral.
  */
 uint8_t pwm_init_channel(struct pwm_channel_setting channel) {
@@ -142,7 +142,7 @@ uint8_t pwm_init_channel(struct pwm_channel_setting channel) {
 	}
 	return 1;
 }
-/**
+/*
  * This function will enable the selected channel, identified with predefined
  * values, like: PWM_CHANNEL_x_MASK
  *
@@ -153,7 +153,7 @@ uint8_t pwm_channel_enable(uint32_t channel) {
 	return 1;
 }
 
-/**
+/*
  * This function will disable the selected channel, identified with predefined
  * values, like: PWM_CHANNEL_x_MASK. This function will block till the channel
  * has been disabled. Disabling the channel will be effective at the end of the
@@ -169,13 +169,13 @@ uint8_t pwm_channel_disable(uint32_t channel) {
 	}
 	return (uint8_t) 0x01;
 }
-/**
+/*
  * This function will read the status of a single channel.
  */
 uint8_t pwm_channel_status(uint32_t channel) {
 	return is_bit_high(&PWM_SR, get_position_of_first_highbit(channel));
 }
-/**
+/*
  * Set the channel polarity.
  * This can reverse the duty cycle. Important when using the PWMLx pins.
  */
@@ -211,7 +211,7 @@ uint8_t pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity) {
 	}
 	return 1;
 }
-/**
+/*
  * Set the channel alignment
  */
 uint8_t pwm_set_channel_alignment(uint32_t channel, uint32_t pwm_alignment) {
@@ -246,7 +246,7 @@ uint8_t pwm_set_channel_alignment(uint32_t channel, uint32_t pwm_alignment) {
 	}
 	return 1;
 }
-/**
+/*
  * Set the channel prescaler
  */
 uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
@@ -290,7 +290,7 @@ uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
 	}
 	return error;
 }
-/**
+/*
  * This function will set the period value used by a given PWM channel.
  * Only set the period directly if you know what you are doing, otherwise
  * use pwm_set_channel_frequency() or pwm_set_clkx_frequency(), because they
@@ -368,7 +368,7 @@ uint8_t pwm_set_channel_period(uint32_t channel, uint32_t period) {
 	}
 	return 1;
 }
-/**
+/*
  * This function will calculate the nessessary prescaler and period to set the
  * channel frequency.
  */
@@ -423,7 +423,7 @@ uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency) {
 	}
 	return 1;
 }
-/**
+/*
  * This function will calculate a divisor and prescaler for a CLKx clock and
  * set the registers.
  */
@@ -471,7 +471,7 @@ uint8_t pwm_set_clkx_frequency(uint32_t channel, uint32_t frequency,
 		return 0; // parameter error
 	}
 }
-/**
+/*
  * This function will set the indicated clock with prescaler and divisor.
  */
 uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor) {
@@ -486,7 +486,7 @@ uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor) {
 	}
 	return 0;
 }
-/**
+/*
  * This function reads the earlier written duty cycle to the channel.
  */
 uint32_t pwm_read(uint32_t channel) {
@@ -521,7 +521,7 @@ uint32_t pwm_read(uint32_t channel) {
 	}
 	return 1;
 }
-/**
+/*
  * Writes an output to a given channel by setting the channel duty cycle.
  */
 uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
@@ -604,7 +604,7 @@ uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
 	}
 	return 1;
 }
-/**
+/*
  * This channel reads the maximum allowed duty cycle for the channel.
  * This is also called channel resolution.
  */
@@ -640,7 +640,7 @@ uint32_t pwm_get_channel_period(uint32_t channel) {
 	}
 	return 0;
 }
-/**
+/*
  * This function reads the alignment og the channel.
  */
 uint32_t pwm_get_channel_alignment(uint32_t channel) {
@@ -675,7 +675,7 @@ uint32_t pwm_get_channel_alignment(uint32_t channel) {
 	}
 	return 0;
 }
-/**
+/*
  * Turns off clock A or B.
  */
 uint8_t pwm_turn_off_clkx(uint8_t clock_id) {
@@ -690,14 +690,14 @@ uint8_t pwm_turn_off_clkx(uint8_t clock_id) {
 	}
 	return 0;
 }
-/**
+/*
  * Shuts down the peripheral but keeps all settings
  */
 uint8_t pwm_shutdown() {
 	pmc_disable_peripheral_clock(ID_PWM);
 	return 1;
 }
-/**
+/*
  * Resets the peripheral and disables all channels
  */
 uint8_t pwm_reset() {
@@ -733,7 +733,7 @@ uint8_t pwm_reset() {
 	clear_register(&PWM_CPRD7);
 	return 1;
 }
-/**
+/*
  * Reset and turns off the peripheral
  */
 uint8_t pwm_close() {

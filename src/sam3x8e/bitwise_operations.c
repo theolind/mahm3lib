@@ -136,12 +136,12 @@ uint8_t set_register(uint32_t *reg) {
 }
 
 uint8_t clear_bit_in_register(uint32_t *reg, uint8_t bit_number) {
-	*reg &= ~(1 << bit_number);
+	*reg &= ~(0x1U << bit_number);
 	return 1;
 }
 
 uint8_t set_bit_in_register(uint32_t *reg, uint8_t bit_number) {
-	*reg |= (1 << bit_number);
+	*reg |= (0x1U << bit_number);
 	return 1;
 }
 

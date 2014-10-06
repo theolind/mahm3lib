@@ -108,23 +108,20 @@ uint8_t pwm_init_peripheral_default() {
  * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_init_peripheral(struct pwm_clk_setting clk_settings) {
-	uint8_t error = 0;
 	pmc_enable_peripheral_clock(ID_PWM);
 	pwm_reset();
 	if (clk_settings.clkA_divisor != 0) {
-		error += pwm_set_clkx(PWM_CLK_ID_CLKA, clk_settings.clkA_prescaler,
+		pwm_set_clkx(PWM_CLK_ID_CLKA, clk_settings.clkA_prescaler,
 				clk_settings.clkA_divisor);
 	}
 	if (clk_settings.clkB_divisor != 0) {
-		error += pwm_set_clkx(PWM_CLK_ID_CLKB, clk_settings.clkB_prescaler,
+		pwm_set_clkx(PWM_CLK_ID_CLKB, clk_settings.clkB_prescaler,
 				clk_settings.clkB_divisor);
 	}
-	// output no_error if no error occurred in any of the functions
-	return (error == 2) ? 1 : 0;
+	return 1;
 }
 
 uint8_t pwm_init_channel(struct pwm_channel_setting channel) {
-	uint8_t error = 0;
 	uint8_t reenable = 0;
 	// Disable the channel and remember the initial state of it
 	if (pwm_channel_status(channel.channel) == 1) {
@@ -132,7 +129,7 @@ uint8_t pwm_init_channel(struct pwm_channel_setting channel) {
 		pwm_channel_disable(channel.channel);
 	}
 	if (channel.use_CLKx == 1) {
-		if (error += pwm_set_channel_frequency(channel.channel,
+		if (pwm_set_channel_frequency(channel.channel,
 				channel.frequency) == 0) {
 			pwm_set_clkx_frequency(channel.channel, channel.frequency,
 					channel.clock_ID);
@@ -140,15 +137,14 @@ uint8_t pwm_init_channel(struct pwm_channel_setting channel) {
 	} else if (channel.use_CLKx == 0) {
 		pwm_set_channel_frequency(channel.channel, channel.frequency);
 	}
-	error += pwm_channel_disable(channel.channel);
-	error += pwm_set_channel_alignment(channel.channel, channel.alignment);
-	error += pwm_set_channel_polarity(channel.channel, channel.polarity);
-	error += pwm_set_channel_duty_cycle(channel.channel, channel.duty_cycle);
+	pwm_channel_disable(channel.channel);
+	pwm_set_channel_alignment(channel.channel, channel.alignment);
+	pwm_set_channel_polarity(channel.channel, channel.polarity);
+	pwm_set_channel_duty_cycle(channel.channel, channel.duty_cycle);
 	if (reenable == 1) {
 		pwm_channel_enable(channel.channel);
 	}
-	// output no_error if no error occurred in any of the functions
-	return (error == 6) ? 1 : 0;
+	return 1;
 }
 
 /**
@@ -683,10 +679,40 @@ uint32_t pwm_get_channel_resolution(uint32_t channel) {
 		return 0;
 		break;
 	}
+	return 0;
 }
 
 uint32_t pwm_get_channel_alignment(uint32_t channel) {
-	return get_section_in_register(&PWM_CMR0, PWM_CMRx_CALG_MASK);
+	switch (channel) {
+	case PWM_CHANNEL_0_MASK:
+		return get_section_in_register(&PWM_CMR0, PWM_CMRx_CALG_MASK);
+		break;
+	case PWM_CHANNEL_1_MASK:
+		return get_section_in_register(&PWM_CMR1, PWM_CMRx_CALG_MASK);
+		break;
+	case PWM_CHANNEL_2_MASK:
+		return get_section_in_register(&PWM_CMR2, PWM_CMRx_CALG_MASK);
+		break;
+	case PWM_CHANNEL_3_MASK:
+		return get_section_in_register(&PWM_CMR3, PWM_CMRx_CALG_MASK);
+		break;
+	case PWM_CHANNEL_4_MASK:
+		return get_section_in_register(&PWM_CMR4, PWM_CMRx_CALG_MASK);
+		break;
+	case PWM_CHANNEL_5_MASK:
+		return get_section_in_register(&PWM_CMR5, PWM_CMRx_CALG_MASK);
+		break;
+	case PWM_CHANNEL_6_MASK:
+		return get_section_in_register(&PWM_CMR6, PWM_CMRx_CALG_MASK);
+		break;
+	case PWM_CHANNEL_7_MASK:
+		return get_section_in_register(&PWM_CMR7, PWM_CMRx_CALG_MASK);
+		break;
+	default:
+		return 0;
+		break;
+	}
+	return 0;
 }
 
 uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency) {

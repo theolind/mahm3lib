@@ -656,9 +656,15 @@ uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle);
  * This function will return the maximum value that the duty cycle can be set
  * to. The highest value that this function can return is 65535.
  *
- * @return {Maximum value that the channeel duty cycle can be set to.}
+ * @return {Maximum value that the channel duty cycle can be set to.}
  */
 uint32_t pwm_get_channel_resolution(uint32_t channel);
+/**
+ * This function will return the current alignment of the chosen channel.
+ *
+ * @return {Can be either PWM_CHANNEL_ALIGN_CENTER or PWM_CHANNEL_ALIGN_LEFT}
+ */
+uint32_t pwm_get_channel_alignment(uint32_t channel);
 /**
  * Turns off one of two clocks in PWM that are called clkA and clkB.
  *

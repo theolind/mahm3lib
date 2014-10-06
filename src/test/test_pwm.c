@@ -16,7 +16,7 @@
 
 
 /*
- * Checking that an PWM channel is enabled.
+ * Checking that an ADC channel is enabled.
  */
 void test_pwm_channel_enabled(void) {
 	pwm_reset();

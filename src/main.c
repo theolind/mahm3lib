@@ -1,7 +1,6 @@
 #include "unity/unity.h"
 #include "test_runner.h"
 
-#include "sam3x8e/bitwise_operations.h"
 #include "sam3x8e/pwm.h"
 #include "sam3x8e/pio.h"
 #include "sam3x8e/pmc.h"
@@ -28,18 +27,17 @@ int main(void) {
 	pwm_init_peripheral_default();
 
 	pwm_channel_setting channel_0;
-	channel_0.alignment = PWM_CHANNEL_ALIGN_LEFT;
-	channel_0.polarity = PWM_CHANNEL_POLARITY_HIGH;
-	channel_0.prescaler = PWM_PRES_MCK_DIV_64;
+	channel_0.alignment = PWM_ALIGN_LEFT;
+	channel_0.polarity = PWM_POLARITY_HIGH;
+	channel_0.prescaler = PWM_CLK_PRES_1024;
 	channel_0.duty_cycle = 0;
 	channel_0.channel = PWM_CHANNEL_0_MASK;
-	channel_0.use_prescaler = TRUE;
+	channel_0.use_prescaler = 1;
 
 	pwm_init_channel(channel_0);
-
-	pwm_set_channel_period(PWM_CHANNEL_0_MASK, 65535);
-	pwm_write(PWM_CHANNEL_0_MASK, 30000);
 	pwm_channel_enable(PWM_CHANNEL_0_MASK);
+	pwm_set_channel_period(PWM_CHANNEL_0_MASK, 100);
+	pwm_write(PWM_CHANNEL_0_MASK, 100);
 
 
 	return 0;

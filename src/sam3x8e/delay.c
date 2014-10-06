@@ -9,7 +9,7 @@
 
 void delay_us(uint32_t us){
 	for (uint32_t i = 0; i < us; i++){
-		uint8_t j = 0;
+		uint8_t j = 0; // <- Put the declaration outside the for-loop. This may change the delay
 		while (j < 6){
 			__asm__ volatile("NOP\n\t" "NOP\n\t" "NOP\n\t" "NOP\n\t");
 			j++;

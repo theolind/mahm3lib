@@ -549,7 +549,8 @@ uint8_t pwm_channel_status(uint32_t channel);
  */
 uint8_t pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity);
 /**
- * Set the channel alignment
+ * Set the channel alignment. Do not change the alignment after having set the
+ * channel frequency or set the channel frequency again.
  *
  * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
  * @return
@@ -579,6 +580,10 @@ uint8_t pwm_set_channel_period(uint32_t channel, uint32_t period);
  * of the CLKx (A and B) clocks for this purpose.
  * This function will re-enable the channel if it was enabled to begin with.
  * This function will also set the period.
+ * Do not change the channel alignment after having set the channel frequency
+ * or you will need to run this function again. Changing the alignment will
+ * halfthe frequency if going from left-alignment to center-alignment and
+ * double it the other way around.
  *
  * If an error is received then the frequency was too high.
  * Highest frequency achievable is 84MHz.
@@ -644,7 +649,7 @@ uint32_t pwm_read(uint32_t channel);
 /**
  * Writes an output to a given channel by setting the channel duty cycle.
  * The duty cycle may not exceed the value of period (CPRD) in PWM_CPRDx.
- * Use pwm_get_channel_resolution() to read this register and get the maximum
+ * Use pwm_get_channel_period() to read this register and get the maximum
  * duty cycle allowed.
  *
  * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
@@ -658,7 +663,7 @@ uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle);
  *
  * @return {Maximum value that the channel duty cycle can be set to.}
  */
-uint32_t pwm_get_channel_resolution(uint32_t channel);
+uint32_t pwm_get_channel_period(uint32_t channel);
 /**
  * This function will return the current alignment of the chosen channel.
  *

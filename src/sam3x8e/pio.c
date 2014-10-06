@@ -90,7 +90,7 @@ uint32_t pio_read_port(pio_reg_t *port) {
 }
 
 uint8_t pio_conf_pin_to_peripheral(pio_reg_t *port,
-		uint32_t periph, uint32_t pin_number){
+		uint32_t periph, uint8_t pin_number){
 	// Disable interrupts on the pin
 	set_bit_in_register(&port->PIO_IDR, pin_number);
 

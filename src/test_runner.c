@@ -23,8 +23,7 @@ void run_tests(void) {
 	// Run UART tests
 	Unity.TestFile = "test/test_uart.c";
 	RUN_TEST(test_uart_send_receive_char_local_loopback_mode, 0);
-	HORIZONTAL_LINE_BREAK()
-	;
+	HORIZONTAL_LINE_BREAK();
 
 	// Run PMC tests
 	Unity.TestFile = "test/test_pmc.c";
@@ -33,8 +32,7 @@ void run_tests(void) {
 	RUN_TEST(test_pmc_PIOB_enabled, 20);
 	RUN_TEST(test_pmc_disable_PIOB, 20);
 	RUN_TEST(test_pmc_PIOB_disabled2, 20);
-	HORIZONTAL_LINE_BREAK()
-	;
+	HORIZONTAL_LINE_BREAK();
 
 	// Run PIO tests
 	Unity.TestFile = "test/test_pio.c";
@@ -45,8 +43,7 @@ void run_tests(void) {
 	RUN_TEST(test_pio_read_pin, 10);
 	RUN_TEST(test_pio_set_output, 10);
 	RUN_TEST(test_pio_conf_multiple_pins, 10);
-	HORIZONTAL_LINE_BREAK()
-	;
+	HORIZONTAL_LINE_BREAK();
 
 	// Run DACC tests
 	Unity.TestFile = "test/test_dacc.c";
@@ -78,6 +75,8 @@ void run_tests(void) {
 	RUN_TEST(test_set_section_in_register2, 30);
 	RUN_TEST(test_clear_register, 30);
 	RUN_TEST(test_set_register, 30);
+	RUN_TEST(test_clear_bit_in_register, 30);
+	RUN_TEST(test_set_bit_in_register, 30);
 	HORIZONTAL_LINE_BREAK();
 
 	UnityEnd();

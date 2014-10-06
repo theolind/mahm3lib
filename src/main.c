@@ -1,6 +1,7 @@
 #include "unity/unity.h"
 #include "test_runner.h"
 
+#include "sam3x8e/bitwise_operations.h"
 #include "sam3x8e/pwm.h"
 #include "sam3x8e/pio.h"
 #include "sam3x8e/pmc.h"
@@ -12,32 +13,6 @@ int main(void) {
 	// run unit tests
 	run_tests();
 
-	/**
-	 * enable the PWM clock in PMC
-	 * initialize peripheral by selecting a prescaler of clk register with PREA
-	 * Select a clock for channel_0
-	 * Select alignment for channel_0
-	 * Select polarity for channel_0
-	 *
-	 *
-	 */
-	pmc_enable_peripheral_clock(ID_PIOC);
-	// MCU pin = PC3   -   DUE pin = 35    -    PWM pin = PWMH0
-	pio_conf_pin_to_peripheral(PIOC, PIO_PERIPH_B, 3);
-	pwm_init_peripheral_default();
-
-	pwm_channel_setting channel_0;
-	channel_0.alignment = PWM_ALIGN_LEFT;
-	channel_0.polarity = PWM_POLARITY_HIGH;
-	channel_0.prescaler = PWM_CLK_PRES_1024;
-	channel_0.duty_cycle = 0;
-	channel_0.channel = PWM_CHANNEL_0_MASK;
-	channel_0.use_prescaler = 1;
-
-	pwm_init_channel(channel_0);
-	pwm_channel_enable(PWM_CHANNEL_0_MASK);
-	pwm_set_channel_period(PWM_CHANNEL_0_MASK, 100);
-	pwm_write(PWM_CHANNEL_0_MASK, 100);
 
 
 	return 0;

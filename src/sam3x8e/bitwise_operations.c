@@ -21,7 +21,6 @@
  * @bug {Not yet fully tested.}
  */
 
-
 #include "bitwise_operations.h"
 
 #include "sam3x8e/uart.h"
@@ -36,7 +35,6 @@
  */
 uint8_t is_bit_high(uint32_t *reg, uint8_t bit) {
 	return (uint8_t) (((*reg >> bit) & 0x01U) == 0x1U);
-//	return (uint8_t) (((*reg & (0x1U << bit))) >= 0x1U);
 }
 /**
  * This function return the bit-number of the first bit being high in a 32-bit
@@ -78,9 +76,9 @@ uint32_t get_section_in_register(uint32_t *reg, uint32_t mask) {
  * This function will modify a section of a given register as indicated by'
  * mask with the value specified in 'value'.
  *
- * @param reg This specifies a pointer to the register
- * @param mask The mask for the section in question (it may not be inverted)
- * @param value The value the section must store
+ * @param reg {This specifies a pointer to the register}
+ * @param mask {The mask for the section in question (it may not be inverted)}
+ * @param value {The value the section must store}
  * @return error (1 = SUCCESS and 0 = FAIL)
  */
 uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value) {
@@ -90,9 +88,8 @@ uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value) {
 	return shift; // 0 from shift could means fail
 }
 /**
- * This function modifies a section of a register, reg, defined by 'mask' with
- * the value in 'value'.
- * It will only work for read/write registers.
+ * This function modifies a section of a register, reg, defined by 'start_bit'
+ * and 'length' with the value in 'value'. A register mask is not needed.
  *
  * Define the parameters like  this example:
  * Ex: 0b00011000 -> start_bit = 3, length = 2
@@ -102,17 +99,19 @@ uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value) {
  * @param length The length of the section
  * @param value The value to be inserted in the register-section
  * @return error (1 = SUCCESS and 0 = FAIL)
- * @deprecated  As of v0.3, replaced by
- *             {@link #set_section_in_register(uint32_t,uint32_t,uint32_t)}
  */
-uint8_t set_section_in_register2(uint32_t *reg, uint8_t start_bit,
-		uint8_t length, uint32_t value) {
-	uint32_t mask;
+uint8_t set_section_in_register2(uint32_t *reg, uint32_t start_bit,
+		uint32_t length, uint32_t value) {
+	uint32_t mask = 1;
+	uint8_t i;
 	if (length > 0) {
 		// Creating the mask for the section in the register
-		mask = ~(((uint32_t) (2 ^ length) - 1) << start_bit);
+		for (i = 0; i < length; i++) {
+			mask *= 2;
+		}
+		mask = ((mask - 1) << start_bit);
 		// Retrieving the register and modifying it
-		*reg = (mask & *reg) | (value << start_bit);
+		*reg = ((~mask) & *reg) | (value << start_bit);
 		return 1;
 	}
 	return 0; // parameter error
@@ -134,12 +133,15 @@ uint8_t set_register(uint32_t *reg) {
 	} else {
 		return 0;
 	}
-	//return 0; // Should not get to here
 }
 
+uint8_t clear_bit_in_register(uint32_t *reg, uint8_t bit_number) {
+	*reg &= ~(1 << bit_number);
+	return 1;
+}
 
-
-
-
-
+uint8_t set_bit_in_register(uint32_t *reg, uint8_t bit_number) {
+	*reg |= (1 << bit_number);
+	return 1;
+}
 

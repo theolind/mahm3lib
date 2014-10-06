@@ -63,35 +63,28 @@
 #define PWM_CPRDUPDx_CPRDUPD_MASK		(0x0000FFFF)
 /////////////////////////////////////////////////////////////////////////////
 /**
+ * PESCALLERS FOR CHANNEL MODE AND CLOCK REGISTER.
+ * These can be used with both PWM_CMRx and PWM_CLK registers.
+ * PWM_CLK can't use the last two defined prescalers as they are meant to point
+ * the PWM_CMRx to the PWM_CLK itself.
+ *
  * Parameters are being defined like this:
- * [PERIPHERAL]_[REGISTER]_[SECTION]_VALUE
+ * [PERIPHERAL]_[SECTION]_VALUE
  */
-//PESCALLERS FOR CLOCK REGISTER
-#define PWM_CLK_PRES_1					(0b0000)
-#define PWM_CLK_PRES_2					(0b0001)
-#define PWM_CLK_PRES_4					(0b0010)
-#define PWM_CLK_PRES_8					(0b0011)
-#define PWM_CLK_PRES_16					(0b0100)
-#define PWM_CLK_PRES_32					(0b0101)
-#define PWM_CLK_PRES_64					(0b0110)
-#define PWM_CLK_PRES_128				(0b0111)
-#define PWM_CLK_PRES_256				(0b1000)
-#define PWM_CLK_PRES_512				(0b1001)
-#define PWM_CLK_PRES_1024				(0b1010)
-//PESCALLERS FOR CHANNEL MODE REGISTER
-#define PWM_CMRx_PRES_1					(0b0000)
-#define PWM_CMRx_PRES_2					(0b0001)
-#define PWM_CMRx_PRES_4					(0b0010)
-#define PWM_CMRx_PRES_8					(0b0011)
-#define PWM_CMRx_PRES_16				(0b0100)
-#define PWM_CMRx_PRES_32				(0b0101)
-#define PWM_CMRx_PRES_64				(0b0110)
-#define PWM_CMRx_PRES_128				(0b0111)
-#define PWM_CMRx_PRES_256				(0b1000)
-#define PWM_CMRx_PRES_512				(0b1001)
-#define PWM_CMRx_PRES_1024				(0b1010)
-#define PWM_CMRx_PRES_CLOCKA			(0b1011)
-#define PWM_CMRx_PRES_CLOCKB			(0b1100)
+//PESCALLERS FOR CHANNEL MODE AND CLOCK REGISTER
+#define PWM_PRES_MCK_DIV_1				(0b0000)
+#define PWM_PRES_MCK_DIV_2				(0b0001)
+#define PWM_PRES_MCK_DIV_4				(0b0010)
+#define PWM_PRES_MCK_DIV_8				(0b0011)
+#define PWM_PRES_MCK_DIV_16				(0b0100)
+#define PWM_PRES_MCK_DIV_32				(0b0101)
+#define PWM_PRES_MCK_DIV_64				(0b0110)
+#define PWM_PRES_MCK_DIV_128			(0b0111)
+#define PWM_PRES_MCK_DIV_256			(0b1000)
+#define PWM_PRES_MCK_DIV_512			(0b1001)
+#define PWM_PRES_MCK_DIV_1024			(0b1010)
+#define PWM_PRES_CLOCKA					(0b1011)
+#define PWM_PRES_CLOCKB					(0b1100)
 // PARAMETERS FOR THE ALIGNMENT
 #define PWM_CMRx_ALIGN_LEFT				0
 #define PWM_CMRx_ALIGN_CENTER			1
@@ -129,7 +122,7 @@ typedef struct pwm_clk_setting{
 /**
  * @typedef
  * This structure is used with pwm_init_channel() to set the settings of a
- * channel. Be aware that either frequency or prescaler must be specified.
+ * channel.
  *
  * @param channel {The channel to be initialized. Prefix: PWM_CHANNEL_}
  * @param polarity {Sets the polarity of the channel.
@@ -137,23 +130,19 @@ typedef struct pwm_clk_setting{
  * @param alignment {Sets the alignment of the channel.
  * Parameter prefix: PWM_ALIGN_}
  * @param duty_cycle {The initial duty cycle of the channel. (Optional)}
- * @param use_prescaler {Must be 1 or 0 to indicate whether prescaler or
- * frequency must be used.}
- * @param prescaler {Sets the channel prescaler. This can also select clock A
- * and B. Parameter prefix: PWM_CMRx_PRES_ (Needed only if use_prescaler it
- * set to 1)}
- * @param frequency {The frequency of the PWM waveform for this channel.
- * (Set only if use_prescaler is set to 0)}
- * @param clock_ID {In case that frequency is specified, then clock_ID must
- * specify which CLKx to be used for this purpose. Prefix: PWM_CLK_ID_}
+ * @param use_CLKx {Must be 1 or 0 to indicate whether to use one of the CLKx
+ * clocks to set the frequency or just the channel prescalers and period must
+ * be used.}
+ * @param frequency {The frequency of the PWM waveform for this channel.}
+ * @param clock_ID {In case that use_CLKx is set to 1, then clock_ID must
+ * specify which CLKx can be used for this purpose. Prefix: PWM_CLK_ID_}
  */
 typedef struct pwm_channel_setting{
 	uint32_t channel;
 	uint32_t polarity;
 	uint32_t alignment;
 	uint32_t duty_cycle;
-	uint32_t use_prescaler;
-	uint32_t prescaler;
+	uint32_t use_CLKx;
 	uint32_t frequency;
 	uint32_t clock_ID;
 }pwm_channel_setting;
@@ -162,18 +151,313 @@ typedef struct pwm_channel_setting{
  * @def
  * These are parameters used in conjunction with initializing a PWM channel.
  */
-#define PWM_POLARITY_HIGH		1
-#define PWM_POLARITY_LOW		0
-#define PWM_ALIGN_LEFT			0
-#define PWM_ALIGN_CENTER		1
+#define PWM_CHANNEL_POLARITY_HIGH		1
+#define PWM_CHANNEL_POLARITY_LOW		0
+#define PWM_CHANNEL_ALIGN_LEFT			0
+#define PWM_CHANNEL_ALIGN_CENTER		1
 
 /**
  * @def
  * These are parameters used in conjunction with turning of clkA and B.
  */
-#define PWM_CLK_ID_CLKA			0
-#define PWM_CLK_ID_CLKB			1
+#define PWM_CLK_ID_CLKA					0
+#define PWM_CLK_ID_CLKB					1
 
+///@cond
+// Pointer to registers of the PWM peripheral.
+#define PWM ((pwm_reg_t *) 0x40094000U)
+///@endcond
+
+/**
+ * @typedef
+ * This structure defines the register mapping of the PWM peripheral.
+ */
+/* Currently bugged (be hold, 137 registers. Don't go in there!)
+typedef struct {
+	// PWM Clock Register, offset 0x000
+	uint32_t PWM_CLK;
+	// PWM Enable Register, offset 0x004
+	uint32_t PWM_ENA;
+	// PWM Disable Register, offset 0x008
+	uint32_t PWM_DIS;
+	// PWM Status Register, offset 0x00C
+	uint32_t PWM_SR;
+	// Not used
+	uint32_t PWM_IER1;
+	// Not used
+	uint32_t PWM_IDR1;
+	// Not used
+	uint32_t PWM_IMR1;
+	// Not used
+	uint32_t PWM_ISR1;
+	// Not used
+	uint32_t PWM_SCM;
+	// Not used
+	uint32_t reserved0;
+	// Not used
+	uint32_t PWM_SCUC;
+	// Not used
+	uint32_t PWM_SCUP;
+	// Not used
+	uint32_t PWM_SCUPUPD;
+	// Not used
+	uint32_t PWM_IER2;
+	// Not used
+	uint32_t PWM_IDR2;
+	// Not used
+	uint32_t PWM_IMR2;
+	// Not used
+	uint32_t PWM_ISR2;
+	// Not used
+	uint32_t PWM_OOV;
+	// Not used
+	uint32_t PWM_OS;
+	// Not used
+	uint32_t PWM_OSS;
+	// Not used
+	uint32_t PWM_OSC;
+	// Not used
+	uint32_t PWM_OSSUPD;
+	// Not used
+	uint32_t PWM_OSCUPD;
+	// Not used
+	uint32_t PWM_FMR;
+	// Not used
+	uint32_t PWM_FSR;
+	// Not used
+	uint32_t PWM_FCR;
+	// Not used
+	uint32_t PWM_FPV;
+	// Not used
+	uint32_t PWM_FPE1;
+	// Not used
+	uint32_t PWM_FPE2;
+	// Not used
+	uint32_t reserved1[2];
+	// Not used
+	uint32_t PWM_ELMR0;
+	// Not used
+	uint32_t PWM_ELMR1;
+	// Not used
+	uint32_t reserved2[10];
+	// Not used
+	uint32_t PWM_SMMR;
+	// Not used
+	uint32_t reserved3[11];
+	// Not used
+	uint32_t PWM_WPCR;
+	// Not used
+	uint32_t PWM_WPSR;
+	// Not used
+	uint32_t reserved4[4];
+	// Not used
+	uint32_t reserved5[10];
+	//Not used
+	uint32_t reserved6;
+	// Not used
+	uint32_t PWM_CMPV0;
+	// Not used
+	uint32_t PWM_CMPVUPD0;
+	// Not used
+	uint32_t PWM_CMPM0;
+	// Not used
+	uint32_t PWM_CMPMUPD0;
+	// Not used
+	uint32_t PWM_CMPV1;
+	// Not used
+	uint32_t PWM_CMPVUPD1;
+	// Not used
+	uint32_t PWM_CMPM1;
+	// Not used
+	uint32_t PWM_CMPMUPD1;
+	// Not used
+	uint32_t PWM_CMPV2;
+	// Not used
+	uint32_t PWM_CMPVUPD2;
+	// Not used
+	uint32_t PWM_CMPM2;
+	// Not used
+	uint32_t PWM_CMPMUPD2;
+	// Not used
+	uint32_t PWM_CMPV3;
+	// Not used
+	uint32_t PWM_CMPVUPD3;
+	// Not used
+	uint32_t PWM_CMPM3;
+	// Not used
+	uint32_t PWM_CMPMUPD3;
+	// Not used
+	uint32_t PWM_CMPV4;
+	// Not used
+	uint32_t PWM_CMPVUPD4;
+	// Not used
+	uint32_t PWM_CMPM4;
+	// Not used
+	uint32_t PWM_CMPMUPD4;
+	// Not used
+	uint32_t PWM_CMPV5;
+	// Not used
+	uint32_t PWM_CMPVUPD5;
+	// Not used
+	uint32_t PWM_CMPM5;
+	// Not used
+	uint32_t PWM_CMPMUPD5;
+	// Not used
+	uint32_t PWM_CMPV6;
+	// Not used
+	uint32_t PWM_CMPVUPD6;
+	// Not used
+	uint32_t PWM_CMPM6;
+	// Not used
+	uint32_t PWM_CMPMUPD6;
+	// Not used
+	uint32_t PWM_CMPV7;
+	// Not used
+	uint32_t PWM_CMPVUPD7;
+	// Not used
+	uint32_t PWM_CMPM7;
+	// Not used
+	uint32_t PWM_CMPMUPD7;
+	// Not used
+	uint32_t reserved7[19];
+
+	// PWM Channel Mode Register (Channel 0)
+	uint32_t PWM_CMR0;
+	// PWM Channel Duty Cycle Register (Channel 0)
+	uint32_t PWM_CDTY0;
+	// PWM Channel Duty Cycle Update Register (Channel 0)
+	uint32_t PWM_CDTYUPD0;
+	// PWM Channel Period Register (Channel 0)
+	uint32_t PWM_CPRD0;
+	// PWM Channel Period Update Register (Channel 0)
+	uint32_t PWM_CPRDUPD0;
+	// PWM Channel Counter Register (Channel 0)
+	uint32_t PWM_CCNT0;
+	// PWM Channel Dead Time Register (Channel 0)
+	uint32_t PWM_DT0;
+	// PWM Channel Dead Time Update Register (Channel 0)
+	uint32_t PWM_DTUPD0;
+
+	// PWM Channel Mode Register (Channel 1)
+	uint32_t PWM_CMR1;
+	// PWM Channel Duty Cycle Register (Channel 1)
+	uint32_t PWM_CDTY1;
+	// PWM Channel Duty Cycle Update Register (Channel 1)
+	uint32_t PWM_CDTYUPD1;
+	// PWM Channel Period Register (Channel 1)
+	uint32_t PWM_CPRD1;
+	// PWM Channel Period Update Register (Channel 1)
+	uint32_t PWM_CPRDUPD1;
+	// PWM Channel Counter Register (Channel 1)
+	uint32_t PWM_CCNT1;
+	// PWM Channel Dead Time Register (Channel 1)
+	uint32_t PWM_DT1;
+	// PWM Channel Dead Time Update Register (Channel 1)
+	uint32_t PWM_DTUPD1;
+
+	// PWM Channel Mode Register (Channel 2)
+	uint32_t PWM_CMR2;
+	// PWM Channel Duty Cycle Register (Channel 2)
+	uint32_t PWM_CDTY2;
+	// PWM Channel Duty Cycle Update Register (Channel 2)
+	uint32_t PWM_CDTYUPD2;
+	// PWM Channel Period Register (Channel 2)
+	uint32_t PWM_CPRD2;
+	// PWM Channel Period Update Register (Channel 2)
+	uint32_t PWM_CPRDUPD2;
+	// PWM Channel Counter Register (Channel 2)
+	uint32_t PWM_CCNT2;
+	// PWM Channel Dead Time Register (Channel 2)
+	uint32_t PWM_DT2;
+	// PWM Channel Dead Time Update Register (Channel 2)
+	uint32_t PWM_DTUPD2;
+
+	// PWM Channel Mode Register (Channel 3)
+	uint32_t PWM_CMR3;
+	// PWM Channel Duty Cycle Register (Channel 3)
+	uint32_t PWM_CDTY3;
+	// PWM Channel Duty Cycle Update Register (Channel 3)
+	uint32_t PWM_CDTYUPD3;
+	// PWM Channel Period Register (Channel 3)
+	uint32_t PWM_CPRD3;
+	// PWM Channel Period Update Register (Channel 3)
+	uint32_t PWM_CPRDUPD3;
+	// PWM Channel Counter Register (Channel 3)
+	uint32_t PWM_CCNT3;
+	// PWM Channel Dead Time Register (Channel 3)
+	uint32_t PWM_DT3;
+	// PWM Channel Dead Time Update Register (Channel 3)
+	uint32_t PWM_DTUPD3;
+
+	// PWM Channel Mode Register (Channel 4)
+	uint32_t PWM_CMR4;
+	// PWM Channel Duty Cycle Register (Channel 4)
+	uint32_t PWM_CDTY4;
+	// PWM Channel Duty Cycle Update Register (Channel 4)
+	uint32_t PWM_CDTYUPD4;
+	// PWM Channel Period Register (Channel 4)
+	uint32_t PWM_CPRD4;
+	// PWM Channel Period Update Register (Channel 4)
+	uint32_t PWM_CPRDUPD4;
+	// PWM Channel Counter Register (Channel 4)
+	uint32_t PWM_CCNT4;
+	// PWM Channel Dead Time Register (Channel 4)
+	uint32_t PWM_DT4;
+	// PWM Channel Dead Time Update Register (Channel 4)
+	uint32_t PWM_DTUPD4;
+
+	// PWM Channel Mode Register (Channel 5)
+	uint32_t PWM_CMR5;
+	// PWM Channel Duty Cycle Register (Channel 5)
+	uint32_t PWM_CDTY5;
+	// PWM Channel Duty Cycle Update Register (Channel 5)
+	uint32_t PWM_CDTYUPD5;
+	// PWM Channel Period Register (Channel 5)
+	uint32_t PWM_CPRD5;
+	// PWM Channel Period Update Register (Channel 5)
+	uint32_t PWM_CPRDUPD5;
+	// PWM Channel Counter Register (Channel 5)
+	uint32_t PWM_CCNT5;
+	// PWM Channel Dead Time Register (Channel 5)
+	uint32_t PWM_DT5;
+	// PWM Channel Dead Time Update Register (Channel 5)
+	uint32_t PWM_DTUPD5;
+
+	// PWM Channel Mode Register (Channel 6)
+	uint32_t PWM_CMR6;
+	// PWM Channel Duty Cycle Register (Channel 6)
+	uint32_t PWM_CDTY6;
+	// PWM Channel Duty Cycle Update Register (Channel 6)
+	uint32_t PWM_CDTYUPD6;
+	// PWM Channel Period Register (Channel 6)
+	uint32_t PWM_CPRD6;
+	// PWM Channel Period Update Register (Channel 6)
+	uint32_t PWM_CPRDUPD6;
+	// PWM Channel Counter Register (Channel 6)
+	uint32_t PWM_CCNT6;
+	// PWM Channel Dead Time Register (Channel 6)
+	uint32_t PWM_DT6;
+	// PWM Channel Dead Time Update Register (Channel 6)
+	uint32_t PWM_DTUPD6;
+
+	// PWM Channel Mode Register (Channel 7)
+	uint32_t PWM_CMR7;
+	// PWM Channel Duty Cycle Register (Channel 7)
+	uint32_t PWM_CDTY7;
+	// PWM Channel Duty Cycle Update Register (Channel 7)
+	uint32_t PWM_CDTYUPD7;
+	// PWM Channel Period Register (Channel 7)
+	uint32_t PWM_CPRD7;
+	// PWM Channel Period Update Register (Channel 7)
+	uint32_t PWM_CPRDUPD7;
+	// PWM Channel Counter Register (Channel 7)
+	uint32_t PWM_CCNT7;
+	// PWM Channel Dead Time Register (Channel 7)
+	uint32_t PWM_DT7;
+	// PWM Channel Dead Time Update Register (Channel 7)
+	uint32_t PWM_DTUPD7;
+} pwm_reg_t;
+*/
 //////////////////////////////////////////////////////////////////////////
 // Function Prototypes
 
@@ -222,12 +506,20 @@ uint8_t pwm_channel_disable(uint32_t channel);
  */
 uint8_t pwm_turn_off_clkx(uint8_t clock_id);
 /**
- * Initializes a single channel in the peripheral out of 8 in total.
- * This function will not multiplex the pin to the peripheral channel and
- * neither enable the channel.
+ * Initialize the PWM peripheral with channel- polarity, alignment, prescaler
+ * and initial duty cycle. Set use_CLKx to 1 if you want these clocks to be used
+ * otherwise set it to 0 to use the channel prescalers only to achieve the
+ * frequency. Using the prescaler should be considered first, because enabling
+ * the CLKx clocks consumes more power.
+ * See pwm_set_channel_frequency() for more details.
+ * This function will disable the channel but re-enable it if it was enabled to
+ * begin with.
  *
- * @param channel
- * @return error (0 = FAIL, 1 = SUCCESS)
+ * The frequency must be set between 2 and 84 MHz.
+ *
+ * @param channel {The channel-instance of type pwm_channel_setting,
+ * (See typedef pwm_channel_setting for more details.)}
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_init_channel(struct pwm_channel_setting channel);
 /**
@@ -287,15 +579,15 @@ uint8_t pwm_reset(void);
 uint32_t pwm_read(uint32_t channel);
 /**
  * Writes an output to a given channel by setting the channel duty cycle.
+ * The duty cycle may not exceed the value of period (CPRD) in PWM_CPRDx.
+ * Use pwm_get_max_duty_cyle() to read this register and get the maximum
+ * duty cycle allowed.
  *
  * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
- * @param duty_cycle {must be between 0 and period as in CPRD in the register PWM_CPRDx.}
+ * @param duty_cycle {must be between 0 and period.}
  * @return error (1 = SCCESS and 0 = FAIL)
  */
-uint8_t pwm_write(uint32_t channel, uint32_t duty_cycle);
-// Set the duty cycle between 0 and period
-//uint32_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle);
-
+uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle);
 /**
  * This function will return the state of the PWM channel.
  *
@@ -303,19 +595,19 @@ uint8_t pwm_write(uint32_t channel, uint32_t duty_cycle);
  * @return 1 if the channel is enabled, 0 if it is disabled
  */
 uint8_t pwm_channel_status(uint32_t channel);
-
 /**
  * This function will automatically select the necessary prescaler and divider
- * for the chosen clock. The clocks can either be clkA or clkB.
- * This function also update the necessary register for this setting.
- * This function will not change the state of the channel. The channel may not
- * be enabled when invoking this function.
+ * for the chosen clock based on frequency. The clocks can either be clkA or
+ * clkB. This function also updates the necessary register for these clocks.
+ * This function will re-enable the channel if it was enabled to begin with.
+ * This function will also set the period.
  *
  * The frequency set will be the nearest to the chosen frequency as possible
  * but not exactly.
  *
- * This function will return an error if it can't find a setting for the frequency.
- * In case of error, the function will not have modified any registers.
+ * This function will return an error if it can't find a setting for the
+ * frequency. In case of error, the function will not have modified any
+ * registers.
  *
  * @param channel {The channel to set the frequency for}
  * @param frequency {The frequency to calculate for}
@@ -323,9 +615,24 @@ uint8_t pwm_channel_status(uint32_t channel);
  * ex: PWM_CLK_ID_CLKA}
  * @return {error, this will indicate whether a setting could be found for the chosen frequency.}
  */
-uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency,
+uint8_t pwm_set_clkx_frequency(uint32_t channel, uint32_t frequency,
 		uint32_t pwm_clk_id);
-
+/**
+ * This function will calculate the nesesary register values and set everything
+ * up for the given channel if successfull. The function will seek to deliver
+ * the highest resolution possible for the given frequency. It will not use any
+ * of the CLKx (A and B) clocks for this purpose.
+ * This function will re-enable the channel if it was enabled to begin with.
+ * This function will also set the period.
+ *
+ * If an error is received then the frequency was too high.
+ * Highest frequency achievable is 84MHz.
+ *
+ * @param channel {The channel to set the frequency for}
+ * @param frequency {The wanted channel frequency}
+ * @return error (1 = SUCESS and 0 = FAIL)
+ */
+uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency);
 /**
  * The PWM peripheral has 13 different clocks. Among those, 11 are scaled down
  * clocks of the system clock and the two others are the more flexible clocks
@@ -354,6 +661,13 @@ uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor);
  */
 uint8_t pwm_set_channel_period(uint32_t channel, uint32_t period);
 
+/**
+ * This function will return the maximum value that the duty cycle can be set
+ * to. The highest value that this function can return is 65535.
+ *
+ * @return {maximum duty cycle that may be used}
+ */
+uint32_t pwm_get_max_duty_cycle(uint32_t channel);
 //////////////////////////////////////////////////////////////////////////
 
 #endif /* PWM_H_ */

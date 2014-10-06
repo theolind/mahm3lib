@@ -18,7 +18,7 @@
  * @date {28 sep 2014}
  * @pre {The API handles all of its dependencies on other peripherals
  * internally and will start other clocks in order to properly operate.}
- * @bug {Manual and automated testing are being designed.}
+ * @bug {Manually tested}
  */
 
 #include "sam3x8e/bitwise_operations.h"
@@ -37,7 +37,7 @@
 #define PWM_CLK 	*((uint32_t*)(p_PWM_BASE_ADD + 0x000)) // PWM Clock Register
 #define PWM_ENA 	*((uint32_t*)(p_PWM_BASE_ADD + 0x004)) // PWM Enable Register
 #define PWM_DIS 	*((uint32_t*)(p_PWM_BASE_ADD + 0x008)) // PWM Disable Register
-#define PWM_SR 		*((uint32_t*)(p_PWM_BASE_ADD + 0x00C)) // PWM Status Register
+#define PWM_SR 	*((uint32_t*)(p_PWM_BASE_ADD + 0x00C)) // PWM Status Register
 
 #define PWM_CMR0 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*0)) // PWM Channel Mode Register
 #define PWM_CMR1 	*((uint32_t*)(p_PWM_BASE_ADD + 0x200 + 0x020*1)) // PWM Channel Mode Register
@@ -124,32 +124,31 @@ uint8_t pwm_init_peripheral(struct pwm_clk_setting clk_settings) {
 	// output no_error if no error occurred in any of the functions
 	return (error == 2) ? 1 : 0;
 }
-/**
- * Initialize the PWM peripheral with channel- polarity, alignment, prescaler
- * and initial duty cycle. If prescaler is chosen then use_prescaler must be
- * set to 1, and if a specific frequency is needed, then use_prescaler must be
- * set to 0. Using the prescaler should be considered first, cause setting the
- * frequency will occupy a CLKx and consume more power.
- * This function will disable the channel but not enable it.
- *
- * The frequency must be set between 322 and 84 MHz.
- *
- * @param channel {The channel-instance of type pwm_channel_setting,
- * (See typedef pwm_channel_setting for more details.)}
- * @return {error, 1 = SUCCESS and 0 = FAIL}
- */
+
 uint8_t pwm_init_channel(struct pwm_channel_setting channel) {
 	uint8_t error = 0;
-	if (channel.use_prescaler == 1) {
-		error += pwm_set_channel_prescaler(channel.channel, channel.prescaler);
-	} else {
-		error += pwm_set_channel_frequency(channel.channel, channel.frequency,
-				channel.clock_ID);
+	uint8_t reenable = 0;
+	// Disable the channel and remember the initial state of it
+	if (pwm_channel_status(channel.channel) == 1) {
+		reenable = 1;
+		pwm_channel_disable(channel.channel);
+	}
+	if (channel.use_CLKx == 1) {
+		if (error += pwm_set_channel_frequency(channel.channel,
+				channel.frequency) == 0) {
+			pwm_set_clkx_frequency(channel.channel, channel.frequency,
+					channel.clock_ID);
+		}
+	} else if (channel.use_CLKx == 0) {
+		pwm_set_channel_frequency(channel.channel, channel.frequency);
 	}
 	error += pwm_channel_disable(channel.channel);
 	error += pwm_set_channel_alignment(channel.channel, channel.alignment);
 	error += pwm_set_channel_polarity(channel.channel, channel.polarity);
-	error += pwm_write(channel.channel, channel.duty_cycle);
+	error += pwm_set_channel_duty_cycle(channel.channel, channel.duty_cycle);
+	if (reenable == 1) {
+		pwm_channel_enable(channel.channel);
+	}
 	// output no_error if no error occurred in any of the functions
 	return (error == 6) ? 1 : 0;
 }
@@ -356,7 +355,7 @@ uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor) {
  * @param duty_cycle {must be between 0 and period as in CPRD in the register PWM_CPRDx.}
  * @return error (1 = SCCESS and 0 = FAIL)
  */
-uint8_t pwm_write(uint32_t channel, uint32_t duty_cycle) {
+uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
 	switch (channel) {
 	case PWM_CHANNEL_0_MASK:
 		if (pwm_channel_status(PWM_CHANNEL_0_MASK)) {
@@ -462,23 +461,23 @@ uint8_t pwm_reset() {
 	clear_register(&PWM_CMR6);
 	clear_register(&PWM_CMR7);
 
-	clear_register(&PWM_CDTYUPD0);
-	clear_register(&PWM_CDTYUPD1);
-	clear_register(&PWM_CDTYUPD2);
-	clear_register(&PWM_CDTYUPD3);
-	clear_register(&PWM_CDTYUPD4);
-	clear_register(&PWM_CDTYUPD5);
-	clear_register(&PWM_CDTYUPD6);
-	clear_register(&PWM_CDTYUPD7);
+	clear_register(&PWM_CDTY0);
+	clear_register(&PWM_CDTY1);
+	clear_register(&PWM_CDTY2);
+	clear_register(&PWM_CDTY3);
+	clear_register(&PWM_CDTY4);
+	clear_register(&PWM_CDTY5);
+	clear_register(&PWM_CDTY6);
+	clear_register(&PWM_CDTY7);
 
-	clear_register(&PWM_CPRDUPD0);
-	clear_register(&PWM_CPRDUPD1);
-	clear_register(&PWM_CPRDUPD2);
-	clear_register(&PWM_CPRDUPD3);
-	clear_register(&PWM_CPRDUPD4);
-	clear_register(&PWM_CPRDUPD5);
-	clear_register(&PWM_CPRDUPD6);
-	clear_register(&PWM_CPRDUPD7);
+	clear_register(&PWM_CPRD0);
+	clear_register(&PWM_CPRD1);
+	clear_register(&PWM_CPRD2);
+	clear_register(&PWM_CPRD3);
+	clear_register(&PWM_CPRD4);
+	clear_register(&PWM_CPRD5);
+	clear_register(&PWM_CPRD6);
+	clear_register(&PWM_CPRD7);
 	return 1;
 }
 /**
@@ -528,44 +527,11 @@ uint8_t pwm_channel_status(uint32_t channel) {
 	return is_bit_high(&PWM_SR, get_position_of_first_highbit(channel));
 }
 
-uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency,
-		uint32_t pwm_clk_id) {
-	uint32_t prescalers[11] = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024 };
-	uint8_t prescaler = 0;
-	uint32_t divisor;
-	uint32_t pwm_channel_pres;
-
-	// check for frequency error
-	if (frequency > SYS_CLK_FREQ) {
-		return 0; // parameter error
-	}
-	// Find prescaler and divisor values for clk
-	divisor = (SYS_CLK_FREQ / prescalers[prescaler]) / frequency;
-	while ((divisor > 255) && (prescaler < 11)) {
-		prescaler++; // Last prescaler was too low, try a higher one
-		divisor = (SYS_CLK_FREQ / prescalers[prescaler]) / frequency;
-	}
-	// Implement result
-	if (prescaler < 11) {
-		// Initialize pwm_clk_id with the correct CLKx prescaler
-		if (pwm_clk_id == PWM_CLK_ID_CLKA) {
-			pwm_channel_pres = PWM_CMRx_PRES_CLOCKA;
-		} else if (pwm_clk_id == PWM_CLK_ID_CLKB) {
-			pwm_channel_pres = PWM_CMRx_PRES_CLOCKB;
-		} else {
-			return 0; // parameter error
-		}
-		// Initialize the CLKx with the found settings
-		pwm_set_clkx(pwm_clk_id, prescaler, divisor);
-		// Set the channel prescaler to the chosen CLKx
-		pwm_set_channel_prescaler(channel, pwm_channel_pres);
-		return 1; // All set (no error)
-	} else {
-		return 0; // parameter error
-	}
-}
 /**
  * This function will set the period value used by a given PWM channel.
+ * Only set the period directly if you know what you are doing, otherwise
+ * use pwm_set_channel_frequency() or pwm_set_clkx_frequency(), because they
+ * will set the period for you.
  *
  * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
  * @param period {The period of the channel. t must be between 0 and 65535.}
@@ -644,5 +610,112 @@ uint8_t pwm_set_channel_period(uint32_t channel, uint32_t period) {
 	return 1;
 }
 
-//TODO write a function to calculate the peiod given the channel prescaler
-// sys_clk or the divisors og the CLKx
+uint8_t pwm_set_clkx_frequency(uint32_t channel, uint32_t frequency,
+		uint32_t pwm_clk_id) {
+	uint32_t prescalers[11] = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024 };
+	uint8_t prescaler = 0;
+	uint32_t divisor;
+	uint32_t pwm_channel_pres;
+	uint8_t reenable = 0;
+	// check for frequency error
+	if (frequency > SYS_CLK_FREQ) {
+		return 0; // parameter error
+	}
+	// Find prescaler and divisor values for clk
+	divisor = (SYS_CLK_FREQ / prescalers[prescaler]) / frequency;
+	while ((divisor > 255) && (prescaler < 11)) {
+		prescaler++; // Last prescaler was too low, try a higher one
+		divisor = (SYS_CLK_FREQ / prescalers[prescaler]) / frequency;
+	}
+	// Implement result
+	if (prescaler < 11) {
+		// Initialize pwm_clk_id with the correct CLKx prescaler
+		if (pwm_clk_id == PWM_CLK_ID_CLKA) {
+			pwm_channel_pres = PWM_PRES_CLOCKA;
+		} else if (pwm_clk_id == PWM_CLK_ID_CLKB) {
+			pwm_channel_pres = PWM_PRES_CLOCKB;
+		} else {
+			return 0; // parameter error
+		}
+		// Disable the channel and remember the initial state of it
+		if (pwm_channel_status(channel) == 1) {
+			reenable = 1;
+			pwm_channel_disable(channel);
+		}
+		// Initialize the CLKx with the found settings
+		pwm_set_clkx(pwm_clk_id, prescaler, divisor);
+		// Set the channel prescaler to the chosen CLKx
+		pwm_set_channel_prescaler(channel, pwm_channel_pres);
+		if (reenable == 1) {
+			pwm_channel_enable(channel);
+		}
+		return 1; // All set (no error)
+	} else {
+		return 0; // parameter error
+	}
+}
+
+uint32_t pwm_get_max_duty_cycle(uint32_t channel) {
+	switch (channel) {
+		case PWM_CHANNEL_0_MASK:
+			return get_section_in_register(&PWM_CPRD0, PWM_CPRDx_CPRD_MASK);
+			break;
+		case PWM_CHANNEL_1_MASK:
+			return get_section_in_register(&PWM_CPRD1, PWM_CPRDx_CPRD_MASK);
+			break;
+		case PWM_CHANNEL_2_MASK:
+			return get_section_in_register(&PWM_CPRD2, PWM_CPRDx_CPRD_MASK);
+			break;
+		case PWM_CHANNEL_3_MASK:
+			return get_section_in_register(&PWM_CPRD3, PWM_CPRDx_CPRD_MASK);
+			break;
+		case PWM_CHANNEL_4_MASK:
+			return get_section_in_register(&PWM_CPRD4, PWM_CPRDx_CPRD_MASK);
+			break;
+		case PWM_CHANNEL_5_MASK:
+			return get_section_in_register(&PWM_CPRD5, PWM_CPRDx_CPRD_MASK);
+			break;
+		case PWM_CHANNEL_6_MASK:
+			return get_section_in_register(&PWM_CPRD6, PWM_CPRDx_CPRD_MASK);
+			break;
+		case PWM_CHANNEL_7_MASK:
+			return get_section_in_register(&PWM_CPRD7, PWM_CPRDx_CPRD_MASK);
+			break;
+		default:
+			return 0;
+			break;
+		}
+}
+
+uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency) {
+	uint32_t prescalers[11] = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024 };
+	//CPRD=MCK/(f*PRE)
+	uint32_t CPRD;
+	uint32_t i = 0;
+	uint8_t reenable = 0;
+
+	// check for frequency error
+	if (frequency > SYS_CLK_FREQ) {
+		return 0; // parameter error
+	}
+	// Find a prescaler based while aiming at the highest period possible
+	CPRD = SYS_CLK_FREQ / (frequency * prescalers[i]);
+	while ((CPRD > 65535) && (i < 10)) {
+		i++;
+		CPRD = SYS_CLK_FREQ / (frequency * prescalers[i]);
+	}
+	// Check result and implement
+	if ((CPRD < 65535) && (i < 11)) {
+		// Disable the channel and remember the initial state of it
+		if (pwm_channel_status(channel) == 1) {
+			reenable = 1;
+			pwm_channel_disable(channel);
+		}
+		pwm_set_channel_period(channel, CPRD);
+		pwm_set_channel_prescaler(channel, i);
+		if (reenable == 1) {
+			pwm_channel_enable(channel);
+		}
+	}
+	return 1;
+}

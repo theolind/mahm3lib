@@ -16,12 +16,10 @@
 
 #include <inttypes.h>
 
-
 ///@cond
 // Pointer to registers of the DACC peripheral.
-#define DACC ((dacc_reg_t *) 0x400C8000U)
+#define DACC ((dacc_reg_t *) 0x40094000U)
 ///@endcond
-
 
 #define DACC_CHANNEL_0		(0)			///<DACC Channel 0
 #define DACC_CHANNEL_1		(1)			///<DACC Channel 1

@@ -1,9 +1,8 @@
 /**
- * @file pwm.c
+ * @file pwm.h
  * @anchor <pwm>
  * @brief Pulse Width Modulation (PWM)
- * @details {This class is used to output a pulse width modulated waveform
- * using the PWM peripheral on the MCU.
+ * @details {An API for controling the PWM peripheral inside a SAM3X8E MCU.
  * This peripheral is an embedded macrocell within the MCU and all of its 44
  * registers are physically mapped on this macrocell, therefore modifying the
  * register requires that the peripheral clock is enabled in PMC. However, when
@@ -14,11 +13,12 @@
  * alignment, PWM frequency and handles the pin multiplexing for all 16 outputs
  * of the peripheral. The API does not stop any clock once it has started them.}
  * @author {Saeed Ghasemi}
- * @version {v0.1}
  * @date {28 sep 2014}
  * @pre {The API handles all of its dependencies on other peripherals
  * internally and will start other clocks in order to properly operate.}
- * @bug {Manual and automated testing are being designed.}
+ * @bug {Manually tested all functions to comply with all demands.
+ * The only problem is that the register set defined below is not working when
+ * implemented. The register mapping currently working is non conventional.}
  */
 
 #ifndef PWM_H_
@@ -61,7 +61,7 @@
 
 #define PWM_CPRDx_CPRD_MASK				(0x0000FFFF)
 #define PWM_CPRDUPDx_CPRDUPD_MASK		(0x0000FFFF)
-/////////////////////////////////////////////////////////////////////////////
+
 /**
  * PESCALLERS FOR CHANNEL MODE AND CLOCK REGISTER.
  * These can be used with both PWM_CMRx and PWM_CLK registers.
@@ -96,7 +96,6 @@
 #define PWM_CLK_DIVx_TURNOFF			0
 
 
-//////////////////////////////////////////////////////////////////////////
 
 // Externally available typedefs, variables and definitions
 /**
@@ -172,7 +171,7 @@ typedef struct pwm_channel_setting{
  * @typedef
  * This structure defines the register mapping of the PWM peripheral.
  */
-/* Currently bugged (be hold, 137 registers. Don't go in there!)
+// Currently bugged (be hold, 137 registers. Don't go in there!)
 typedef struct {
 	// PWM Clock Register, offset 0x000
 	uint32_t PWM_CLK;
@@ -457,15 +456,14 @@ typedef struct {
 	// PWM Channel Dead Time Update Register (Channel 7)
 	uint32_t PWM_DTUPD7;
 } pwm_reg_t;
-*/
-//////////////////////////////////////////////////////////////////////////
-// Function Prototypes
 
+
+// Function Prototypes
 /**
  * Default initialization for the PWM peripheral
  * This leaves clkA and clkB off and starts the peripheral clock.
  *
- * @return error (0 = FAIL, 1 = SUCCESS)
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
  * @pre {This function requires the PMC API.}
  */
 uint8_t pwm_init_peripheral_default(void);
@@ -474,7 +472,7 @@ uint8_t pwm_init_peripheral_default(void);
  * This function controls clkA and clkB and starts the peripheral clock.
  * It is recommended to use pwm_set_channel_frequency() to select a clock.
  *
- * @return error (0 = FAIL, 1 = SUCCESS)
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
  * @pre {This function requires the PMC API.}
  */
 uint8_t pwm_init_peripheral(struct pwm_clk_setting clk_settings);
@@ -485,7 +483,7 @@ uint8_t pwm_init_peripheral(struct pwm_clk_setting clk_settings);
  * Alternatively use PWM_CHANNEL_ALL_MASK to enable all channel at once.
  *
  * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
- * @return error Will always return 1 = SUCCESS
+ * @return {error Will always return 1 = SUCCESS}
  */
 uint8_t pwm_channel_enable(uint32_t channel);
 /**
@@ -495,14 +493,14 @@ uint8_t pwm_channel_enable(uint32_t channel);
  * Alternatively use PWM_CHANNEL_ALL_MASK to disable all channel at once.
  *
  * @param channel {The channel to be disabled, use prefix: PWM_CHANNEL_}
- * @return error (1 = SUCCESS and 0 = FAIL)
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_channel_disable(uint32_t channel);
 /**
  * Turns off one of two clocks in PWM that are called clkA and clkB.
  *
  * @param clock_id
- * @return error (0 = FAIL, 1 = SUCCESS)
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_turn_off_clkx(uint8_t clock_id);
 /**
@@ -551,7 +549,7 @@ uint8_t pwm_set_channel_alignment(uint32_t channel, uint32_t PWM_ALIGN_);
  * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
  * @param prescaler {This is the prescaler to be set.
  * Use one of the predefined. prefix: PWM_CMRx_PRES_}
- * @return error
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler);
 /**
@@ -566,7 +564,7 @@ uint8_t pwm_shutdown(void);
 uint8_t pwm_close(void);
 /**
  * Resets the peripheral and disables all channels
- * @return error
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_reset(void);
 /**
@@ -585,14 +583,14 @@ uint32_t pwm_read(uint32_t channel);
  *
  * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
  * @param duty_cycle {must be between 0 and period.}
- * @return error (1 = SCCESS and 0 = FAIL)
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle);
 /**
  * This function will return the state of the PWM channel.
  *
  * @param channel {the channel to get the status for}
- * @return 1 if the channel is enabled, 0 if it is disabled
+ * @return {1 if the channel is enabled, 0 if it is disabled}
  */
 uint8_t pwm_channel_status(uint32_t channel);
 /**
@@ -613,7 +611,8 @@ uint8_t pwm_channel_status(uint32_t channel);
  * @param frequency {The frequency to calculate for}
  * @param pwm_clk_id {the ID for the clock you want to modify,
  * ex: PWM_CLK_ID_CLKA}
- * @return {error, this will indicate whether a setting could be found for the chosen frequency.}
+ * @return {error, 1 = SUCCESS and 0 = FAIL - This indicates whether a setting
+ * could be found for the chosen frequency.}
  */
 uint8_t pwm_set_clkx_frequency(uint32_t channel, uint32_t frequency,
 		uint32_t pwm_clk_id);
@@ -630,7 +629,7 @@ uint8_t pwm_set_clkx_frequency(uint32_t channel, uint32_t frequency,
  *
  * @param channel {The channel to set the frequency for}
  * @param frequency {The wanted channel frequency}
- * @return error (1 = SUCESS and 0 = FAIL)
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency);
 /**
@@ -649,7 +648,7 @@ uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency);
  * @param prescaler {Use one of the predefined prescalers.
  * Prefix: PWM_CLK_PRES_}
  * @param divisor {Use a value between 1 and 255.}
- * @return error
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor);
 /**
@@ -657,7 +656,7 @@ uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor);
  *
  * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
  * @param period {The period of the channel. t must be between 0 and 65535.}
- * @return error (1 = SCCESS and 0 = FAIL)
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_set_channel_period(uint32_t channel, uint32_t period);
 
@@ -665,9 +664,9 @@ uint8_t pwm_set_channel_period(uint32_t channel, uint32_t period);
  * This function will return the maximum value that the duty cycle can be set
  * to. The highest value that this function can return is 65535.
  *
- * @return {maximum duty cycle that may be used}
+ * @return {Maximum value that the channeel duty cycle can be set to.}
  */
-uint32_t pwm_get_max_duty_cycle(uint32_t channel);
+uint32_t pwm_get_channel_resolution(uint32_t channel);
 //////////////////////////////////////////////////////////////////////////
 
 #endif /* PWM_H_ */

@@ -2,8 +2,7 @@
  * @file pwm.c
  * @anchor <pwm>
  * @brief Pulse Width Modulation (PWM)
- * @details {This class is used to output a pulse width modulated waveform
- * using the PWM peripheral on the MCU.
+ * @details {An API for controlling the PWM peripheral inside a SAM3X8E MCU.
  * This peripheral is an embedded macrocell within the MCU and all of its 44
  * registers are physically mapped on this macrocell, therefore modifying the
  * register requires that the peripheral clock is enabled in PMC. However, when
@@ -14,18 +13,18 @@
  * alignment, PWM frequency and handles the pin multiplexing for all 16 outputs
  * of the peripheral. The API does not stop any clock once it has started them.}
  * @author {Saeed Ghasemi}
- * @version {v0.1}
  * @date {28 sep 2014}
  * @pre {The API handles all of its dependencies on other peripherals
  * internally and will start other clocks in order to properly operate.}
- * @bug {Manually tested}
+ * @bug {Manually tested all functions to comply with all demands.
+ * The only problem is that the register set defined below is not working when
+ * implemented. The register mapping currently working is non conventional.}
  */
 
 #include "sam3x8e/bitwise_operations.h"
 #include "sam3x8e/pmc.h"
 #include "sam3x8e/pwm.h"
 
-/////////////////////////////////////////////////////////////////////////////
 ///\cond
 /*
  *  Necessary registers addressed by incrementing the base address by an
@@ -85,9 +84,8 @@
 #define PWM_CPRDUPD7 *((uint32_t*)(p_PWM_BASE_ADD + 0x210 + 0x020*7)) // PWM Channel Period Update Register
 
 ///\endcond
-////////////////////////////////////////////////////////////////////////
 
-/**
+/*
  * Initialize the PWM peripheral with minimum requirements.
  *
  * @return {error, 1 = SUCCESS and 0 = FAIL}
@@ -176,7 +174,7 @@ uint8_t pwm_channel_enable(uint32_t channel) {
  * Alternatively use PWM_CHANNEL_ALL_MASK to disable all channel at once.
  *
  * @param channel {The channel to be disabled, use prefix: PWM_CHANNEL_}
- * @return error (1 = SUCCESS and 0 = FAIL)
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_channel_disable(uint32_t channel) {
 	if (pwm_channel_status(channel)) {
@@ -193,7 +191,7 @@ uint8_t pwm_channel_disable(uint32_t channel) {
  * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
  * @param prescaler {This is the prescaler to be set.
  * Use one of the predefined. prefix: PWM_CMRx_PRES_}
- * @return error
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
 	uint8_t error = 0;
@@ -353,7 +351,7 @@ uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor) {
  *
  * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
  * @param duty_cycle {must be between 0 and period as in CPRD in the register PWM_CPRDx.}
- * @return error (1 = SCCESS and 0 = FAIL)
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
 	switch (channel) {
@@ -445,7 +443,7 @@ uint8_t pwm_shutdown() {
 }
 /**
  * Resets the peripheral and disables all channels
- * @return error
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_reset() {
 	pwm_channel_disable(PWM_CHANNEL_ALL_MASK);
@@ -535,7 +533,7 @@ uint8_t pwm_channel_status(uint32_t channel) {
  *
  * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
  * @param period {The period of the channel. t must be between 0 and 65535.}
- * @return error (1 = SCCESS and 0 = FAIL)
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_set_channel_period(uint32_t channel, uint32_t period) {
 	switch (channel) {
@@ -655,36 +653,40 @@ uint8_t pwm_set_clkx_frequency(uint32_t channel, uint32_t frequency,
 	}
 }
 
-uint32_t pwm_get_max_duty_cycle(uint32_t channel) {
+uint32_t pwm_get_channel_resolution(uint32_t channel) {
 	switch (channel) {
-		case PWM_CHANNEL_0_MASK:
-			return get_section_in_register(&PWM_CPRD0, PWM_CPRDx_CPRD_MASK);
-			break;
-		case PWM_CHANNEL_1_MASK:
-			return get_section_in_register(&PWM_CPRD1, PWM_CPRDx_CPRD_MASK);
-			break;
-		case PWM_CHANNEL_2_MASK:
-			return get_section_in_register(&PWM_CPRD2, PWM_CPRDx_CPRD_MASK);
-			break;
-		case PWM_CHANNEL_3_MASK:
-			return get_section_in_register(&PWM_CPRD3, PWM_CPRDx_CPRD_MASK);
-			break;
-		case PWM_CHANNEL_4_MASK:
-			return get_section_in_register(&PWM_CPRD4, PWM_CPRDx_CPRD_MASK);
-			break;
-		case PWM_CHANNEL_5_MASK:
-			return get_section_in_register(&PWM_CPRD5, PWM_CPRDx_CPRD_MASK);
-			break;
-		case PWM_CHANNEL_6_MASK:
-			return get_section_in_register(&PWM_CPRD6, PWM_CPRDx_CPRD_MASK);
-			break;
-		case PWM_CHANNEL_7_MASK:
-			return get_section_in_register(&PWM_CPRD7, PWM_CPRDx_CPRD_MASK);
-			break;
-		default:
-			return 0;
-			break;
-		}
+	case PWM_CHANNEL_0_MASK:
+		return get_section_in_register(&PWM_CPRD0, PWM_CPRDx_CPRD_MASK);
+		break;
+	case PWM_CHANNEL_1_MASK:
+		return get_section_in_register(&PWM_CPRD1, PWM_CPRDx_CPRD_MASK);
+		break;
+	case PWM_CHANNEL_2_MASK:
+		return get_section_in_register(&PWM_CPRD2, PWM_CPRDx_CPRD_MASK);
+		break;
+	case PWM_CHANNEL_3_MASK:
+		return get_section_in_register(&PWM_CPRD3, PWM_CPRDx_CPRD_MASK);
+		break;
+	case PWM_CHANNEL_4_MASK:
+		return get_section_in_register(&PWM_CPRD4, PWM_CPRDx_CPRD_MASK);
+		break;
+	case PWM_CHANNEL_5_MASK:
+		return get_section_in_register(&PWM_CPRD5, PWM_CPRDx_CPRD_MASK);
+		break;
+	case PWM_CHANNEL_6_MASK:
+		return get_section_in_register(&PWM_CPRD6, PWM_CPRDx_CPRD_MASK);
+		break;
+	case PWM_CHANNEL_7_MASK:
+		return get_section_in_register(&PWM_CPRD7, PWM_CPRDx_CPRD_MASK);
+		break;
+	default:
+		return 0;
+		break;
+	}
+}
+
+uint32_t pwm_get_channel_alignment(uint32_t channel) {
+	return get_section_in_register(&PWM_CMR0, PWM_CMRx_CALG_MASK);
 }
 
 uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency) {
@@ -693,16 +695,27 @@ uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency) {
 	uint32_t CPRD;
 	uint32_t i = 0;
 	uint8_t reenable = 0;
+	uint8_t alignment;
+	// Get alignmnet
+	alignment = pwm_get_channel_alignment(channel);
 
 	// check for frequency error
 	if (frequency > SYS_CLK_FREQ) {
 		return 0; // parameter error
 	}
 	// Find a prescaler based while aiming at the highest period possible
-	CPRD = SYS_CLK_FREQ / (frequency * prescalers[i]);
+	if (alignment == PWM_CHANNEL_ALIGN_CENTER) {
+		CPRD = SYS_CLK_FREQ / (frequency * prescalers[i] * 2);
+	} else {
+		CPRD = SYS_CLK_FREQ / (frequency * prescalers[i]);
+	}
 	while ((CPRD > 65535) && (i < 10)) {
 		i++;
-		CPRD = SYS_CLK_FREQ / (frequency * prescalers[i]);
+		if (alignment == PWM_CHANNEL_ALIGN_CENTER) {
+			CPRD = SYS_CLK_FREQ / (frequency * prescalers[i] * 2);
+		} else {
+			CPRD = SYS_CLK_FREQ / (frequency * prescalers[i]);
+		}
 	}
 	// Check result and implement
 	if ((CPRD < 65535) && (i < 11)) {

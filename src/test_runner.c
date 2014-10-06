@@ -15,6 +15,7 @@
 #include "test/test_adc.h"
 #include "test/test_dacc.h"
 #include "test/test_uart.h"
+#include "test/test_bitwise_operations.h"
 
 void run_tests(void) {
 	UnityBegin();
@@ -63,6 +64,20 @@ void run_tests(void) {
 	RUN_TEST(test_adc_channel_status, 30);
 	RUN_TEST(test_adc_set_resolution_10_bit, 30);
 	RUN_TEST(test_adc_set_resolution_12_bit, 30);
+	HORIZONTAL_LINE_BREAK();
+
+	// Run bitwise_operations tests
+	Unity.TestFile = "test/test_bitwise_operations.c";
+	RUN_TEST(test_is_bit_high, 30);
+	RUN_TEST(test_get_position_of_first_highbit, 30);
+	RUN_TEST(test_get_section_in_register, 30);
+	RUN_TEST(test_set_section_in_register, 30);
+	RUN_TEST(test_set_section_in_register2, 30);
+	RUN_TEST(test_clear_register, 30);
+	RUN_TEST(test_set_register, 30);
+	RUN_TEST(test_clear_bit_in_register, 30);
+	RUN_TEST(test_set_bit_in_register, 30);
+	HORIZONTAL_LINE_BREAK();
 
 	UnityEnd();
 }

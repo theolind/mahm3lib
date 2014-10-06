@@ -27,6 +27,8 @@
 #include <stdint.h>
 
 #define SYS_CLK_FREQ		84000000
+#define TRUE				1
+#define FALSE				0
 
 /**
  * This function will test to see if the specified bit in a register is set
@@ -46,7 +48,7 @@ uint8_t is_bit_high(uint32_t *reg, uint8_t bit);
  * @param mask The mask to be examined
  * @return Bit-number of the first position
  */
-uint32_t get_position_of_first_highbit(uint32_t mask);
+uint8_t get_position_of_first_highbit(uint32_t mask);
 /**
  * This function will modify a section of a given register as indicated by
  * mask with the value specified in 'value'.
@@ -70,7 +72,7 @@ uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value);
  * @param value The value the section must store
  * @return error (1 = SUCCESS and 0 = FAIL)
  */
-uint8_t set_section_in_register2(uint32_t *reg, uint8_t start_bit,
+uint8_t set_section_in_register2(uint32_t *reg, uint32_t start_bit,
 		uint32_t length, uint32_t value);
 /**
  * This function will only return the value of a specified section in a given
@@ -96,5 +98,23 @@ uint8_t clear_register(uint32_t *reg);
  * @return error (1 = SUCCESS and 0 = FAIL)
  */
 uint8_t set_register(uint32_t *reg);
+/**
+ * This function will clear a bit identified by bit_number in the specified
+ * register.
+ *
+ * @param reg {The pointer to the register to operate on}
+ * @param bit_number {The number for the bit in the register}
+ * @return error {This function always returns 1 = SUCCESS}
+ */
+uint8_t clear_bit_in_register(uint32_t *reg, uint8_t bit_number);
+/**
+ * This function will set a bit identified by bit_number in the specified
+ * register.
+ *
+ * @param reg {The pointer to the register to operate on}
+ * @param bit_number {The number for the bit in the register}
+ * @return error {This function always returns 1 = SUCCESS}
+ */
+uint8_t set_bit_in_register(uint32_t *reg, uint8_t bit_number);
 
 #endif /* _BITWISE_OPE_H_ */

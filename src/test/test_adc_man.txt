@@ -37,7 +37,7 @@ DON'T FORGET TO INCLUDE:
 		second = (data - (data % 100)) / 100;
 		data = (data - second * 100);
 		third = (data - (data % 10)) / 10;
-		data = (data - second * 10);
+		data = (data - third * 10);
 		fourth = data % 10;
 
 		char dataprint[4];

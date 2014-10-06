@@ -18,7 +18,6 @@
  *
  */
 
-
 #ifndef DELAY_H_
 #define DELAY_H_
 
@@ -37,27 +36,5 @@ void delay_micros(uint32_t us);
  * to several seconds
  */
 void delay_ms(uint32_t ms);
-
-
-///@cond
-
-/*
- * Adds a pause for every for every 1000 microseconds.
- */
-void delay_1000(uint32_t us_1000);
-/*
- * Adds a pause for every for every 100 microseconds.
- */
-void delay_100(uint32_t us_100);
-/*
- * Adds a pause for every for every 10 microseconds.
- */
-void delay_10(uint32_t us_10);
-/*
- * Adds a pause for every for every 1 microseconds.
- */
-void delay_1(uint32_t us_1);
-
-///@endcond
 
 #endif

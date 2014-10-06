@@ -638,6 +638,13 @@ uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor);
  */
 uint8_t pwm_set_channel_period(uint32_t channel, uint32_t period);
 
+/**
+ * This function will return the maximum value that the duty cycle can be set
+ * to. The highest value that this function can return is 65535.
+ *
+ * @return {maximum duty cycle that may be used}
+ */
+uint32_t pwm_get_max_duty_cycle(void);
 //////////////////////////////////////////////////////////////////////////
 
 #endif /* PWM_H_ */

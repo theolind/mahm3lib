@@ -1,11 +1,11 @@
 /**
  * @file
  * @brief Arduino Due PIN mapPINg
- * @details This file is used for PINs on the Arduino boards
+ * @details This file is used for physical pins on the Arduino Due board
  * @author Hisham Ramish
  * @author Stefan Angelov
  * @version 0.1
- * @date 29 sep 2014
+ * @date 06 oct 2014
 
  */
 
@@ -19,7 +19,8 @@
 #include <dacc.h>
 
 /**
- * ADC mapPINgs
+ * ADC mappings
+ * Pins A0-A11 on the left side of the Arduino Due board
  */
 #define A0_PIN		ADC_CHANNEL_7
 #define A1_PIN		ADC_CHANNEL_6
@@ -35,22 +36,17 @@
 #define A11_PIN		ADC_CHANNEL_13
 
 /**
- * DACC mapPINgs
+ * DACC mappings
+ * Pins DAC0, DAC1 on the left side of the Arduino board
  */
 #define DAC0_PIN	DACC_CHANNEL_0
 #define DAC1_PIN	DACC_CHANNEL_1
 
 /**
- * PIO mapPINgs
+ * PIO mappings
+ * Pins 2-13 on the right side of the Arduino board
+ * Pins 22-53 on the lower part of the Arduino board
  */
-
-//#define PIOA ((pio_reg_t *) 0x400E0E00)
-//#define PIOB ((pio_reg_t *) 0x400E1000)
-//#define PIOC ((pio_reg_t *) 0x400E1200)
-//#define PIOD ((pio_reg_t *) 0x400E1400)
-//#define PIOE ((pio_reg_t *) 0x400E1600)
-//#define PIOF ((pio_reg_t *) 0x400E1800)
-
 #define D2_PIN		25
 #define D3_PIN		28
 #define D4_PIN		26
@@ -62,6 +58,7 @@
 #define D10_PIN		29
 #define D11_PIN		7
 #define D12_PIN		8
+#define D13_PIN		27
 #define D22_PIN		26
 #define D23_PIN		14
 #define D24_PIN		15
@@ -106,6 +103,7 @@
 #define D10_PORT	PIOC
 #define D11_PORT	PIOD
 #define D12_PORT	PIOD
+#define D13_PORT	PIOB
 #define D22_PORT	PIOB
 #define D23_PORT	PIOA
 #define D24_PORT	PIOA
@@ -138,7 +136,6 @@
 #define D51_PORT	PIOC
 #define D52_PORT	PIOB
 #define D53_PORT	PIOB
-
 
 
 #endif

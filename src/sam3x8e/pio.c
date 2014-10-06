@@ -10,7 +10,7 @@
 */
 
 #include "pio.h"
-
+#include "sam3x8e/bitwise_operations.h"
 
 
 /*
@@ -89,21 +89,21 @@ uint32_t pio_read_port(pio_reg_t *port) {
 	return port->PIO_PDSR;
 }
 
-
 uint8_t pio_conf_pin_to_peripheral(pio_reg_t *port,
 		uint32_t periph, uint32_t pin_number){
-	//uint32_t *p_reg;
+	// Disable interrupts on the pin
+	set_bit_in_register(&port->PIO_IDR, pin_number);
 
-	// The will be set in peripheral mode (not controllable by PIO)
-	//p_reg = (uint32_t *) (port + PIO_PDR);
-	port->PIO_PDR = (0x1U << pin_number);
-	// The will be set to peripheral B
-	//p_reg = (uint32_t *) (port + PIO_ABSR);
-	if(periph){ // 0 is peripheral A and 1 is B
-		port->PIO_ABSR &= ~(0x1U << pin_number); // Clear for peripheral A
-	}else{
-		port->PIO_ABSR |= (0x1U << pin_number); // Set to peripheral B
+	// The pin will be set to peripheral B
+	if(periph == PIO_PERIPH_B){ // 0 is peripheral A and 1 is B
+		// Set to peripheral B
+		set_bit_in_register(&port->PIO_ABSR, (uint8_t)pin_number);
+	}else if(periph == PIO_PERIPH_A){
+		// Clear for peripheral A
+		clear_bit_in_register(&port->PIO_ABSR, (uint8_t)pin_number);
 	}
+	// The pin will be set in peripheral mode (not controllable by PIO)
+	set_bit_in_register(&port->PIO_PDR, (uint8_t)pin_number);
 	return 1;
 }
 

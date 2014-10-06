@@ -42,40 +42,12 @@
 #define PIO_PERIPH_A			0
 #define PIO_PERIPH_B			1
 
-/*
-// port register offsets
-#define PIO_PER 0x0000	//PIO enable register
-#define PIO_PDR 0x0004	//PIO disable register
-#define PIO_PSR 0x0008  //PIO status register
-
-#define PIO_OER 0x0010	//output enable register
-#define PIO_ODR 0x0014	//output disable register
-#define PIO_OSR 0x0018 	//output status register
-
-#define PIO_SODR 0x0030	//set output data register
-#define PIO_CODR 0x0034	//clear output data register
-#define PIO_ODSR 0x0038 //output data status register
-#define PIO_PDSR 0x003C	//pin data status register
-
-#define PIO_PUDR 0x0060	//pull-up disable register
-#define PIO_PUER 0x0064	//pull-up enable register
-#define PIO_PUSR 0x0068	//pull-up status register
-
-#define PIO_ABSR 0x0070	//Peripheral AB Select Register
-
-#define PIO_OWER 0x00A0	//Output Write Enable
-#define PIO_OWDR 0x00A4	//Output Write Disable
-#define PIO_OWSR 0x00A8	//Output Write Status Register
-*/
-
-
-////////////////////////////////////////////////////////
-// External (to be used by the user) (temporarily)
-//Physical pin mapping
-//PIO_PIN_[package pin number]_[port and bit number]
 /**
  * @def
- * These are mapped pins of the MCU relative to their respective package number.
+ * These are mapped pins of the MCU relative to their respective package
+ * pin number.
+ *
+ * PIO_PIN_[package pin number]_[port and bit number]
  */
 #define PIN_PIO_1_PB26			(26)
 #define PIN_PIO_42_PA19			(19)
@@ -95,7 +67,6 @@
 #define PIN_PIO_116_PC4			(4)
 #define PIN_PIO_140_PB14		(14)
 // These should be extended (These are MCU pin mappings and not arduino pin mappings)
-////////////////////////////////////////////////////////
 
 ///@cond
 /*

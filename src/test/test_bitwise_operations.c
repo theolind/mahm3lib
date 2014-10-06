@@ -65,38 +65,59 @@ void test_set_section_in_register(void) {
 	reg = 0x00000000;
 	set_section_in_register(&reg, 0xF0000000, 2);
 	TEST_ASSERT_TRUE(reg == 0x20000000);
-//	set_section_in_register(&reg, 0x00000030, 3);
-//	TEST_ASSERT_TRUE(reg == 0x00000030);
-//	set_section_in_register(&reg, 0x00700000, 2);
-//	TEST_ASSERT_TRUE(reg == 0x00200000);
-//	set_section_in_register(&reg, 0x00000C00, 4);
-//	TEST_ASSERT_TRUE(reg == 0x00000400);
-//	set_section_in_register(&reg, 0x00000C00, 8);
-//	TEST_ASSERT_TRUE(reg == 0x00000800);
+	reg = 0x00000000;
+	set_section_in_register(&reg, 0x00000030, 3);
+	TEST_ASSERT_TRUE(reg == 0x00000030);
+	reg = 0x00000000;
+	set_section_in_register(&reg, 0x00700000, 2);
+	TEST_ASSERT_TRUE(reg == 0x00200000);
+	reg = 0x00000000;
+	set_section_in_register(&reg, 0x00000E00, 4);
+	TEST_ASSERT_TRUE(reg == 0x00000800);
+	reg = 0x00000321; // Register already has data (Not overwriting)
+	set_section_in_register(&reg, 0x00F00000, 8);
+	TEST_ASSERT_TRUE(reg == 0x00800321);
+	reg = 0x00000321; // Register already has data (overwriting)
+	set_section_in_register(&reg, 0x000000F0, 8);
+	TEST_ASSERT_TRUE(reg == 0x00000381);
 }
 
 void test_set_section_in_register2(void) {
-	uint32_t reg = 0x00000000;
+	uint32_t reg;
+	reg = 0x00000000;
 	set_section_in_register2(&reg, 0, 2, 3);
-	TEST_ASSERT_TRUE(reg == 0x00000011);
+	TEST_ASSERT_TRUE(reg == 0x00000003);
+	reg = 0x00000000;
 	set_section_in_register2(&reg, 0, 2, 1);
 	TEST_ASSERT_TRUE(reg == 0x00000001);
+	reg = 0x00000000;
 	set_section_in_register2(&reg, 0, 2, 2);
-	TEST_ASSERT_TRUE(reg == 0x00000010);
+	TEST_ASSERT_TRUE(reg == 0x00000002);
+	reg = 0x00000000;
 	set_section_in_register2(&reg, 1, 2, 3);
-	TEST_ASSERT_TRUE(reg == 0x00000110);
+	TEST_ASSERT_TRUE(reg == 0x00000006);
+	reg = 0x00000000;
 	set_section_in_register2(&reg, 1, 2, 2);
-	TEST_ASSERT_TRUE(reg == 0x00000100);
+	TEST_ASSERT_TRUE(reg == 0x00000004);
+	reg = 0x00000000;
 	set_section_in_register2(&reg, 1, 2, 1);
-	TEST_ASSERT_TRUE(reg == 0x00000010U);
+	TEST_ASSERT_TRUE(reg == 0x00000002);
+	reg = 0x00200000;
+	set_section_in_register2(&reg, 1, 2, 1);
+	TEST_ASSERT_TRUE(reg == 0x00200002);
+	reg = 0x00200000; // first bit in nibble = 28 24 20 16 12 8 4 0
+	set_section_in_register2(&reg, 24, 5, 17);
+	TEST_ASSERT_TRUE(reg == 0x11200000); //0001 0001 last two nibbles
 }
 
 void test_clear_register(void) {
 	uint32_t reg = 123;
 	clear_register(&reg);
 	TEST_ASSERT_TRUE(reg == 0x00000000);
+	reg = 0x12454534;
+	clear_register(&reg);
 	TEST_ASSERT_EQUAL_UINT32(0x00000000, reg);
-	reg = 0x12334413;
+	reg = 0xFFFFFFFF;
 	clear_register(&reg);
 	TEST_ASSERT_TRUE(reg == 0x00000000);
 	TEST_ASSERT_EQUAL_UINT32(0, reg);
@@ -115,3 +136,32 @@ void test_set_register(void) {
 	TEST_ASSERT_TRUE(reg == 0xFFFFFFFF);
 }
 
+void test_clear_bit_in_register(void) {
+	uint32_t reg = 0x00000001; // first bit in nibble = 28 24 20 16 12 8 4 0
+	clear_bit_in_register(&reg, 0);
+	TEST_ASSERT_TRUE(reg == 0x00000000);
+	TEST_ASSERT_TRUE(is_bit_high(&reg, 0) == 0);
+	reg = 0x00050000;
+	clear_bit_in_register(&reg, 16);
+	TEST_ASSERT_TRUE(reg == 0x00040000);
+	TEST_ASSERT_TRUE(is_bit_high(&reg, 16) == 0);
+	reg = 0x80080800;
+	clear_bit_in_register(&reg, 31);
+	TEST_ASSERT_TRUE(reg == 0x00080800);
+	TEST_ASSERT_TRUE(is_bit_high(&reg, 31) == 0);
+}
+
+void test_set_bit_in_register(void) {
+	uint32_t reg = 0x00000000; // first bit in nibble = 28 24 20 16 12 8 4 0
+	set_bit_in_register(&reg, 0);
+	TEST_ASSERT_TRUE(reg == 0x00000001);
+	TEST_ASSERT_TRUE(is_bit_high(&reg, 0) == 1);
+	reg = 0x00040000;
+	set_bit_in_register(&reg, 16);
+	TEST_ASSERT_TRUE(reg == 0x00050000);
+	TEST_ASSERT_TRUE(is_bit_high(&reg, 16) == 1);
+	reg = 0x00080800;
+	set_bit_in_register(&reg, 31);
+	TEST_ASSERT_TRUE(reg == 0x80080800);
+	TEST_ASSERT_TRUE(is_bit_high(&reg, 31) == 1);
+}

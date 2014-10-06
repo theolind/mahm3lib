@@ -143,7 +143,7 @@ uint8_t pwm_init_channel(struct pwm_channel_setting channel) {
 	if (channel.use_prescaler == 1) {
 		error += pwm_set_channel_prescaler(channel.channel, channel.prescaler);
 	} else {
-		error += pwm_set_channel_frequency(channel.channel, channel.frequency,
+		error += pwm_set_clkx_frequency(channel.channel, channel.frequency,
 				channel.clock_ID);
 	}
 	error += pwm_channel_disable(channel.channel);
@@ -528,42 +528,7 @@ uint8_t pwm_channel_status(uint32_t channel) {
 	return is_bit_high(&PWM_SR, get_position_of_first_highbit(channel));
 }
 
-uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency,
-		uint32_t pwm_clk_id) {
-	uint32_t prescalers[11] = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024 };
-	uint8_t prescaler = 0;
-	uint32_t divisor;
-	uint32_t pwm_channel_pres;
 
-	// check for frequency error
-	if (frequency > SYS_CLK_FREQ) {
-		return 0; // parameter error
-	}
-	// Find prescaler and divisor values for clk
-	divisor = (SYS_CLK_FREQ / prescalers[prescaler]) / frequency;
-	while ((divisor > 255) && (prescaler < 11)) {
-		prescaler++; // Last prescaler was too low, try a higher one
-		divisor = (SYS_CLK_FREQ / prescalers[prescaler]) / frequency;
-	}
-	// Implement result
-	if (prescaler < 11) {
-		// Initialize pwm_clk_id with the correct CLKx prescaler
-		if (pwm_clk_id == PWM_CLK_ID_CLKA) {
-			pwm_channel_pres = PWM_CMRx_PRES_CLOCKA;
-		} else if (pwm_clk_id == PWM_CLK_ID_CLKB) {
-			pwm_channel_pres = PWM_CMRx_PRES_CLOCKB;
-		} else {
-			return 0; // parameter error
-		}
-		// Initialize the CLKx with the found settings
-		pwm_set_clkx(pwm_clk_id, prescaler, divisor);
-		// Set the channel prescaler to the chosen CLKx
-		pwm_set_channel_prescaler(channel, pwm_channel_pres);
-		return 1; // All set (no error)
-	} else {
-		return 0; // parameter error
-	}
-}
 /**
  * This function will set the period value used by a given PWM channel.
  *
@@ -644,5 +609,45 @@ uint8_t pwm_set_channel_period(uint32_t channel, uint32_t period) {
 	return 1;
 }
 
-//TODO write a function to calculate the peiod given the channel prescaler
-// sys_clk or the divisors og the CLKx
+uint8_t pwm_set_clkx_frequency(uint32_t channel, uint32_t frequency,
+		uint32_t pwm_clk_id) {
+	uint32_t prescalers[11] = { 1, 2, 4, 8, 16, 32, 64, 128, 256, 512, 1024 };
+	uint8_t prescaler = 0;
+	uint32_t divisor;
+	uint32_t pwm_channel_pres;
+
+	// check for frequency error
+	if (frequency > SYS_CLK_FREQ) {
+		return 0; // parameter error
+	}
+	// Find prescaler and divisor values for clk
+	divisor = (SYS_CLK_FREQ / prescalers[prescaler]) / frequency;
+	while ((divisor > 255) && (prescaler < 11)) {
+		prescaler++; // Last prescaler was too low, try a higher one
+		divisor = (SYS_CLK_FREQ / prescalers[prescaler]) / frequency;
+	}
+	// Implement result
+	if (prescaler < 11) {
+		// Initialize pwm_clk_id with the correct CLKx prescaler
+		if (pwm_clk_id == PWM_CLK_ID_CLKA) {
+			pwm_channel_pres = PWM_PRES_CLOCKA;
+		} else if (pwm_clk_id == PWM_CLK_ID_CLKB) {
+			pwm_channel_pres = PWM_PRES_CLOCKB;
+		} else {
+			return 0; // parameter error
+		}
+		// Initialize the CLKx with the found settings
+		pwm_set_clkx(pwm_clk_id, prescaler, divisor);
+		// Set the channel prescaler to the chosen CLKx
+		pwm_set_channel_prescaler(channel, pwm_channel_pres);
+		return 1; // All set (no error)
+	} else {
+		return 0; // parameter error
+	}
+}
+//TODO write a function to set the period based on a given frequency
+
+//uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t min_resolution,
+	//	uint32_t ) {
+
+//}

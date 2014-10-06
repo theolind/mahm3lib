@@ -1,6 +1,6 @@
 /**
  * @file
- * @brief Arduino Due PIN mapPINg
+ * @brief Arduino Due PIN mapping
  * @details This file is used for physical pins on the Arduino Due board
  * @author Hisham Ramish
  * @author Stefan Angelov

@@ -573,25 +573,6 @@ uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler);
  */
 uint8_t pwm_set_channel_period(uint32_t channel, uint32_t period);
 /**
- * The PWM peripheral has 13 different clocks. Among those, 11 are scaled down
- * clocks of the system clock and the two others are the more flexible clocks
- * that can be set to much lower freuencies than the prescalers. These clock go
- * by the name Clock A and Clock B. They are derived by the SYS_CLK_FREQ which
- * they prescale and the outcome of that they can further divide with a divisor
- * and achieve lower frequencies for the PWM peripheral. These clocks can be
- * turned off when not needed.
- *
- * This function will set the prescaler and divisor for the indicated clock.
- * If the prescaler is other than 0, the clock will be turned on.
- *
- * @param clock_id {The id for the clock to be set. Use prefix: PWM_CLK_ID_}
- * @param prescaler {Use one of the predefined prescalers.
- * Prefix: PWM_CLK_PRES_}
- * @param divisor {Use a value between 1 and 255.}
- * @return {error, 1 = SUCCESS and 0 = FAIL}
- */
-uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor);
-/**
  * This function will calculate the necessary register values and set everything
  * up for the given channel if successful. The function will seek to deliver
  * the highest resolution possible for the given frequency. It will not use any
@@ -634,6 +615,25 @@ uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency);
 uint8_t pwm_set_clkx_frequency(uint32_t channel, uint32_t frequency,
 		uint32_t pwm_clk_id);
 /**
+ * The PWM peripheral has 13 different clocks. Among those, 11 are scaled down
+ * clocks of the system clock and the two others are the more flexible clocks
+ * that can be set to much lower freuencies than the prescalers. These clock go
+ * by the name Clock A and Clock B. They are derived by the SYS_CLK_FREQ which
+ * they prescale and the outcome of that they can further divide with a divisor
+ * and achieve lower frequencies for the PWM peripheral. These clocks can be
+ * turned off when not needed.
+ *
+ * This function will set the prescaler and divisor for the indicated clock.
+ * If the prescaler is other than 0, the clock will be turned on.
+ *
+ * @param clock_id {The id for the clock to be set. Use prefix: PWM_CLK_ID_}
+ * @param prescaler {Use one of the predefined prescalers.
+ * Prefix: PWM_CLK_PRES_}
+ * @param divisor {Use a value between 1 and 255.}
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
+ */
+uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor);
+/**
  * Read what was earlier written to the channel
  *
  * @param channel {The channel to be enabled, use prefix: PWM_CHANNEL_}
@@ -674,19 +674,19 @@ uint32_t pwm_get_channel_alignment(uint32_t channel);
 uint8_t pwm_turn_off_clkx(uint8_t clock_id);
 /**
  * Shuts down the peripheral but keeps all settings
- * @return
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_shutdown(void);
-/**
- * Reset and turns off the peripheral
- * @return
- */
-uint8_t pwm_close(void);
 /**
  * Resets the peripheral and disables all channels
  * @return {error, 1 = SUCCESS and 0 = FAIL}
  */
 uint8_t pwm_reset(void);
+/**
+ * Reset and turns off the peripheral
+ * @return {error, 1 = SUCCESS and 0 = FAIL}
+ */
+uint8_t pwm_close(void);
 
 
 #endif /* PWM_H_ */

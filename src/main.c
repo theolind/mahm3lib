@@ -1,3 +1,4 @@
+#include "main.h"
 #include "unity/unity.h"
 #include "test_runner.h"
 
@@ -5,6 +6,7 @@
 #include "sam3x8e/pwm.h"
 #include "sam3x8e/pio.h"
 #include "sam3x8e/pmc.h"
+
 
 int main(void) {
 	// basic initialization of hardware and UART communication.

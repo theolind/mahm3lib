@@ -246,13 +246,13 @@ typedef struct pwm_reg_t {
 	uint32_t reserved1[2]; ///< Not used
 	uint32_t PWM_ELMR0; ///< Not used
 	uint32_t PWM_ELMR1; ///< Not used
-	uint32_t reserved2[10]; ///< Not used
+	uint32_t reserved2[11]; ///< Not used
 	uint32_t PWM_SMMR; ///< Not used
-	uint32_t reserved3[11]; ///< Not used
+	uint32_t reserved3[12]; ///< Not used
 	uint32_t PWM_WPCR; ///< Not used
 	uint32_t PWM_WPSR; ///< Not used
-	uint32_t reserved4[4]; ///< Not used
-	uint32_t reserved5[10]; ///< Not used
+	uint32_t reserved4[5]; ///< Not used
+	uint32_t Reserved_for_PDC_registers[11]; ///< Not used
 	uint32_t reserved6; ///< Not used
 	uint32_t PWM_CMPV0; ///< Not used
 	uint32_t PWM_CMPVUPD0; ///< Not used
@@ -286,7 +286,7 @@ typedef struct pwm_reg_t {
 	uint32_t PWM_CMPVUPD7; ///< Not used
 	uint32_t PWM_CMPM7; ///< Not used
 	uint32_t PWM_CMPMUPD7; ///< Not used
-	uint32_t reserved7[19]; ///< Not used
+	uint32_t reserved7[20]; ///< Not used
 
 	uint32_t PWM_CMR0; ///< PWM Channel Mode Register (Channel 0)
 	uint32_t PWM_CDTY0; ///< PWM Channel Duty Cycle Register (Channel 0)

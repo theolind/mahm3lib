@@ -11,15 +11,14 @@
  * independent of any API. These are mainly a collection of tested bitwise
  * operations on registers or memory.
  * @author Saeed Ghasemi
- * @since Since v0.3, get_position_of_first_highbit() has been added. And mask is
- * the preferred way of editing a register section.
+ * @since Since release-1, get_position_of_first_highbit() has been added. And
+ * mask is the preferred way of editing a register section.
  * @date 25 sep 2014
  * @pre Since they are stand-alone, there are no preconditions for their use.
  * @bug {Fully tested and bugfree.}
  */
 
 #include "bitwise_operations.h"
-
 #include "sam3x8e/uart.h"
 
 /**

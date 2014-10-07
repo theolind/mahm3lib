@@ -11,8 +11,8 @@
  * independent of any API. These are mainly a collection of tested bitwise
  * operations on registers or memory.
  * @author Saeed Ghasemi
- * @since Since v0.3, first_bit_position_of_mask() has been added. And mask is
- * the preferred way of editing a register section.
+ * @since Since release-1, first_bit_position_of_mask() has been added. And
+ * mask is the preferred way of editing a register section.
  * @date 25 sep 2014
  * @pre Since they are stand-alone, there are no preconditions for their use.
  * @bug Fully tested and bugfree.
@@ -23,10 +23,21 @@
 
 #include <stdint.h>
 
+/**
+ * The Master clock speed of the SAM3X8E microprocessor.
+ */
 #define SYS_CLK_FREQ		84000000
+
+///@{
+/**
+ * Standard commonly used definitions.
+ */
 #define TRUE				1
 #define FALSE				0
+///@}
 
+
+// Function Prototypes
 /**
  * This function will test to see if the specified bit in a register is set
  * high.

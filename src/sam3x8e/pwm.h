@@ -13,8 +13,10 @@
  * of the peripheral. The API does not stop any clock once it has started them.
  * @author Saeed Ghasemi
  * @date 28 sep 2014
- * @pre The API handles all of its dependencies on other peripherals
- * internally and will start other clocks in order to properly operate.
+ * @pre The API does not handle its dependencies on other peripherals
+ * internally and wont start the necessary clocks for it own operation. The
+ * programmer refer to the documentation for PMC and PIO to deal with the
+ * dependencies of this API on them.
  * @bug Manually tested all functions to comply with all demands.
  * The only problem is that the register set defined below is not working when
  * implemented. The register mapping currently working is non conventional.

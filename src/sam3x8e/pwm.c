@@ -21,7 +21,6 @@
  */
 
 #include "sam3x8e/bitwise_operations.h"
-#include "sam3x8e/pmc.h"
 #include "sam3x8e/pwm.h"
 
 ///\cond
@@ -84,14 +83,7 @@
 
 ///\endcond
 
-/*
- * Initialize the PWM peripheral with minimum requirements.
- */
-uint8_t pwm_init_peripheral_default() {
-	pmc_enable_peripheral_clock(ID_PWM);
-	pwm_reset();
-	return 1;
-}
+
 /*
  * This initialization function also takes in parameters for the two clocks
  * called CLK_A and CLK_B.
@@ -101,8 +93,6 @@ uint8_t pwm_init_peripheral_default() {
  * be set to select the output of theses clocks.
  */
 uint8_t pwm_init_peripheral(struct pwm_clk_setting clk_settings) {
-	pmc_enable_peripheral_clock(ID_PWM);
-	pwm_reset();
 	if (clk_settings.clkA_divisor != 0) {
 		pwm_set_clkx(PWM_CLK_ID_CLKA, clk_settings.clkA_prescaler,
 				clk_settings.clkA_divisor);

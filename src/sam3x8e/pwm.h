@@ -333,20 +333,12 @@ typedef struct pwm_channel_setting {
 
 // Function Prototypes
 /**
- * Default initialization for the PWM peripheral
- * This leaves clkA and clkB off and starts the peripheral clock.
- *
- * @return error, 1 = SUCCESS and 0 = FAIL
- * @pre This function requires the PMC API.
- */
-uint8_t pwm_init_peripheral_default(void);
-/**
  * Initialize the PWM peripheral with a structure containing clock_settings.
  * This function controls clkA and clkB and starts the peripheral clock.
  * It is recommended to use pwm_set_channel_frequency() to select a clock.
+ * This function does not reset the whole peripheral.
  *
  * @return error, 1 = SUCCESS and 0 = FAIL
- * @pre This function requires the PMC API.
  */
 uint8_t pwm_init_peripheral(struct pwm_clk_setting clk_settings);
 /**

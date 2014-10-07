@@ -23,6 +23,11 @@
 #ifndef PWM_H_
 #define PWM_H_
 
+#ifndef ID_H_
+#define ID_H_
+#include "sam3x8e/id.h"
+#endif
+
 ///@{
 /**
  * These defines are masks for the PWM channels and can be used as the channel

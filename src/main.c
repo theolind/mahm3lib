@@ -1,4 +1,5 @@
 #include "unity/unity.h"
+#include "unity/unity_hw_setup.h"
 #include "test_runner.h"
 
 int main(void) {
@@ -10,4 +11,3 @@ int main(void) {
 
 	return 0;
 }
-

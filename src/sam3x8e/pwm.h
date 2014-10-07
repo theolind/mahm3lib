@@ -23,20 +23,25 @@
 #ifndef PWM_H_
 #define PWM_H_
 
+#ifndef ID_H_
+#define ID_H_
+#include "sam3x8e/id.h"
+#endif
+
 ///@{
 /**
  * These defines are masks for the PWM channels and can be used as the channel
  * input of every function.
  */
-#define PWM_CHANNEL_0_MASK				(1<<0)
-#define PWM_CHANNEL_1_MASK				(1<<1)
-#define PWM_CHANNEL_2_MASK				(1<<2)
-#define PWM_CHANNEL_3_MASK				(1<<3)
-#define PWM_CHANNEL_4_MASK				(1<<4)
-#define PWM_CHANNEL_5_MASK				(1<<5)
-#define PWM_CHANNEL_6_MASK				(1<<6)
-#define PWM_CHANNEL_7_MASK				(1<<7)
-#define PWM_CHANNEL_ALL_MASK			(0xFF)
+#define PWM_CHANNEL_0				(0)
+#define PWM_CHANNEL_1				(1)
+#define PWM_CHANNEL_2				(2)
+#define PWM_CHANNEL_3				(3)
+#define PWM_CHANNEL_4				(4)
+#define PWM_CHANNEL_5				(5)
+#define PWM_CHANNEL_6				(6)
+#define PWM_CHANNEL_7				(7)
+#define PWM_CHANNEL_ALL				(255)
 ///@}
 ///@{
 /**
@@ -333,20 +338,12 @@ typedef struct pwm_channel_setting {
 
 // Function Prototypes
 /**
- * Default initialization for the PWM peripheral
- * This leaves clkA and clkB off and starts the peripheral clock.
- *
- * @return error, 1 = SUCCESS and 0 = FAIL
- * @pre This function requires the PMC API.
- */
-uint8_t pwm_init_peripheral_default(void);
-/**
  * Initialize the PWM peripheral with a structure containing clock_settings.
  * This function controls clkA and clkB and starts the peripheral clock.
  * It is recommended to use pwm_set_channel_frequency() to select a clock.
+ * This function does not reset the whole peripheral.
  *
  * @return error, 1 = SUCCESS and 0 = FAIL
- * @pre This function requires the PMC API.
  */
 uint8_t pwm_init_peripheral(struct pwm_clk_setting clk_settings);
 /**
@@ -532,11 +529,6 @@ uint32_t pwm_get_channel_alignment(uint32_t channel);
  * @return error, 1 = SUCCESS and 0 = FAIL
  */
 uint8_t pwm_turn_off_clkx(uint8_t clock_id);
-/**
- * Shuts down the peripheral but keeps all settings
- * @return error, 1 = SUCCESS and 0 = FAIL
- */
-uint8_t pwm_shutdown(void);
 /**
  * Resets the peripheral and disables all channels
  * @return error, 1 = SUCCESS and 0 = FAIL

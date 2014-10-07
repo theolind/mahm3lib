@@ -46,7 +46,7 @@
  * @param bit Specifies the bit-number in the register
  * @return The return will be TRUE or FLASE
  */
-uint8_t is_bit_high(uint32_t *reg, uint8_t bit);
+uint8_t get_bit(uint32_t *reg, uint8_t bit);
 /**
  * This function return the bit-number of the first bit being high in a 32-bit
  * long value. The main purpose of this function is to find the start-bit of a

@@ -1,8 +1,7 @@
 /**
  * @file bitwise_operations.h
- * @anchor <bitwise_operations>
  * @brief A storage place for commonly used bitwise operation.
- * @details {This class holds some commonly used bitwise operation.
+ * @details This class holds some commonly used bitwise operation.
  * This file helps avoiding recreation of function with the same functionality.
  * Mostly intended for bitwise operation and other small operations and
  * generally functions that are common for the different APIs but not linked to
@@ -10,15 +9,13 @@
  * These function can be used both internally and as well as externally by the
  * end programmer. Its functions fall into the definition of stand-alone and
  * independent of any API. These are mainly a collection of tested bitwise
- * operations on registers or memory.}
- * @author {Saeed Ghasemi}
- * @version {v0.4}
- * @since {Since v0.3, first_bit_position_of_mask() has been added. And mask is
- * the preferred way of editing a register section and the use of start_bit is
- * deprecated.}
- * @date {25 sep 2014}
- * @pre {Since they are stand-alone, there are no preconditions for their use.}
- * @bug {Not yet fully tested.}
+ * operations on registers or memory.
+ * @author Saeed Ghasemi
+ * @since Since v0.3, first_bit_position_of_mask() has been added. And mask is
+ * the preferred way of editing a register section.
+ * @date 25 sep 2014
+ * @pre Since they are stand-alone, there are no preconditions for their use.
+ * @bug Fully tested and bugfree.
  */
 
 #ifndef _BITWISE_OPE_H_

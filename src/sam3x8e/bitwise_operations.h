@@ -11,7 +11,7 @@
  * independent of any API. These are mainly a collection of tested bitwise
  * operations on registers or memory.
  * @author Saeed Ghasemi
- * @since Since release-1, first_bit_position_of_mask() has been added. And
+ * @since Since release-1, get_position_of_first_highbit() has been added. And
  * mask is the preferred way of editing a register section.
  * @date 25 sep 2014
  * @pre Since they are stand-alone, there are no preconditions for their use.
@@ -49,12 +49,15 @@
 uint8_t is_bit_high(uint32_t *reg, uint8_t bit);
 /**
  * This function return the bit-number of the first bit being high in a 32-bit
- * long value. The main porpose of this function is to find the start-bit of a
+ * long value. The main purpose of this function is to find the start-bit of a
  * given mask. The start-bit can then be used to left-bit-shift a value into
  * position relative to a section in a register.
  *
- * @param mask The mask to be examined
- * @return Bit-number of the first position
+ * Be sure not to pass mask = 0 into this function, the output will be
+ * misleading and equal to 0.
+ *
+ * @param mask {The mask to be examined}
+ * @return {bit-number of the first position (0 could indicate error)}
  */
 uint8_t get_position_of_first_highbit(uint32_t mask);
 /**
@@ -68,16 +71,17 @@ uint8_t get_position_of_first_highbit(uint32_t mask);
  */
 uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value);
 /**
- * This function will modify a section of a given register as indicated by
- * start_bit and length with the value specified in 'value'.
+ * This function modifies a section of a register, reg. The section is defined
+ * by 'start_bit' and 'length' with the value in 'value'. A register mask is
+ * not needed.
  *
- * Define the parameters like this:
- * Ex: Having -> 0b00011000 -> start_bit = 3, length = 2
+ * Define the parameters like  this example:
+ * Ex: 0b00011000 -> start_bit = 3, length = 2
  *
- * @param reg This specifies a pointer to the register
- * @param start_bit The position of the first bit of the section
+ * @param reg The pointer to the register (not its value)
+ * @param start_bit Position of the first bit of the section in the register
  * @param length The length of the section
- * @param value The value the section must store
+ * @param value The value to be inserted in the register-section
  * @return error (1 = SUCCESS and 0 = FAIL)
  */
 uint8_t set_section_in_register2(uint32_t *reg, uint32_t start_bit,
@@ -100,7 +104,7 @@ uint32_t get_section_in_register(uint32_t *reg, uint32_t mask);
  */
 uint8_t clear_register(uint32_t *reg);
 /**
- * This function will set the entire register.
+ * This function will set the entire register to 1.
  *
  * @param reg The pointer to the register to be set.
  * @return error (1 = SUCCESS and 0 = FAIL)

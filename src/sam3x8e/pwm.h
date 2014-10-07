@@ -96,7 +96,7 @@
  * Parameters are being defined like this:
  * [PERIPHERAL]_[SECTION]_VALUE
  */
-#define PWM_PRES_MCK_DIV_1				(0b0000) ///sdfs
+#define PWM_PRES_MCK_DIV_1				(0b0000)
 #define PWM_PRES_MCK_DIV_2				(0b0001)
 #define PWM_PRES_MCK_DIV_4				(0b0010)
 #define PWM_PRES_MCK_DIV_8				(0b0011)
@@ -123,20 +123,12 @@
  * @typedef
  * This structure is used with pwm_init() to set the settings for the clocks A
  * and B of the PWM peripheral.
- * @param clkA_prescaler {This is the prescaler for clock A.
- * Parameter prefix: PWM_CLK_PRES_}
- * @param clkA_divisor {This is the divisor for clock A. Set this between 0 and
- * 255. 0 will turn the clock off.}
- * @param clkB {This is the prescaler for clock B.
- * Parameter prefix: PWM_CLK_PRES_}
- * @param clkA_divisor {This is the divisor for clock B. Set this between 0 and
- * 255. 0 will turn the clock off.}
  */
 typedef struct pwm_clk_setting{
-	uint32_t clkA_prescaler;
-	uint32_t clkA_divisor;
-	uint32_t clkB_prescaler;
-	uint32_t clkB_divisor;
+	uint32_t clkA_prescaler;///<This is the prescaler for clock A. Parameter prefix: PWM_CLK_PRES_
+	uint32_t clkA_divisor;///<This is the divisor for clock A. Set this between 0 and 255. 0 will turn the clock off.
+	uint32_t clkB_prescaler;///<This is the prescaler for clock B. Parameter prefix: PWM_CLK_PRES_
+	uint32_t clkB_divisor; ///<This is the divisor for clock B. Set this between 0 and 255. 0 will turn the clock off.
 }pwm_clk_setting;
 /**
  * @typedef (pwm_channel_setting)

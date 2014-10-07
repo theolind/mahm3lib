@@ -13,8 +13,10 @@
  * of the peripheral. The API does not stop any clock once it has started them.
  * @author Saeed Ghasemi
  * @date 28 sep 2014
- * @pre The API handles all of its dependencies on other peripherals
- * internally and will start other clocks in order to properly operate.
+ * @pre The API does not handle its dependencies on other peripherals
+ * internally and wont start the necessary clocks for it own operation. The
+ * programmer refer to the documentation for PMC and PIO to deal with the
+ * dependencies of this API on them.
  * @bug Manually tested all functions to comply with all demands.
  * The only problem is that the register set defined below is not working when
  * implemented. The register mapping currently working is non conventional.
@@ -35,50 +37,50 @@
  * the pins are being defined like this:
  * PIN_PWM[PIN POLAITY][CHANNEL NUMBER]_P[PORT][PIN NUMBER]_[PIO MUX PERIPHERAL]
  */
-#define PIN_PWMH0_PA8_B
-#define PIN_PWMH0_PB12_B
-#define PIN_PWMH0_PC3_B
-#define PIN_PWMH0_PE15_A
-#define PIN_PWMH1_PA19_B
-#define PIN_PWMH1_PB13_B
-#define PIN_PWMH1_PC5_B
-#define PIN_PWMH1_PE16_A
-#define PIN_PWMH2_PA13_B
-#define PIN_PWMH2_PB14_B
-#define PIN_PWMH2_PC7_B
-#define PIN_PWMH3_PA9_B
-#define PIN_PWMH3_PB15_B
-#define PIN_PWMH3_PC9_B
-#define PIN_PWMH3_PF3_A
-#define PIN_PWMH4_PC20_B
-#define PIN_PWMH4_PE20_A
-#define PIN_PWMH5_PC19_B
-#define PIN_PWMH5_PE22_A
-#define PIN_PWMH6_PC18_B
-#define PIN_PWMH6_PE24_A
-#define PIN_PWMH7_PE26_A
-#define PIN_PWML0_PA21_B
-#define PIN_PWML0_PB16_B
-#define PIN_PWML0_PC2_B
-#define PIN_PWML0_PE18_A
-#define PIN_PWML1_PA12_B
-#define PIN_PWML1_PB17_B
-#define PIN_PWML1_PC4_B
-#define PIN_PWML2_PA20_B
-#define PIN_PWML2_PB18_B
-#define PIN_PWML2_PC6_B
-#define PIN_PWML2_PE17_A
-#define PIN_PWML3_PA0_B
-#define PIN_PWML3_PB19_B
-#define PIN_PWML3_PC8_B
-#define PIN_PWML4_PC21_B
-#define PIN_PWML4_PE19_A
-#define PIN_PWML5_PC22_B
-#define PIN_PWML5_PE21_A
-#define PIN_PWML6_PC23_B
-#define PIN_PWML6_PE23_A
-#define PIN_PWML7_PC24_B
-#define PIN_PWML7_PE25_A
+#define PIN_PWMH0_PA8_B			(8)
+#define PIN_PWMH0_PB12_B		(12)
+#define PIN_PWMH0_PC3_B			(3)
+#define PIN_PWMH0_PE15_A		(15)
+#define PIN_PWMH1_PA19_B		(19)
+#define PIN_PWMH1_PB13_B		(13)
+#define PIN_PWMH1_PC5_B			(5)
+#define PIN_PWMH1_PE16_A		(16)
+#define PIN_PWMH2_PA13_B		(13)
+#define PIN_PWMH2_PB14_B		(14)
+#define PIN_PWMH2_PC7_B			(7)
+#define PIN_PWMH3_PA9_B			(9)
+#define PIN_PWMH3_PB15_B		(15)
+#define PIN_PWMH3_PC9_B			(9)
+#define PIN_PWMH3_PF3_A			(3)
+#define PIN_PWMH4_PC20_B		(20)
+#define PIN_PWMH4_PE20_A		(20)
+#define PIN_PWMH5_PC19_B		(19)
+#define PIN_PWMH5_PE22_A		(22)
+#define PIN_PWMH6_PC18_B		(18)
+#define PIN_PWMH6_PE24_A		(24)
+#define PIN_PWMH7_PE26_A		(26)
+#define PIN_PWML0_PA21_B		(21)
+#define PIN_PWML0_PB16_B		(16)
+#define PIN_PWML0_PC2_B			(2)
+#define PIN_PWML0_PE18_A		(18)
+#define PIN_PWML1_PA12_B		(12)
+#define PIN_PWML1_PB17_B		(17)
+#define PIN_PWML1_PC4_B			(4)
+#define PIN_PWML2_PA20_B		(20)
+#define PIN_PWML2_PB18_B		(18)
+#define PIN_PWML2_PC6_B			(6)
+#define PIN_PWML2_PE17_A		(17)
+#define PIN_PWML3_PA0_B			(0)
+#define PIN_PWML3_PB19_B		(19)
+#define PIN_PWML3_PC8_B			(8)
+#define PIN_PWML4_PC21_B		(21)
+#define PIN_PWML4_PE19_A		(19)
+#define PIN_PWML5_PC22_B		(22)
+#define PIN_PWML5_PE21_A		(21)
+#define PIN_PWML6_PC23_B		(23)
+#define PIN_PWML6_PE23_A		(23)
+#define PIN_PWML7_PC24_B		(24)
+#define PIN_PWML7_PE25_A		(25)
 ///@}
 
 ///@{
@@ -252,7 +254,7 @@ typedef struct pwm_reg_t {
 	uint32_t PWM_WPCR; ///< Not used
 	uint32_t PWM_WPSR; ///< Not used
 	uint32_t reserved4[5]; ///< Not used
-	uint32_t Reserved_for_PDC_registers[11]; ///< Not used
+	uint32_t Reserved_for_PDC_registers5[11]; ///< Not used
 	uint32_t reserved6; ///< Not used
 	uint32_t PWM_CMPV0; ///< Not used
 	uint32_t PWM_CMPVUPD0; ///< Not used

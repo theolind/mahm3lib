@@ -29,7 +29,7 @@
  * @param bit Specifies the bit-number in the register
  * @return The return will be TRUE or FLASE
  */
-uint8_t is_bit_high(uint32_t *reg, uint8_t bit) {
+uint8_t get_bit(uint32_t *reg, uint8_t bit) {
 	return (uint8_t) (((*reg >> bit) & 0x01U) == 0x1U);
 }
 /*

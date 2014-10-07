@@ -172,7 +172,7 @@ uint8_t pwm_channel_disable(uint32_t channel) {
  * This function will read the status of a single channel.
  */
 uint8_t pwm_channel_status(uint32_t channel) {
-	return is_bit_high(&PWM_SR, get_position_of_first_highbit(channel));
+	return get_bit(&PWM_SR, get_position_of_first_highbit(channel));
 }
 /*
  * Set the channel polarity.

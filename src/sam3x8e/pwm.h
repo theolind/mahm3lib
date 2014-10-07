@@ -31,7 +31,7 @@
 ///@{
 /**
  * These define the pins that can be used with the PWM peripheral.
- * Not all the pins are nessesarily broaken out on a peticular board.
+ * Not all the pins are necessarily broken out on a particular board.
  * the pins are being defined like this:
  * PIN_PWM[PIN POLAITY][CHANNEL NUMBER]_P[PORT][PIN NUMBER]_[PIO MUX PERIPHERAL]
  */

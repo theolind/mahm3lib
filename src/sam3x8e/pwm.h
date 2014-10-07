@@ -30,6 +30,59 @@
 
 ///@{
 /**
+ * These define the pins that can be used with the PWM peripheral.
+ * Not all the pins are necessarily broken out on a particular board.
+ * the pins are being defined like this:
+ * PIN_PWM[PIN POLAITY][CHANNEL NUMBER]_P[PORT][PIN NUMBER]_[PIO MUX PERIPHERAL]
+ */
+#define PIN_PWMH0_PA8_B
+#define PIN_PWMH0_PB12_B
+#define PIN_PWMH0_PC3_B
+#define PIN_PWMH0_PE15_A
+#define PIN_PWMH1_PA19_B
+#define PIN_PWMH1_PB13_B
+#define PIN_PWMH1_PC5_B
+#define PIN_PWMH1_PE16_A
+#define PIN_PWMH2_PA13_B
+#define PIN_PWMH2_PB14_B
+#define PIN_PWMH2_PC7_B
+#define PIN_PWMH3_PA9_B
+#define PIN_PWMH3_PB15_B
+#define PIN_PWMH3_PC9_B
+#define PIN_PWMH3_PF3_A
+#define PIN_PWMH4_PC20_B
+#define PIN_PWMH4_PE20_A
+#define PIN_PWMH5_PC19_B
+#define PIN_PWMH5_PE22_A
+#define PIN_PWMH6_PC18_B
+#define PIN_PWMH6_PE24_A
+#define PIN_PWMH7_PE26_A
+#define PIN_PWML0_PA21_B
+#define PIN_PWML0_PB16_B
+#define PIN_PWML0_PC2_B
+#define PIN_PWML0_PE18_A
+#define PIN_PWML1_PA12_B
+#define PIN_PWML1_PB17_B
+#define PIN_PWML1_PC4_B
+#define PIN_PWML2_PA20_B
+#define PIN_PWML2_PB18_B
+#define PIN_PWML2_PC6_B
+#define PIN_PWML2_PE17_A
+#define PIN_PWML3_PA0_B
+#define PIN_PWML3_PB19_B
+#define PIN_PWML3_PC8_B
+#define PIN_PWML4_PC21_B
+#define PIN_PWML4_PE19_A
+#define PIN_PWML5_PC22_B
+#define PIN_PWML5_PE21_A
+#define PIN_PWML6_PC23_B
+#define PIN_PWML6_PE23_A
+#define PIN_PWML7_PC24_B
+#define PIN_PWML7_PE25_A
+///@}
+
+///@{
+/**
  * These defines are masks for the PWM channels and can be used as the channel
  * input of every function.
  */
@@ -335,7 +388,7 @@ typedef struct pwm_channel_setting {
 ///@}
 
 
-
+///@{
 // Function Prototypes
 /**
  * Initialize the PWM peripheral with a structure containing clock_settings.
@@ -390,6 +443,8 @@ uint8_t pwm_channel_disable(uint32_t channel);
  * @return 1 if the channel is enabled, 0 if it is disabled
  */
 uint8_t pwm_channel_status(uint32_t channel);
+///@}
+///@{
 /**
  * Set the channel polarity.
  * This can reverse the duty cycle. Important when using the PWMLx pins.
@@ -491,14 +546,6 @@ uint8_t pwm_set_clkx_frequency(uint32_t channel, uint32_t frequency,
  */
 uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor);
 /**
- * Read what was earlier written to the channel
- *
- * @param channel The channel to be enabled, use prefix: PWM_CHANNEL_
- * @return Previously set duty cycle (if 0 is received then it could mean
- * error)
- */
-uint32_t pwm_read(uint32_t channel);
-/**
  * Writes an output to a given channel by setting the channel duty cycle.
  * The duty cycle may not exceed the value of period (CPRD) in PWM_CPRDx.
  * Use pwm_get_channel_period() to read this register and get the maximum
@@ -509,6 +556,16 @@ uint32_t pwm_read(uint32_t channel);
  * @return error, 1 = SUCCESS and 0 = FAIL
  */
 uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle);
+///@}
+///@{
+/**
+ * Read what was earlier written to the channel
+ *
+ * @param channel The channel to be enabled, use prefix: PWM_CHANNEL_
+ * @return Previously set duty cycle (if 0 is received then it could mean
+ * error)
+ */
+uint32_t pwm_read(uint32_t channel);
 /**
  * This function will return the maximum value that the duty cycle can be set
  * to. The highest value that this function can return is 65535.
@@ -522,6 +579,8 @@ uint32_t pwm_get_channel_period(uint32_t channel);
  * @return Can be either PWM_CHANNEL_ALIGN_CENTER or PWM_CHANNEL_ALIGN_LEFT
  */
 uint32_t pwm_get_channel_alignment(uint32_t channel);
+///@}
+///@{
 /**
  * Turns off one of two clocks in PWM that are called clkA and clkB.
  *
@@ -539,5 +598,6 @@ uint8_t pwm_reset(void);
  * @return error, 1 = SUCCESS and 0 = FAIL
  */
 uint8_t pwm_close(void);
+///@}
 
 #endif /* PWM_H_ */

@@ -273,13 +273,13 @@ uint32_t pio_read_port(pio_reg_t *port);
  * (These refer to the board independent pin mapping and will be available when
  * the API is included.)
  *
- * @author {Saeed Ghasemi}
- * @param port {This is the pio port of the pin to be multiplexed.}
- * @param periph {Point to your chosen peripheral. PIO_PERIPH_A or B}
- * @param pin_number {This is the pin number in the port register.
- * Start with prefix: PIN_[peripheral] to get to predefined pins.}
+ * @author Saeed Ghasemi
+ * @param port This is the pio port of the pin to be multiplexed.
+ * @param periph Point to your chosen peripheral. PIO_PERIPH_A or B.
+ * @param pin_number This is the pin number in the port register.
+ * Start with prefix: PIN_[peripheral] to get to predefined pins.
  * @return error (1  = SUCCESS, 0 = FAIL)
- * @bug {Not yet tested. All ports will be included after initial testing.}
+ * @bug Tested and bugfree!
  */
 uint8_t pio_conf_pin_to_peripheral(pio_reg_t *port, uint32_t periph,
 		uint8_t pin_number);

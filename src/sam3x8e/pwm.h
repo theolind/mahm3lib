@@ -33,15 +33,15 @@
  * These defines are masks for the PWM channels and can be used as the channel
  * input of every function.
  */
-#define PWM_CHANNEL_0_MASK				(1<<0)
-#define PWM_CHANNEL_1_MASK				(1<<1)
-#define PWM_CHANNEL_2_MASK				(1<<2)
-#define PWM_CHANNEL_3_MASK				(1<<3)
-#define PWM_CHANNEL_4_MASK				(1<<4)
-#define PWM_CHANNEL_5_MASK				(1<<5)
-#define PWM_CHANNEL_6_MASK				(1<<6)
-#define PWM_CHANNEL_7_MASK				(1<<7)
-#define PWM_CHANNEL_ALL_MASK			(0xFF)
+#define PWM_CHANNEL_0				(0)
+#define PWM_CHANNEL_1				(1)
+#define PWM_CHANNEL_2				(2)
+#define PWM_CHANNEL_3				(3)
+#define PWM_CHANNEL_4				(4)
+#define PWM_CHANNEL_5				(5)
+#define PWM_CHANNEL_6				(6)
+#define PWM_CHANNEL_7				(7)
+#define PWM_CHANNEL_ALL				(255)
 ///@}
 ///@{
 /**
@@ -529,11 +529,6 @@ uint32_t pwm_get_channel_alignment(uint32_t channel);
  * @return error, 1 = SUCCESS and 0 = FAIL
  */
 uint8_t pwm_turn_off_clkx(uint8_t clock_id);
-/**
- * Shuts down the peripheral but keeps all settings
- * @return error, 1 = SUCCESS and 0 = FAIL
- */
-uint8_t pwm_shutdown(void);
 /**
  * Resets the peripheral and disables all channels
  * @return error, 1 = SUCCESS and 0 = FAIL

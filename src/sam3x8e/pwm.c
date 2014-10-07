@@ -25,6 +25,11 @@
 
 ///\cond
 /*
+ * Distance between channel registers
+ */
+#define ch_dis		(0x20U)
+
+/*
  *  Necessary registers addressed by incrementing the base address by an
  *  register-specific offset.
  */
@@ -169,14 +174,18 @@ uint8_t pwm_channel_status(uint32_t channel) {
  * This can reverse the duty cycle. Important when using the PWMLx pins.
  */
 uint8_t pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity) {
+	// PWM_CMR0 + 0x20 * 3 = PWM_CMR3
+	return set_section_in_register((&PWM_CMR0)+ch_dis*channel, PWM_CMRx_CPOL_MASK,
+			pwm_polarity);
+	/*
 	switch (channel) {
-	case PWM_CHANNEL_0_MASK:
-		set_section_in_register(&PWM_CMR0, PWM_CMRx_CPOL_MASK, pwm_polarity);
+	case PWM_CHANNEL_0:
+
 		break;
-	case PWM_CHANNEL_1_MASK:
+	case PWM_CHANNEL_1:
 		set_section_in_register(&PWM_CMR1, PWM_CMRx_CPOL_MASK, pwm_polarity);
 		break;
-	case PWM_CHANNEL_2_MASK:
+	case PWM_CHANNEL_2:
 		set_section_in_register(&PWM_CMR2, PWM_CMRx_CPOL_MASK, pwm_polarity);
 		break;
 	case PWM_CHANNEL_3_MASK:
@@ -199,11 +208,15 @@ uint8_t pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity) {
 		break;
 	}
 	return 1;
+	*/
 }
 /*
  * Set the channel alignment
  */
 uint8_t pwm_set_channel_alignment(uint32_t channel, uint32_t pwm_alignment) {
+
+	return set_section_in_register((&PWM_CMR0)+ch_dis*channel, PWM_CMRx_CALG_MASK, pwm_alignment);
+	/*
 	switch (channel) {
 	case PWM_CHANNEL_0_MASK:
 		set_section_in_register(&PWM_CMR0, PWM_CMRx_CALG_MASK, pwm_alignment);
@@ -234,11 +247,16 @@ uint8_t pwm_set_channel_alignment(uint32_t channel, uint32_t pwm_alignment) {
 		break;
 	}
 	return 1;
+	*/
 }
 /*
  * Set the channel prescaler
  */
 uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
+
+	return set_section_in_register((&PWM_CMR0)+ch_dis*channel,
+			PWM_CMRx_CPRE_MASK, prescaler);
+	/*
 	uint8_t error = 0;
 	switch (channel) {
 	case PWM_CHANNEL_0_MASK:
@@ -278,6 +296,7 @@ uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
 		break;
 	}
 	return error;
+	*/
 }
 /*
  * This function will set the period value used by a given PWM channel.
@@ -286,6 +305,10 @@ uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
  * will set the period for you.
  */
 uint8_t pwm_set_channel_period(uint32_t channel, uint32_t period) {
+
+	return set_section_in_register((&PWM_CPRDUPD0)+ch_dis*channel, PWM_CPRDUPDx_CPRDUPD_MASK,
+						period);
+	/*
 	switch (channel) {
 	case PWM_CHANNEL_0_MASK:
 		if (pwm_channel_status(PWM_CHANNEL_0_MASK)) {
@@ -356,6 +379,7 @@ uint8_t pwm_set_channel_period(uint32_t channel, uint32_t period) {
 		break;
 	}
 	return 1;
+	*/
 }
 /*
  * This function will calculate the nessessary prescaler and period to set the
@@ -479,6 +503,10 @@ uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor) {
  * This function reads the earlier written duty cycle to the channel.
  */
 uint32_t pwm_read(uint32_t channel) {
+
+	return get_section_in_register((&PWM_CDTY0)+ch_dis*channel,
+			PWM_CDTYx_CDTY_MASK);
+	/*
 	switch (channel) {
 	case PWM_CHANNEL_0_MASK:
 		return get_section_in_register(&PWM_CDTY0, PWM_CDTYx_CDTY_MASK);
@@ -509,11 +537,16 @@ uint32_t pwm_read(uint32_t channel) {
 		break;
 	}
 	return 1;
+	*/
 }
 /*
  * Writes an output to a given channel by setting the channel duty cycle.
  */
 uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
+
+	return set_section_in_register((&PWM_CDTYUPD0)+ch_dis*channel,
+			PWM_CDTYUPDx_CDTYUPD_MASK, duty_cycle);
+	/*
 	switch (channel) {
 	case PWM_CHANNEL_0_MASK:
 		if (pwm_channel_status(PWM_CHANNEL_0_MASK)) {
@@ -592,12 +625,17 @@ uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
 		break;
 	}
 	return 1;
+	*/
 }
 /*
  * This channel reads the maximum allowed duty cycle for the channel.
  * This is also called channel resolution.
  */
 uint32_t pwm_get_channel_period(uint32_t channel) {
+
+	return get_section_in_register((&PWM_CPRD0)+ch_dis*channel,
+			PWM_CPRDx_CPRD_MASK);
+	/*
 	switch (channel) {
 	case PWM_CHANNEL_0_MASK:
 		return get_section_in_register(&PWM_CPRD0, PWM_CPRDx_CPRD_MASK);
@@ -628,11 +666,16 @@ uint32_t pwm_get_channel_period(uint32_t channel) {
 		break;
 	}
 	return 0;
+	*/
 }
 /*
  * This function reads the alignment og the channel.
  */
 uint32_t pwm_get_channel_alignment(uint32_t channel) {
+
+	return get_section_in_register((&PWM_CMR0)+ch_dis*channel,
+			PWM_CMRx_CALG_MASK);
+	/*
 	switch (channel) {
 	case PWM_CHANNEL_0_MASK:
 		return get_section_in_register(&PWM_CMR0, PWM_CMRx_CALG_MASK);
@@ -663,6 +706,7 @@ uint32_t pwm_get_channel_alignment(uint32_t channel) {
 		break;
 	}
 	return 0;
+	*/
 }
 /*
  * Turns off clock A or B.
@@ -680,17 +724,10 @@ uint8_t pwm_turn_off_clkx(uint8_t clock_id) {
 	return 0;
 }
 /*
- * Shuts down the peripheral but keeps all settings
- */
-uint8_t pwm_shutdown() {
-	pmc_disable_peripheral_clock(ID_PWM);
-	return 1;
-}
-/*
  * Resets the peripheral and disables all channels
  */
 uint8_t pwm_reset() {
-	pwm_channel_disable(PWM_CHANNEL_ALL_MASK);
+	pwm_channel_disable(PWM_CHANNEL_ALL << 0);
 
 	clear_register(&PWM_CLK);
 

@@ -549,9 +549,9 @@ uint8_t pwm_set_clkx_frequency(uint32_t channel, uint32_t frequency,
 uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor);
 /**
  * Writes an output to a given channel by setting the channel duty cycle.
- * The duty cycle may not exceed the value of period (CPRD) in PWM_CPRDx.
- * Use pwm_get_channel_period() to read this register and get the maximum
- * duty cycle allowed.
+ * The duty cycle may not exceed the value of period (CPRD) in PWM_CPRDx, which
+ * is the maximum duty cycle.
+ * Use pwm_get_channel_period() to get the maximum duty cycle.
  *
  * @param channel The channel to be enabled, use prefix: PWM_CHANNEL_
  * @param duty_cycle must be between 0 and period.
@@ -594,9 +594,9 @@ uint8_t pwm_turn_off_clkx(uint8_t clock_id);
  * Resets the channel and disables it
  * @return error, 1 = SUCCESS and 0 = FAIL
  */
-uint8_t pwm_reset_channel(void);
+uint8_t pwm_reset_channel(uint32_t channel);
 /**
- * Resets the peripheral and disables all channels
+ * Disables and resets all channels and the peripheral.
  * @return error, 1 = SUCCESS and 0 = FAIL
  */
 uint8_t pwm_reset_peripheral(void);

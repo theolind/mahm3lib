@@ -157,7 +157,7 @@ uint8_t pwm_channel_enable(uint32_t channel) {
  */
 uint8_t pwm_channel_disable(uint32_t channel) {
 	if (pwm_channel_status(channel)) {
-		set_section_in_register(&PWM_DIS, (1<<channel), 1);
+		set_section_in_register(&PWM_DIS, channel, 1);
 		while (pwm_channel_status(channel)) {
 		}
 	}
@@ -167,7 +167,7 @@ uint8_t pwm_channel_disable(uint32_t channel) {
  * This function will read the status of a single channel.
  */
 uint8_t pwm_channel_status(uint32_t channel) {
-	return get_bit(&PWM_SR, channel);
+	return get_bit(&PWM_SR, get_position_of_first_highbit(channel));
 }
 /*
  * Set the channel polarity.
@@ -179,13 +179,12 @@ uint8_t pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity) {
 	//		PWM_CMRx_CPOL_MASK, pwm_polarity);
 
 	switch (channel) {
-	case PWM_CHANNEL_0:
-
+	case PWM_CHANNEL_0_MASK:
 		break;
-	case PWM_CHANNEL_1:
+	case PWM_CHANNEL_1_MASK:
 		set_section_in_register(&PWM_CMR1, PWM_CMRx_CPOL_MASK, pwm_polarity);
 		break;
-	case PWM_CHANNEL_2:
+	case PWM_CHANNEL_2_MASK:
 		set_section_in_register(&PWM_CMR2, PWM_CMRx_CPOL_MASK, pwm_polarity);
 		break;
 	case PWM_CHANNEL_3_MASK:
@@ -503,7 +502,7 @@ uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor) {
 /*
  * This function reads the earlier written duty cycle to the channel.
  */
-uint32_t pwm_read(uint32_t channel) {
+uint32_t pwm_channel_read(uint32_t channel) {
 
 	//return get_section_in_register((&PWM_CDTY0)+ch_dis*channel,
 	//		PWM_CDTYx_CDTY_MASK);
@@ -678,13 +677,13 @@ uint32_t pwm_get_channel_alignment(uint32_t channel) {
 	//		PWM_CMRx_CALG_MASK);
 
 	switch (channel) {
-	case PWM_CHANNEL_0:
+	case PWM_CHANNEL_0_MASK:
 		return get_section_in_register(&PWM_CMR0, PWM_CMRx_CALG_MASK);
 		break;
-	case PWM_CHANNEL_1:
+	case PWM_CHANNEL_1_MASK:
 		return get_section_in_register(&PWM_CMR1, PWM_CMRx_CALG_MASK);
 		break;
-	case PWM_CHANNEL_2:
+	case PWM_CHANNEL_2_MASK:
 		return get_section_in_register(&PWM_CMR2, PWM_CMRx_CALG_MASK);
 		break;
 	case PWM_CHANNEL_3_MASK:

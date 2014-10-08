@@ -88,15 +88,15 @@
  * These defines are masks for the PWM channels and can be used as the channel
  * input of every function.
  */
-#define PWM_CHANNEL_0				(0)
-#define PWM_CHANNEL_1				(1)
-#define PWM_CHANNEL_2				(2)
-#define PWM_CHANNEL_3				(3)
-#define PWM_CHANNEL_4				(4)
-#define PWM_CHANNEL_5				(5)
-#define PWM_CHANNEL_6				(6)
-#define PWM_CHANNEL_7				(7)
-#define PWM_CHANNEL_ALL				(255)
+#define PWM_CHANNEL_0_MASK				(0)
+#define PWM_CHANNEL_1_MASK				(1)
+#define PWM_CHANNEL_2_MASK				(2)
+#define PWM_CHANNEL_3_MASK				(3)
+#define PWM_CHANNEL_4_MASK				(4)
+#define PWM_CHANNEL_5_MASK				(5)
+#define PWM_CHANNEL_6_MASK				(6)
+#define PWM_CHANNEL_7_MASK				(7)
+#define PWM_CHANNEL_ALL					(255)
 ///@}
 ///@{
 /**
@@ -567,7 +567,7 @@ uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle);
  * @return Previously set duty cycle (if 0 is received then it could mean
  * error)
  */
-uint32_t pwm_read(uint32_t channel);
+uint32_t pwm_channel_read(uint32_t channel);
 /**
  * This function will return the maximum value that the duty cycle can be set
  * to. The highest value that this function can return is 65535.

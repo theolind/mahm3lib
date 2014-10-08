@@ -97,13 +97,13 @@ uint8_t pio_conf_pin_to_peripheral(pio_reg_t *port,
 	// The pin will be set to peripheral B
 	if(periph == PIO_PERIPH_B){ // 0 is peripheral A and 1 is B
 		// Set to peripheral B
-		set_bit_in_register(&port->PIO_ABSR, (uint8_t)pin_number);
+		set_bit_in_register(&port->PIO_ABSR, pin_number);
 	}else if(periph == PIO_PERIPH_A){
 		// Clear for peripheral A
-		clear_bit_in_register(&port->PIO_ABSR, (uint8_t)pin_number);
+		clear_bit_in_register(&port->PIO_ABSR, pin_number);
 	}
 	// The pin will be set in peripheral mode (not controllable by PIO)
-	set_bit_in_register(&port->PIO_PDR, (uint8_t)pin_number);
+	set_bit_in_register(&port->PIO_PDR, pin_number);
 	return 1;
 }
 

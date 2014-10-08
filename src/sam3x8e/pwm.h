@@ -88,15 +88,15 @@
  * These defines are masks for the PWM channels and can be used as the channel
  * input of every function.
  */
-#define PWM_CHANNEL_0_MASK				(0)
-#define PWM_CHANNEL_1_MASK				(1)
-#define PWM_CHANNEL_2_MASK				(2)
-#define PWM_CHANNEL_3_MASK				(3)
-#define PWM_CHANNEL_4_MASK				(4)
-#define PWM_CHANNEL_5_MASK				(5)
-#define PWM_CHANNEL_6_MASK				(6)
-#define PWM_CHANNEL_7_MASK				(7)
-#define PWM_CHANNEL_ALL					(255)
+#define PWM_CHANNEL_0					(0)
+#define PWM_CHANNEL_1					(1)
+#define PWM_CHANNEL_2					(2)
+#define PWM_CHANNEL_3					(3)
+#define PWM_CHANNEL_4					(4)
+#define PWM_CHANNEL_5					(5)
+#define PWM_CHANNEL_6					(6)
+#define PWM_CHANNEL_7					(7)
+//#define PWM_CHANNEL_ALL_MASK			(0xFF)
 ///@}
 ///@{
 /**
@@ -417,7 +417,7 @@ uint8_t pwm_init_peripheral(struct pwm_clk_setting clk_settings);
  * (See typedef pwm_channel_setting for more details.)
  * @return error, 1 = SUCCESS and 0 = FAIL
  */
-uint8_t pwm_init_channel(struct pwm_channel_setting channel);
+uint8_t pwm_init_channel(struct pwm_channel_setting settings);
 /**
  * This function will enable the selected channel, identified with predefined
  * values, like: PWM_CHANNEL_x_MASK
@@ -427,7 +427,7 @@ uint8_t pwm_init_channel(struct pwm_channel_setting channel);
  * @param channel The channel to be enabled, use prefix: PWM_CHANNEL_
  * @return error Will always return 1 = SUCCESS
  */
-uint8_t pwm_channel_enable(uint32_t channel);
+uint8_t pwm_channel_enable(uint8_t channel);
 /**
  * This function will disable the selected channel, identified with predefined
  * values, like: PWM_CHANNEL_x_MASK.
@@ -437,14 +437,14 @@ uint8_t pwm_channel_enable(uint32_t channel);
  * @param channel The channel to be disabled, use prefix: PWM_CHANNEL_
  * @return error, 1 = SUCCESS and 0 = FAIL
  */
-uint8_t pwm_channel_disable(uint32_t channel);
+uint8_t pwm_channel_disable(uint8_t channel);
 /**
  * This function will return the state of the PWM channel.
  *
  * @param channel the channel to get the status for
  * @return 1 if the channel is enabled, 0 if it is disabled
  */
-uint8_t pwm_channel_status(uint32_t channel);
+uint8_t pwm_channel_status(uint8_t channel);
 ///@}
 ///@{
 /**
@@ -574,13 +574,13 @@ uint32_t pwm_channel_read(uint32_t channel);
  *
  * @return Maximum value that the channel duty cycle can be set to.
  */
-uint32_t pwm_get_channel_period(uint32_t channel);
+uint32_t pwm_get_channel_period(uint8_t channel);
 /**
  * This function will return the current alignment of the chosen channel.
  *
  * @return Can be either PWM_CHANNEL_ALIGN_CENTER or PWM_CHANNEL_ALIGN_LEFT
  */
-uint32_t pwm_get_channel_alignment(uint32_t channel);
+uint32_t pwm_get_channel_alignment(uint8_t channel);
 ///@}
 ///@{
 /**
@@ -591,15 +591,15 @@ uint32_t pwm_get_channel_alignment(uint32_t channel);
  */
 uint8_t pwm_turn_off_clkx(uint8_t clock_id);
 /**
+ * Resets the channel and disables it
+ * @return error, 1 = SUCCESS and 0 = FAIL
+ */
+uint8_t pwm_reset_channel(void);
+/**
  * Resets the peripheral and disables all channels
  * @return error, 1 = SUCCESS and 0 = FAIL
  */
-uint8_t pwm_reset(void);
-/**
- * Reset and turns off the peripheral
- * @return error, 1 = SUCCESS and 0 = FAIL
- */
-uint8_t pwm_close(void);
+uint8_t pwm_reset_peripheral(void);
 ///@}
 
 #endif /* PWM_H_ */

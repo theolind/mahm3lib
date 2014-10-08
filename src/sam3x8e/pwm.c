@@ -25,11 +25,6 @@
 
 ///\cond
 /*
- * Distance between channel registers
- */
-#define ch_dis		(0x20U)
-
-/*
  *  Necessary registers addressed by incrementing the base address by an
  *  register-specific offset.
  */
@@ -111,28 +106,28 @@ uint8_t pwm_init_peripheral(struct pwm_clk_setting clk_settings) {
 /*
  * This function initializes a channel of the PWM peripheral.
  */
-uint8_t pwm_init_channel(struct pwm_channel_setting channel) {
+uint8_t pwm_init_channel(struct pwm_channel_setting settings) {
 	uint8_t reenable = 0;
 	// Disable the channel and remember the initial state of it
-	if (pwm_channel_status(channel.channel) == 1) {
+	if (pwm_channel_status(settings.channel) == 1) {
 		reenable = 1;
-		pwm_channel_disable(channel.channel);
+		pwm_channel_disable(settings.channel);
 	}
-	if (channel.use_CLKx == 1) {
-		if (pwm_set_channel_frequency(channel.channel,
-				channel.frequency) == 0) {
-			pwm_set_clkx_frequency(channel.channel, channel.frequency,
-					channel.clock_ID);
+	if (settings.use_CLKx == 1) {
+		if (pwm_set_channel_frequency(settings.channel,
+				settings.frequency) == 0) {
+			pwm_set_clkx_frequency(settings.channel, settings.frequency,
+					settings.clock_ID);
 		}
-	} else if (channel.use_CLKx == 0) {
-		pwm_set_channel_frequency(channel.channel, channel.frequency);
+	} else if (settings.use_CLKx == 0) {
+		pwm_set_channel_frequency(settings.channel, settings.frequency);
 	}
-	pwm_channel_disable(channel.channel);
-	pwm_set_channel_alignment(channel.channel, channel.alignment);
-	pwm_set_channel_polarity(channel.channel, channel.polarity);
-	pwm_set_channel_duty_cycle(channel.channel, channel.duty_cycle);
+	pwm_channel_disable(settings.channel);
+	pwm_set_channel_alignment(settings.channel, settings.alignment);
+	pwm_set_channel_polarity(settings.channel, settings.polarity);
+	pwm_set_channel_duty_cycle(settings.channel, settings.duty_cycle);
 	if (reenable == 1) {
-		pwm_channel_enable(channel.channel);
+		pwm_channel_enable(settings.channel);
 	}
 	return 1;
 }
@@ -142,8 +137,8 @@ uint8_t pwm_init_channel(struct pwm_channel_setting channel) {
  *
  * Alternatively use PWM_CHANNEL_ALL_MASK to enable all channel at once.
  */
-uint8_t pwm_channel_enable(uint32_t channel) {
-	set_section_in_register(&PWM_ENA, (1<<channel), 1);
+uint8_t pwm_channel_enable(uint8_t channel) {
+	set_section_in_register(&PWM_ENA, (1u<<channel), 1);
 	return 1;
 }
 
@@ -155,9 +150,9 @@ uint8_t pwm_channel_enable(uint32_t channel) {
  *
  * Alternatively use PWM_CHANNEL_ALL_MASK to disable all channel at once.
  */
-uint8_t pwm_channel_disable(uint32_t channel) {
+uint8_t pwm_channel_disable(uint8_t channel) {
 	if (pwm_channel_status(channel)) {
-		set_section_in_register(&PWM_DIS, channel, 1);
+		set_section_in_register(&PWM_DIS, (1u<<channel), 1);
 		while (pwm_channel_status(channel)) {
 		}
 	}
@@ -166,40 +161,37 @@ uint8_t pwm_channel_disable(uint32_t channel) {
 /*
  * This function will read the status of a single channel.
  */
-uint8_t pwm_channel_status(uint32_t channel) {
-	return get_bit(&PWM_SR, get_position_of_first_highbit(channel));
+uint8_t pwm_channel_status(uint8_t channel) {
+	return get_bit(&PWM_SR, channel);
 }
 /*
  * Set the channel polarity.
  * This can reverse the duty cycle. Important when using the PWMLx pins.
  */
 uint8_t pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity) {
-	// PWM_CMR0 + 0x20 * 3 = PWM_CMR3
-	//return set_section_in_register((&PWM_CMR0)+ch_dis*channel,
-	//		PWM_CMRx_CPOL_MASK, pwm_polarity);
-
 	switch (channel) {
-	case PWM_CHANNEL_0_MASK:
+	case PWM_CHANNEL_0:
+		set_section_in_register(&PWM_CMR0, PWM_CMRx_CPOL_MASK, pwm_polarity);
 		break;
-	case PWM_CHANNEL_1_MASK:
+	case PWM_CHANNEL_1:
 		set_section_in_register(&PWM_CMR1, PWM_CMRx_CPOL_MASK, pwm_polarity);
 		break;
-	case PWM_CHANNEL_2_MASK:
+	case PWM_CHANNEL_2:
 		set_section_in_register(&PWM_CMR2, PWM_CMRx_CPOL_MASK, pwm_polarity);
 		break;
-	case PWM_CHANNEL_3_MASK:
+	case PWM_CHANNEL_3:
 		set_section_in_register(&PWM_CMR3, PWM_CMRx_CPOL_MASK, pwm_polarity);
 		break;
-	case PWM_CHANNEL_4_MASK:
+	case PWM_CHANNEL_4:
 		set_section_in_register(&PWM_CMR4, PWM_CMRx_CPOL_MASK, pwm_polarity);
 		break;
-	case PWM_CHANNEL_5_MASK:
+	case PWM_CHANNEL_5:
 		set_section_in_register(&PWM_CMR5, PWM_CMRx_CPOL_MASK, pwm_polarity);
 		break;
-	case PWM_CHANNEL_6_MASK:
+	case PWM_CHANNEL_6:
 		set_section_in_register(&PWM_CMR6, PWM_CMRx_CPOL_MASK, pwm_polarity);
 		break;
-	case PWM_CHANNEL_7_MASK:
+	case PWM_CHANNEL_7:
 		set_section_in_register(&PWM_CMR7, PWM_CMRx_CPOL_MASK, pwm_polarity);
 		break;
 	default:
@@ -207,39 +199,34 @@ uint8_t pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity) {
 		break;
 	}
 	return 1;
-
 }
 /*
  * Set the channel alignment
  */
 uint8_t pwm_set_channel_alignment(uint32_t channel, uint32_t pwm_alignment) {
-
-	//return set_section_in_register((&PWM_CMR0)+ch_dis*channel,
-	//		PWM_CMRx_CALG_MASK, pwm_alignment);
-
 	switch (channel) {
-	case PWM_CHANNEL_0_MASK:
+	case PWM_CHANNEL_0:
 		set_section_in_register(&PWM_CMR0, PWM_CMRx_CALG_MASK, pwm_alignment);
 		break;
-	case PWM_CHANNEL_1_MASK:
+	case PWM_CHANNEL_1:
 		set_section_in_register(&PWM_CMR1, PWM_CMRx_CALG_MASK, pwm_alignment);
 		break;
-	case PWM_CHANNEL_2_MASK:
+	case PWM_CHANNEL_2:
 		set_section_in_register(&PWM_CMR2, PWM_CMRx_CALG_MASK, pwm_alignment);
 		break;
-	case PWM_CHANNEL_3_MASK:
+	case PWM_CHANNEL_3:
 		set_section_in_register(&PWM_CMR3, PWM_CMRx_CALG_MASK, pwm_alignment);
 		break;
-	case PWM_CHANNEL_4_MASK:
+	case PWM_CHANNEL_4:
 		set_section_in_register(&PWM_CMR4, PWM_CMRx_CALG_MASK, pwm_alignment);
 		break;
-	case PWM_CHANNEL_5_MASK:
+	case PWM_CHANNEL_5:
 		set_section_in_register(&PWM_CMR5, PWM_CMRx_CALG_MASK, pwm_alignment);
 		break;
-	case PWM_CHANNEL_6_MASK:
+	case PWM_CHANNEL_6:
 		set_section_in_register(&PWM_CMR6, PWM_CMRx_CALG_MASK, pwm_alignment);
 		break;
-	case PWM_CHANNEL_7_MASK:
+	case PWM_CHANNEL_7:
 		set_section_in_register(&PWM_CMR7, PWM_CMRx_CALG_MASK, pwm_alignment);
 		break;
 	default:
@@ -247,47 +234,42 @@ uint8_t pwm_set_channel_alignment(uint32_t channel, uint32_t pwm_alignment) {
 		break;
 	}
 	return 1;
-
 }
 /*
  * Set the channel prescaler
  */
 uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
-
-	//return set_section_in_register((&PWM_CMR0)+ch_dis*channel,
-	//		PWM_CMRx_CPRE_MASK, prescaler);
-
 	uint8_t error = 0;
 	switch (channel) {
-	case PWM_CHANNEL_0_MASK:
+	case PWM_CHANNEL_0:
 		error = set_section_in_register(&PWM_CMR0, PWM_CMRx_CPRE_MASK,
 				prescaler);
 		break;
-	case PWM_CHANNEL_1_MASK:
+	case PWM_CHANNEL_1:
 		error = set_section_in_register(&PWM_CMR1, PWM_CMRx_CPRE_MASK,
 				prescaler);
 		break;
-	case PWM_CHANNEL_2_MASK:
+	case PWM_CHANNEL_2:
 		error = set_section_in_register(&PWM_CMR2, PWM_CMRx_CPRE_MASK,
 				prescaler);
 		break;
-	case PWM_CHANNEL_3_MASK:
+	case PWM_CHANNEL_3:
 		error = set_section_in_register(&PWM_CMR3, PWM_CMRx_CPRE_MASK,
 				prescaler);
 		break;
-	case PWM_CHANNEL_4_MASK:
+	case PWM_CHANNEL_4:
 		error = set_section_in_register(&PWM_CMR4, PWM_CMRx_CPRE_MASK,
 				prescaler);
 		break;
-	case PWM_CHANNEL_5_MASK:
+	case PWM_CHANNEL_5:
 		error = set_section_in_register(&PWM_CMR5, PWM_CMRx_CPRE_MASK,
 				prescaler);
 		break;
-	case PWM_CHANNEL_6_MASK:
+	case PWM_CHANNEL_6:
 		error = set_section_in_register(&PWM_CMR6, PWM_CMRx_CPRE_MASK,
 				prescaler);
 		break;
-	case PWM_CHANNEL_7_MASK:
+	case PWM_CHANNEL_7:
 		error = set_section_in_register(&PWM_CMR7, PWM_CMRx_CPRE_MASK,
 				prescaler);
 		break;
@@ -296,7 +278,6 @@ uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
 		break;
 	}
 	return error;
-
 }
 /*
  * This function will set the period value used by a given PWM channel.
@@ -305,69 +286,65 @@ uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
  * will set the period for you.
  */
 uint8_t pwm_set_channel_period(uint32_t channel, uint32_t period) {
-
-	//return set_section_in_register((&PWM_CPRDUPD0)+ch_dis*channel,
-	//		PWM_CPRDUPDx_CPRDUPD_MASK, period);
-
 	switch (channel) {
-	case PWM_CHANNEL_0_MASK:
-		if (pwm_channel_status(PWM_CHANNEL_0_MASK)) {
+	case PWM_CHANNEL_0:
+		if (pwm_channel_status(PWM_CHANNEL_0)) {
 			set_section_in_register(&PWM_CPRDUPD0, PWM_CPRDUPDx_CPRDUPD_MASK,
 					period);
 		} else {
 			set_section_in_register(&PWM_CPRD0, PWM_CPRDx_CPRD_MASK, period);
 		}
 		break;
-	case PWM_CHANNEL_1_MASK:
-		if (pwm_channel_status(PWM_CHANNEL_1_MASK)) {
+	case PWM_CHANNEL_1:
+		if (pwm_channel_status(PWM_CHANNEL_1)) {
 			set_section_in_register(&PWM_CPRDUPD1, PWM_CPRDUPDx_CPRDUPD_MASK,
 					period);
 		} else {
 			set_section_in_register(&PWM_CPRD1, PWM_CPRDx_CPRD_MASK, period);
 		}
 		break;
-	case PWM_CHANNEL_2_MASK:
-		if (pwm_channel_status(PWM_CHANNEL_2_MASK)) {
+	case PWM_CHANNEL_2:
+		if (pwm_channel_status(PWM_CHANNEL_2)) {
 			set_section_in_register(&PWM_CPRDUPD2, PWM_CPRDUPDx_CPRDUPD_MASK,
 					period);
 		} else {
 			set_section_in_register(&PWM_CPRD2, PWM_CPRDx_CPRD_MASK, period);
 		}
 		break;
-	case PWM_CHANNEL_3_MASK:
-		if (pwm_channel_status(PWM_CHANNEL_3_MASK)) {
+	case PWM_CHANNEL_3:
+		if (pwm_channel_status(PWM_CHANNEL_3)) {
 			set_section_in_register(&PWM_CPRDUPD3, PWM_CPRDUPDx_CPRDUPD_MASK,
 					period);
 		} else {
 			set_section_in_register(&PWM_CPRD3, PWM_CPRDx_CPRD_MASK, period);
 		}
 		break;
-	case PWM_CHANNEL_4_MASK:
-		if (pwm_channel_status(PWM_CHANNEL_4_MASK)) {
+	case PWM_CHANNEL_4:
+		if (pwm_channel_status(PWM_CHANNEL_4)) {
 			set_section_in_register(&PWM_CPRDUPD4, PWM_CPRDUPDx_CPRDUPD_MASK,
 					period);
 		} else {
 			set_section_in_register(&PWM_CPRD4, PWM_CPRDx_CPRD_MASK, period);
 		}
 		break;
-	case PWM_CHANNEL_5_MASK:
-		if (pwm_channel_status(PWM_CHANNEL_5_MASK)) {
+	case PWM_CHANNEL_5:
+		if (pwm_channel_status(PWM_CHANNEL_5)) {
 			set_section_in_register(&PWM_CPRDUPD5, PWM_CPRDUPDx_CPRDUPD_MASK,
 					period);
 		} else {
 			set_section_in_register(&PWM_CPRD5, PWM_CPRDx_CPRD_MASK, period);
 		}
 		break;
-	case PWM_CHANNEL_6_MASK:
-		if (pwm_channel_status(PWM_CHANNEL_6_MASK)) {
+	case PWM_CHANNEL_6:
+		if (pwm_channel_status(PWM_CHANNEL_6)) {
 			set_section_in_register(&PWM_CPRDUPD6, PWM_CPRDUPDx_CPRDUPD_MASK,
 					period);
 		} else {
 			set_section_in_register(&PWM_CPRD6, PWM_CPRDx_CPRD_MASK, period);
 		}
 		break;
-	case PWM_CHANNEL_7_MASK:
-		if (pwm_channel_status(PWM_CHANNEL_7_MASK)) {
+	case PWM_CHANNEL_7:
+		if (pwm_channel_status(PWM_CHANNEL_7)) {
 			set_section_in_register(&PWM_CPRDUPD7, PWM_CPRDUPDx_CPRDUPD_MASK,
 					period);
 		} else {
@@ -379,7 +356,6 @@ uint8_t pwm_set_channel_period(uint32_t channel, uint32_t period) {
 		break;
 	}
 	return 1;
-
 }
 /*
  * This function will calculate the nessessary prescaler and period to set the
@@ -502,34 +478,30 @@ uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor) {
 /*
  * This function reads the earlier written duty cycle to the channel.
  */
-uint32_t pwm_channel_read(uint32_t channel) {
-
-	//return get_section_in_register((&PWM_CDTY0)+ch_dis*channel,
-	//		PWM_CDTYx_CDTY_MASK);
-
+uint32_t pwm_read(uint8_t channel) {
 	switch (channel) {
-	case PWM_CHANNEL_0_MASK:
+	case PWM_CHANNEL_0:
 		return get_section_in_register(&PWM_CDTY0, PWM_CDTYx_CDTY_MASK);
 		break;
-	case PWM_CHANNEL_1_MASK:
+	case PWM_CHANNEL_1:
 		return get_section_in_register(&PWM_CDTY1, PWM_CDTYx_CDTY_MASK);
 		break;
-	case PWM_CHANNEL_2_MASK:
+	case PWM_CHANNEL_2:
 		return get_section_in_register(&PWM_CDTY2, PWM_CDTYx_CDTY_MASK);
 		break;
-	case PWM_CHANNEL_3_MASK:
+	case PWM_CHANNEL_3:
 		return get_section_in_register(&PWM_CDTY3, PWM_CDTYx_CDTY_MASK);
 		break;
-	case PWM_CHANNEL_4_MASK:
+	case PWM_CHANNEL_4:
 		return get_section_in_register(&PWM_CDTY4, PWM_CDTYx_CDTY_MASK);
 		break;
-	case PWM_CHANNEL_5_MASK:
+	case PWM_CHANNEL_5:
 		return get_section_in_register(&PWM_CDTY5, PWM_CDTYx_CDTY_MASK);
 		break;
-	case PWM_CHANNEL_6_MASK:
+	case PWM_CHANNEL_6:
 		return get_section_in_register(&PWM_CDTY6, PWM_CDTYx_CDTY_MASK);
 		break;
-	case PWM_CHANNEL_7_MASK:
+	case PWM_CHANNEL_7:
 		return get_section_in_register(&PWM_CDTY7, PWM_CDTYx_CDTY_MASK);
 		break;
 	default:
@@ -537,19 +509,14 @@ uint32_t pwm_channel_read(uint32_t channel) {
 		break;
 	}
 	return 1;
-
 }
 /*
  * Writes an output to a given channel by setting the channel duty cycle.
  */
 uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
-
-	//return set_section_in_register((&PWM_CDTYUPD0)+ch_dis*channel,
-	//		PWM_CDTYUPDx_CDTYUPD_MASK, duty_cycle);
-
 	switch (channel) {
-	case PWM_CHANNEL_0_MASK:
-		if (pwm_channel_status(PWM_CHANNEL_0_MASK)) {
+	case PWM_CHANNEL_0:
+		if (pwm_channel_status(PWM_CHANNEL_0)) {
 			set_section_in_register(&PWM_CDTYUPD0, PWM_CDTYUPDx_CDTYUPD_MASK,
 					duty_cycle);
 		} else {
@@ -557,8 +524,8 @@ uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
 					duty_cycle);
 		}
 		break;
-	case PWM_CHANNEL_1_MASK:
-		if (pwm_channel_status(PWM_CHANNEL_1_MASK)) {
+	case PWM_CHANNEL_1:
+		if (pwm_channel_status(PWM_CHANNEL_1)) {
 			set_section_in_register(&PWM_CDTYUPD1, PWM_CDTYUPDx_CDTYUPD_MASK,
 					duty_cycle);
 		} else {
@@ -566,8 +533,8 @@ uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
 					duty_cycle);
 		}
 		break;
-	case PWM_CHANNEL_2_MASK:
-		if (pwm_channel_status(PWM_CHANNEL_2_MASK)) {
+	case PWM_CHANNEL_2:
+		if (pwm_channel_status(PWM_CHANNEL_2)) {
 			set_section_in_register(&PWM_CDTYUPD2, PWM_CDTYUPDx_CDTYUPD_MASK,
 					duty_cycle);
 		} else {
@@ -575,8 +542,8 @@ uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
 					duty_cycle);
 		}
 		break;
-	case PWM_CHANNEL_3_MASK:
-		if (pwm_channel_status(PWM_CHANNEL_3_MASK)) {
+	case PWM_CHANNEL_3:
+		if (pwm_channel_status(PWM_CHANNEL_3)) {
 			set_section_in_register(&PWM_CDTYUPD3, PWM_CDTYUPDx_CDTYUPD_MASK,
 					duty_cycle);
 		} else {
@@ -584,8 +551,8 @@ uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
 					duty_cycle);
 		}
 		break;
-	case PWM_CHANNEL_4_MASK:
-		if (pwm_channel_status(PWM_CHANNEL_4_MASK)) {
+	case PWM_CHANNEL_4:
+		if (pwm_channel_status(PWM_CHANNEL_4)) {
 			set_section_in_register(&PWM_CDTYUPD4, PWM_CDTYUPDx_CDTYUPD_MASK,
 					duty_cycle);
 		} else {
@@ -593,8 +560,8 @@ uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
 					duty_cycle);
 		}
 		break;
-	case PWM_CHANNEL_5_MASK:
-		if (pwm_channel_status(PWM_CHANNEL_5_MASK)) {
+	case PWM_CHANNEL_5:
+		if (pwm_channel_status(PWM_CHANNEL_5)) {
 			set_section_in_register(&PWM_CDTYUPD5, PWM_CDTYUPDx_CDTYUPD_MASK,
 					duty_cycle);
 		} else {
@@ -602,8 +569,8 @@ uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
 					duty_cycle);
 		}
 		break;
-	case PWM_CHANNEL_6_MASK:
-		if (pwm_channel_status(PWM_CHANNEL_6_MASK)) {
+	case PWM_CHANNEL_6:
+		if (pwm_channel_status(PWM_CHANNEL_6)) {
 			set_section_in_register(&PWM_CDTYUPD6, PWM_CDTYUPDx_CDTYUPD_MASK,
 					duty_cycle);
 		} else {
@@ -611,8 +578,8 @@ uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
 					duty_cycle);
 		}
 		break;
-	case PWM_CHANNEL_7_MASK:
-		if (pwm_channel_status(PWM_CHANNEL_7_MASK)) {
+	case PWM_CHANNEL_7:
+		if (pwm_channel_status(PWM_CHANNEL_7)) {
 			set_section_in_register(&PWM_CDTYUPD7, PWM_CDTYUPDx_CDTYUPD_MASK,
 					duty_cycle);
 		} else {
@@ -625,40 +592,35 @@ uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
 		break;
 	}
 	return 1;
-
 }
 /*
  * This channel reads the maximum allowed duty cycle for the channel.
  * This is also called channel resolution.
  */
-uint32_t pwm_get_channel_period(uint32_t channel) {
-
-	//return get_section_in_register((&PWM_CPRD0)+ch_dis*channel,
-	//		PWM_CPRDx_CPRD_MASK);
-
+uint32_t pwm_get_channel_period(uint8_t channel) {
 	switch (channel) {
-	case PWM_CHANNEL_0_MASK:
+	case PWM_CHANNEL_0:
 		return get_section_in_register(&PWM_CPRD0, PWM_CPRDx_CPRD_MASK);
 		break;
-	case PWM_CHANNEL_1_MASK:
+	case PWM_CHANNEL_1:
 		return get_section_in_register(&PWM_CPRD1, PWM_CPRDx_CPRD_MASK);
 		break;
-	case PWM_CHANNEL_2_MASK:
+	case PWM_CHANNEL_2:
 		return get_section_in_register(&PWM_CPRD2, PWM_CPRDx_CPRD_MASK);
 		break;
-	case PWM_CHANNEL_3_MASK:
+	case PWM_CHANNEL_3:
 		return get_section_in_register(&PWM_CPRD3, PWM_CPRDx_CPRD_MASK);
 		break;
-	case PWM_CHANNEL_4_MASK:
+	case PWM_CHANNEL_4:
 		return get_section_in_register(&PWM_CPRD4, PWM_CPRDx_CPRD_MASK);
 		break;
-	case PWM_CHANNEL_5_MASK:
+	case PWM_CHANNEL_5:
 		return get_section_in_register(&PWM_CPRD5, PWM_CPRDx_CPRD_MASK);
 		break;
-	case PWM_CHANNEL_6_MASK:
+	case PWM_CHANNEL_6:
 		return get_section_in_register(&PWM_CPRD6, PWM_CPRDx_CPRD_MASK);
 		break;
-	case PWM_CHANNEL_7_MASK:
+	case PWM_CHANNEL_7:
 		return get_section_in_register(&PWM_CPRD7, PWM_CPRDx_CPRD_MASK);
 		break;
 	default:
@@ -666,39 +628,34 @@ uint32_t pwm_get_channel_period(uint32_t channel) {
 		break;
 	}
 	return 0;
-
 }
 /*
  * This function reads the alignment og the channel.
  */
-uint32_t pwm_get_channel_alignment(uint32_t channel) {
-
-	//return get_section_in_register((&PWM_CMR0)+ch_dis*channel,
-	//		PWM_CMRx_CALG_MASK);
-
+uint32_t pwm_get_channel_alignment(uint8_t channel) {
 	switch (channel) {
-	case PWM_CHANNEL_0_MASK:
+	case PWM_CHANNEL_0:
 		return get_section_in_register(&PWM_CMR0, PWM_CMRx_CALG_MASK);
 		break;
-	case PWM_CHANNEL_1_MASK:
+	case PWM_CHANNEL_1:
 		return get_section_in_register(&PWM_CMR1, PWM_CMRx_CALG_MASK);
 		break;
-	case PWM_CHANNEL_2_MASK:
+	case PWM_CHANNEL_2:
 		return get_section_in_register(&PWM_CMR2, PWM_CMRx_CALG_MASK);
 		break;
-	case PWM_CHANNEL_3_MASK:
+	case PWM_CHANNEL_3:
 		return get_section_in_register(&PWM_CMR3, PWM_CMRx_CALG_MASK);
 		break;
-	case PWM_CHANNEL_4_MASK:
+	case PWM_CHANNEL_4:
 		return get_section_in_register(&PWM_CMR4, PWM_CMRx_CALG_MASK);
 		break;
-	case PWM_CHANNEL_5_MASK:
+	case PWM_CHANNEL_5:
 		return get_section_in_register(&PWM_CMR5, PWM_CMRx_CALG_MASK);
 		break;
-	case PWM_CHANNEL_6_MASK:
+	case PWM_CHANNEL_6:
 		return get_section_in_register(&PWM_CMR6, PWM_CMRx_CALG_MASK);
 		break;
-	case PWM_CHANNEL_7_MASK:
+	case PWM_CHANNEL_7:
 		return get_section_in_register(&PWM_CMR7, PWM_CMRx_CALG_MASK);
 		break;
 	default:
@@ -706,7 +663,6 @@ uint32_t pwm_get_channel_alignment(uint32_t channel) {
 		break;
 	}
 	return 0;
-
 }
 /*
  * Turns off clock A or B.
@@ -727,7 +683,7 @@ uint8_t pwm_turn_off_clkx(uint8_t clock_id) {
  * Resets the peripheral and disables all channels
  */
 uint8_t pwm_reset() {
-	pwm_channel_disable(PWM_CHANNEL_ALL << 0);
+	pwm_channel_disable(0x000000FF); // This means all channels
 
 	clear_register(&PWM_CLK);
 
@@ -767,11 +723,4 @@ uint8_t pwm_close() {
 	pwm_shutdown();
 	return 1;
 }
-
-
-
-
-
-
-
 

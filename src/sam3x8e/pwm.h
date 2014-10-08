@@ -427,7 +427,7 @@ uint8_t pwm_init_channel(struct pwm_channel_setting settings);
  * @param channel The channel to be enabled, use prefix: PWM_CHANNEL_
  * @return error Will always return 1 = SUCCESS
  */
-uint8_t pwm_channel_enable(uint8_t channel);
+uint8_t pwm_channel_enable(uint32_t channel);
 /**
  * This function will disable the selected channel, identified with predefined
  * values, like: PWM_CHANNEL_x_MASK.
@@ -437,14 +437,14 @@ uint8_t pwm_channel_enable(uint8_t channel);
  * @param channel The channel to be disabled, use prefix: PWM_CHANNEL_
  * @return error, 1 = SUCCESS and 0 = FAIL
  */
-uint8_t pwm_channel_disable(uint8_t channel);
+uint8_t pwm_channel_disable(uint32_t channel);
 /**
  * This function will return the state of the PWM channel.
  *
  * @param channel the channel to get the status for
  * @return 1 if the channel is enabled, 0 if it is disabled
  */
-uint8_t pwm_channel_status(uint8_t channel);
+uint8_t pwm_channel_status(uint32_t channel);
 ///@}
 ///@{
 /**
@@ -574,13 +574,13 @@ uint32_t pwm_channel_read(uint32_t channel);
  *
  * @return Maximum value that the channel duty cycle can be set to.
  */
-uint32_t pwm_get_channel_period(uint8_t channel);
+uint32_t pwm_get_channel_period(uint32_t channel);
 /**
  * This function will return the current alignment of the chosen channel.
  *
  * @return Can be either PWM_CHANNEL_ALIGN_CENTER or PWM_CHANNEL_ALIGN_LEFT
  */
-uint32_t pwm_get_channel_alignment(uint8_t channel);
+uint32_t pwm_get_channel_alignment(uint32_t channel);
 ///@}
 ///@{
 /**

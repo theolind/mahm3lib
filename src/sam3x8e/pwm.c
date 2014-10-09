@@ -344,7 +344,7 @@ uint8_t pwm_reset_channel(uint32_t channel) {
  */
 uint8_t pwm_reset_peripheral() {
 	clear_register(&PWM->PWM_CLK);
-	for (int channel = 0; channel < 8; channel++) {
+	for (uint32_t channel = 0; channel < 8; channel++) {
 		pwm_reset_channel(channel);
 	}
 	return 1;

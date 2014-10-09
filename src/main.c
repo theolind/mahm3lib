@@ -1,6 +1,11 @@
 #include "main.h"
 #include "unity/unity_hw_setup.h"
 #include "test_runner.h"
+#include "sam3x8e/arduino_due.h"
+#include "sam3x8e/pmc.h"
+#include "sam3x8e/pio.h"
+#include "sam3x8e/delay.h"
+#include "sam3x8e/uart.h"
 #include "sam3x8e/rtos/FreeRTOS.h"
 #include "sam3x8e/rtos/task.h"
 
@@ -9,14 +14,59 @@ void vApplicationIdleHook( void );
 void vApplicationStackOverflowHook( TaskHandle_t pxTask, char *pcTaskName );
 void vApplicationTickHook( void );
 
+unsigned int led_num;
+
+
 int main(void) {
 	// basic initialization of hardware and UART communication.
 	unity_hw_setup();
 
-	run_tests();
+	//run_tests();
+
+	pmc_enable_peripheral_clock(ID_PIOB);
+	pio_enable_pin(D13_PORT, D13);
+	pio_conf_pin(D13_PORT, D13, 0, 0);
+
+	xTaskCreate(Thread1, NULL, configMINIMAL_STACK_SIZE, NULL, 4, NULL);
+	//xTaskCreate(Thread2, NULL, configMINIMAL_STACK_SIZE, NULL, 4, NULL);
+
+
+	vTaskStartScheduler();
+
+	while(1);
 
 	return 0;
 }
+
+static void Thread2(void *arg) {
+
+	for (;;) {
+
+		led_num++;
+		char test = (char) led_num;
+		//uart_write_str(test);
+		vTaskDelay((50L * configTICK_RATE_HZ) / 1000L); //50ms delay
+	}
+
+
+}
+
+static void Thread1(void *arg) {
+
+	for (;;) {
+		pio_set_pin(D13_PORT, D13, 0);
+
+		vTaskDelay((500L * configTICK_RATE_HZ) / 1000L); //50ms delay(100);
+
+		pio_set_pin(D13_PORT, D13, 1);
+
+		vTaskDelay((500L * configTICK_RATE_HZ) / 1000L); //50ms delay(100);
+	}
+
+
+
+}
+
 
 void vApplicationMallocFailedHook( void )
 {
@@ -31,6 +81,7 @@ void vApplicationMallocFailedHook( void )
 	to query the size of free heap space that remains (although it does not
 	provide information on how the remaining heap might be fragmented). */
 	taskDISABLE_INTERRUPTS();
+	uart_write_str("1");
 	for( ;; );
 }
 /*-----------------------------------------------------------*/
@@ -46,6 +97,7 @@ void vApplicationIdleHook( void )
 	important that vApplicationIdleHook() is permitted to return to its calling
 	function, because it is the responsibility of the idle task to clean up
 	memory allocated by the kernel to any task that has since been deleted. */
+	uart_write_str("2");
 }
 /*-----------------------------------------------------------*/
 
@@ -58,6 +110,7 @@ void vApplicationStackOverflowHook( TaskHandle_t pxTask, char *pcTaskName )
 	configCHECK_FOR_STACK_OVERFLOW is defined to 1 or 2.  This hook
 	function is called if a stack overflow is detected. */
 	taskDISABLE_INTERRUPTS();
+	uart_write_str("3");
 	for( ;; );
 }
 /*-----------------------------------------------------------*/
@@ -69,4 +122,5 @@ void vApplicationTickHook( void )
 	added here, but the tick hook is called from an interrupt context, so
 	code must not attempt to block, and only the interrupt safe FreeRTOS API
 	functions can be used (those that end in FromISR()). */
+	uart_write_str("4");
 }

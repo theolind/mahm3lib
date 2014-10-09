@@ -81,6 +81,7 @@ task.h is included from an application file. */
 #include "FreeRTOS.h"
 #include "task.h"
 #include "FreeRTOSConfig.h"
+#include "sam3x8e/uart.h"
 
 
 #undef MPU_WRAPPERS_INCLUDED_FROM_API_FILE
@@ -146,6 +147,8 @@ BlockLink_t *pxBlock, *pxPreviousBlock, *pxNewBlockLink;
 void *pvReturn = NULL;
 
 	vTaskSuspendAll();
+
+
 	{
 		/* If this is the first call to malloc then the heap will require
 		initialisation to setup the list of free blocks. */
@@ -155,6 +158,7 @@ void *pvReturn = NULL;
 		}
 		else
 		{
+
 			mtCOVERAGE_TEST_MARKER();
 		}
 
@@ -164,6 +168,7 @@ void *pvReturn = NULL;
 		kernel, so it must be free. */
 		if( ( xWantedSize & xBlockAllocatedBit ) == 0 )
 		{
+
 			/* The wanted size is increased so it can contain a BlockLink_t
 			structure in addition to the requested amount of bytes. */
 			if( xWantedSize > 0 )
@@ -190,6 +195,9 @@ void *pvReturn = NULL;
 
 			if( ( xWantedSize > 0 ) && ( xWantedSize <= xFreeBytesRemaining ) )
 			{
+
+				uart_write_str("heap_4.c: pvPortMalloc \r\n");
+
 				/* Traverse the list from the start	(lowest address) block until
 				one	of adequate size is found. */
 				pxPreviousBlock = &xStart;

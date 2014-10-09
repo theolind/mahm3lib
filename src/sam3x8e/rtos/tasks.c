@@ -526,8 +526,13 @@ TCB_t * pxNewTCB;
 	checking that the allocation was successful. */
 	pxNewTCB = prvAllocateTCBAndStack( usStackDepth, puxStackBuffer );
 
+	uart_write_str("task.c: xTaskGenericCreate (after pxNewTCP) \r\n");
+
 	if( pxNewTCB != NULL )
 	{
+
+		uart_write_str("task.c: xTaskGenericCreate (inside if loop) \r\n");
+
 		StackType_t *pxTopOfStack;
 
 		#if( portUSING_MPU_WRAPPERS == 1 )

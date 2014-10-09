@@ -27,11 +27,16 @@ int main(void) {
 	pio_enable_pin(D13_PORT, D13);
 	pio_conf_pin(D13_PORT, D13, 0, 0);
 
+	uart_write_str("\r\nMain: Pre-task create \r\n");
+
 	xTaskCreate(Thread1, NULL, configMINIMAL_STACK_SIZE, NULL, 4, NULL);
 	//xTaskCreate(Thread2, NULL, configMINIMAL_STACK_SIZE, NULL, 4, NULL);
 
+	uart_write_str("Main: Post-task create \r\n");
 
 	vTaskStartScheduler();
+
+	uart_write_str("Main: Post vTaskStartScheduler \r\n");
 
 	while(1);
 
@@ -81,7 +86,7 @@ void vApplicationMallocFailedHook( void )
 	to query the size of free heap space that remains (although it does not
 	provide information on how the remaining heap might be fragmented). */
 	taskDISABLE_INTERRUPTS();
-	uart_write_str("1");
+	uart_write_str("vApplicationMallocFailedHook \r\n");
 	for( ;; );
 }
 /*-----------------------------------------------------------*/
@@ -97,7 +102,7 @@ void vApplicationIdleHook( void )
 	important that vApplicationIdleHook() is permitted to return to its calling
 	function, because it is the responsibility of the idle task to clean up
 	memory allocated by the kernel to any task that has since been deleted. */
-	uart_write_str("2");
+	uart_write_str("vApplicationIdleHook \r\n");
 }
 /*-----------------------------------------------------------*/
 
@@ -110,7 +115,7 @@ void vApplicationStackOverflowHook( TaskHandle_t pxTask, char *pcTaskName )
 	configCHECK_FOR_STACK_OVERFLOW is defined to 1 or 2.  This hook
 	function is called if a stack overflow is detected. */
 	taskDISABLE_INTERRUPTS();
-	uart_write_str("3");
+	uart_write_str("vApplicationStackOverflowHook \r\n");
 	for( ;; );
 }
 /*-----------------------------------------------------------*/
@@ -122,5 +127,5 @@ void vApplicationTickHook( void )
 	added here, but the tick hook is called from an interrupt context, so
 	code must not attempt to block, and only the interrupt safe FreeRTOS API
 	functions can be used (those that end in FromISR()). */
-	uart_write_str("4");
+	uart_write_str("vApplicationTickHook \r\n");
 }

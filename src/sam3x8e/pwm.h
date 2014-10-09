@@ -581,6 +581,12 @@ uint32_t pwm_get_channel_period(uint32_t channel);
  * @return Can be either PWM_CHANNEL_ALIGN_CENTER or PWM_CHANNEL_ALIGN_LEFT
  */
 uint32_t pwm_get_channel_alignment(uint32_t channel);
+/**
+ * This function reads the selected prescaler of the channel.
+ *
+ * @return Will be equal to one of the predefined prescalers with prefix: PWM_PRES_
+ */
+uint32_t pwm_get_channel_prescaler(uint32_t channel);
 ///@}
 ///@{
 /**

@@ -9,7 +9,7 @@
 #ifndef TEST_PWM_H_
 #define TEST_PWM_H_
 
-#include "sam3x8e/pwm.h"
+
 
 void test_pwm_channel_enabled(void);
 void test_pwm_channel_disabled(void);

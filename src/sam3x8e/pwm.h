@@ -413,7 +413,7 @@ uint8_t pwm_init_peripheral(struct pwm_clk_setting clk_settings);
  *
  * The frequency must be set between 2 and 84 MHz.
  *
- * @param channel The channel-instance of type pwm_channel_setting,
+ * @param settings The channel-instance of type pwm_channel_setting,
  * (See typedef pwm_channel_setting for more details.)
  * @return error, 1 = SUCCESS and 0 = FAIL
  */

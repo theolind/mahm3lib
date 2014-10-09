@@ -94,6 +94,9 @@ void run_tests(void) {
 	RUN_TEST(test_pwm_channel_duty_cycle, 30);
 	RUN_TEST(test_pwm_channel_polarity, 30);
 	RUN_TEST(test_pwm_channel_alignment, 30);
+	RUN_TEST(test_pwm_channel_period, 30);
+	RUN_TEST(test_pwm_set_clkx, 30);
+	RUN_TEST(test_set_frequency, 30);
 
 	HORIZONTAL_LINE_BREAK();
 

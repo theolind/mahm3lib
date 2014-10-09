@@ -16,7 +16,7 @@
 #define PMC_H_
 
 #include <inttypes.h>
-#include "sam3x8e/id.h"				// Definitions of Peripheral Identifiers
+#include "id.h"				// Definitions of Peripheral Identifiers
 
 ///@cond
 // Pointer to registers of the PMC peripheral.

@@ -29,5 +29,11 @@
  */
 #define SPI_SR_SPIENS		16
 
+void test_spi_setup(void);
+void test_spi_init(void);
+void test_spi_select_slave(void);
+void test_spi_write_ready(void);
+void test_spi_write(void);
 void test_spi(void);
+
 #endif

@@ -69,7 +69,11 @@ void run_tests(void) {
 	// Run SPI tests
 	// Have yet to run tests due to error messages
 	Unity.TestFile = "test/test_spi.c";
-	RUN_TEST(test_spi, 30);
+	test_spi_setup();
+	RUN_TEST(test_spi_init, 30);
+	RUN_TEST(test_spi_select_slave, 30);
+	RUN_TEST(test_spi_write_ready, 30);
+	RUN_TEST(test_spi_write, 30);
 
 	UnityEnd();
 }

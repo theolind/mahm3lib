@@ -50,9 +50,9 @@ uint8_t spi_read(spi_reg_t *spi) {
 uint8_t spi_write_ready(spi_reg_t *spi) {
 	// transfer of data to shift register is indicated by TDRE bit in SPI_SR
 	// transmission completion is indicated by TXEMPTY bit in SPI_SR
-	return ((spi->SPI_SR & (1<<9)) >> 9);
+	return spi->SPI_SR & (0x1u << 9);
 }
 
 uint8_t spi_read_ready(spi_reg_t *spi) {
-	return ((spi->SPI_SR & (1<<3)) >> 3);
+	return (spi->SPI_SR & (1<<3));
 }

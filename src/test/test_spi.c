@@ -14,7 +14,7 @@
 #include "sam3x8e/pio.h"
 #include "test/test_spi.h"
 
-void test_spi(void) {
+void test_spi_setup(void) {
 	const spi_settings_t spi_settings_t = {
 		.master = 1,
 		.CPOL = 0,
@@ -25,17 +25,39 @@ void test_spi(void) {
 
 	pmc_enable_peripheral_clock(ID_SPI0);
 
-	pio_conf_pin_to_peripheral(PIOA, 1, 25);
-	pio_conf_pin_to_peripheral(PIOA, 1, 26);
+	pio_conf_pin_to_peripheral(PIOA, 1, 25);	//MISO
+	pio_conf_pin_to_peripheral(PIOA, 1, 26);	//MOSI
+	pio_conf_pin_to_peripheral(PIOA, 1, 27);	//SPCK
+	pio_conf_pin_to_peripheral(PIOA, 1, 28);	//NPCS0
+	pio_conf_pin_to_peripheral(PIOA, 1, 29);	//NPCS1
+	pio_conf_pin_to_peripheral(PIOA, 1, 30);	//NPSC2
+	pio_conf_pin_to_peripheral(PIOA, 1, 31);	//NPSC3
 
-	TEST_ASSERT_FALSE(SPI0->SPI_SR & (0x1u << SPI_SR_SPIENS));
-	TEST_ASSERT_TRUE(spi_init(SPI0, &spi_settings_t));
+	spi_init(SPI0, &spi_settings_t);
+}
+
+void test_spi_init(void) {
 	TEST_ASSERT_TRUE(SPI0->SPI_SR & (0x1u << SPI_SR_SPIENS));
+}
 
-	spi_select_slave(SPI0, 0);
+void test_spi_select_slave(void) {
+	spi_select_slave(SPI0, 1);
+	//TODO write a test for this
+}
 
+void test_spi_write_ready() {
+	TEST_ASSERT_TRUE( spi_write_ready(SPI0) );
+}
+
+void test_spi_write() {
+	spi_select_slave(SPI0, 1);
+
+	TEST_ASSERT_TRUE( SPI0->SPI_SR & (0x1u << 9) );
 	spi_write(SPI0, 0b00110101);
+	TEST_ASSERT_FALSE(SPI0->SPI_SR & (0x1u << 9));
+}
 
+void test_spi(void) {
 	while(!spi_write_ready(SPI0));
 
 	TEST_ASSERT_FALSE(spi_read(SPI0) == 0b00110101);

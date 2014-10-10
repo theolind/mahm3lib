@@ -25,14 +25,14 @@ void test_spi(void) {
 
 	pmc_enable_peripheral_clock(ID_SPI0);
 
+	pio_conf_pin_to_peripheral(PIOA, 1, 25);
+	pio_conf_pin_to_peripheral(PIOA, 1, 26);
+
 	TEST_ASSERT_FALSE(SPI0->SPI_SR & (0x1u << SPI_SR_SPIENS));
 	TEST_ASSERT_TRUE(spi_init(SPI0, &spi_settings_t));
 	TEST_ASSERT_TRUE(SPI0->SPI_SR & (0x1u << SPI_SR_SPIENS));
 
-	pio_conf_pin_to_peripheral(PIOA, 1, 25);
-	pio_conf_pin_to_peripheral(PIOA, 1, 26);
-
-	//spi_select_slave(SPI0, 1);
+	spi_select_slave(SPI0, 0);
 
 	spi_write(SPI0, 0b00110101);
 

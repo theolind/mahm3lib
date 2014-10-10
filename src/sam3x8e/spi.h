@@ -38,7 +38,7 @@ typedef struct spi_reg_t {
 	uint32_t SPI_CSR2;		//0X38, chip select register 2
 	uint32_t SPI_CSR3;		//0X3C, chip select register 3
 	uint32_t reserved1[40];	//0x40 - 0xe0, reserved
-	uint32_t SPI_WPCR;		//0xE4, write protection control register
+	uint32_t SPI_WPMR;		//0xE4, write protection control register
 	uint32_t SPI_WPSR;		//0xE8, write protection status register
 	//registers 0xec - 0xfc reserved
 } spi_reg_t;

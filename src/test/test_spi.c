@@ -14,6 +14,8 @@
 #include "sam3x8e/pio.h"
 #include "test/test_spi.h"
 
+#include "sam3x8e/delay.h"
+
 void test_spi_setup(void) {
 	const spi_settings_t spi_settings_t = {
 		.master = 1,
@@ -55,6 +57,21 @@ void test_spi_write() {
 	TEST_ASSERT_TRUE( SPI0->SPI_SR & (0x1u << 9) );
 	spi_write(SPI0, 0b00110101);
 	TEST_ASSERT_FALSE(SPI0->SPI_SR & (0x1u << 9));
+}
+
+void test_spi_read_ready() {
+	TEST_ASSERT_FALSE( spi_read_ready(SPI0) );
+	spi_write(SPI0, 0b00110101);
+
+	uint32_t timeout = 1000;
+	while(!spi_read_ready(SPI0)) {
+		delay_ms(1);
+		if(--timeout <= 0) {
+			TEST_ASSERT_TRUE(0);
+			return;
+		}
+	}
+	TEST_ASSERT_TRUE(1);
 }
 
 void test_spi(void) {

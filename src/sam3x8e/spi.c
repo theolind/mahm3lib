@@ -54,5 +54,5 @@ uint32_t spi_write_ready(spi_reg_t *spi) {
 }
 
 uint8_t spi_read_ready(spi_reg_t *spi) {
-	return (spi->SPI_SR & (1<<3));
+	return (spi->SPI_SR & (1<<0));
 }

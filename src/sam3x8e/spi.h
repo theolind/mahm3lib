@@ -94,7 +94,7 @@ uint32_t spi_write_ready(spi_reg_t *spi);
 /**
  * We want to test if we are able to read data. It is good to do this before you read data.
  * @param spi
- * @return true if we have no data in the receive register
+ * @return true if we have data in the receive register
  */
 uint8_t spi_read_ready(spi_reg_t *spi);
 

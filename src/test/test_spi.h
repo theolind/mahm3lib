@@ -34,6 +34,7 @@ void test_spi_init(void);
 void test_spi_select_slave(void);
 void test_spi_write_ready(void);
 void test_spi_write(void);
+void test_spi_read_ready(void);
 void test_spi(void);
 
 #endif

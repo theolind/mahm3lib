@@ -74,7 +74,7 @@ void spi_select_slave(spi_reg_t *spi, uint8_t slave);
  * @param spi
  * @param data the data to send
  */
-void spi_write(spi_reg_t *spi, uint8_t data);
+void spi_write(spi_reg_t *spi, uint16_t data);
 
 /**
  * Reads data that has been received
@@ -82,14 +82,14 @@ void spi_write(spi_reg_t *spi, uint8_t data);
  * @pre You need to spi_write_char before you can spi_read_char
  * @return received char
  */
-uint8_t spi_read(spi_reg_t *spi);
+uint16_t spi_read(spi_reg_t *spi);
 
 /**
  * Test if we are able to send data
  * @param spi
  * @return true if all data has been sent and we are ready to send new data
  */
-uint8_t spi_write_ready(spi_reg_t *spi);
+uint32_t spi_write_ready(spi_reg_t *spi);
 
 /**
  * We want to test if we are able to read data. It is good to do this before you read data.

@@ -31,7 +31,7 @@ void spi_select_slave(spi_reg_t *spi, uint8_t slave) {
 	spi->SPI_MR |= (0b111 >> (3-slave)) << 16; //set bit 16 to 18 in SPI_MR
 }
 
-void spi_write(spi_reg_t *spi, uint8_t data) {
+void spi_write(spi_reg_t *spi, uint16_t data) {
 	// transfer begins when processor writes to spi->SPI_TDR
 	// before writing SPI_TDR, PCS field in SPI_MR must be set in order to select slave
 
@@ -41,16 +41,16 @@ void spi_write(spi_reg_t *spi, uint8_t data) {
 	spi->SPI_TDR = data;
 }
 
-uint8_t spi_read(spi_reg_t *spi) {
+uint16_t spi_read(spi_reg_t *spi) {
 	// SPI_RDR holds received data, this register is full when RDRF bit in SPI_SR is set
 	//When data is read, this bit is cleared
 	return spi->SPI_RDR;
 }
 
-uint8_t spi_write_ready(spi_reg_t *spi) {
+uint32_t spi_write_ready(spi_reg_t *spi) {
 	// transfer of data to shift register is indicated by TDRE bit in SPI_SR
 	// transmission completion is indicated by TXEMPTY bit in SPI_SR
-	return spi->SPI_SR & (0x1u << 9);
+	return (spi->SPI_SR & (0x1u << 9));
 }
 
 uint8_t spi_read_ready(spi_reg_t *spi) {

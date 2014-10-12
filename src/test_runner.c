@@ -54,6 +54,7 @@ void run_tests(void) {
 	RUN_TEST(test_pio_output, 30);
 	RUN_TEST(test_pio_read_pin, 30);
 	RUN_TEST(test_pio_set_output, 30);
+	RUN_TEST(test_pio_set_outputs, 30);
 	RUN_TEST(test_pio_conf_multiple_pins, 30);
 	HORIZONTAL_LINE_BREAK();
 

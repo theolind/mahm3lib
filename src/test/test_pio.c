@@ -74,6 +74,7 @@ void test_pio_read_pin(void) {
 	pio_disable_pin(PIOB, 15);
 
 	TEST_ASSERT_TRUE(pin);
+	//TEST_ASSERT_EQUAL_UINT32(10, pin);
 }
 
 /*

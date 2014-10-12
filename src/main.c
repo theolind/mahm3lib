@@ -1,8 +1,7 @@
-#include <stdio.h>
-#include <inttypes.h>
+#include "main.h"
 #include "unity/unity_hw_setup.h"
-#include "unity/unity.h"
 #include "test_runner.h"
+
 
 int main(void) {
 	// basic initialization of hardware and UART communication.
@@ -12,3 +11,4 @@ int main(void) {
 
 	return 0;
 }
+

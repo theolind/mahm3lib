@@ -1,15 +1,9 @@
 ﻿/*
  * unity_hw_setup.c
  *
- * This file still needs some "cleaning":
- * 	- 	eliminate the need for memory mapping in this file
- * 		(create new functions, etc)
- *
- * 	-	make this file totally dependent of the SAM3X8E library!
- *
  * Author:	Mathias Beckius
  *
- * Date:	29 September, 2014
+ * Date:	12 October 2014
  */
 
 #include "unity_hw_setup.h"

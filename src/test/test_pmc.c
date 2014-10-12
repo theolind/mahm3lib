@@ -17,7 +17,6 @@
  */
 void test_pmc_PIOB_disabled1(void) {
 	TEST_ASSERT_FALSE(PMC->PMC_PCSR0 & (0x1u << ID_PIOB));
-	TEST_ASSERT_TRUE(0);
 }
 
 /*

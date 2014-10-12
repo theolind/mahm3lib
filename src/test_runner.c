@@ -25,8 +25,7 @@ void run_tests(void) {
 	// Run UART tests
 	Unity.TestFile = "test/test_uart.c";
 	RUN_TEST(test_uart_send_receive_char_local_loopback_mode, 0);
-	HORIZONTAL_LINE_BREAK()
-	;
+	HORIZONTAL_LINE_BREAK();
 
 	// Run EEFC tests
 	Unity.TestFile = "test/test_eefc.c";

@@ -81,7 +81,6 @@ void pmc_init_system_clock(void) {
  * ret 1 Timeout error.
  *
  * Important!
- * When everything's working, clean up and move this function to PMC API.
  * PMC->PMC_SR might still be a little unreliable, won't work in
  * systemclock_init().
  */

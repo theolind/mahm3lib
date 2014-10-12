@@ -69,6 +69,12 @@
 // These should be extended (These are MCU pin mappings and not arduino pin mappings)
 ///@}
 
+
+#define PIO_FILTER_GLITCH	(0) /// Selector for glitch filter mode
+#define PIO_FILTER_DEBOUNCE (0)	/// Selector for debounce filter mode
+
+
+
 ///@cond
 /*
  * Mapping of PIO registers
@@ -283,5 +289,34 @@ uint32_t pio_read_port(pio_reg_t *port);
  */
 uint8_t pio_conf_pin_to_peripheral(pio_reg_t *port, uint32_t periph,
 		uint8_t pin_number);
+
+/**
+ * Checks if glitch filter is selected in selected pio line
+ * @pre
+ */
+uint8_t pio_filter_glitch_enabled(pio_reg_t *port, uint32_t pin_number, uint32_t filter);
+
+/**
+ * Checks if debounce filter is selected in selected pio line
+ */
+uint8_t pio_filter_debounce_enabled(pio_reg_t *port, uint32_t pin_number, uint32_t filter);
+
+
+/**
+ * Enables glitch filter for a specified port and pin
+ * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
+ * @param pin_number the pin number (on the port) to enable filter on
+ * @pre The peripheral clock must be enabled for this to work
+ */
+uint8_t pio_filter_glitch_enable(pio_reg_t *port, uint32_t pin_number);
+
+/**
+ * Disable glitch filter for a specified port and pin
+ * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
+ * @param pin_number the pin number (on the port) to enable filter on
+ * @pre The peripheral clock must be enabled for this to work
+ */
+uint8_t pio_filter_glitch_disable(pio_reg_t *port, uint32_t pin_number);
+
 
 #endif

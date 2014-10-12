@@ -7,7 +7,7 @@
  * 			Andreas Drotth
  * 			Mathias Beckius
  *
- * Date: 30 September 2014
+ * Date: 	30 September 2014
  */
 
 #include "adc.h"

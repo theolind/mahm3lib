@@ -22,6 +22,9 @@
 // Pointer to registers of the PMC peripheral.
 #define PMC ((pmc_reg_t *) 0x400E0600U)
 
+#define PMC_CKGR_MOR_KEY 		(0x37u << 16)
+#define PMC_CKGR_MOR_MOSCXTBY 	(1u)
+
 /*
  * Mapping of PMC registers
  * Base address: 0x400E0600
@@ -95,6 +98,9 @@ typedef struct {
 	uint32_t PMC_PCR;
 } pmc_reg_t;
 ///@endcond
+
+void pmc_init_system_clock(void);
+uint32_t pmc_switch_mclk_to_pllack(uint32_t ul_pres);
 
 /**
  * Enable peripheral clock.

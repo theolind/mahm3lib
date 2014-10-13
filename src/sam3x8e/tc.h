@@ -77,9 +77,26 @@ typedef struct {
 	uint32_t TC_WPMR;
 } tc_reg_t;
 
-//typedef struct {
-//	uint32_t someting_example_setting;
-//
-//} tc_settings_t;
+typedef struct {
+	uint32_t example_setting;
+	// ...
+} tc_settings_t;
+
+/**
+ * Configures a specified counter with provided settings.
+ * @param settings Settings for timer counter.
+ * should be a struct of type tc_settings_t.
+ */
+void tc_set(tc_settings_t* tc_settings);
+
+void tc_enable_clock(tc_reg_t *tc, uint32_t channel);
+
+void tc_disable_clock(tc_reg_t *tc, uint32_t channel);
+
+void tc_start_clock(tc_reg_t *tc, uint32_t channel);
+
+void tc_stop_clock(tc_reg_t *tc, uint32_t channel);
+
+uint32_t tc_read_counter_value(tc_reg_t * tc, uint32_t channel);
 
 #endif

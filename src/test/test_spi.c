@@ -52,7 +52,6 @@ void test_spi_write_ready() {
 }
 
 void test_spi_write() {
-	delay_ms(3000);
 	spi_select_slave(SPI0, 1);
 
 	TEST_ASSERT_TRUE( SPI0->SPI_SR & (0x1u << 9) );
@@ -62,8 +61,6 @@ void test_spi_write() {
 
 void test_spi_read_ready() {
 	TEST_ASSERT_FALSE( spi_read_ready(SPI0) );
-	//spi_select_slave(SPI0, 0);
-	//delay_ms(100);
 	spi_select_slave(SPI0, 1);
 	spi_write(SPI0, 0b00110101);
 

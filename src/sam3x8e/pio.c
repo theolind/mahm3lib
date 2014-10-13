@@ -108,3 +108,34 @@ uint8_t pio_conf_pin_to_peripheral(pio_reg_t *port,
 	return 1;
 }
 
+
+
+uint32_t pio_debounce_filter_selected(pio_reg_t *port, uint32_t pin_number) {
+	return (port->PIO_IFDGSR & (1u << pin_number));
+}
+
+uint32_t pio_glitch_filter_selected(pio_reg_t *port, uint32_t pin_number) {
+	return ~(port->PIO_IFDGSR & (1u << pin_number));
+}
+
+void pio_select_glitch_filter(pio_reg_t *port, uint32_t pin_number) {
+	port->PIO_SCIFSR = (1u << pin_number);
+}
+
+void pio_select_debounce_filter(pio_reg_t *port, uint32_t pin_number) {
+	port->PIO_DIFSR |= (1u << pin_number);
+}
+
+void pio_enable_glitch_filter(pio_reg_t *port, uint32_t pin_number) {
+	port->PIO_IFER |= (1u << pin_number);
+}
+
+void pio_disable_glitch_filter(pio_reg_t *port, uint32_t pin_number) {
+	port->PIO_IFDR |= (1u << pin_number);
+}
+
+uint32_t pio_glitch_filter_enabled(pio_reg_t *port, uint32_t pin_number) {
+	return (port->PIO_IFSR & (1u << pin_number));
+}
+
+

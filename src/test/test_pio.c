@@ -135,4 +135,29 @@ void test_pio_conf_multiple_pins(void){
 	TEST_ASSERT_TRUE(pin);
 }
 
+void test_pio_select_glitch_filter(void) {
+
+	pmc_enable_peripheral_clock(ID_PIOB);
+
+	pio_select_glitch_filter(PIOB,27);
+
+	TEST_ASSERT_TRUE(pio_glitch_filter_selected(PIOB, 27));
+
+	pmc_disable_peripheral_clock(ID_PIOB);
+}
+
+void test_pio_enable_glitch_filter(void) {
+
+	pmc_enable_peripheral_clock(ID_PIOB);
+
+	//pio_select_glitch_filter(PIOB, 27);
+
+	pio_enable_glitch_filter(PIOB, 27);
+
+	TEST_ASSERT_TRUE(pio_glitch_filter_enabled(PIOB, 27));
+
+	pmc_disable_peripheral_clock(ID_PIOB);
+	pio_disable_glitch_filter(PIOB, 27);
+}
+
 

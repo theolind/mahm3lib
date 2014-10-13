@@ -16,14 +16,16 @@ uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings) {
 	spi->SPI_MR |= settings->master;
 	spi->SPI_MR |= (1<<5);	//Wait Data Read Before Transfer - prevents overrun of SPI_RDR
 	spi->SPI_MR &= ~(1<<1);	//Clear bit one in MR to set fied peripheral select
-	spi->SPI_CSR0 = settings->CPOL | (settings->NCPHA<<1) | (settings->bits[0]<<4)
+	/*spi->SPI_CSR0 = settings->CPOL | (settings->NCPHA<<1) | (settings->bits[0]<<4)
 					| (settings->baud[0]<<8);
 	spi->SPI_CSR1 = settings->CPOL | (settings->NCPHA<<1) | (settings->bits[1]<<4)
 						| (settings->baud[1]<<8);
 	spi->SPI_CSR2 = settings->CPOL | (settings->NCPHA<<1) | (settings->bits[2]<<4)
 						| (settings->baud[2]<<8);
 	spi->SPI_CSR3 = settings->CPOL | (settings->NCPHA<<1) | (settings->bits[3]<<4)
-						| (settings->baud[3]<<8);
+						| (settings->baud[3]<<8);*/
+
+	spi->SPI_CSR1 = 0b00000000000000001111111100000000;
 }
 
 void spi_select_slave(spi_reg_t *spi, uint8_t slave) {

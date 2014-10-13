@@ -72,7 +72,7 @@ void run_tests(void) {
 	test_spi_setup();
 	RUN_TEST(test_spi_init, 30);
 	RUN_TEST(test_spi_select_slave, 30);
-	RUN_TEST(test_spi_write_ready, 30);
+	//RUN_TEST(test_spi_write_ready, 30);
 	RUN_TEST(test_spi_write, 30);
 	RUN_TEST(test_spi_read_ready, 30);
 

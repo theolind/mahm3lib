@@ -21,19 +21,19 @@ void test_spi_setup(void) {
 		.master = 1,
 		.CPOL = 0,
 		.NCPHA = 0,
-		.baud[0] = 128,
+		.baud[0] = 1,
 		.bits[0] = 8
 	};
 
 	pmc_enable_peripheral_clock(ID_SPI0);
 
-	pio_conf_pin_to_peripheral(PIOA, 1, 25);	//MISO
-	pio_conf_pin_to_peripheral(PIOA, 1, 26);	//MOSI
-	pio_conf_pin_to_peripheral(PIOA, 1, 27);	//SPCK
-	pio_conf_pin_to_peripheral(PIOA, 1, 28);	//NPCS0
-	pio_conf_pin_to_peripheral(PIOA, 1, 29);	//NPCS1
-	pio_conf_pin_to_peripheral(PIOA, 1, 30);	//NPSC2
-	pio_conf_pin_to_peripheral(PIOA, 1, 31);	//NPSC3
+	pio_conf_pin_to_peripheral(PIOA, 0, 25);	//MISO
+	pio_conf_pin_to_peripheral(PIOA, 0, 26);	//MOSI
+	pio_conf_pin_to_peripheral(PIOA, 0, 27);	//SPCK
+	pio_conf_pin_to_peripheral(PIOA, 0, 28);	//NPCS0
+	pio_conf_pin_to_peripheral(PIOA, 0, 29);	//NPCS1
+	pio_conf_pin_to_peripheral(PIOA, 0, 30);	//NPSC2
+	pio_conf_pin_to_peripheral(PIOA, 0, 31);	//NPSC3
 
 	spi_init(SPI0, &spi_settings_t);
 }
@@ -61,6 +61,9 @@ void test_spi_write() {
 
 void test_spi_read_ready() {
 	TEST_ASSERT_FALSE( spi_read_ready(SPI0) );
+	spi_select_slave(SPI0, 0);
+	delay_ms(100);
+	spi_select_slave(SPI0, 1);
 	spi_write(SPI0, 0b00110101);
 
 	uint32_t timeout = 1000;

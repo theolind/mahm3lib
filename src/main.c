@@ -10,6 +10,7 @@
 #include "sam3x8e/rtos/task.h"
 #include "sam3x8e/rtos/semphr.h"
 
+
 void vApplicationMallocFailedHook( void );
 void vApplicationIdleHook( void );
 void vApplicationStackOverflowHook( TaskHandle_t pxTask, char *pcTaskName );
@@ -35,6 +36,7 @@ functionality. */
 
 /* The queue used by both tasks. */
 static QueueHandle_t xQueue = NULL;
+
 
 int main(void) {
 	// basic initialization of hardware and UART communication.
@@ -76,8 +78,8 @@ int main(void) {
 
 		return 0;
 
-	return 0;
 }
+
 
 static void Thread1(void *arg) {
 

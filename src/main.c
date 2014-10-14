@@ -8,14 +8,33 @@
 #include "sam3x8e/uart.h"
 #include "sam3x8e/rtos/FreeRTOS.h"
 #include "sam3x8e/rtos/task.h"
+#include "sam3x8e/rtos/semphr.h"
 
 void vApplicationMallocFailedHook( void );
 void vApplicationIdleHook( void );
 void vApplicationStackOverflowHook( TaskHandle_t pxTask, char *pcTaskName );
 void vApplicationTickHook( void );
 
-unsigned int led_num;
+/* Priorities at which the tasks are created. */
+#define mainQUEUE_RECEIVE_TASK_PRIORITY		( tskIDLE_PRIORITY + 2 )
+#define	mainQUEUE_SEND_TASK_PRIORITY		( tskIDLE_PRIORITY + 1 )
 
+/* The rate at which data is sent to the queue.  The 200ms value is converted
+to ticks using the portTICK_PERIOD_MS constant. */
+#define mainQUEUE_SEND_FREQUENCY_MS			( 200 / portTICK_PERIOD_MS )
+
+/* The number of items the queue can hold.  This is 1 as the receive task
+will remove items as they are added, meaning the send task should always find
+the queue empty. */
+#define mainQUEUE_LENGTH					( 1 )
+
+/* Values passed to the two tasks just to check the task parameter
+functionality. */
+#define mainQUEUE_SEND_PARAMETER			( 0x1111UL )
+#define mainQUEUE_RECEIVE_PARAMETER			( 0x22UL )
+
+/* The queue used by both tasks. */
+static QueueHandle_t xQueue = NULL;
 
 int main(void) {
 	// basic initialization of hardware and UART communication.
@@ -23,52 +42,88 @@ int main(void) {
 
 	//run_tests();
 
-	pmc_enable_peripheral_clock(ID_PIOB);
-	pio_enable_pin(D13_PORT, D13);
-	pio_conf_pin(D13_PORT, D13, 0, 0);
+	/* Create the queue. */
+	xQueue = xQueueCreate( mainQUEUE_LENGTH, sizeof( unsigned long ) );
 
-	uart_write_str("\r\nMain: Pre-task create \r\n");
+		if( xQueue != NULL )
+		{
+			/* Start the two tasks as described in the comments at the top of this
+			file. */
+			xTaskCreate( Thread1,					/* The function that implements the task. */
+			"Rx", 									/* The text name assigned to the task - for debug only as it is not used by the kernel. */
+			configMINIMAL_STACK_SIZE, 				/* The size of the stack to allocate to the task. */
+			( void * ) mainQUEUE_RECEIVE_PARAMETER, /* The parameter passed to the task - just to check the functionality. */
+			mainQUEUE_RECEIVE_TASK_PRIORITY, 		/* The priority assigned to the task. */
+			NULL );									/* The task handle is not required, so NULL is passed. */
 
-	xTaskCreate(Thread1, NULL, configMINIMAL_STACK_SIZE, NULL, 4, NULL);
-	//xTaskCreate(Thread2, NULL, configMINIMAL_STACK_SIZE, NULL, 4, NULL);
 
-	uart_write_str("Main: Post-task create \r\n");
+			xTaskCreate( Thread2,					/* The function that implements the task. */
+			"Rx", 									/* The text name assigned to the task - for debug only as it is not used by the kernel. */
+			configMINIMAL_STACK_SIZE, 				/* The size of the stack to allocate to the task. */
+			( void * ) mainQUEUE_SEND_PARAMETER, /* The parameter passed to the task - just to check the functionality. */
+			mainQUEUE_SEND_TASK_PRIORITY, 		/* The priority assigned to the task. */
+			NULL );
+			/* Start the tasks and timer running. */
+			print_pmc_status();
 
-	vTaskStartScheduler();
+			vTaskStartScheduler();
+		}
 
-	uart_write_str("Main: Post vTaskStartScheduler \r\n");
+		/* If all is well, the scheduler will now be running, and the following
+		line will never be reached.  If the following line does execute, then
+		there was insufficient FreeRTOS heap memory available for the idle and/or
+		timer tasks	to be created.  See the memory management section on the
+		FreeRTOS web site for more details. */
+		for( ;; );
 
-	while(1);
+		return 0;
 
 	return 0;
 }
 
-static void Thread2(void *arg) {
-
-	for (;;) {
-
-		led_num++;
-		char test = (char) led_num;
-		//uart_write_str(test);
-		vTaskDelay((50L * configTICK_RATE_HZ) / 1000L); //50ms delay
-	}
-
-
-}
-
 static void Thread1(void *arg) {
 
+	pmc_enable_peripheral_clock(ID_PIOD);
+	pio_enable_pin(D12_PORT, D12);
+	pio_conf_pin(D12_PORT, D12, 0, 0);
+
 	for (;;) {
-		pio_set_pin(D13_PORT, D13, 0);
-
-		vTaskDelay((500L * configTICK_RATE_HZ) / 1000L); //50ms delay(100);
-
-		pio_set_pin(D13_PORT, D13, 1);
-
-		vTaskDelay((500L * configTICK_RATE_HZ) / 1000L); //50ms delay(100);
+		pio_set_pin(D12_PORT, D12, 0);
+		vTaskDelay(400 / portTICK_PERIOD_MS);
+		pio_set_pin(D12_PORT, D12, 1);
+		vTaskDelay(400 / portTICK_PERIOD_MS);
 	}
+}
 
+static void Thread2(void *arg) {
 
+	pmc_enable_peripheral_clock(ID_PIOB);
+	pio_enable_pin(D13_PORT, D13);
+	pio_conf_pin(D13_PORT, D13, 0, 0);
+
+	for( ;; ) {
+		vTaskDelay(100 / portTICK_PERIOD_MS);
+		pio_set_pin(D13_PORT, D13, 0);
+		vTaskDelay(100 / portTICK_PERIOD_MS);
+		pio_set_pin(D13_PORT, D13, 1);
+	}
+}
+
+void print_pmc_status(void){
+
+	for(char i = 0; i<45; i++){
+
+		uart_write_str("ID");
+		uart_write_char(i+48);
+		uart_write_str(" : ");
+		if(pmc_peripheral_clock_enabled(i)){
+			uart_write_str("SUCCESS");
+			uart_write_str("\r\n");
+			}else{
+			uart_write_str("FAIL");
+			uart_write_str("\r\n");
+		}
+	}
 
 }
 

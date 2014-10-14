@@ -7,7 +7,7 @@
  *
  * @author Andreas Drotth
  * @author Mattias Nilsson
- * @date 13 Oktober 2014
+ * @date 14 Oktober 2014
  */
 
 #ifndef TC_H_
@@ -15,20 +15,25 @@
 
 #include <inttypes.h>
 
-// pointer to registers of TC, base address: 0x40080000
-#define TC0 ((tc_reg_t *) 0x40080000U)
-#define TC1 ((tc_reg_t *) 0x40084000U)
-#define TC2 ((tc_reg_t *) 0x40088000U)
+// Pointer to base addresses of the three Timer Counters.
+#define TC0 ((tc_reg_t *) 0x40080000U) ///< Instance of TC0
+#define TC1 ((tc_reg_t *) 0x40084000U) ///< Instance of TC1
+#define TC2 ((tc_reg_t *) 0x40088000U) ///< Instance of TC2
 
-#define TC0_TCLK0	(0x00)
-#define TC0_TCLK1	(0x40)
-#define TC0_TCLK2	(0x80)
-#define TC1_TCLK3	(0x00)
-#define TC1_TCLK4	(0x40)
-#define TC1_TCLK5	(0x80)
-#define TC2_TCLK6	(0x00)
-#define TC2_TCLK7	(0x40)
-#define TC2_TCLK8	(0x80)
+// Valid channels for each TC instance
+#define CHANNEL_0	(0x00) ///< TCx channel 0
+#define CHANNEL_1	(0x40) ///< TCx channel 1
+#define CHANNEL_2	(0x80) ///< TCx channel 2
+
+// Valid clock selections
+#define TCLK1 		(0)	///< Timer clock 1 (MCK/2)
+#define TCLK2 		(1)	///< Timer clock 2 (MCK/8)
+#define TCLK3 		(2)	///< Timer clock 3 (MCK/32)
+#define TCLK4 		(3)	///< Timer clock 4 (MCK/128)
+#define TCLK5		(4) ///< Timer clock 5 (SLCK, equivalent to MCK in SCLK mode)
+#define XC0			(5) ///< Extern clock 0
+#define XC1			(6) ///< Extern clock 1
+#define XC2			(7) ///< Extern clock 2
 
 typedef struct {
 	// Channel Control Register, offset 0x0000
@@ -78,25 +83,61 @@ typedef struct {
 } tc_reg_t;
 
 typedef struct {
-	uint32_t example_setting;
-	// ...
+	/**
+	 * Mode selection.
+	 * 0 = Capture Mode
+	 * 1 = Waveform Mode
+	 */
+	uint32_t mode;
+	/**
+	 * Clock selection.
+	 * Either an internal timer clock or external clock.
+	 */
+	uint32_t clock;
 } tc_settings_t;
 
 /**
  * Configures a specified counter with provided settings.
  * @param settings Settings for timer counter.
- * should be a struct of type tc_settings_t.
+ * Should be a struct of type tc_settings_t.
+ * @param tc Timer counter instance.
+ * @param channel Channel to configure.
  */
-void tc_set(tc_settings_t* tc_settings);
+void tc_conf(tc_settings_t* settings, tc_reg_t *tc, uint32_t channel);
 
+/**
+ * Enables the clock for a channel.
+ * @param tc Timer counter instance.
+ * @param channel Channel to configure.
+ */
 void tc_enable_clock(tc_reg_t *tc, uint32_t channel);
 
+/**
+ * Disables the clock for a channel.
+ * @param tc Timer counter instance.
+ * @param channel Channel to configure.
+ */
 void tc_disable_clock(tc_reg_t *tc, uint32_t channel);
 
+/**
+ * Starts the clock for a channel.
+ * @param tc Timer counter instance.
+ * @param channel Channel to configure.
+ */
 void tc_start_clock(tc_reg_t *tc, uint32_t channel);
 
+/**
+ * Stops the clock for a channel.
+ * @param tc Timer counter instance.
+ * @param channel Channel to configure.
+ */
 void tc_stop_clock(tc_reg_t *tc, uint32_t channel);
 
+/**
+ * Read the counter value from a channel.
+ * @param tc Timer counter instance.
+ * @param channel Channel to configure.
+ */
 uint32_t tc_read_counter_value(tc_reg_t * tc, uint32_t channel);
 
 #endif

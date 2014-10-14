@@ -40,8 +40,6 @@ int main(void) {
 	// basic initialization of hardware and UART communication.
 	unity_hw_setup();
 
-	//run_tests();
-
 	/* Create the queue. */
 	xQueue = xQueueCreate( mainQUEUE_LENGTH, sizeof( unsigned long ) );
 
@@ -124,7 +122,6 @@ void print_pmc_status(void){
 			uart_write_str("\r\n");
 		}
 	}
-
 }
 
 

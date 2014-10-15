@@ -100,7 +100,6 @@ typedef struct {
 ///@endcond
 
 void pmc_init_system_clock(void);
-uint32_t pmc_switch_mclk_to_pllack(uint32_t ul_pres);
 
 /**
  * Enable peripheral clock.

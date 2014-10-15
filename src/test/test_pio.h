@@ -19,5 +19,7 @@ void test_pio_read_pin(void);	//testing pio_read_*
 void test_pio_set_output(void);	//testing pio_set_*
 void test_pio_set_outputs(void);
 void test_pio_conf_multiple_pins(void);
+void test_pio_select_glitch_filter(void);
+void test_pio_enable_glitch_filter(void);
 
 #endif /* TEST_PIO_H_ */

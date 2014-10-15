@@ -39,11 +39,6 @@ void run_tests(void) {
 	RUN_TEST(test_pmc_PIOB_enabled, 20);
 	RUN_TEST(test_pmc_disable_PIOB, 20);
 	RUN_TEST(test_pmc_PIOB_disabled2, 20);
-	RUN_TEST(test_pmc_PWM_disabled1, 20);
-	RUN_TEST(test_pmc_enable_PWM, 20);
-	RUN_TEST(test_pmc_PWM_enabled, 20);
-	RUN_TEST(test_pmc_disable_PWM, 20);
-	RUN_TEST(test_pmc_PWM_disabled2, 20);
 	HORIZONTAL_LINE_BREAK();
 
 	// Run PIO tests
@@ -56,6 +51,8 @@ void run_tests(void) {
 	RUN_TEST(test_pio_set_output, 30);
 	RUN_TEST(test_pio_set_outputs, 30);
 	RUN_TEST(test_pio_conf_multiple_pins, 30);
+	RUN_TEST(test_pio_select_glitch_filter, 30);
+	RUN_TEST(test_pio_enable_glitch_filter, 30);
 	HORIZONTAL_LINE_BREAK();
 
 	// Run DACC tests
@@ -100,9 +97,6 @@ void run_tests(void) {
 	RUN_TEST(test_pwm_channel_duty_cycle, 30);
 	RUN_TEST(test_pwm_channel_polarity, 30);
 	RUN_TEST(test_pwm_channel_alignment, 30);
-	RUN_TEST(test_pwm_channel_period, 30);
-	RUN_TEST(test_pwm_set_clkx, 30);
-	RUN_TEST(test_set_frequency, 30);
 
 	UnityEnd();
 }

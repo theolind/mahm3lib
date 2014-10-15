@@ -25,15 +25,23 @@
 #define CHANNEL_1	(0x40) ///< TCx channel 1
 #define CHANNEL_2	(0x80) ///< TCx channel 2
 
-// Valid clock selections
+// Clock selections
 #define TCLK1 		(0)	///< Timer clock 1 (MCK/2)
 #define TCLK2 		(1)	///< Timer clock 2 (MCK/8)
 #define TCLK3 		(2)	///< Timer clock 3 (MCK/32)
 #define TCLK4 		(3)	///< Timer clock 4 (MCK/128)
 #define TCLK5		(4) ///< Timer clock 5 (SLCK, equivalent to MCK in SCLK mode)
-#define XC0			(5) ///< Extern clock 0
-#define XC1			(6) ///< Extern clock 1
-#define XC2			(7) ///< Extern clock 2
+#define TCLK_XC0	(5) ///< Extern clock 0
+#define TCLK_XC1	(6) ///< Extern clock 1
+#define TCLK_XC2	(7) ///< Extern clock 2
+
+// Burst selections
+#define BURST_NONE	(0) ///< The clock is not gated by an external signal.
+#define BURST_XC0 	(1) ///< XC0 is ANDed with the selected clock.
+#define BURST_XC1 	(2) ///< XC1 is ANDed with the selected clock.
+#define BURST_XC2 	(3) ///< XC2 is ANDed with the selected clock.
+
+
 
 typedef struct {
 	// Channel Control Register, offset 0x0000
@@ -82,19 +90,60 @@ typedef struct {
 	uint32_t TC_WPMR;
 } tc_reg_t;
 
-typedef struct {
-	/**
-	 * Mode selection.
-	 * 0 = Capture Mode
-	 * 1 = Waveform Mode
-	 */
-	uint32_t mode;
+/**
+ * Settings for the individual channels.
+ */
+typedef struct tc_channel_settings {
+	// Common parameters
 	/**
 	 * Clock selection.
 	 * Either an internal timer clock or external clock.
 	 */
-	uint32_t clock;
-} tc_settings_t;
+	uint32_t tcclcks;
+	/**
+	 * Clock invertion.
+	 * 0: counter is incremented on rising edge of the clock.
+	 * 1: counter is incremented on falling edge of the clock.
+	 */
+	uint32_t clki;
+	/**
+	 * Burst Signal Selection
+	 * 0: The clock is not gated by an external signal.
+	 * 1-3: ANDed with the selected clock.
+	 */
+	uint32_t burst;
+	/**
+	 * Mode selection.
+	 * 0: Capture Mode
+	 * 1: Waveform Mode
+	 */
+	uint32_t wave;
+
+	// Capture mode parameters
+	uint32_t ldbstop;
+	uint32_t ldbdis;
+	uint32_t etrgedg;
+	uint32_t abetrg;
+	uint32_t cpctrg;
+	uint32_t ldra;
+	uint32_t ldrb;
+
+	// Waveform mode parameters
+	uint32_t cpcstop;
+	uint32_t cpcdis;
+	uint32_t eevtedg;
+	uint32_t eevt;
+	uint32_t enetrg;
+	uint32_t wavesel;
+	uint32_t acpa;
+	uint32_t acpc;
+	uint32_t aeevt;
+	uint32_t aswtrg;
+	uint32_t bcpb;
+	uint32_t bcpc;
+	uint32_t beevt;
+	uint32_t bswtrg;
+} tc_channel_settings_t;
 
 /**
  * Configures a specified counter with provided settings.
@@ -103,7 +152,7 @@ typedef struct {
  * @param tc Timer counter instance.
  * @param channel Channel to configure.
  */
-void tc_conf(tc_settings_t* settings, tc_reg_t *tc, uint32_t channel);
+void tc_conf(tc_channel_settings_t* settings, tc_reg_t *tc, uint32_t channel);
 
 /**
  * Enables the clock for a channel.
@@ -137,6 +186,7 @@ void tc_stop_clock(tc_reg_t *tc, uint32_t channel);
  * Read the counter value from a channel.
  * @param tc Timer counter instance.
  * @param channel Channel to configure.
+ * @return The read counter value.
  */
 uint32_t tc_read_counter_value(tc_reg_t * tc, uint32_t channel);
 

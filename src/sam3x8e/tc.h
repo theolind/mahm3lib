@@ -7,7 +7,7 @@
  *
  * @author Andreas Drotth
  * @author Mattias Nilsson
- * @date 14 Oktober 2014
+ * @date 15 Oktober 2014
  */
 
 #ifndef TC_H_
@@ -21,10 +21,15 @@
 #define TC2 ((tc_reg_t *) 0x40088000U) ///< Instance of TC2
 
 // Valid channels for each TC instance
-#define CHANNEL_0	(0x00) ///< TCx channel 0
-#define CHANNEL_1	(0x40) ///< TCx channel 1
-#define CHANNEL_2	(0x80) ///< TCx channel 2
+#define CHANNEL_0	(0x00) ///< TC channel 0
+#define CHANNEL_1	(0x40) ///< TC channel 1
+#define CHANNEL_2	(0x80) ///< TC channel 2
 
+// Used by functions
+#define TC_CCR_CLKEN	(0x1u << 0)
+#define TC_CCR_CLKDIS	(0x1u << 1)
+
+//------- Defines used for TC Channel Mode Register -------
 // Clock selections
 #define TCLK1 		(0)	///< Timer clock 1 (MCK/2)
 #define TCLK2 		(1)	///< Timer clock 2 (MCK/8)
@@ -41,9 +46,10 @@
 #define BURST_XC1 	(2) ///< XC1 is ANDed with the selected clock.
 #define BURST_XC2 	(3) ///< XC2 is ANDed with the selected clock.
 
-
-
-typedef struct {
+/*
+ * Mapping of TC registers
+ */
+typedef struct tc_reg {
 	// Channel Control Register, offset 0x0000
 	uint32_t TC_CCR;
 	// Channel Mode Register, offset 0x0004
@@ -107,9 +113,7 @@ typedef struct tc_channel_settings {
 	 */
 	uint32_t clki;
 	/**
-	 * Burst Signal Selection
-	 * 0: The clock is not gated by an external signal.
-	 * 1-3: ANDed with the selected clock.
+	 * Burst Signal Selection.
 	 */
 	uint32_t burst;
 	/**
@@ -144,6 +148,24 @@ typedef struct tc_channel_settings {
 	uint32_t beevt;
 	uint32_t bswtrg;
 } tc_channel_settings_t;
+
+typedef struct tc_block_settings {
+	uint32_t tc0xc0s;
+	uint32_t tc1xc1s;
+	uint32_t tc2xc2s;
+	uint32_t qden;
+	uint32_t posen;
+	uint32_t speeden;
+	uint32_t qdtrans;
+	uint32_t edgpha;
+	uint32_t inva;
+	uint32_t invb;
+	uint32_t invidx;
+	uint32_t swap;
+	uint32_t idxphb;
+	uint32_t filter;
+	uint32_t maxfilt;
+} tc_block_settings_t;
 
 /**
  * Configures a specified counter with provided settings.

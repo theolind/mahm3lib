@@ -3,8 +3,9 @@
  *
  * Author:	Theodor Lindquist
  * 			Soded Alatia
+ * 			Mathias Beckius
  *
- * Date:	18 September 2014
+ * Date:	12 October 2014
  */
 
 #ifndef TEST_PIO_H_
@@ -16,6 +17,7 @@ void test_pio_pullup(void);	//testing pio_conf_*
 void test_pio_output(void);	//testing pio_conf_*
 void test_pio_read_pin(void);	//testing pio_read_*
 void test_pio_set_output(void);	//testing pio_set_*
+void test_pio_set_outputs(void);
 void test_pio_conf_multiple_pins(void);
 
 #endif /* TEST_PIO_H_ */

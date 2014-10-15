@@ -6,7 +6,7 @@
 * 			Felix Ruponen
 * 			Mathias Beckius
 *
-* Date:		29 September 2014
+* Date:		12 October 2014
 */
 
 #include "pio.h"
@@ -39,7 +39,7 @@ void pio_conf_pins(pio_reg_t *port, uint32_t pins, uint32_t input, uint32_t pull
 		//use the output disable register to enable inputs
 		port->PIO_ODR = pins;
 	} else {
-		//use the output enable register to enalbe outputs
+		//use the output enable register to enable outputs
 		port->PIO_OER = pins;
 }
 	//set pullups
@@ -79,10 +79,11 @@ void pio_set_pins(pio_reg_t *port, uint32_t pins, uint32_t level) {
 
 void pio_set_port(pio_reg_t *port, uint32_t levels) {
 	port->PIO_SODR = levels;
+	port->PIO_CODR = ~levels;
 }
 
 uint32_t pio_read_pin(pio_reg_t *port, uint32_t pin) {
-	return ((pio_read_port(port) & (1U << pin)) >> pin);
+	return ((pio_read_port(port) & (1U << pin)) != 0);
 }
 
 uint32_t pio_read_port(pio_reg_t *port) {

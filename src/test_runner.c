@@ -54,6 +54,7 @@ void run_tests(void) {
 	RUN_TEST(test_pio_output, 30);
 	RUN_TEST(test_pio_read_pin, 30);
 	RUN_TEST(test_pio_set_output, 30);
+	RUN_TEST(test_pio_set_outputs, 30);
 	RUN_TEST(test_pio_conf_multiple_pins, 30);
 	HORIZONTAL_LINE_BREAK();
 
@@ -89,51 +90,6 @@ void run_tests(void) {
 	RUN_TEST(test_set_register, 60);
 	RUN_TEST(test_clear_bit_in_register, 60);
 	RUN_TEST(test_set_bit_in_register, 60);
-	HORIZONTAL_LINE_BREAK();
-
-	// Run PIO tests
-	Unity.TestFile = "test/test_pio.c";
-	RUN_TEST(test_pio_enable_pin, 10);
-	RUN_TEST(test_pio_disable_pin, 10);
-	RUN_TEST(test_pio_pullup, 10);
-	RUN_TEST(test_pio_output, 10);
-	RUN_TEST(test_pio_read_pin, 10);
-	RUN_TEST(test_pio_set_output, 10);
-	RUN_TEST(test_pio_conf_multiple_pins, 10);
-	HORIZONTAL_LINE_BREAK();
-
-	// Run DACC tests
-	Unity.TestFile = "test/test_dacc.c";
-	RUN_TEST(test_dacc_channel_0_disabled1, 30);
-	RUN_TEST(test_dacc_channel_1_disabled1, 30);
-	RUN_TEST(test_dacc_enable_channel_0, 30);
-	RUN_TEST(test_dacc_enable_channel_1, 30);
-	RUN_TEST(test_dacc_disable_channel_0, 30);
-	RUN_TEST(test_dacc_disable_channel_1, 30);
-	RUN_TEST(test_dacc_channel_0_disabled2, 30);
-	RUN_TEST(test_dacc_channel_1_disabled2, 30);
-	HORIZONTAL_LINE_BREAK();
-
-	// Run ADC tests
-	Unity.TestFile = "test/test_adc.c";
-	RUN_TEST(test_adc_channel_enabled, 30);
-	RUN_TEST(test_adc_channel_disabled, 30);
-	RUN_TEST(test_adc_channel_status, 30);
-	RUN_TEST(test_adc_set_resolution_10_bit, 30);
-	RUN_TEST(test_adc_set_resolution_12_bit, 30);
-	HORIZONTAL_LINE_BREAK();
-
-	// Run bitwise_operations tests
-	Unity.TestFile = "test/test_bitwise_operations.c";
-	RUN_TEST(test_is_bit_high, 30);
-	RUN_TEST(test_get_position_of_first_highbit, 30);
-	RUN_TEST(test_get_section_in_register, 30);
-	RUN_TEST(test_set_section_in_register, 30);
-	RUN_TEST(test_set_section_in_register2, 30);
-	RUN_TEST(test_clear_register, 30);
-	RUN_TEST(test_set_register, 30);
-	RUN_TEST(test_clear_bit_in_register, 30);
-	RUN_TEST(test_set_bit_in_register, 30);
 	HORIZONTAL_LINE_BREAK();
 
 	// Run PWM tests

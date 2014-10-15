@@ -21,8 +21,8 @@ void test_spi_setup(void) {
 		.master = 1,
 		.CPOL = 0,
 		.NCPHA = 0,
-		.baud[1] = 255,
-		.bits[1] = 0
+		.baud[0] = 255,
+		.bits[0] = 0
 	};
 
 	pmc_enable_peripheral_clock(ID_SPI0);
@@ -57,6 +57,12 @@ void test_spi_write() {
 	TEST_ASSERT_TRUE( SPI0->SPI_SR & (0x1u << 9) );
 	spi_write(SPI0, 0b00110101);
 	TEST_ASSERT_FALSE(SPI0->SPI_SR & (0x1u << 9));
+	while(1) {
+		spi_write(SPI0, 0b11111111);
+		delay_us(1000);
+		spi_write(SPI0, 0b00000000);
+		delay_us(1000);
+	}
 }
 
 void test_spi_read_ready() {

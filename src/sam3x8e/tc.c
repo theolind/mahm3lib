@@ -10,5 +10,11 @@
 #include "tc.h"
 
 void tc_enable_clock(tc_reg_t *tc, uint32_t channel){
-	(tc->TC_CCR + channel) = TC_CCR_CLKEN;
+	tc_channel_reg_t *tc_channel;
+	if (channel > MAX_CHANNELS){
+		return;
+	}
+	tc_channel = tc->TC_CHANNEL + channel;
+
+	tc_channel->TC_CCR = TC_CCR_CLKEN;
 }

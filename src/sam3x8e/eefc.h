@@ -2,13 +2,12 @@
  * @file eefc.h
  * @brief EEFC - Enhanced Embedded Flash Controller
  * @details This API is used to set the EEFC.
+ * @details The API is very limited by the moment. Only functionality to
+ * make a standard system initialization is implemented.
  * @post Initialize system clock
  *
- * Important: The API is very limited by the moment. Only functionality to
- * make a standard system initialization is implemented.
- *
  * @author Mathias Beckius
- * @date 12 October 2014
+ * @date 15 October 2014
  */
 
 #ifndef EEFC_H_
@@ -16,8 +15,9 @@
 
 #include <inttypes.h>
 
-// Pointers to registers of the Watchdog peripheral.
+/// @brief Pointer to registers EEFC0
 #define EEFC0 ((eefc_reg_t *) 0x400E0A00U)
+/// @brief Pointer to registers EEFC1
 #define EEFC1 ((eefc_reg_t *) 0x400E0C00U)
 
 ///@cond

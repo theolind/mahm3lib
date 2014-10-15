@@ -10,7 +10,4 @@
 
 int main(void);
 
-static void Thread1(void*);
-static void Thread2(void*);
-
 #endif /* MAIN_H_ */

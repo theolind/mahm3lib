@@ -6,9 +6,7 @@ DON'T FORGET TO INCLUDE:
 #include "sam3x8e/pio.h"
 #include "sam3x8e/delay.h"
 #include "sam3x8e/uart.h"
-#include "sam3x8e/coos/CoOS.h"
-#include "sam3x8e/coos/OsConfig.h" /*!< CoOS configure header file*/
-
+#include "sam3x8e/rtos.h"
 /*---------------------------- Variable Define -------------------------------*/
 OS_STK taskA_stk[128]; /*!< Define "taskA" task stack */
 OS_STK led_stk[128]; /*!< define "led" task stack */
@@ -65,11 +63,8 @@ int main(void) {
 	unity_hw_setup();
 
 //	run_tests();
-	uart_write_str("pre \n\r");
 
 	CoInitOS(); /*!< Initial CooCox CoOS          */
-
-	uart_write_str("after \n\r");
 
 	/*!< Create three tasks	*/
 	CoCreateTask(taskA, 0, 0, &taskA_stk[128 - 1], 128);

@@ -1,71 +1,80 @@
 #include "main.h"
 #include "unity/unity_hw_setup.h"
 #include "test_runner.h"
-#include "sam3x8e/chibios/ch.h"
-#include "chconf.h"
-#include "halconf.h"
-#include "stdio.h"
+#include "sam3x8e/arduino_due.h"
+#include "sam3x8e/pmc.h"
+#include "sam3x8e/pio.h"
+#include "sam3x8e/delay.h"
+#include "sam3x8e/uart.h"
+#include "sam3x8e/coos/CoOS.h"
+#include "sam3x8e/coos/OsConfig.h" /*!< CoOS configure header file*/
 
+/*---------------------------- Variable Define -------------------------------*/
+OS_STK taskA_stk[128]; /*!< Define "taskA" task stack */
+OS_STK led_stk[128]; /*!< define "led" task stack */
+OS_MutexID uart_mutex; /*!< UART1 mutex id            */
+OS_FlagID a_flag, b_flag; /*!< Save falg id	             */
+volatile unsigned int Cnt = 0; /*!< A counter             */
 
-/*
- * This is a periodic thread that does absolutely nothing except increasing
- * the seconds counter.
- */
-static WORKING_AREA(waThread1, 128);
-static WORKING_AREA(waThread2, 128);
-static WORKING_AREA(waThread3, 128);
-
-static msg_t Thread1(void *arg) {
-	(void)arg;
-
-	while (TRUE) {
-		chThdSleepMilliseconds(1000);
+void taskA(void* pdata) {
+	/*!< Create a mutex for uart print */
+	uart_mutex = CoCreateMutex();
+	if (uart_mutex == E_CREATE_FAIL) { /*!< If failed to create, print message */
+		uart_write_str(" Failed to create Mutex! \n\r");
 	}
-	return 0;
+	/*!< Create two flags to communicate between taskA and taskB */
+	a_flag = CoCreateFlag(TRUE, 0);
+	if (a_flag == E_CREATE_FAIL) {
+		uart_write_str(" Failed to create the Flag! \n\r");
+	}
+	b_flag = CoCreateFlag(TRUE, 0);
+	if (b_flag == E_CREATE_FAIL) {
+		uart_write_str(" Failed to create the Flag ! \n\r");
+	}
+	for (;;) {
+		CoWaitForSingleFlag(a_flag, 0);
+		CoEnterMutexSection(uart_mutex);
+		uart_write_str(" taskA is running \n\r");
+		CoLeaveMutexSection(uart_mutex);
+	}
 }
 
-static msg_t Thread2(void *arg) {
-	(void)arg;
 
-	while (TRUE) {
-		chThdSleepMilliseconds(1000);
+void led(void* pdata) {
+	pmc_enable_peripheral_clock(ID_PIOB);
+	pio_enable_pin(D13_PORT, D13);
+	pio_conf_pin(D13_PORT, D13, 0, 0);
+
+
+	for (;;) {
+		pio_set_pin(D13_PORT, D13, 0);
+		CoTickDelay(50);
+		pio_set_pin(D13_PORT, D13, 1);
+		CoTickDelay(50);
+		if ((Cnt % 2) == 0) {
+			CoSetFlag(a_flag); /*!< Set "a_flag" flag*/
+		} else if ((Cnt % 2) == 1) {
+			CoSetFlag(b_flag); /*!< Set "b_flag" flag*/
+		}
+		Cnt++;
 	}
-	return 0;
 }
-
-static msg_t Thread3(void *arg) {
-	(void)arg;
-
-	while (TRUE) {
-		chThdSleepMilliseconds(500);
-	}
-	return 0;
-}
-
 
 int main(void) {
 	// basic initialization of hardware and UART communication.
 	unity_hw_setup();
 
-	//run_tests();
+//	run_tests();
+	uart_write_str("pre \n\r");
 
+	CoInitOS(); /*!< Initial CooCox CoOS          */
 
-  /*
-   * System initializations.
-   * - Kernel initialization, the main() function becomes a thread and the
-   *   RTOS is active.
-   */
+	uart_write_str("after \n\r");
 
-  chSysInit();
-
-  /*
-   * Creates the example thread.
-   */
-  chThdCreateStatic(waThread1, sizeof(waThread1), NORMALPRIO, Thread1, NULL);
-  chThdCreateStatic(waThread2, sizeof(waThread2), NORMALPRIO, Thread2, NULL);
-  chThdCreateStatic(waThread3, sizeof(waThread3), NORMALPRIO, Thread3, NULL);
-
-  while (1);
-
-	return 0;
+	/*!< Create three tasks	*/
+	CoCreateTask(taskA, 0, 0, &taskA_stk[128 - 1], 128);
+	CoCreateTask(led, 0, 2, &led_stk[128 - 1], 128);
+	CoStartOS(); /*!< Start multitask	           */
 }
+
+

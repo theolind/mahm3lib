@@ -33,7 +33,8 @@ void test_tc_enable_clock(void) {
 }
 
 void test_tc_disable_clock(void) {
-
+	tc_disable_clock(TC0, TC_CHANNEL_0);
+	TEST_ASSERT_FALSE( (TC0->TC_CHANNEL[0].TC_SR) & TC_SR_CLKSTA_ENABLED );
 }
 
 void test_tc_start_clock(void) {

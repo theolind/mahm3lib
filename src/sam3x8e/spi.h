@@ -50,6 +50,8 @@ typedef struct {
 	uint32_t NCPHA;
 	uint32_t baud[4];
 	uint32_t bits[4];
+	uint32_t DLYBCT;
+	uint32_t DLYBS;
 } spi_settings_t;
 
 //this would start configure the pins etc.

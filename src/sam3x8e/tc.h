@@ -385,7 +385,7 @@ typedef struct tc_block_settings {
  * @param tc Timer counter instance.
  * @param channel Channel to configure.
  */
-void tc_conf_channel(tc_channel_settings_t* settings, tc_reg_t *tc, uint32_t channel);
+void tc_conf_channel(const tc_channel_settings_t* settings, tc_reg_t *tc, uint32_t channel);
 
 /**
  * Configures a specified timer instance with provided settings.

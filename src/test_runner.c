@@ -109,6 +109,8 @@ void run_tests(void) {
 	// Run TC tests
 	RUN_TEST(test_tc_conf_channel, 80);
 	RUN_TEST(test_tc_enable_clock, 80);
+	RUN_TEST(test_tc_disable_clock, 80);
+
 
 	UnityEnd();
 }

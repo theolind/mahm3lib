@@ -2,7 +2,7 @@
  * Timer Counter (TC) unit tests
  *
  * Author: Andreas Drotth, Mattias Nilsson
- * Date: 16 Oktober 2014
+ * Date: 17 Oktober 2014
  */
 
 #include "unity/unity.h"

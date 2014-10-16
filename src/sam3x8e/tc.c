@@ -33,6 +33,19 @@ void tc_start_clock(tc_reg_t *tc, uint32_t channel){
 	if (channel > MAX_CHANNELS){
 		return;
 	}
-	//tc->TC_CHANNEL[channel].TC_CCR = TC_CCR_CLKEN;
-	tc->TC_CHANNEL[channel].TC_CCR = TC_CCR_SWTRG;
+	tc->TC_CHANNEL[channel].TC_CCR |= TC_CCR_SWTRG_ON;
+}
+
+void tc_stop_clock(tc_reg_t *tc, uint32_t channel){
+	if (channel > MAX_CHANNELS){
+		return;
+	}
+	tc->TC_CHANNEL[channel].TC_CCR |= TC_CCR_SWTRG_OFF;
+}
+
+uint32_t tc_read_counter_value(tc_reg_t * tc, uint32_t channel){
+	if (channel > MAX_CHANNELS){
+		return 0;
+	}
+	return tc->TC_CHANNEL[channel].TC_CV;
 }

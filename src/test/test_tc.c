@@ -7,6 +7,7 @@
 
 #include "unity/unity.h"
 #include "sam3x8e/pmc.h"
+
 #include "test/test_tc.h"
 
 void test_tc_conf_channel(void) {
@@ -38,14 +39,32 @@ void test_tc_disable_clock(void) {
 }
 
 void test_tc_start_clock(void) {
+	uint32_t counter = 0;
+	TEST_ASSERT_FALSE(counter);
 	tc_enable_clock(TC0, TC_CHANNEL_0);
-	TEST_ASSERT_FALSE( (TC0->TC_CHANNEL[0].TC_SR) & TC_CCR_SWTRG );
+	tc_start_clock(TC0, TC_CHANNEL_0);
+	delay_micros(100);
+	counter = TC0->TC_CHANNEL[0].TC_CV;
+	TEST_ASSERT_TRUE(counter > 0);
 }
 
 void test_tc_stop_clock(void) {
-
+	uint32_t counter = 0, counter_ref = 0;
+	counter = TC0->TC_CHANNEL[0].TC_CV;
+	TEST_ASSERT_TRUE(counter > counter_ref);
+	tc_stop_clock(TC0, TC_CHANNEL_0);
+	counter = TC0->TC_CHANNEL[0].TC_CV;
+	counter_ref = counter;
+	delay_micros(100);
+	counter = TC0->TC_CHANNEL[0].TC_CV;
 }
 
 void test_tc_read_counter_value(void) {
-
+	uint32_t counter = 0, counter_ref = 0;
+	counter = tc_read_counter_value(TC0, TC_CHANNEL_0);
+	TEST_ASSERT_TRUE(counter > counter_ref);
+	counter_ref = counter;
+	delay_micros(100);
+	counter = tc_read_counter_value(TC0, TC_CHANNEL_0);
+	TEST_ASSERT_TRUE(counter > counter_ref);
 }

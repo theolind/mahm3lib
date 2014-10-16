@@ -52,9 +52,14 @@ void test_spi_write_ready() {
 }
 
 void test_spi_write() {
-	pio_enable_pin(PIOB, 15);
-	pio_set_pin(PIOB, 15, 0);
-	pio_set_pin(PIOB, 15, 1);
+	pio_enable_pin(PIOC, 14);
+	pio_conf_pin(PIOC, 14, 0, 1);
+
+	pio_set_pin(PIOC, 14, 0);
+	delay_ms(2000);
+	pio_set_pin(PIOC, 14, 1);
+	delay_ms(2000);
+	pio_set_pin(PIOC, 14, 0);
 
 	spi_select_slave(SPI0, 0);
 

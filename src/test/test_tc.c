@@ -19,7 +19,7 @@ void test_tc_conf_channel(void) {
 
 	tc_conf_channel(&tc_settings, TC0, 0);
 
-	TEST_ASSERT_TRUE(TC0->TC_CHANNEL[0].TC_CCR);
+	TEST_ASSERT_TRUE(TC0->TC_CHANNEL[0].TC_CMR);
 }
 
 void test_tc_conf_block(void) {
@@ -29,13 +29,7 @@ void test_tc_conf_block(void) {
 void test_tc_enable_clock(void) {
 	tc_enable_clock(TC0, TC_CHANNEL_0);
 
-	// Test if using ASF way of doing things
-//	tc_channel_reg_t *tc_channel;
-//	tc_channel = TC0->TC_CHANNEL + 1;
-//	TEST_ASSERT_TRUE(tc_channel->TC_SR & TC_SR_CLKSTA_ENABLED);
-
-	// Test if our own way
-	TEST_ASSERT_TRUE( (TC0->TC_CHANNEL[0].TC_CCR) & TC_SR_CLKSTA_ENABLED );
+	TEST_ASSERT_TRUE( (TC0->TC_CHANNEL[0].TC_SR) & TC_SR_CLKSTA_ENABLED );
 }
 
 void test_tc_disable_clock(void) {

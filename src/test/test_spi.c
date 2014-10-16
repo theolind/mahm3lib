@@ -26,6 +26,7 @@ void test_spi_setup(void) {
 		.DLYBS = 0,
 		.DLYBCT = 0
 	};
+	//dummy comment, u can remove this :)
 
 	pmc_enable_peripheral_clock(ID_SPI0);
 

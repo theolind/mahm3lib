@@ -7,7 +7,7 @@
  *		Saeed Ghasemi
  *		Mathias Beckius
  *
- * Date: 29 September 2014
+ * Date: 16 October 2014
  */
 
 #include "pmc.h"
@@ -26,33 +26,32 @@ static uint32_t pmc_switch_mclk_to_pllack(uint32_t);
 ///@endcond
 
 void pmc_init_system_clock(void) {
-	/* Config system clock setting - Already running from SYSCLK_SRC_MAINCK_4M_RC */
-	//Internal 4MHz RC oscillator as master source clock
-	/* Set PMC Clock Generator Main Oscillator Register:
-	 * 	- Main Crystal Oscillator Bypass
-	 * 	- Enable Main XTAL oscillator
-	 * */
-	PMC->CKGR_MOR = (PMC->CKGR_MOR & ~2u) | PMC_CKGR_MOR_KEY | PMC_CKGR_MOR_MOSCXTBY | (62u << 8);
+	// Enable Main XTAL oscillator
+	PMC->CKGR_MOR = (PMC->CKGR_MOR & ~2u) | PMC_CKGR_MOR_KEY |
+					PMC_CKGR_MOR_MOSCXTEN |	PMC_CKGR_MOR_MOSCXTST;
 
 	// Wait to the Main XTAL oscillator is stabilized
-	while (!(PMC->PMC_SR & 1u));
+	while (!(PMC->PMC_SR & PMC_SR_MOSCXTS));
 
 	// select the Main Crystal Oscillator
-	PMC->CKGR_MOR |= PMC_CKGR_MOR_KEY | (1u << 24);
+	PMC->CKGR_MOR |= PMC_CKGR_MOR_KEY | PMC_CKGR_MOR_MOSCSEL;
 
-	// oscillator ready? Main Oscillator Selection Status - Selection is in progress
-	while (!(PMC->PMC_SR & (1u << 16)));
+	// check Main Oscillator Selection Status - Selection is in progress
+	while (!(PMC->PMC_SR & PMC_SR_MOSCSELS));
 
 	// Disable PLLA clock - Always stop PLL first!
-	PMC->CKGR_PLLAR = (1u << 29);
+	PMC->CKGR_PLLAR = CKGR_PLLAR_ONE;
 	// set PMC clock generator
-	PMC->CKGR_PLLAR = (1u << 29) | (13u << 16) | 1 | (0x3fU << 8);
+	PMC->CKGR_PLLAR = 	CKGR_PLLAR_ONE | CKGR_PLLAR_MULA |
+						CKGR_PLLAR_DIVA_BYPASS | CKGR_PLLAR_PLLACOUNT;
 
 	// wait for PLL to be locked
-	while (!(PMC->PMC_SR & 2u));
+	while (!(PMC->PMC_SR & PMC_SR_LOCKA));
 
-	// Switch master clock source selection to PLLA clock,
-	// selected clock divided by 2
+	/*
+	 * Switch master clock source selection to PLLA clock,
+	 * selected clock divided by 2.
+	 */
 	pmc_switch_mclk_to_pllack(1u << 4);
 }
 
@@ -63,21 +62,17 @@ void pmc_init_system_clock(void) {
  *
  * ret 0 Success.
  * ret 1 Timeout error.
- *
- * Important!
- * PMC->PMC_SR might still be a little unreliable, won't work in
- * systemclock_init().
  */
 static uint32_t pmc_switch_mclk_to_pllack(uint32_t ul_pres) {
 	uint32_t ul_timeout;
-	PMC->PMC_MCKR = (PMC->PMC_MCKR & (~(0x7u << 4))) | ul_pres;
-	for (ul_timeout = 2048; !(PMC->PMC_SR & (1 << 3)); --ul_timeout) {
+	PMC->PMC_MCKR = PMC_MCKR_PRES(ul_pres);
+	for (ul_timeout = 2048; !(PMC->PMC_SR & PMC_SR_MCKRDY); --ul_timeout) {
 		if (ul_timeout == 0) {
 			return 1;
 		}
 	}
-	PMC->PMC_MCKR = (PMC->PMC_MCKR & (~(0x3u))) | 2;
-	for (ul_timeout = 2048; !(PMC->PMC_SR & (1 << 3)); --ul_timeout) {
+	PMC->PMC_MCKR = PMC_MCKR_CSS(PMC_MCKR_CSS_PLLA_CLK);
+	for (ul_timeout = 2048; !(PMC->PMC_SR & PMC_SR_MCKRDY); --ul_timeout) {
 		if (ul_timeout == 0) {
 			return 1;
 		}

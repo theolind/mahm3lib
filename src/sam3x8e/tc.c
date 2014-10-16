@@ -28,3 +28,11 @@ void tc_disable_clock(tc_reg_t *tc, uint32_t channel){
 	}
 	tc->TC_CHANNEL[channel].TC_CCR = TC_CCR_CLKDIS;
 }
+
+void tc_start_clock(tc_reg_t *tc, uint32_t channel){
+	if (channel > MAX_CHANNELS){
+		return;
+	}
+	//tc->TC_CHANNEL[channel].TC_CCR = TC_CCR_CLKEN;
+	tc->TC_CHANNEL[channel].TC_CCR = TC_CCR_SWTRG;
+}

@@ -38,7 +38,8 @@ void test_tc_disable_clock(void) {
 }
 
 void test_tc_start_clock(void) {
-
+	tc_enable_clock(TC0, TC_CHANNEL_0);
+	TEST_ASSERT_FALSE( (TC0->TC_CHANNEL[0].TC_SR) & TC_CCR_SWTRG );
 }
 
 void test_tc_stop_clock(void) {

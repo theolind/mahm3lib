@@ -78,6 +78,7 @@
 // Used by functions
 #define MAX_CHANNELS			(3)
 #define TC_CCR_CLKEN			(0x1u << 0)
+#define TC_CCR_SWTRG			(0x1u << 2)
 #define TC_CCR_CLKDIS			(0x1u << 1)
 #define TC_SR_CLKSTA_ENABLED	(0x1u << 16)
 #define TC_CMR_WAVE_POS			(15)

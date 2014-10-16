@@ -7,7 +7,7 @@
 
 #include "unity/unity.h"
 #include "sam3x8e/pmc.h"
-#include "sam3x8e/delay.h"
+
 #include "test/test_tc.h"
 
 void test_tc_conf_channel(void) {

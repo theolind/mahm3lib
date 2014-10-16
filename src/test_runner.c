@@ -18,6 +18,7 @@
 #include "test/test_eefc.h"
 #include "test/test_bitwise_operations.h"
 #include "test/test_pwm.h"
+#include "test/test_tc.h"
 
 void run_tests(void) {
 	UnityBegin();
@@ -103,6 +104,11 @@ void run_tests(void) {
 	RUN_TEST(test_pwm_channel_period, 30);
 	RUN_TEST(test_pwm_set_clkx, 30);
 	RUN_TEST(test_set_frequency, 30);
+	HORIZONTAL_LINE_BREAK();
+
+	// Run TC tests
+	RUN_TEST(test_tc_conf_channel, 80);
+	RUN_TEST(test_tc_enable_clock, 80);
 
 	UnityEnd();
 }

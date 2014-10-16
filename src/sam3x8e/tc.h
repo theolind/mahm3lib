@@ -21,9 +21,9 @@
 #define TC2 ((tc_reg_t *) 0x40088000U) ///< Instance of TC2
 
 // Valid channels for each TC instance
-#define CHANNEL_0	(0) ///< TC channel 0
-#define CHANNEL_1	(1) ///< TC channel 1
-#define CHANNEL_2	(2) ///< TC channel 2
+#define TC_CHANNEL_0	(0) ///< TC channel 0
+#define TC_CHANNEL_1	(1) ///< TC channel 1
+#define TC_CHANNEL_2	(2) ///< TC channel 2
 
 // TC Channel Mode Register
 #define TC_CMR_TCCLKS_TCLK1 	(0)	///< Timer clock 1 (MCK/2)
@@ -76,9 +76,12 @@
 
 ///@cond
 // Used by functions
-#define MAX_CHANNELS	(3)
-#define TC_CCR_CLKEN	(0x1u << 0)
-#define TC_CCR_CLKDIS	(0x1u << 1)
+#define MAX_CHANNELS			(3)
+#define TC_CCR_CLKEN			(0x1u << 0)
+#define TC_CCR_CLKDIS			(0x1u << 1)
+#define TC_SR_CLKSTA_ENABLED	(0x1u << 16)
+#define TC_CMR_WAVE_POS			(15)
+#define TC_CMR_TCCLKS_POS		(0)
 
 /*
  * Mapping of TC channel registers
@@ -148,7 +151,7 @@ typedef struct tc_channel_settings {
 	 * Clock selection.
 	 * Either an internal timer clock or external clock.
 	 */
-	uint32_t tcclcks;
+	uint32_t tcclks;
 	/**
 	 * Clock invertion.
 	 * 0: counter is incremented on rising edge of the clock.

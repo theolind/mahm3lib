@@ -22,7 +22,9 @@ void test_spi_setup(void) {
 		.CPOL = 0,
 		.NCPHA = 0,
 		.baud[0] = 255,
-		.bits[0] = 0
+		.bits[0] = 0,
+		.DLYBS = 0,
+		.DLYBCT = 0
 	};
 
 	pmc_enable_peripheral_clock(ID_SPI0);

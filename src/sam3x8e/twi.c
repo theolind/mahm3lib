@@ -1,7 +1,6 @@
-/*
- * @author Jonathan Bjarnason
- * @version 0.1
- * @date 10 October 2014
+/**
+ * @brief TWI, Two Wire Interface
  *
- * @brief First draft of the TWI interface
+ * @author Jonathan Bjarnason
+ * @date 10 October 2014
  */

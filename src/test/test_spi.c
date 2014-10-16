@@ -52,6 +52,10 @@ void test_spi_write_ready() {
 }
 
 void test_spi_write() {
+	pio_enable_pin(PIOB, 15);
+	pio_set_pin(PIOB, 15, 0);
+	pio_set_pin(PIOB, 15, 1);
+
 	spi_select_slave(SPI0, 0);
 
 	TEST_ASSERT_TRUE( SPI0->SPI_SR & (0x1u << 9) );

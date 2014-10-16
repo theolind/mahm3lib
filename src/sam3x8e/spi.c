@@ -14,7 +14,8 @@
 uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings) {
 	spi->SPI_CR |= 0b1; //same as (1<<0); //enabling SPI
 	spi->SPI_MR |= settings->master;
-	spi->SPI_MR |= (1<<5);	//Wait Data Read Before Transfer - prevents overrun of SPI_RDR
+	spi->SPI_WPMR |= 0b10100110101000000100100100000000;
+	//spi->SPI_MR |= (1<<5);	//Wait Data Read Before Transfer - prevents overrun of SPI_RDR
 	spi->SPI_MR &= ~(1<<1);	//Clear bit one in MR to set fied peripheral select
 	spi->SPI_CSR0 = settings->CPOL | (settings->NCPHA<<1) | (settings->bits[0]<<4)
 					| (settings->baud[0]<<8);

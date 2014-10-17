@@ -35,6 +35,6 @@ int main(void) {
 void delay(uint32_t us)
 {
 	tc_start_clock(TC0, TC_CHANNEL_0);
-	while (tc_read_counter_value(TC0, TC_CHANNEL_0) < us*42;
+	while (tc_read_counter_value(TC0, TC_CHANNEL_0) < us*42);
 	tc_stop_clock(TC0, TC_CHANNEL_0);
 }

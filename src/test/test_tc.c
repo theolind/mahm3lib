@@ -13,7 +13,7 @@
 void test_tc_conf_channel(void) {
 	const tc_channel_settings_t tc_settings = {
 		.wave = 0,
-		.tcclks = 0
+		.tcclks = 1
 	};
 
 	pmc_enable_peripheral_clock(ID_TC0);

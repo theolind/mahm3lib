@@ -14,6 +14,19 @@
 #define TWI0 ((twi_reg_t *) 0x4008C000U)
 #define TWI1 ((twi_reg_t *) 0x40090000U)
 
+// Bit addresses in Control Register
+#define TWI_CR_MSEN(value) (value << 2)
+#define TWI_CR_MSDIS(value) (value << 3)
+#define TWI_CR_SVEN(value) (value << 4)
+#define TWI_CR_SVDIS(value) (value << 5)
+#define TWI_CR_SWRST(value) (value << 7)
+
+// Bit addresses in Slave Mode Register
+#define TWI_SMR_SADR(value) (value << 22)
+
+#define SET_BIT 0x1u
+#define CLEAR_BIT 0x0u
+
 // Mapping of TWI registers
 typedef struct twi_reg {
 	// Control Register, offset: 0x00
@@ -127,7 +140,7 @@ uint8_t twi_read_byte(twi_reg_t *twi);
  * @param baudrate The desired TWI bus speed. (Hz)
  * @param master_clk Speed of the main clock of the device. (Hz)
  */
-void twi_set_clocks(twi_reg_t *twi, uint32_t baudrate, uint32_t master_clk);
+void twi_set_clocks(twi_reg_t *twi, twi_settings_t *settings);
 
 /**
  * @brief Reset TWI

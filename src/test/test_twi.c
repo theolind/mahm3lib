@@ -30,15 +30,44 @@ static void test_twi_init(void){
 void test_twi_master_init(twi_reg_t *twi){
 	test_twi_init();
 
-	const twi_settings_t twi_settings = {
-		.baudrate = 182000,
-		.master_clk = 3000
+	const twi_settings_t settings = {
+		.baudrate = 9200,
+		.master_clk = 30
 	};
 
-	twi_master_init(&twi, twi_settings);
+	TEST_ASSERT_TRUE(twi_master_init(twi, settings));
 
 }
 
 void test_twi_master_write(twi_reg_t *twi){
+	// Spells 'twi' in ASCII code
+	uint8_t data_array[3] = { 0x74, 0x77, 0x69 };
+/*
+	const twi_packet_t packet = {
+		.address[3] = {0x40u, 0x80u, 0x120u},
+		.address_length = 3,
+		.buffer = data_array[0],
+		.data_length = 3,
+		.chip
+	};
+*/
+
+	//TEST_ASSERT_TRUE(twi_master_write(twi, packet));
+}
+
+void test_twi_master_read(twi_reg_t *twi){
+
+}
+
+void test_twi_slave_init(twi_reg_t *twi){
+	twi_master_init(twi, );
+
+}
+
+void test_twi_slave_write(twi_reg_t *twi){
+
+}
+
+void test_twi_slave_read(twi_reg_t *twi){
 
 }

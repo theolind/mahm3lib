@@ -34,7 +34,7 @@
 #define TWI_SR_EOSACC (0x1u << 11)
 
 // Bit addresses in Slave Mode Register
-#define TWI_SMR_SADR(value) (value << 22)
+#define TWI_SMR_SADR(value) (value << 16)
 
 // Bit addresses in Master Mode Register
 #define TWI_MMR_IADRSZ(value) (value << 8)
@@ -45,7 +45,14 @@
 #define TWI_THR_TXDATA(value) (value << 0)
 
 // Bit addresses in Receive Holding Register
-#define TWI_RHR_RXDATA (0x11111111u << 0)
+#define TWI_RHR_RXDATA ((255) << 0)
+
+// Bit addresses in Clock Waveform Generator Register
+#define TWI_CWGR_CLDIV(value) (value << 0)
+#define TWI_CWGR_CHDIV(value) (value << 8)
+#define TWI_CWGR_CKDIV(value) (value << 16)
+
+#define TWI_FAST_MODE_SPEED 400000
 
 // Mapping of TWI registers
 typedef struct twi_reg {
@@ -103,7 +110,7 @@ typedef struct twi_packet {
  * @param twi Pointer to a TWI instance.
  * @param settings Settings for initializing the TWI module.
  */
-void twi_master_init(twi_reg_t *twi, twi_settings_t *settings);
+uint8_t twi_master_init(twi_reg_t *twi, twi_settings_t *settings);
 
 /**
  * @brief Read multiple bytes from a slave device.
@@ -143,24 +150,9 @@ void twi_slave_read(twi_reg_t *twi, uint8_t *data);
 void twi_slave_write(twi_reg_t *twi, uint8_t *data);
 
 /**
- * @brief Writes a byte of data along the TWI bus.
- * @param twi Pointer to a TWI instance.
- * @param data What data to write.
- */
-void twi_write_byte(twi_reg_t *twi, uint8_t data);
-
-/**
- * @brief Reads a byte on the TWI bus.
- * @param twi Pointer to a TWI instance.
- * @return Received data.
- */
-uint8_t twi_read_byte(twi_reg_t *twi);
-
-/**
  * @brief Converts an array of addresses into a 32 bit variable.
  * @param address Pointer to the array of addresses.
- * @param address_length The amount of bytes the address array contains. A value
- * greater than three is treated as a three.
+ * @param address_length The amount of bytes the address array contains.
  */
 uint32_t twi_convert_address(uint8_t *address, uint8_t address_length);
 
@@ -170,7 +162,7 @@ uint32_t twi_convert_address(uint8_t *address, uint8_t address_length);
  * @param baudrate The desired TWI bus speed. (Hz)
  * @param master_clk Speed of the main clock of the device. (Hz)
  */
-void twi_set_clocks(twi_reg_t *twi, const twi_settings_t *settings);
+uint8_t twi_set_clocks(twi_reg_t *twi, twi_settings_t *settings);
 
 /**
  * @brief Reset TWI

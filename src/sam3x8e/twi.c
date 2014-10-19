@@ -7,11 +7,13 @@
 
 #include "twi.h"
 
-void twi_master_init(twi_reg_t *twi, twi_settings_t *settings){
+uint8_t twi_master_init(twi_reg_t *twi, twi_settings_t *settings){
 
 	twi_reset(twi);
 
-	twi_set_clocks(twi, settings);
+	if(!(twi_set_clocks(twi, settings))){
+		return 0;
+	}
 
 	// Set Master Disable bit
 	twi->TWI_CR = TWI_CR_MSDIS;
@@ -21,6 +23,8 @@ void twi_master_init(twi_reg_t *twi, twi_settings_t *settings){
 
 	// Set Master Enable bit
 	twi->TWI_CR = TWI_CR_MSEN;
+
+	return 1;
 }
 
 uint8_t twi_master_read(twi_reg_t *twi, twi_packet_t *packet){
@@ -34,14 +38,14 @@ uint8_t twi_master_read(twi_reg_t *twi, twi_packet_t *packet){
 	// Set read mode, slave address and internal address
 	twi->TWI_MMR = 0;
 	twi->TWI_MMR = TWI_MMR_MREAD(0x1u) | TWI_MMR_DADR(packet->chip) |
-			((TWI_MMR_IADRSZ(packet->address_length)) &
-			TWI_MMR_IADRSZ(0x3u));
+			((TWI_MMR_IADRSZ(packet->address_length)) & TWI_MMR_IADRSZ(0x3u));
 
 	// Set internal address for remote chip
 	twi->TWI_IADR = 0;
-	twi->TWI_IADR = twi_convert_address(packet->address, packet->address_length);
+	twi->TWI_IADR = twi_convert_address(packet->address,
+			packet->address_length);
 
-	// Send a START Condition
+	// Signal start of transfer
 	twi->TWI_CR = TWI_CR_START;
 
 	while (counter < packet->data_length) {
@@ -49,17 +53,22 @@ uint8_t twi_master_read(twi_reg_t *twi, twi_packet_t *packet){
 			return 0;
 		}
 
-		// Last byte ?
+		// If this is the last byte.
 		if ((counter + 1) == packet->data_length) {
+			// Signal end of transfer
 			twi->TWI_CR = TWI_CR_STOP;
 		}
-		if (twi->TWI_CR & TWI_SR_RXRDY) {
+
+		// If a new byte has been received since last read.
+		if (twi->TWI_SR & TWI_SR_RXRDY) {
+			// Put data from TWI_RHR in buffer variable and increment the
+			// pointers address.
 			*packet->buffer++ = twi->TWI_RHR;
 			counter ++;
 		}
 	}
 
-	// Wait for Transmission Completed flag to set
+	// Wait for Transmission Completed flag to be set
 	while (!(twi->TWI_SR & TWI_SR_TXCOMP));
 
 	return 1;
@@ -71,8 +80,7 @@ uint8_t twi_master_write(twi_reg_t *twi, twi_packet_t *packet){
 	// Set write mode, slave address and internal address
 	twi->TWI_MMR = 0;
 	twi->TWI_MMR = TWI_MMR_MREAD(0x0u) | TWI_MMR_DADR(packet->chip) |
-			(TWI_MMR_IADRSZ(packet->address_length) &
-			TWI_MMR_IADRSZ(0x3u));
+			(TWI_MMR_IADRSZ(packet->address_length) & TWI_MMR_IADRSZ(0x3u));
 
 	/* Set internal address for remote chip */
 	twi->TWI_IADR = 0;
@@ -132,18 +140,20 @@ void twi_slave_init(twi_reg_t *twi, uint8_t slave_adress){
 void twi_slave_read(twi_reg_t *twi, uint8_t *data){
 
 	while(1){
-		// Check if the slave address on the TWI line matches this slave device
+		// If the slave address on the TWI line matches this slave device
 		if(twi->TWI_SR & TWI_SR_SVACC){
-			// Check for general calls. (Not yet implemented)
+			// If no general calls have been made. (Not yet implemented)
 			if(!(twi->TWI_SR & TWI_SR_GACC)){
-				// Check if slave is supposed to do a read and if TWI_RHR has
+				// If slave is supposed to do a read and if TWI_RHR has
 				// received a character since last read
 				if((twi->TWI_SR & TWI_SR_SVREAD) &&
 						(twi->TWI_SR & TWI_SR_RXRDY)){
 					*data++ = (uint8_t) twi->TWI_RHR;
 				}
 			}
-		}else if((twi->TWI_SR & TWI_SR_EOSACC)||(twi->TWI_SR & TWI_SR_TXCOMP)){
+		}
+		// If transmission is completed or slave access is finished
+		else if((twi->TWI_SR & TWI_SR_EOSACC)||(twi->TWI_SR & TWI_SR_TXCOMP)){
 			break;
 		}
 	}
@@ -152,11 +162,11 @@ void twi_slave_read(twi_reg_t *twi, uint8_t *data){
 void twi_slave_write(twi_reg_t *twi, uint8_t *data){
 
 	while(1){
-		// Check if the slave address on the TWI line matches this slave device
+		// If the slave address on the TWI line matches this slave device
 		if(twi->TWI_SR & TWI_SR_SVACC){
-			// Check for general calls. (Not yet implemented)
+			// If no general calls have been made. (Not yet implemented)
 			if(!(twi->TWI_SR & TWI_SR_GACC)){
-				// Check if slave is supposed to do a write, TWI_THR is empty
+				// If slave is supposed to do a write, TWI_THR is empty
 				// and the last data has been sent and acknowledged
 				if(!(twi->TWI_SR & TWI_SR_SVREAD) &&
 						(twi->TWI_SR & TWI_SR_TXRDY)){
@@ -164,19 +174,11 @@ void twi_slave_write(twi_reg_t *twi, uint8_t *data){
 				}
 			}
 		}
-		// Check if transmission is completed or slave access is finished
+		// If transmission is completed or slave access is finished
 		else if((twi->TWI_SR & TWI_SR_EOSACC)||(twi->TWI_SR & TWI_SR_TXCOMP)){
 			break;
 		}
 	}
-}
-
-void twi_write_byte(twi_reg_t *twi, uint8_t data){
-	twi->TWI_THR = TWI_THR_TXDATA(data);
-}
-
-uint8_t twi_read_byte(twi_reg_t *twi){
-	return(twi->TWI_RHR & (0x11111111u << 7));
 }
 
 uint32_t twi_convert_address(uint8_t *address, uint8_t address_length){
@@ -203,30 +205,48 @@ uint32_t twi_convert_address(uint8_t *address, uint8_t address_length){
 	return result;
 }
 
-void twi_set_clocks(twi_reg_t *twi, const twi_settings_t *settings){
-	uint32_t ckdiv = 0;
-	uint32_t c_lh_div;
+uint8_t twi_set_clocks(twi_reg_t *twi, twi_settings_t *settings){
+	uint32_t clock_divider = 0;
+	uint32_t clock_low_high_divider;
 
-	if (settings->baudrate > 400000) {
-		// return 0;
+	if (settings->baudrate > TWI_FAST_MODE_SPEED) {
+		return 0;
 	}
 
-	c_lh_div = settings->master_clk / (settings->baudrate * 2) - 4;
+	// Calculate clock low devider and clock high devider
+	clock_low_high_divider = settings->baudrate / (settings->master_clk *
+			to_the_power_of(2 ,clock_divider)) -
+			(4/to_the_power_of(2 ,clock_divider));
 
-	// cldiv must fit in 8 bits, ckdiv must fit in 3 bits
-	while ((c_lh_div > 0xFF) && (ckdiv < 7)) {
-		// Increase clock divider
-		ckdiv++;
-		// Divide cldiv value
-		c_lh_div /= 2;
+	// clock_low_high_divider must fit in 8 bits,
+	// clock_divider must fit in 3 bits
+	while ((clock_low_high_divider > 0xFF) && (clock_divider < 7)) {
+		clock_divider++;
+		// Calculate clock low devider and clock high devider
+		clock_low_high_divider = settings->baudrate / (settings->master_clk *
+				raise_to_the_power_of(2 ,clock_divider)) -
+				(4/raise_to_the_power_of(2 ,clock_divider));
 	}
 
-	/* set clock waveform generator register */
-	twi->TWI_CWGR = (c_lh_div >> 7);
-	twi->TWI_CWGR = (c_lh_div >> 15);
-	twi->TWI_CWGR = (ckdiv >> 18);
+	// If clock_low_high_divider does not fit in 8 bits
+	if(clock_low_high_divider > 0xFF){
+		return 0;
+	}
 
-	// return 1;
+	// Set clock waveform generator register
+	twi->TWI_CWGR = TWI_CWGR_CLDIV(clock_low_high_divider);
+	twi->TWI_CWGR = TWI_CWGR_CHDIV(clock_low_high_divider);
+	twi->TWI_CWGR = TWI_CWGR_CKDIV(clock_divider);
+
+	return 1;
+}
+
+int raise_to_the_power_of(int base, int exponent){
+	int result=1;
+	for(int i=0; i<exponent; i++){
+		result = result * base;
+	}
+	return result;
 }
 
 void twi_reset(twi_reg_t *twi){

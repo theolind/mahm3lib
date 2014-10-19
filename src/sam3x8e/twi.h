@@ -15,17 +15,37 @@
 #define TWI1 ((twi_reg_t *) 0x40090000U)
 
 // Bit addresses in Control Register
-#define TWI_CR_MSEN(value) (value << 2)
-#define TWI_CR_MSDIS(value) (value << 3)
-#define TWI_CR_SVEN(value) (value << 4)
-#define TWI_CR_SVDIS(value) (value << 5)
-#define TWI_CR_SWRST(value) (value << 7)
+#define TWI_CR_START (0x1u << 0)
+#define TWI_CR_STOP (0x1u << 1)
+#define TWI_CR_MSEN (0x1u << 2)
+#define TWI_CR_MSDIS (0x1u << 3)
+#define TWI_CR_SVEN (0x1u << 4)
+#define TWI_CR_SVDIS (0x1u << 5)
+#define TWI_CR_SWRST (0x1u << 7)
+
+// Bit addresses in Status Register
+#define TWI_SR_TXCOMP (0x1u << 0)
+#define TWI_SR_RXRDY (0x1u << 1)
+#define TWI_SR_TXRDY (0x1u << 2)
+#define TWI_SR_SVREAD (0x1u << 3)
+#define TWI_SR_SVACC (0x1u << 4)
+#define TWI_SR_GACC (0x1u << 5)
+#define TWI_SR_NACK (0x1u << 8)
+#define TWI_SR_EOSACC (0x1u << 11)
 
 // Bit addresses in Slave Mode Register
 #define TWI_SMR_SADR(value) (value << 22)
 
-#define SET_BIT 0x1u
-#define CLEAR_BIT 0x0u
+// Bit addresses in Master Mode Register
+#define TWI_MMR_IADRSZ(value) (value << 8)
+#define TWI_MMR_MREAD(value) (value << 12)
+#define TWI_MMR_DADR(value) (value << 16)
+
+// Bit addresses in Transmit Holding Register
+#define TWI_THR_TXDATA(value) (value << 0)
+
+// Bit addresses in Receive Holding Register
+#define TWI_RHR_RXDATA (0x11111111u << 0)
 
 // Mapping of TWI registers
 typedef struct twi_reg {
@@ -66,14 +86,14 @@ typedef struct twi_settings {
 // Information used for data transmission
 typedef struct twi_packet {
 	// Internal address of the selected chip
-	uint32_t address[3];
+	uint8_t address[3];
 	// The number of bytes in the internal address segment (1-3 bytes)
-	uint32_t address_length;
+	uint8_t address_length;
 	// Where to store data if used in a read function.
 	// What data to write if used in a write function.
 	uint32_t *buffer;
 	// How many bytes do we want to store/write.
-	uint32_t length;
+	uint32_t data_length;
 	// TWI chip address to communicate with
 	uint32_t chip;
 } twi_packet_t;
@@ -90,14 +110,15 @@ void twi_master_init(twi_reg_t *twi, twi_settings_t *settings);
  * @param twi Pointer to a TWI instance.
  * @param packet Which address to read from and where to store the data.
  */
-void twi_master_read(twi_reg_t *twi, twi_packet_t *packet);
+uint8_t twi_master_read(twi_reg_t *twi, twi_packet_t *packet);
 
 /**
  * @brief Write multiple bytes to a slave device.
  * @param twi Pointer to a TWI instance.
  * @param packet Which address to write to and what data to write.
+ * @return
  */
-void twi_master_write(twi_reg_t *twi, twi_packet_t *packet);
+uint8_t twi_master_write(twi_reg_t *twi, twi_packet_t *packet);
 
 /**
  * @brief Initialize the chosen TWI instance as slave.
@@ -110,6 +131,7 @@ void twi_slave_init(twi_reg_t *twi, uint8_t slave_adress);
  * @brief Read data from master.
  * @param twi Pointer to a TWI instance.
  * @param data Where to store data from read.
+ * @return Number of bytes read
  */
 void twi_slave_read(twi_reg_t *twi, uint8_t *data);
 
@@ -135,12 +157,20 @@ void twi_write_byte(twi_reg_t *twi, uint8_t data);
 uint8_t twi_read_byte(twi_reg_t *twi);
 
 /**
+ * @brief Converts an array of addresses into a 32 bit variable.
+ * @param address Pointer to the array of addresses.
+ * @param address_length The amount of bytes the address array contains. A value
+ * greater than three is treated as a three.
+ */
+uint32_t twi_convert_address(uint8_t *address, uint8_t address_length);
+
+/**
  * @brief Set the TWI bus speed in conjunction with the master clock frequency.
  * @param twi Pointer to a TWI instance.
  * @param baudrate The desired TWI bus speed. (Hz)
  * @param master_clk Speed of the main clock of the device. (Hz)
  */
-void twi_set_clocks(twi_reg_t *twi, twi_settings_t *settings);
+void twi_set_clocks(twi_reg_t *twi, const twi_settings_t *settings);
 
 /**
  * @brief Reset TWI

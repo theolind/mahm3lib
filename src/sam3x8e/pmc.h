@@ -2,14 +2,13 @@
  * @file pmc.h
  * @brief PMC - Power Management Controller
  * @details The PMC API is used to handle internal clocks on the SAM3XAE.
- * @pre Initialize the system clock.
  *
  * @author Felix Ruponen
  * @author Mattias Nilsson
  * @author Saeed Ghasemi
  * @author Mathias Beckius
  * @author Andreas Drotth
- * @date 30 September 2014
+ * @date 16 October 2014
  */
 
 #ifndef PMC_H_
@@ -21,6 +20,42 @@
 ///@cond
 // Pointer to registers of the PMC peripheral.
 #define PMC ((pmc_reg_t *) 0x400E0600U)
+
+// Main Crystal Oscillator Enable
+#define PMC_CKGR_MOR_MOSCXTEN 		(1u)
+// Main Crystal Oscillator Start-up Time
+#define PMC_CKGR_MOR_MOSCXTST 		(62u << 8)
+// Password
+#define PMC_CKGR_MOR_KEY 			(0x37u << 16)
+// Main Oscillator Selection
+#define PMC_CKGR_MOR_MOSCSEL		(1u << 24)
+
+// Main XTAL Oscillator Status
+#define PMC_SR_MOSCXTS				(1u)
+// PLLA Lock Status
+#define PMC_SR_LOCKA				(2u)
+// Master Clock Status
+#define PMC_SR_MCKRDY				(1 << 3)
+// Main Oscillator Selection Status
+#define PMC_SR_MOSCSELS				(1u << 16)
+
+// Divider is bypassed
+#define CKGR_PLLAR_DIVA_BYPASS		(1u)
+// PLLA Counter
+#define CKGR_PLLAR_PLLACOUNT		(0x3fU << 8)
+// PLLA Multiplier
+#define CKGR_PLLAR_MULA				(13u << 16)
+// ONE: Must Be Set to 1 (when programming the CKGR_PLLAR register)
+#define CKGR_PLLAR_ONE				(1u << 29)
+
+// Master Clock Source Selection: PLLA Clock is selected
+#define PMC_MCKR_CSS_PLLA_CLK		(2)
+// Master Clock Source Selection
+#define PMC_MCKR_CSS(selection)	\
+	((PMC->PMC_MCKR & (~(0x3u))) | (selection))
+// Processor Clock Prescaler
+#define PMC_MCKR_PRES(prescaler) \
+	((PMC->PMC_MCKR & (~(0x7u << 4))) | prescaler)
 
 /*
  * Mapping of PMC registers
@@ -95,6 +130,12 @@ typedef struct {
 	uint32_t PMC_PCR;
 } pmc_reg_t;
 ///@endcond
+
+/**
+ * Initializes the system clock, must be performed during system initialization.
+ * @pre Set Flash Wait State.
+ */
+void pmc_init_system_clock(void);
 
 /**
  * Enable peripheral clock.

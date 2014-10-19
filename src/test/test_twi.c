@@ -60,7 +60,7 @@ void test_twi_master_read(twi_reg_t *twi){
 }
 
 void test_twi_slave_init(twi_reg_t *twi){
-	twi_master_init(twi, );
+	//twi_master_init(twi, );
 
 }
 

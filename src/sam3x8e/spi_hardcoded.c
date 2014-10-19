@@ -5,6 +5,7 @@
  *      Author: Soddi
  */
 #include <inttypes.h>
+#include "spi_hardcoded.h"
 
 //#define SPI0 ((spi_reg_t *) 0x40008000U)
 uint32_t *const p_SPI0_CR  = (uint32_t *) 0x40008000u;

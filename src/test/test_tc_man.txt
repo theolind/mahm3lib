@@ -66,19 +66,19 @@ void delay_TC_0(uint32_t us)
 {
 	tc_start_clock(TC0, TC_CHANNEL_0);
 	while (tc_read_counter_value(TC0, TC_CHANNEL_0) < us*42);
-	tc_stop_clock(TC0, TC_CHANNEL_0);
+	tc_disable_clock(TC0, TC_CHANNEL_0);
 }
 
 void delay_TC_1(uint32_t us)
 {
 	tc_start_clock(TC1, TC_CHANNEL_0);
 	while (tc_read_counter_value(TC1, TC_CHANNEL_0) < us*10); //(us*10.5*10)/10);
-	tc_stop_clock(TC1, TC_CHANNEL_0);
+	tc_disable_clock(TC1, TC_CHANNEL_0);
 }
 
 void delay_TC_2(uint32_t us)
 {
 	tc_start_clock(TC2, TC_CHANNEL_0);
 	while (tc_read_counter_value(TC2, TC_CHANNEL_0) < us*2); //(us*2.625*1000)/1000);
-	tc_stop_clock(TC2, TC_CHANNEL_0);
+	tc_disable_clock(TC2, TC_CHANNEL_0);
 }

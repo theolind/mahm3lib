@@ -115,6 +115,5 @@ void run_tests(void) {
 	RUN_TEST(test_tc_stop_clock, 80);
 	RUN_TEST(test_tc_read_counter_value, 80);
 
-
 	UnityEnd();
 }

@@ -215,8 +215,8 @@ uint8_t twi_set_clocks(twi_reg_t *twi, twi_settings_t *settings){
 
 	// Calculate clock low devider and clock high devider
 	clock_low_high_divider = settings->baudrate / (settings->master_clk *
-			to_the_power_of(2 ,clock_divider)) -
-			(4/to_the_power_of(2 ,clock_divider));
+			raise_to_the_power_of(2 ,clock_divider)) -
+			(4/raise_to_the_power_of(2 ,clock_divider));
 
 	// clock_low_high_divider must fit in 8 bits,
 	// clock_divider must fit in 3 bits

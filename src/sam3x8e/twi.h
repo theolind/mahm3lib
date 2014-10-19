@@ -109,6 +109,7 @@ typedef struct twi_packet {
  * @brief Initialize the chosen TWI instance as master.
  * @param twi Pointer to a TWI instance.
  * @param settings Settings for initializing the TWI module.
+ * @return 1=pass, 0=unaccepted values in settings variable
  */
 uint8_t twi_master_init(twi_reg_t *twi, twi_settings_t *settings);
 
@@ -116,6 +117,7 @@ uint8_t twi_master_init(twi_reg_t *twi, twi_settings_t *settings);
  * @brief Read multiple bytes from a slave device.
  * @param twi Pointer to a TWI instance.
  * @param packet Which address to read from and where to store the data.
+ * @return 1=pass, 0=NACK detected or illegal values
  */
 uint8_t twi_master_read(twi_reg_t *twi, twi_packet_t *packet);
 
@@ -123,7 +125,7 @@ uint8_t twi_master_read(twi_reg_t *twi, twi_packet_t *packet);
  * @brief Write multiple bytes to a slave device.
  * @param twi Pointer to a TWI instance.
  * @param packet Which address to write to and what data to write.
- * @return
+ * @return 1=pass, 0=NACK detected
  */
 uint8_t twi_master_write(twi_reg_t *twi, twi_packet_t *packet);
 
@@ -153,6 +155,7 @@ void twi_slave_write(twi_reg_t *twi, uint8_t *data);
  * @brief Converts an array of addresses into a 32 bit variable.
  * @param address Pointer to the array of addresses.
  * @param address_length The amount of bytes the address array contains.
+ * @return A 32 bit variable containing address data.
  */
 uint32_t twi_convert_address(uint8_t *address, uint8_t address_length);
 
@@ -161,6 +164,7 @@ uint32_t twi_convert_address(uint8_t *address, uint8_t address_length);
  * @param twi Pointer to a TWI instance.
  * @param baudrate The desired TWI bus speed. (Hz)
  * @param master_clk Speed of the main clock of the device. (Hz)
+ * @return 1=pass, 0=fail
  */
 uint8_t twi_set_clocks(twi_reg_t *twi, twi_settings_t *settings);
 

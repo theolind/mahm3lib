@@ -216,5 +216,28 @@ void test_tc_sync(void){
 
 }
 void test_register(void){
+	tc_channel_settings_t tc_settings0 = {
+		.wave = 1,
+		.tcclks = 0
+	};
+	tc_channel_settings_t tc_settings2 = {
+		.wave = 1,
+		.tcclks = 2
+	};
 
+
+	tc_conf_channel(&tc_settings0, TC0, TC_CHANNEL_0);
+	tc_conf_channel(&tc_settings2, TC1, TC_CHANNEL_1);
+
+	TEST_ASSERT_FALSE(TC0->TC_CHANNEL[TC_CHANNEL_0].TC_RA);
+	TEST_ASSERT_FALSE(TC1->TC_CHANNEL[TC_CHANNEL_1].TC_RB);
+	TEST_ASSERT_FALSE(TC2->TC_CHANNEL[TC_CHANNEL_2].TC_RC);
+
+	tc_write_reg_a(TC0, TC_CHANNEL_0, 1000);
+	tc_write_reg_b(TC1, TC_CHANNEL_1, 1000);
+	tc_write_reg_c(TC2, TC_CHANNEL_2, 1000);
+
+	TEST_ASSERT_TRUE(TC0->TC_CHANNEL[TC_CHANNEL_0].TC_RA);
+	TEST_ASSERT_TRUE(TC1->TC_CHANNEL[TC_CHANNEL_1].TC_RB);
+	TEST_ASSERT_TRUE(TC2->TC_CHANNEL[TC_CHANNEL_2].TC_RC);
 }

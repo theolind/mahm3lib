@@ -41,7 +41,7 @@ U32        TmrIDVessel = 0;         /*!< Timer ID container.                  */
 static void InsertTmrList(OS_TCID tmrID)
 {
     P_TmrCtrl pTmr;
-    S32 deltaTicks;
+    U32 deltaTicks;
     U32 tmrCnt;
     tmrCnt = TmrTbl[tmrID].tmrCnt;      /* Get timer time                     */
     
@@ -181,11 +181,11 @@ OS_TCID CoCreateTmr(U8 tmrType, U32 tmrCnt, U32 tmrReload, vFUNCPtr func)
     OsSchedLock();                        /* Lock schedule                    */
     for(i = 0; i < CFG_MAX_TMR; i++)
     {
-        if((TmrIDVessel & (1 << i)) == 0) /* Is free timer ID?                */
+        if((TmrIDVessel & (U32)(1 << i)) == 0) /* Is free timer ID?                */
         {
-            TmrIDVessel |= (1<<i);        /* Yes,assign ID to this timer      */
+            TmrIDVessel |= (U32)(1<<i);        /* Yes,assign ID to this timer      */
             OsSchedUnlock();              /* Unlock schedule                  */
-            TmrTbl[i].tmrID     = i;      /* Initialize timer as user set     */
+            TmrTbl[i].tmrID     = (U32)i;      /* Initialize timer as user set     */
             TmrTbl[i].tmrType   = tmrType;	
             TmrTbl[i].tmrState  = TMR_STATE_STOPPED;
             TmrTbl[i].tmrCnt    = tmrCnt;
@@ -220,7 +220,7 @@ StatusType CoStartTmr(OS_TCID tmrID)
     {
         return E_INVALID_ID;
     }
-    if( (TmrIDVessel & (1<<tmrID)) == 0)
+    if( (TmrIDVessel & (U32)(1<<tmrID)) == 0)
     {
         return E_INVALID_ID;
     }
@@ -258,7 +258,7 @@ StatusType CoStopTmr(OS_TCID tmrID)
     {
         return E_INVALID_ID;
     }
-    if((TmrIDVessel & (1<<tmrID)) == 0)
+    if((TmrIDVessel & (U32)(1<<tmrID)) == 0)
     {
         return E_INVALID_ID;
     }
@@ -296,7 +296,7 @@ StatusType CoDelTmr(OS_TCID tmrID)
     {
         return E_INVALID_ID;
     }
-    if( (TmrIDVessel & (1<<tmrID)) == 0)
+    if( (TmrIDVessel & (U32)(1<<tmrID)) == 0)
     {
         return E_INVALID_ID;
     }
@@ -306,7 +306,7 @@ StatusType CoDelTmr(OS_TCID tmrID)
     {
         RemoveTmrList(tmrID);         /* Yes,remove this timer from timer list*/
     }
-    TmrIDVessel &=~(1<<tmrID);        /* Release resource that this timer hold*/
+    TmrIDVessel &=~(U32)(1<<tmrID);        /* Release resource that this timer hold*/
     return E_OK;                      /* Return OK                            */
 }
 
@@ -331,7 +331,7 @@ U32 CoGetCurTmrCnt(OS_TCID tmrID,StatusType* perr)
         *perr = E_INVALID_ID;
         return 0;
     }
-    if((TmrIDVessel & (1<<tmrID)) == 0)
+    if((TmrIDVessel & (U32)(1<<tmrID)) == 0)
     {
         *perr = E_INVALID_ID;
         return 0;
@@ -363,7 +363,7 @@ StatusType CoSetTmrCnt(OS_TCID tmrID,U32 tmrCnt,U32 tmrReload)
     {
         return E_INVALID_ID;
     }
-    if( (TmrIDVessel & (1<<tmrID)) == 0)
+    if( (TmrIDVessel & (U32)(1<<tmrID)) == 0)
     {
         return E_INVALID_ID;
     }

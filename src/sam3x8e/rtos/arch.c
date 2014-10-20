@@ -44,7 +44,7 @@ OS_STK *InitTaskContext(FUNCPtr task,void *param,OS_STK *pstk)
     return (context);                   /* Returns location of new stack top. */
 }
 
-
+void SysTick_Handler(void);
  
 /**
  *******************************************************************************

@@ -31,6 +31,7 @@
 void CoIdleTask(void* pdata)
 {
     /* Add your codes here */
+	(void) pdata;
     for(; ;) 
     {
         /* Add your codes here */
@@ -51,10 +52,11 @@ void CoIdleTask(void* pdata)
  */
 void CoStkOverflowHook(OS_TID taskID)
 {
+	(void) taskID;
     /* Process stack overflow  here */
-    for(; ;) 
+    for(; ;)
     {
-      
+
     }
 }
 

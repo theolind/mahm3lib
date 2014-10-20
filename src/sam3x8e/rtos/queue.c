@@ -55,9 +55,9 @@ OS_EventID CoCreateQueue(void **qStart, U16 size ,U8 sortType)
     for(i = 0; i < CFG_MAX_QUEUE; i++)
     {
         /* Assign a free QUEUE control block                                  */
-        if((QueueIDVessel & (1 << i)) == 0)	
+        if((QueueIDVessel & (U32)(1 << i)) == 0)
         {
-            QueueIDVessel |= (1<<i);		
+            QueueIDVessel |= (U32)(1<<i);
             OsSchedUnlock();
             
             QueueTbl[i].qStart   = qStart;  /* Initialize the queue           */

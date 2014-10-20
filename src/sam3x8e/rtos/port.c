@@ -157,6 +157,7 @@ void IRQ_DISABLE_SAVE(void)
  */
 void SetEnvironment (OS_STK *pstk)
 {
+	(void)pstk;
     __asm volatile
     (   
        " SUB    R0,#28 \n"

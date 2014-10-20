@@ -36,8 +36,8 @@ void spi_init_hardcoded(void) {
 
 	*p_SPI0_CSR = 0x0u; //CPOL = 0
 	*p_SPI0_CSR |= (0x0u<<1); //NCPHA = 0
-	*p_SPI0_CSR |= (0x0u<<2); //CSNAAT = 0
-	*p_SPI0_CSR |= (0x0u<<3); //CSAAT = 0
+	//*p_SPI0_CSR |= (0x0u<<2); //CSNAAT = 0 //ignored as CSAAT = 1
+	*p_SPI0_CSR |= (0x1u<<3); //CSAAT = 1 this means PCS will not rise after last transfer. Remains active
 
 	*p_SPI0_CSR |= (0x0u<<4); //BITS = 0 (8-bit transfer)
 	*p_SPI0_CSR |= (0x4u<<8); //SCBRR = 4 (MCK/4 baud rate div) (change to mask later) (testa att skriva samtliga SCBR)
@@ -50,12 +50,22 @@ void spi_select_slave_hardcoded(void) {
 
 //read
 uint32_t spi_rx(void) {
-	uint32_t data = *p_SPI0_RDR;
-	return data;
+	uint32_t timeout = 1000;
+	do {
+		timeout--;
+	}
+	while(!(spi_rx_ready()) && timeout > 0);
+	if (timeout == 0) {
+		return timeout;
+	} else {
+		uint32_t data = (*p_SPI0_RDR & (0xFFFF)) ;
+		return data;
+	}
 }
 
 //write
-void spi_tx(uint32_t data) {
+void spi_tx(uint16_t data) {
+	while(!(spi_tx_ready()));
 	*p_SPI0_TDR = data;
 }
 
@@ -65,6 +75,8 @@ uint32_t spi_rx_ready(void) {
 }
 
 uint32_t spi_tx_ready(void) {
-	uint32_t TXEMPTY = ~(*p_SPI0_SR & (0x1u << 9)); //inverted to make tx_ready when it's 0 (data in TDR)
-	return TXEMPTY;
+	uint32_t TDRE = (*p_SPI0_SR & (0x1u << 1));
+	return TDRE;
+	//uint32_t TXEMPTY = ~(*p_SPI0_SR & (0x1u << 9)); //inverted to make tx_ready when it's 0 (data in TDR)
+	//return TXEMPTY;
 }

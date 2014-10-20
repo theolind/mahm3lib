@@ -17,7 +17,6 @@ uint32_t *const p_SPI0_MR;
 void test_spi_init_hardcoded(void) {
 	pmc_enable_peripheral_clock(24);
 
-	spi_init_hardcoded();
 
 	pio_conf_pin_to_peripheral(PIOA, 0, 25);	//MISO
 	pio_conf_pin_to_peripheral(PIOA, 0, 26);	//MOSI
@@ -26,6 +25,8 @@ void test_spi_init_hardcoded(void) {
 	pio_conf_pin_to_peripheral(PIOA, 0, 29);	//NPCS1
 	pio_conf_pin_to_peripheral(PIOA, 0, 30);	//NPSC2
 	pio_conf_pin_to_peripheral(PIOA, 0, 31);	//NPSC3
+
+	spi_init_hardcoded();
 
 	TEST_ASSERT_TRUE(*p_SPI0_SR & (0x1u << 16));	//spi enabled?
 	TEST_ASSERT_TRUE(*p_SPI0_MR & (0x1u << 0));	//spi is master?

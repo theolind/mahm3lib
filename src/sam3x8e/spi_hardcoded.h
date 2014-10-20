@@ -13,7 +13,7 @@
 void spi_init_hardcoded(void);
 void spi_select_slave_hardcoded(void);
 uint32_t spi_rx(void);
-void spi_tx(uint32_t data);
+void spi_tx(uint16_t data);
 uint32_t spi_rx_ready(void);
 uint32_t spi_tx_ready(void);
 

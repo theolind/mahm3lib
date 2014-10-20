@@ -405,7 +405,7 @@ void tc_conf_block(tc_block_settings_t* settings, tc_reg_t *tc);
 void tc_enable_clock(tc_reg_t *tc, uint32_t channel);
 
 /**
- * Disables the clock for a channel.
+ * Disables the clock for a channel. Is also used for stopping the counter.
  * @param tc Timer counter instance.
  * @param channel Channel to configure.
  */
@@ -418,12 +418,7 @@ void tc_disable_clock(tc_reg_t *tc, uint32_t channel);
  */
 void tc_start_clock(tc_reg_t *tc, uint32_t channel);
 
-/**
- * Stops the clock for a channel.
- * @param tc Timer counter instance.
- * @param channel Channel to configure.
- */
-void tc_stop_clock(tc_reg_t *tc, uint32_t channel);
+
 
 /**
  * Read the counter value from a channel.

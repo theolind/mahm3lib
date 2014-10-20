@@ -72,7 +72,9 @@ void spi_tx(uint16_t data) {
 
 uint32_t spi_rx_ready(void) {
 	uint32_t RDRF = (*p_SPI0_SR & (0x1u<<0));
-	return RDRF;
+	uint32_t TXEMPTY = (*p_SPI0_SR & (0x1u << 9)); //tx_ready when it's 1 (data in TDR)
+	uint32_t status_rdy = (RDRF | TXEMPTY);
+	return status_rdy;
 }
 
 //returns 1 if transmission is ready
@@ -87,4 +89,9 @@ uint32_t spi_tx_complete(void) {
 	return TXEMPTY;
 
 }
+
+//returns 1 if the SPI receive holding register is full, otherwise 0.
+uint32_t spi_rx_full(void) {
+	uint32_t RDRF = (*p_SPI0_SR & (0x1u << 0));
+	return RDRF;
 }

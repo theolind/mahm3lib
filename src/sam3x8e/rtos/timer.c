@@ -58,12 +58,12 @@ static void InsertTmrList(OS_TCID tmrID)
     else                  /* No,find correct place ,and insert inserted timer */
     {								    
       	pTmr       = TmrList; 
-      	deltaTicks = tmrCnt;            /* Get timer tick                     */
+      	deltaTicks = (S32) tmrCnt;            /* Get timer tick                     */
       	
       	/* find correct place */
       	while(pTmr != NULL)
       	{				    
-            deltaTicks -= pTmr->tmrCnt; /* Get ticks with previous item       */
+            deltaTicks -= (S32) (pTmr->tmrCnt); /* Get ticks with previous item       */
             if(deltaTicks < 0)          /* Is delta ticks<0?                  */  
             {	
                 /* Yes,get correct place */
@@ -81,7 +81,7 @@ static void InsertTmrList(OS_TCID tmrID)
                     TmrList->tmrPrev      = &TmrTbl[tmrID];
                     TmrList               = &TmrTbl[tmrID];
                 }
-                TmrTbl[tmrID].tmrCnt            = TmrTbl[tmrID].tmrNext->tmrCnt+deltaTicks;
+                TmrTbl[tmrID].tmrCnt            = (U32)((S32)(TmrTbl[tmrID].tmrNext->tmrCnt) + deltaTicks);
                 TmrTbl[tmrID].tmrNext->tmrCnt  -= TmrTbl[tmrID].tmrCnt; 
                 break;	
             }
@@ -91,7 +91,7 @@ static void InsertTmrList(OS_TCID tmrID)
                 /* Yes,insert into */
                 TmrTbl[tmrID].tmrPrev = pTmr;
                 pTmr->tmrNext         = &TmrTbl[tmrID];	
-                TmrTbl[tmrID].tmrCnt  = deltaTicks;
+                TmrTbl[tmrID].tmrCnt  = (U32) deltaTicks;
                 break;	
             }
             pTmr = pTmr->tmrNext;       /* Get the next item in timer list    */	
@@ -181,9 +181,9 @@ OS_TCID CoCreateTmr(U8 tmrType, U32 tmrCnt, U32 tmrReload, vFUNCPtr func)
     OsSchedLock();                        /* Lock schedule                    */
     for(i = 0; i < CFG_MAX_TMR; i++)
     {
-        if((TmrIDVessel & (1 << i)) == 0) /* Is free timer ID?                */
+        if((TmrIDVessel & (1u << i)) == 0) /* Is free timer ID?                */
         {
-            TmrIDVessel |= (1<<i);        /* Yes,assign ID to this timer      */
+            TmrIDVessel |= (1u<<i);        /* Yes,assign ID to this timer      */
             OsSchedUnlock();              /* Unlock schedule                  */
             TmrTbl[i].tmrID     = i;      /* Initialize timer as user set     */
             TmrTbl[i].tmrType   = tmrType;	
@@ -220,7 +220,7 @@ StatusType CoStartTmr(OS_TCID tmrID)
     {
         return E_INVALID_ID;
     }
-    if( (TmrIDVessel & (1<<tmrID)) == 0)
+    if( (TmrIDVessel & (1u<<tmrID)) == 0)
     {
         return E_INVALID_ID;
     }
@@ -258,7 +258,7 @@ StatusType CoStopTmr(OS_TCID tmrID)
     {
         return E_INVALID_ID;
     }
-    if((TmrIDVessel & (1<<tmrID)) == 0)
+    if((TmrIDVessel & (1u<<tmrID)) == 0)
     {
         return E_INVALID_ID;
     }
@@ -296,7 +296,7 @@ StatusType CoDelTmr(OS_TCID tmrID)
     {
         return E_INVALID_ID;
     }
-    if( (TmrIDVessel & (1<<tmrID)) == 0)
+    if( (TmrIDVessel & (1u<<tmrID)) == 0)
     {
         return E_INVALID_ID;
     }
@@ -306,7 +306,7 @@ StatusType CoDelTmr(OS_TCID tmrID)
     {
         RemoveTmrList(tmrID);         /* Yes,remove this timer from timer list*/
     }
-    TmrIDVessel &=~(1<<tmrID);        /* Release resource that this timer hold*/
+    TmrIDVessel &=~(1u<<tmrID);        /* Release resource that this timer hold*/
     return E_OK;                      /* Return OK                            */
 }
 
@@ -331,7 +331,7 @@ U32 CoGetCurTmrCnt(OS_TCID tmrID,StatusType* perr)
         *perr = E_INVALID_ID;
         return 0;
     }
-    if((TmrIDVessel & (1<<tmrID)) == 0)
+    if((TmrIDVessel & (1u<<tmrID)) == 0)
     {
         *perr = E_INVALID_ID;
         return 0;
@@ -363,7 +363,7 @@ StatusType CoSetTmrCnt(OS_TCID tmrID,U32 tmrCnt,U32 tmrReload)
     {
         return E_INVALID_ID;
     }
-    if( (TmrIDVessel & (1<<tmrID)) == 0)
+    if( (TmrIDVessel & (1u<<tmrID)) == 0)
     {
         return E_INVALID_ID;
     }

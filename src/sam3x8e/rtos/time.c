@@ -53,18 +53,15 @@ void InsertDelayList(P_OSTCB ptcb,U32 ticks)
     {	
         /* No,find correct place ,and insert the task */
         dlyNext    = DlyList; 
-        deltaTicks = ticks;             /* Get task delay ticks               */
+        deltaTicks = (S32)ticks;             /* Get task delay ticks               */
         
         /* Find correct place */
         while(dlyNext != NULL)
         {		
             /* Get delta ticks with previous item */ 
-        	deltaTicks -= dlyNext->delayTick;
-            if(deltaTicks < 0)          /* Is delta ticks<0?                  */
+        	deltaTicks -= (S32)(dlyNext->delayTick);
+            if (deltaTicks < 0)          /* Is delta ticks<0?                  */
             {
-            	/* Get delta ticks with previous item */
-            	deltaTicks -= dlyNext->delayTick;
-
                 /* Yes,get correct place */
                 if(dlyNext->TCBprev != NULL)   /* Is head item of DELAY list? */
                 {							   
@@ -79,19 +76,16 @@ void InsertDelayList(P_OSTCB ptcb,U32 ticks)
                     DlyList->TCBprev = ptcb;
                     DlyList          = ptcb;
                 }
-                ptcb->delayTick           = ptcb->TCBnext->delayTick+deltaTicks;
+                ptcb->delayTick           = (U32)((S32)(ptcb->TCBnext->delayTick) + deltaTicks);
                 ptcb->TCBnext->delayTick -= ptcb->delayTick; 
                 break;
             }
             /* Is last item in DELAY list? */
-            else if(/*(deltaTicks >= 0) && */(dlyNext->TCBnext == NULL) )
+            else if ((deltaTicks >= 0) && (dlyNext->TCBnext == NULL) )
             {
-            	/* Get delta ticks with previous item */
-            	deltaTicks -= dlyNext->delayTick;
-
                 ptcb->TCBprev    = dlyNext; /* Yes,insert into                */
                 dlyNext->TCBnext = ptcb;	
-                ptcb->delayTick  = deltaTicks;
+                ptcb->delayTick  = (U32)deltaTicks;
                 break;
             }
             dlyNext = dlyNext->TCBnext; /* Get the next item in DELAY list    */
@@ -295,8 +289,8 @@ StatusType  CoTimeDelay(U8 hour,U8 minute,U8 sec,U16 millsec)
     }	
     
     /* Get tick counter from time */
-    ticks = ((hour*3600) + (minute*60) + (sec)) * (CFG_SYSTICK_FREQ)\
-            + (millsec*CFG_SYSTICK_FREQ + 500)/1000;
+    ticks = (U32)(((hour*3600) + (minute*60) + (sec)) * (CFG_SYSTICK_FREQ) \
+            + (millsec*CFG_SYSTICK_FREQ + 500) / 1000);
     
     CoTickDelay(ticks);                 /* Call tick delay                    */
     return E_OK;                        /* Return OK                          */

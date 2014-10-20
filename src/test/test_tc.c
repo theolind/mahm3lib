@@ -82,7 +82,7 @@ void test_tc_start_clock(void) {
 	TEST_ASSERT_TRUE(counter_tc2 > 0);
 }
 
-void test_tc_stop_clock(void) {
+void test_tc_counter_stopped(void) {
 	uint32_t counter_tc0 = 0, counter_tc1 = 0, counter_tc2 = 0
 			, counter_ref_tc0 = 0, counter_ref_tc1 = 0, counter_ref_tc2 = 0;
 	counter_tc0 = TC0->TC_CHANNEL[TC_CHANNEL_2].TC_CV;

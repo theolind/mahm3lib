@@ -39,7 +39,7 @@
  * has been initialized. If these clocks are used, the channels prescalers must
  * be set to select the output of theses clocks.
  */
-uint8_t pwm_init_peripheral(struct pwm_clk_setting clk_settings) {
+uint8_t pwm_init_peripheral(pwm_clk_setting_t clk_settings) {
 	if (clk_settings.clkA_divisor != 0) {
 		pwm_set_clkx(PWM_CLK_ID_CLKA, clk_settings.clkA_prescaler,
 				clk_settings.clkA_divisor);
@@ -53,7 +53,7 @@ uint8_t pwm_init_peripheral(struct pwm_clk_setting clk_settings) {
 /*
  * This function initializes a channel of the PWM peripheral.
  */
-uint8_t pwm_init_channel(struct pwm_channel_setting settings) {
+uint8_t pwm_init_channel(pwm_channel_setting_t settings) {
 	uint8_t reenable = 0;
 	// Disable the channel and remember the initial state of it
 	if (pwm_channel_status(settings.channel) == 1) {

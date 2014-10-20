@@ -4,8 +4,10 @@
  * @details Header file for the RTOS including information.
  *
  * Information:
- * The CoOS RTOS source code files were downloaded from http://www.coocox.org/CoOS.htm
- * The user guide for the CoOS can be found in .pdf format at http://www.coocox.org/downloadfile/CoOS/PDF/CooCox_CoOS_User_Guide.pdf
+ * The CoOS RTOS source code files were downloaded from
+ * http://www.coocox.org/CoOS.htm
+ * The user guide for the CoOS can be found in .pdf format at
+ * http://www.coocox.org/downloadfile/CoOS/PDF/CooCox_CoOS_User_Guide.pdf
  *
  * This file is to be included in main.c in order for the RTOS to work.
  *

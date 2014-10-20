@@ -11,7 +11,7 @@
 */
 
 #include "pio.h"
-#include "sam3x8e/bitwise_operations.h"
+#include "bitwise_operations.h"
 
 /*
  * This register can only be written if the WPEN bit is cleared in

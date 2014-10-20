@@ -33,7 +33,8 @@ void spi_init_hardcoded(void) {
 	*p_SPI0_MR |= (0x0u<<2); // chip select direct connect to peripheral device
 	*p_SPI0_MR |= (0x1u<<4); // mode fault detection disabled
 //	*p_SPI0_MR |= (0x1u<<5); // wait until RDR is empty (temp. outcommented)
-	*p_SPI0_MR |= (0x1u<<4);
+	*p_SPI0_MR |= (0x1u<<4); //disable fault detection
+	*p_SPI0_MR |= (0x0u<<24); // 0 = 1 MCK period as delay.
 
 	*p_SPI0_CSR = 0x0u; //CPOL = 0
 	*p_SPI0_CSR |= (0x0u<<1); //NCPHA = 0
@@ -41,6 +42,8 @@ void spi_init_hardcoded(void) {
 	*p_SPI0_CSR |= (0x1u<<3); //CSAAT = 1 this means PCS will not rise after last transfer. Remains active
 	*p_SPI0_CSR |= (0x0u<<4); //BITS = 0 (8-bit transfer)
 	*p_SPI0_CSR |= (0x4u<<8); //SCBRR = 4 (MCK/4 baud rate div) (change to mask later) (testa att skriva samtliga SCBR)
+	*p_SPI0_CSR |= (0x0u<<16); // DLYBS = 1/2 SPCK clock period
+	*p_SPI0_CSR |= (0x0u<<24); //DLYBCT = no delay between transfers.
 
 }
 

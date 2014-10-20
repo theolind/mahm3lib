@@ -16,6 +16,8 @@ uint32_t spi_rx(void);
 void spi_tx(uint16_t data);
 uint32_t spi_rx_ready(void);
 uint32_t spi_tx_ready(void);
+uint32_t spi_tx_complete(void);
+uint32_t spi_rx_full(void);
 
 
 #endif /* SAM3X8E_SPI_HARDCODED_H_ */

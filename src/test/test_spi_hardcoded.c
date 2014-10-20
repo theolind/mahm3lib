@@ -3,6 +3,10 @@
  *
  *  Created on: Oct 20, 2014
  *      Author: th
+ *      Author: Soddi
+ *
+ *      This code is not complete, but we give up.. things are not working out at all
+ *      When using logic analyzer, we're not receiving anything of value. No clock pulse etc..
  */
 
 #include "unity/unity.h"
@@ -45,11 +49,17 @@ void test_spi_tx_hardcoded(void) {
 		spi_tx(0b11011010);
 }
 
+void test_spi_tx_complete_hardcoded(void) {
+	TEST_ASSERT_TRUE(spi_tx_complete());
+}
+
 void test_spi_rx_ready_hardcoded(void) {
-	TEST_ASSERT_FALSE( spi_rx_ready() );
+	TEST_ASSERT_TRUE( spi_rx_ready() );
 }
 
 void test_spi_rx_hardcoded(void) {
-	while(!spi_rx());
+	while(!spi_tx_ready());	//wait for tx ready
+	spi_tx(0b00000000); //dummy code so we can read
+	while(!(spi_tx_complete()));
 	TEST_ASSERT_EQUAL( spi_rx(), 0b11011010 );
 }

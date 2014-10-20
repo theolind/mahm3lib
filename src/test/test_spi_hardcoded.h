@@ -10,8 +10,11 @@
 
 void test_spi_init_hardcoded(void);
 void test_spi_select_slave_hardcoded(void);
+
 void test_spi_tx_ready_hardcoded(void);
 void test_spi_tx_hardcoded(void);
+void test_spi_tx_complete_hardcoded(void);
+
 void test_spi_rx_ready_hardcoded(void);
 void test_spi_rx_hardcoded(void);
 

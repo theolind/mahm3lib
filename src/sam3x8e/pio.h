@@ -11,6 +11,7 @@
  * @author Theodor Lindquist
  * @author Soded Alatia
  * @author Felix Ruponen
+ * @author Saeed Ghasemi
  *
  * @date 29 September 2014
  *
@@ -407,60 +408,6 @@ uint8_t pio_get_interrupt_additional_modes_mask(pio_reg_t *port, uint32_t pin);
  * @return if high then detection method is ...
  */
 uint8_t pio_get_interrupt_detection_method(pio_reg_t *port, uint32_t pin);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 #endif

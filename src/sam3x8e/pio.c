@@ -1,13 +1,14 @@
 /*
- * pio.c
- *
- * Author: 	Theodor Lindquist
- *			Soded Alatia
- * 			Felix Ruponen
- * 			Mathias Beckius
- *
- * Date:		12 October 2014
- */
+* pio.c
+*
+* Author: 	Theodor Lindquist
+*			Soded Alatia
+* 			Felix Ruponen
+* 			Mathias Beckius
+* 			Saeed Ghasemi
+*
+* Date:		12 October 2014
+*/
 
 #include "pio.h"
 #include "sam3x8e/bitwise_operations.h"

@@ -63,8 +63,6 @@ void test_tc_disable_clock(void) {
 
 void test_tc_start_clock(void) {
 	uint32_t counter_tc0 = 0, counter_tc1 = 0, counter_tc2 = 0;
-	TEST_ASSERT_TRUE((counter_tc0 == counter_tc1) &&
-			(counter_tc1 == counter_tc2));
 
 	tc_enable_clock(TC0, TC_CHANNEL_2);
 	tc_enable_clock(TC1, TC_CHANNEL_1);
@@ -83,6 +81,7 @@ void test_tc_start_clock(void) {
 	TEST_ASSERT_TRUE(counter_tc2 > 0);
 }
 
+// TODO: Unnecessary. There is no stop_clock function.
 void test_tc_stop_clock(void) {
 	uint32_t counter_tc0 = 0, counter_tc1 = 0, counter_tc2 = 0
 			, counter_ref_tc0 = 0, counter_ref_tc1 = 0, counter_ref_tc2 = 0;
@@ -140,7 +139,7 @@ void test_tc_read_counter_value(void) {
 	counter_ref_tc1 = counter_tc1;
 	counter_ref_tc2 = counter_tc2;
 
-	//Must use a quite long delay due to TC2 running on a slow clock
+	//Must use a quite long delay due to TC2 running on a quite slow clock
 	delay_micros(200000);
 	counter_tc0 = tc_read_counter_value(TC0, TC_CHANNEL_2);
 	counter_tc1 = tc_read_counter_value(TC1, TC_CHANNEL_1);

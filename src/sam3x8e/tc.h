@@ -7,7 +7,7 @@
  *
  * @author Andreas Drotth
  * @author Mattias Nilsson
- * @date 15 Oktober 2014
+ * @date 20 Oktober 2014
  */
 
 #ifndef TC_H_
@@ -79,8 +79,7 @@
 #define MAX_CHANNELS			(3)
 #define TC_CCR_CLKEN			(0x1u << 0)
 #define TC_CCR_CLKDIS			(0x1u << 1)
-#define TC_CCR_SWTRG_ON			(0x1u << 2)
-#define TC_CCR_SWTRG_OFF		(0x0u << 2)
+#define TC_CCR_SWTRG			(0x1u << 2)
 #define TC_SR_CLKSTA_ENABLED	(0x1u << 16)
 #define TC_CMR_WAVE_POS			(15)
 #define TC_CMR_TCCLKS_POS		(0)

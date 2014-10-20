@@ -1,3 +1,6 @@
+
+
+
 #include <stdio.h>
 #include <inttypes.h>
 #include "unity/unity_hw_setup.h"
@@ -9,6 +12,11 @@
 #include "sam3x8e/pwm.h"
 #include "sam3x8e/bitwise_operations.h"
 #include "sam3x8e/arduino_due.h"
+#include "sam3x8e/nvic.h"
+
+#define NVIC_ISER0			*((uint32_t *)0xE000E100)
+
+void PIOA_Handler(void);
 
 int main(void) {
 	// basic initialization of hardware and UART communication.
@@ -26,7 +34,7 @@ int main(void) {
 	pio_conf_pin_to_peripheral(PIOA, PIO_PERIPH_B, PIN_PWML2_PA20_B); //43
 	pio_conf_pin_to_peripheral(PIOC, PIO_PERIPH_B, PIN_PWMH6_PC18_B); //45
 
-	pwm_channel_setting channel_0;
+	pwm_channel_setting_t channel_0;
 	channel_0.channel = PWM_CHANNEL_0;
 	channel_0.alignment = PWM_CHANNEL_ALIGN_LEFT;
 	channel_0.polarity = PWM_CHANNEL_POLARITY_HIGH;
@@ -35,7 +43,7 @@ int main(void) {
 	channel_0.frequency = 25000;
 	channel_0.clock_ID = PWM_CLK_ID_CLKA;
 
-	pwm_channel_setting channel_1;
+	pwm_channel_setting_t channel_1;
 	channel_1.channel = PWM_CHANNEL_1;
 	channel_1.alignment = PWM_CHANNEL_ALIGN_LEFT;
 	channel_1.polarity = PWM_CHANNEL_POLARITY_HIGH;

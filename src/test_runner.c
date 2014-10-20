@@ -19,6 +19,7 @@
 #include "test/test_bitwise_operations.h"
 #include "test/test_pwm.h"
 #include "test/test_tc.h"
+#include "test/test_twi.h"
 
 void run_tests(void) {
 	UnityBegin();
@@ -114,6 +115,16 @@ void run_tests(void) {
 	RUN_TEST(test_tc_start_clock, 80);
 	RUN_TEST(test_tc_stop_clock, 80);
 	RUN_TEST(test_tc_read_counter_value, 80);
+	HORIZONTAL_LINE_BREAK();
+
+	// Run TWI tests
+	Unity.TestFile = "test/test_twi.c";
+	RUN_TEST(test_twi_init_slave, 90);
+	RUN_TEST(test_twi_set_device_address, 90);
+	RUN_TEST(test_twi_set_internal_address, 90);
+	RUN_TEST(test_twi_set_clock_invalid_parameters, 90);
+	RUN_TEST(test_twi_set_clock_valid_parameters, 90);
+	//RUN_TEST(test_twi_send_receive_SEMI_AUTOMATIC, 90);
 
 	UnityEnd();
 }

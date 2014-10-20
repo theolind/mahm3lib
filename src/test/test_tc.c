@@ -128,6 +128,8 @@ void test_tc_read_counter_value(void) {
 	tc_start_clock(TC1, TC_CHANNEL_1);
 	tc_start_clock(TC2, TC_CHANNEL_0);
 
+	//delay_ms(100); // How about a delay
+
 	counter_tc0 = tc_read_counter_value(TC0, TC_CHANNEL_2);
 	counter_tc1 = tc_read_counter_value(TC1, TC_CHANNEL_1);
 	counter_tc2 = tc_read_counter_value(TC2, TC_CHANNEL_0);

@@ -16,12 +16,13 @@
 #include "test/test_dacc.h"
 #include "test/test_uart.h"
 #include "test/test_spi.h"
+#include "test/test_spi_hardcoded.h"
 
 void run_tests(void) {
 	UnityBegin();
 
 	// Run UART tests
-	Unity.TestFile = "test/test_uart.c";
+	/*Unity.TestFile = "test/test_uart.c";
 	RUN_TEST(test_uart_send_receive_char_local_loopback_mode, 0);
 	HORIZONTAL_LINE_BREAK();
 
@@ -74,7 +75,15 @@ void run_tests(void) {
 	RUN_TEST(test_spi_select_slave, 30);
 	RUN_TEST(test_spi_write_ready, 30);
 	RUN_TEST(test_spi_write, 30);
-	RUN_TEST(test_spi_read_ready, 30);
+	RUN_TEST(test_spi_read_ready, 30);*/
+
+	Unity.TestFile = "test/test_spi_hardcoded.c";
+	RUN_TEST(test_spi_init_hardcoded, 30);
+	RUN_TEST(test_spi_select_slave_hardcoded, 30);
+	RUN_TEST(test_spi_tx_ready_hardcoded, 30);
+	RUN_TEST(test_spi_rx_ready_hardcoded, 30);
+	RUN_TEST(test_spi_tx_hardcoded, 30);
+	RUN_TEST(test_spi_rx_hardcoded, 30);
 
 	UnityEnd();
 }

@@ -25,7 +25,6 @@
 #ifndef PWM_H_
 #define PWM_H_
 
-
 ///@{
 /**
  * These define the pins that can be used with the PWM peripheral.
@@ -210,7 +209,7 @@
  * @typedef pwm_reg_t
  * This structure defines the register mapping of the PWM peripheral.
  */
-typedef struct {
+typedef struct pwm_reg {
 	uint32_t PWM_CLK; ///< PWM Clock Register, offset 0x000
 	uint32_t PWM_ENA; ///< PWM Enable Register, offset 0x004
 	uint32_t PWM_DIS; ///< PWM Disable Register, offset 0x008
@@ -362,7 +361,7 @@ typedef struct {
  * This structure is used with pwm_init() to set the settings for the clocks A
  * and B of the PWM peripheral.
  */
-typedef struct {
+typedef struct pwm_clk_setting {
 	uint32_t clkA_prescaler; ///<This is the prescaler for clock A. Parameter prefix: PWM_CLK_PRES_
 	uint32_t clkA_divisor; ///<This is the divisor for clock A. Set this between 0 and 255. 0 will turn the clock off.
 	uint32_t clkB_prescaler; ///<This is the prescaler for clock B. Parameter prefix: PWM_CLK_PRES_
@@ -373,7 +372,7 @@ typedef struct {
  * This structure is used with pwm_init_channel() to set the settings of a
  * channel.
  */
-typedef struct {
+typedef struct pwm_channel_setting {
 	uint32_t channel; ///<The channel to be initialized. Prefix: PWM_CHANNEL_
 	uint32_t polarity; ///<Sets the polarity of the channel. Parameter prefix: PWM_POLARITY_
 	uint32_t alignment; ///<Sets the alignment of the channel. Parameter prefix: PWM_ALIGN_

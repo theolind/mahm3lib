@@ -112,6 +112,23 @@
 #define TC_CMR_BEEVT_POS		(28)
 #define TC_CMR_BSWTRG_POS		(30)
 
+#define TC_BMR_TC0XC0S_POS		(0)
+#define TC_BMR_TC1XC1S_POS		(2)
+#define TC_BMR_TC2XCS2_POS		(3)
+#define TC_BMR_QDEN_POS			(8)
+#define TC_BMR_POSEN_POS		(9)
+#define TC_BMR_SPEEDEN_POS		(10)
+#define TC_BMR_QDTRANS_POS		(11)
+#define TC_BMR_EDGPHA_POS		(12)
+#define TC_BMR_INVA_POS			(13)
+#define TC_BMR_INVB_POS			(14)
+#define TC_BMR_INVIDX_POS		(15)
+#define TC_BMR_SWAP_POS			(16)
+#define TC_BMR_IDXPHB_POS		(17)
+#define TC_BMR_FILTER_POS		(19)
+#define TC_BMR_MAXFILT_POS		(20)
+
+
 /*
  * Mapping of TC channel registers
  */

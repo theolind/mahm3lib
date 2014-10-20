@@ -49,8 +49,22 @@ void tc_conf_channel(tc_channel_settings_t* set, tc_reg_t *tc, uint32_t channel)
 	}
 }
 
-void tc_conf_block(tc_block_settings_t* settings, tc_reg_t *tc){
-
+void tc_conf_block(tc_block_settings_t* set, tc_reg_t *tc){
+	tc->TC_BMR = (set->tc0xc0s << TC_BMR_TC0XC0S_POS);
+	tc->TC_BMR |= (set->tc1xc1s << TC_BMR_TC1XC1S_POS);
+	tc->TC_BMR |= (set->tc2xc2s << TC_BMR_TC2XCS2_POS);
+	tc->TC_BMR |= (set->qden << TC_BMR_QDEN_POS);
+	tc->TC_BMR |= (set->posen << TC_BMR_POSEN_POS);
+	tc->TC_BMR |= (set->speeden << TC_BMR_SPEEDEN_POS);
+	tc->TC_BMR |= (set->qdtrans << TC_BMR_QDTRANS_POS);
+	tc->TC_BMR |= (set->edgpha << TC_BMR_EDGPHA_POS);
+	tc->TC_BMR |= (set->inva << TC_BMR_INVA_POS);
+	tc->TC_BMR |= (set->invb << TC_BMR_INVB_POS);
+	tc->TC_BMR |= (set->invidx << TC_BMR_INVIDX_POS);
+	tc->TC_BMR |= (set->swap << TC_BMR_SWAP_POS);
+	tc->TC_BMR |= (set->idxphb << TC_BMR_IDXPHB_POS);
+	tc->TC_BMR |= (set->filter << TC_BMR_FILTER_POS);
+	tc->TC_BMR |= (set->maxfilt << TC_BMR_MAXFILT_POS);
 }
 
 void tc_enable_clock(tc_reg_t *tc, uint32_t channel) {

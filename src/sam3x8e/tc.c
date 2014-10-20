@@ -9,12 +9,14 @@
 
 #include "tc.h"
 
-// TODO: const really necessary?
-// TODO: function header exceeds 80 width limit
 // TODO: make macro mask function, works for now but mask is better
-void tc_conf_channel(const tc_channel_settings_t* settings, tc_reg_t *tc, uint32_t channel) {
-	tc->TC_CHANNEL[channel].TC_CMR |= (settings->wave << TC_CMR_WAVE_POS);
-	tc->TC_CHANNEL[channel].TC_CMR |= (settings->tcclks << TC_CMR_TCCLKS_POS);
+void tc_conf_channel(tc_channel_settings_t* set, tc_reg_t *tc, uint32_t channel) {
+	tc->TC_CHANNEL[channel].TC_CMR |= (set->wave << TC_CMR_WAVE_POS);
+	tc->TC_CHANNEL[channel].TC_CMR |= (set->tcclks << TC_CMR_TCCLKS_POS);
+}
+
+void tc_conf_block(tc_block_settings_t* settings, tc_reg_t *tc){
+
 }
 
 void tc_enable_clock(tc_reg_t *tc, uint32_t channel) {

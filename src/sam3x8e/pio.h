@@ -69,6 +69,14 @@
 #define PIO_PIN_8_PA15			(15)
 // These should be extended (These are MCU pin mappings and not arduino pin mappings)
 ///@}
+///@{
+#define PIO_INT_EDGE_CHANGE				(0)
+#define PIO_INT_EDGE_RISING				(1)
+#define PIO_INT_EDGE_FALLING			(2)
+#define PIO_INT_LEVEL_HIGH				(3)
+#define PIO_INT_LEVEL_LOW				(4)
+#define PIO_INT_DISABLE					(5)
+///@}
 
 ///@cond
 /*

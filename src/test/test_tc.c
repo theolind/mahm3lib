@@ -19,6 +19,7 @@ void test_tc_conf_channel(void) {
 	tc_channel_settings_t tc_settings1 = {
 		.wave = 0,
 		.tcclks = 1
+
 	};
 	tc_channel_settings_t tc_settings2 = {
 		.wave = 0,
@@ -44,7 +45,43 @@ void test_tc_conf_channel(void) {
 }
 
 void test_tc_conf_block(void) {
-
+	tc_block_settings_t tc_settings_enable = {
+			.tc0xc0s = 1,
+			.tc1xc1s = 1,
+			.tc2xc2s = 1,
+			.qden = 1,
+			.posen = 1,
+			.speeden = 1,
+			.qdtrans = 1,
+			.edgpha = 1,
+			.inva = 1,
+			.invb = 1,
+			.swap = 1,
+			.invidx = 1,
+			.idxphb = 1,
+			.filter = 1
+	};
+	tc_block_settings_t tc_settings_disable = {
+			.tc0xc0s = 0,
+			.tc1xc1s = 0,
+			.tc2xc2s = 0,
+			.qden = 0,
+			.posen = 0,
+			.speeden = 0,
+			.qdtrans = 0,
+			.edgpha = 0,
+			.inva = 0,
+			.invb = 0,
+			.swap = 0,
+			.invidx = 0,
+			.idxphb = 0,
+			.filter = 0
+	};
+	TEST_ASSERT_FALSE(TC0->TC_BMR);
+	tc_conf_block(&tc_settings_enable, TC0);
+	TEST_ASSERT_TRUE(TC0->TC_BMR);
+	tc_conf_block(&tc_settings_disable, TC0);
+	TEST_ASSERT_FALSE(TC0->TC_BMR);
 }
 
 void test_tc_enable_clock(void) {

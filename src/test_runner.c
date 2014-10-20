@@ -109,6 +109,7 @@ void run_tests(void) {
 	// Run TC tests
 	Unity.TestFile = "test/test_tc.c";
 	RUN_TEST(test_tc_conf_channel, 80);
+	RUN_TEST(test_tc_conf_block, 80);
 	RUN_TEST(test_tc_enable_clock, 80);
 	RUN_TEST(test_tc_disable_clock, 80);
 	RUN_TEST(test_tc_start_clock, 80);

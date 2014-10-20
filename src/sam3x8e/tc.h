@@ -81,8 +81,36 @@
 #define TC_CCR_CLKDIS			(0x1u << 1)
 #define TC_CCR_SWTRG			(0x1u << 2)
 #define TC_SR_CLKSTA_ENABLED	(0x1u << 16)
+#define TC_CMR_WAVEFORM_MODE	(1)
+#define TC_CMR_CAPTURE_MODE		(0)
+#define TC_BCR_SYNC				(1)
+
+// Parameter positions
 #define TC_CMR_WAVE_POS			(15)
 #define TC_CMR_TCCLKS_POS		(0)
+#define TC_CMR_CLKI_POS			(3)
+#define TC_CMR_BURST_POS		(4)
+#define TC_CMR_LDBSTOP_POS		(6)
+#define TC_CMR_LDBDIS_POS		(7)
+#define TC_CMR_ETRGEDG_POS		(8)
+#define TC_CMR_ABETRG_POS		(10)
+#define TC_CMR_CPCTRG_POS		(14)
+#define TC_CMR_LDRA_POS			(16)
+#define TC_CMR_LDRB_POS			(18)
+#define TC_CMR_CPCSTOP_POS		(6)
+#define TC_CMR_CPCDIS_POS		(7)
+#define TC_CMR_EEVTEDG_POS		(8)
+#define TC_CMR_EEVT_POS			(10)
+#define TC_CMR_ENETRG_POS		(12)
+#define TC_CMR_WAVSEL_POS		(13)
+#define TC_CMR_ACPA_POS			(16)
+#define TC_CMR_ACPC_POS			(18)
+#define TC_CMR_AEEVT_POS		(20)
+#define TC_CMR_ASWTRG_POS		(22)
+#define TC_CMR_BCPB_POS			(24)
+#define TC_CMR_BCPC_POS			(26)
+#define TC_CMR_BEEVT_POS		(28)
+#define TC_CMR_BSWTRG_POS		(30)
 
 /*
  * Mapping of TC channel registers
@@ -238,7 +266,7 @@ typedef struct tc_channel_settings {
 	/**
 	 * Waveform Selection.
 	 */
-	uint32_t wavesel;
+	uint32_t wavsel;
 	/**
 	 * RA Compare Effect on TIOA.
 	 * 0: NONE, 1: SET
@@ -418,11 +446,65 @@ void tc_disable_clock(tc_reg_t *tc, uint32_t channel);
 void tc_start_clock(tc_reg_t *tc, uint32_t channel);
 
 /**
+ * Generates a software trigger simultaneously for each of the channels.
+ * @param tc Timer counter instance.
+ */
+void tc_sync_block(tc_reg_t *tc);
+
+/**
  * Read the counter value from a channel.
  * @param tc Timer counter instance.
- * @param channel Channel to configure.
+ * @param channel Channel to read value from.
  * @return The read counter value.
  */
 uint32_t tc_read_counter_value(tc_reg_t * tc, uint32_t channel);
+
+/**
+ * Reads from register A from the specified channel.
+ * @param tc Timer counter instance.
+ * @param channel Channel to read from.
+ * @return The read register value.
+ */
+uint32_t tc_read_reg_a(tc_reg_t * tc, uint32_t channel);
+
+/**
+ * Reads from register B from the specified channel.
+ * @param tc Timer counter instance.
+ * @param channel Channel to read from.
+ * @return The read register value.
+ */
+uint32_t tc_read_reg_b(tc_reg_t * tc, uint32_t channel);
+
+/**
+ * Reads from register C from the specified channel.
+ * @param tc Timer counter instance.
+ * @param channel Channel to read from.
+ * @return The read register value.
+ */
+uint32_t tc_read_reg_c(tc_reg_t * tc, uint32_t channel);
+
+/**
+ * Writes to register A from the specified channel.
+ * @param tc Timer counter instance.
+ * @param channel Channel to write to.
+ * @param value The value to be written to the register.
+ */
+void tc_write_reg_a(tc_reg_t * tc, uint32_t channel, uint32_t value);
+
+/**
+ * Writes to register B from the specified channel.
+ * @param tc Timer counter instance.
+ * @param channel Channel to write to.
+ * @param value The value to be written to the register.
+ */
+void tc_write_reg_b(tc_reg_t * tc, uint32_t channel, uint32_t value);
+
+/**
+ * Writes to register C from the specified channel.
+ * @param tc Timer counter instance.
+ * @param channel Channel to write to.
+ * @param value The value to be written to the register.
+ */
+void tc_write_reg_c(tc_reg_t * tc, uint32_t channel, uint32_t value);
 
 #endif

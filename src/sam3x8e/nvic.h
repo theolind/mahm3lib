@@ -11,9 +11,11 @@
 #ifndef NVIC_H_
 #define NVIC_H_
 
+#include <inttypes.h>
+
 /**
- * There is a pair of all these registers and they should be accessed with:
- * NVIC_ISER[0], but not befor the
+ * The registers for the NVIC are placed far from each other. This is the
+ * address for the first register. The rest are defined as offsets to this one.
  */
 #define NVIC		((nvic_reg_t *) 0xE000E100U)
 

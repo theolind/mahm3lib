@@ -12,6 +12,7 @@
  */
 
 #include "nvic.h"
+#include "bitwise_operations.h"
 
 uint8_t nvic_enable_interrupt(uint8_t peripheral_id){
 	if(peripheral_id > 31){

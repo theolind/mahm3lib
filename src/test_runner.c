@@ -115,6 +115,8 @@ void run_tests(void) {
 	RUN_TEST(test_tc_start_clock, 80);
 	RUN_TEST(test_tc_counter_stopped, 80);
 	RUN_TEST(test_tc_read_counter_value, 80);
+	RUN_TEST(test_tc_sync, 80);
+	RUN_TEST(test_register, 80);
 	HORIZONTAL_LINE_BREAK();
 
 	UnityEnd();

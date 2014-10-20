@@ -14,3 +14,5 @@ void test_tc_disable_clock(void);
 void test_tc_start_clock(void);
 void test_tc_counter_stopped(void);
 void test_tc_read_counter_value(void);
+void test_tc_sync(void);
+void test_register(void);

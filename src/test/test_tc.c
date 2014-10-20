@@ -47,34 +47,10 @@ void test_tc_conf_channel(void) {
 void test_tc_conf_block(void) {
 	tc_block_settings_t tc_settings_enable = {
 			.tc0xc0s = 1,
-			.tc1xc1s = 1,
-			.tc2xc2s = 1,
-			.qden = 1,
-			.posen = 1,
-			.speeden = 1,
-			.qdtrans = 1,
-			.edgpha = 1,
-			.inva = 1,
-			.invb = 1,
-			.swap = 1,
-			.invidx = 1,
-			.idxphb = 1,
 			.filter = 1
 	};
 	tc_block_settings_t tc_settings_disable = {
 			.tc0xc0s = 0,
-			.tc1xc1s = 0,
-			.tc2xc2s = 0,
-			.qden = 0,
-			.posen = 0,
-			.speeden = 0,
-			.qdtrans = 0,
-			.edgpha = 0,
-			.inva = 0,
-			.invb = 0,
-			.swap = 0,
-			.invidx = 0,
-			.idxphb = 0,
 			.filter = 0
 	};
 	TEST_ASSERT_FALSE(TC0->TC_BMR);
@@ -214,4 +190,31 @@ void test_tc_read_counter_value(void) {
 	TEST_ASSERT_TRUE(counter1 > counter_ref1);
 	TEST_ASSERT_TRUE(counter2 > counter_ref2);
 	TEST_ASSERT_TRUE(counter3 > counter_ref3);
+}
+
+void test_tc_sync(void){
+	uint32_t counter0 = 0, counter1 = 0, counter2 = 0, counter3 = 0;
+
+	tc_enable_clock(TC0, TC_CHANNEL_0);
+	tc_enable_clock(TC0, TC_CHANNEL_1);
+	tc_enable_clock(TC1, TC_CHANNEL_1);
+	tc_enable_clock(TC2, TC_CHANNEL_2);
+
+	tc_sync_block(TC0);
+	tc_sync_block(TC1);
+	tc_sync_block(TC2);
+	delay_micros(100);
+
+	counter0 = TC0->TC_CHANNEL[TC_CHANNEL_0].TC_CV;
+	counter1 = TC0->TC_CHANNEL[TC_CHANNEL_1].TC_CV;
+	counter2 = TC1->TC_CHANNEL[TC_CHANNEL_1].TC_CV;
+	counter3 = TC2->TC_CHANNEL[TC_CHANNEL_2].TC_CV;
+	TEST_ASSERT_TRUE(counter0 > 0);
+	TEST_ASSERT_TRUE(counter1 > 0);
+	TEST_ASSERT_TRUE(counter2 > 0);
+	TEST_ASSERT_TRUE(counter3 > 0);
+
+}
+void test_register(void){
+
 }

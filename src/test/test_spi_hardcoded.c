@@ -5,6 +5,7 @@
  *      Author: th
  */
 
+#include "unity/unity.h"
 #include "sam3x8e/spi_hardcoded.h"
 #include "test/test_spi_hardcoded.h"
 #include <inttypes.h>
@@ -24,19 +25,19 @@ void test_spi_select_slave_hardcoded(void) {
 }
 
 void test_spi_tx_ready_hardcoded(void) {
-	TEST_ASSERT_TRUE( spi_tx_ready_hardcoded() );
+	TEST_ASSERT_TRUE( spi_tx_ready() );
 }
 
 void test_spi_tx_hardcoded(void) {
-	while(!spi_tx_ready_hardcoded());	//wait for tx ready
-	spi_tx_hardcoded(0b11011010);
+	while(!spi_tx_ready());	//wait for tx ready
+	spi_tx(0b11011010);
 }
 
 void test_spi_rx_ready_hardcoded(void) {
-	TEST_ASSERT_FALSE( spi_rx_ready_hardcoded() );
+	TEST_ASSERT_FALSE( spi_rx_ready() );
 }
 
 void test_spi_rx_hardcoded(void) {
-	while(!spi_rx_ready_hardcoded());
-	TEST_ASSERT_EQUAL( spi_rx_hardcoded(), 0b11011010 );
+	while(!spi_rx());
+	TEST_ASSERT_EQUAL( spi_rx(), 0b11011010 );
 }

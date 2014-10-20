@@ -32,15 +32,16 @@ void spi_init_hardcoded(void) {
 	*p_SPI0_MR |= (0x0u<<1); //fixed PS
 	*p_SPI0_MR |= (0x0u<<2); // chip select direct connect to peripheral device
 	*p_SPI0_MR |= (0x1u<<4); // mode fault detection disabled
-	*p_SPI0_MR |= (0x1u<<5); // wait until RDR is empty
+//	*p_SPI0_MR |= (0x1u<<5); // wait until RDR is empty (temp. outcommented)
+	*p_SPI0_MR |= (0x1u<<4);
 
 	*p_SPI0_CSR = 0x0u; //CPOL = 0
 	*p_SPI0_CSR |= (0x0u<<1); //NCPHA = 0
 	//*p_SPI0_CSR |= (0x0u<<2); //CSNAAT = 0 //ignored as CSAAT = 1
 	*p_SPI0_CSR |= (0x1u<<3); //CSAAT = 1 this means PCS will not rise after last transfer. Remains active
-
 	*p_SPI0_CSR |= (0x0u<<4); //BITS = 0 (8-bit transfer)
 	*p_SPI0_CSR |= (0x4u<<8); //SCBRR = 4 (MCK/4 baud rate div) (change to mask later) (testa att skriva samtliga SCBR)
+
 }
 
 void spi_select_slave_hardcoded(void) {
@@ -74,9 +75,16 @@ uint32_t spi_rx_ready(void) {
 	return RDRF;
 }
 
+//returns 1 if transmission is ready
 uint32_t spi_tx_ready(void) {
 	uint32_t TDRE = (*p_SPI0_SR & (0x1u << 1));
 	return TDRE;
-	//uint32_t TXEMPTY = ~(*p_SPI0_SR & (0x1u << 9)); //inverted to make tx_ready when it's 0 (data in TDR)
-	//return TXEMPTY;
+}
+
+// Returns 1 if transmission is complete
+uint32_t spi_tx_complete(void) {
+	uint32_t TXEMPTY = (*p_SPI0_SR & (0x1u << 9)); //tx_ready when it's 1 (data in TDR)
+	return TXEMPTY;
+
+}
 }

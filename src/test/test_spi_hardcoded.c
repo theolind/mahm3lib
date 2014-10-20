@@ -42,7 +42,7 @@ void test_spi_tx_ready_hardcoded(void) {
 
 void test_spi_tx_hardcoded(void) {
 	while(!spi_tx_ready());	//wait for tx ready
-	spi_tx(0b11011010);
+		spi_tx(0b11011010);
 }
 
 void test_spi_rx_ready_hardcoded(void) {

@@ -1,51 +1,50 @@
 /*
- * @file test_twi.c
- * @brief Two Wire Interface (TWI) unit tests
- * @details This class is used to test the capabilities of the TWI API
+ * Two Wire Interface (TWI) unit tests
  *
- * @author Jonathan Bjarnason
- * @date 12 October 2014
+ * Authors:	Jonathan Bjarnason
+ * 			Mathias Beckius
+ *
+ * Date:	20 October 2014
  */
 
 #include "unity/unity.h"
 #include "sam3x8e/id.h"
 #include "sam3x8e/twi.h"
 #include "sam3x8e/pio.h"
+#include "sam3x8e/pmc.h"
 #include "test/test_twi.h"
-/*
-static void test_twi_init(void){
-	pmc_enable_peripheral_clock(ID_TWI0);
 
-	pio_conf_pin_to_peripheral(PIOA, PHERIPHERAL_A, 17);	//TWCK
-	pio_conf_pin_to_peripheral(PIOA, PHERIPHERAL_A, 18);	//TWD
+static void twi_init(void){
+	pmc_enable_peripheral_clock(ID_TWI0);
+	pio_conf_pin_to_peripheral(PIOA, PIO_PERIPH_A, 17);	// SDA
+	pio_conf_pin_to_peripheral(PIOA, PIO_PERIPH_A, 18);	// SCL
 
 	pmc_enable_peripheral_clock(ID_TWI1);
-
-	pio_conf_pin_to_peripheral(PIOB, PHERIPHERAL_A, 12);	//TWCK
-	pio_conf_pin_to_peripheral(PIOB, PHERIPHERAL_A, 13);	//TWD
-
-	twi_init();
+	pio_conf_pin_to_peripheral(PIOB, PIO_PERIPH_A, 12);	// SDA (pin 20)
+	pio_conf_pin_to_peripheral(PIOB, PIO_PERIPH_A, 13);	// SCL (pin 21)
 }
-*/
+
+/*
+ * Tests if the Slave Address can be set.
+ */
+void test_twi_init_slave(void) {
+	twi_init_slave(TWI0, 100);
+	twi_init_slave(TWI1, 100);
+	TEST_ASSERT_TRUE(((TWI0->TWI_SMR >> 16) & 127u) == 100u);
+	TEST_ASSERT_TRUE(((TWI1->TWI_SMR >> 16) & 127u) == 100u);
+}
 
 /*
  * This test performs a control of:
- * 	1) is current Master Read Direction modified?
- * 	2) is Device Address set?
- * 	3) is a 8-bit Device Address ignored?
- * 	4) is Internal Address Size set?
- * 	5) can the setting for the Internal Address Size be larger than 2 bits?
+ * 	1) is Device Address set?
+ * 	2) is a 8-bit Device Address ignored?
+ * 	3) is Internal Address Size set?
+ * 	4) can the setting for the Internal Address Size be larger than 2 bits?
  */
 void test_twi_set_device_address(void) {
-	// Set Master Read Direction
-	TWI0->TWI_MMR = (1 << 12);
-	TWI1->TWI_MMR = (1 << 12);
 	// Set Device Address and Internal Address Size
 	twi_set_device_address(TWI0, 0xFF, 7);
 	twi_set_device_address(TWI1, 0xFF, 7);
-	// Master Read Direction shouldn't be modified
-	TEST_ASSERT_TRUE(TWI0->TWI_MMR & (1 << 12));
-	TEST_ASSERT_TRUE(TWI1->TWI_MMR & (1 << 12));
 	// Device Address should be set
 	TEST_ASSERT_TRUE(TWI0->TWI_MMR & (0xFF << 16));
 	TEST_ASSERT_TRUE(TWI1->TWI_MMR & (0xFF << 16));
@@ -125,8 +124,97 @@ void test_twi_set_clock_valid_parameters(void) {
 	TEST_ASSERT_TRUE((reg1 & (7u << 16)) == 0);
 }
 
+/*
+ * This test is semi-automatic and requires that SDA and SCL of
+ * both TWI peripherals are connected.
+ * NOT WORKING!!!!!!!!!!!!!!
+ */
 void test_twi_send_receive_SEMI_AUTOMATIC(void) {
+	volatile uint32_t i;
+	uint32_t result, status;
+	uint8_t slave_address = 0xFF;
+	uint8_t data_in = 0;
+	uint8_t data_out;
 
+	twi_init();
+
+	/*
+	 * initialize TWI Slave
+	 */
+	twi_init_slave(TWI1, slave_address);
+
+	/*
+	 * initialize TWI Master
+	 */
+	twi_set_clock(TWI0, TWI_STANDARD_MODE_SPEED, 84000000);
+	twi_init_master(TWI0);
+	twi_set_device_address(TWI0, slave_address, 0);
+	//twi_set_internal_address(TWI0, 0);
+	/*
+	 * send data to slave
+	 */
+	data_out = 65;
+	// set Master Write Direction
+	//TWI0->TWI_MMR |= TWI_MMR_MASTER_WRITE;
+	// write data to slave
+	TWI0->TWI_THR = data_out;
+	// Wait for Transmission Completed flag to set
+	//while (!(TWI0->TWI_SR & TWI_SR_TXCOMP));
+
+	/*
+	 * check if the slave address on the TWI line matches the slave device
+	 */
+	result = 0;
+	for (i = 0; result == 0 && i < 10000; i++) {
+		result = TWI1->TWI_SR & TWI_SR_SVACC;
+	}
+	TEST_ASSERT_TRUE(result);
+	// send STOP command from Master
+	TWI0->TWI_CR = TWI_CR_STOP;
+
+	/*
+	 * send data to slave
+	 */
+	data_out = 65;
+	// set Master Write Direction
+	TWI0->TWI_MMR |= TWI_MMR_MASTER_WRITE;
+	// write data to slave
+	TWI0->TWI_THR = data_out;
+
+
+	/*
+	 * read data from master
+	 */
+	status = TWI1->TWI_SR;
+	// If the slave address on the TWI line matches this slave device
+	if (status & TWI_SR_SVACC) {
+		if ((status & TWI_SR_SVREAD) && (status & TWI_SR_RXRDY)) {
+			// read character
+			data_in = (uint8_t) TWI1->TWI_RHR;
+		}
+	}
+	TEST_ASSERT_TRUE(data_in == data_out);
+
+/*
+	// Wait for last acknowledge
+	while (1) {
+		status = twi->TWI_SR;
+		// If last byte has not been acknowledged
+		if (status & TWI_SR_NACK) {
+			return 1; // indicate "failure"
+		}
+		// ready to send data?
+		if (status & TWI_SR_TXRDY) {
+			break;
+		}
+	}
+	// send STOP command
+	twi->TWI_CR = TWI_CR_STOP;
+	// Wait for Transmission Completed flag to set
+	while (!(twi->TWI_SR & TWI_SR_TXCOMP));
+
+
+	TEST_ASSERT_TRUE(data_in == data_out);*/
 }
 /*
 

@@ -186,7 +186,6 @@ void twi_read_slave(twi_reg_t *twi, uint8_t *buffer, uint32_t *length) {
 					*buffer = (uint8_t) twi->TWI_RHR;
 					buffer++;
 					(*length)++;
-					uart_write_char('Q');
 				}
 			}
 		}

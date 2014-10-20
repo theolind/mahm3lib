@@ -86,7 +86,7 @@ static void InsertTmrList(OS_TCID tmrID)
                 break;	
             }
             /* Is last item in list? */									
-            else if (/*(deltaTicks >= 0) && */(pTmr->tmrNext == NULL))
+            else if ((deltaTicks >= 0) && (pTmr->tmrNext == NULL))
             {	
                 /* Yes,insert into */
                 TmrTbl[tmrID].tmrPrev = pTmr;

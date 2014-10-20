@@ -10,6 +10,7 @@
 #include "sam3x8e/delay.h"
 #include "test/test_tc.h"
 
+// TODO: Why does the test fail if timerclk1 (0) is used?
 void test_tc_conf_channel(void) {
 	const tc_channel_settings_t tc_settings_tc0 = {
 		.wave = 0,

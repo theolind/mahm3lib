@@ -417,8 +417,6 @@ void tc_disable_clock(tc_reg_t *tc, uint32_t channel);
  */
 void tc_start_clock(tc_reg_t *tc, uint32_t channel);
 
-
-
 /**
  * Read the counter value from a channel.
  * @param tc Timer counter instance.

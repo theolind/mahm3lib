@@ -7,20 +7,22 @@
  * 			Mathias Beckius
  *
  * Date:	20 October 2014
+ *
+ * Only a part of the API is tested and also working!
  */
 
 #include "twi.h"
 
 void twi_set_device_address(twi_reg_t *twi, uint32_t dadr, uint32_t iadrsz) {
-	// keep current setting for Master Read Direction
-	twi->TWI_MMR &= TWI_MMR_MREAD(1);
+	twi->TWI_MMR = 0;
 	// set device address of slave
-	twi->TWI_MMR |= TWI_MMR_DADR(dadr);
+	twi->TWI_MMR = 	TWI_MMR_DADR(dadr) |
 	// specify size of the slave's internal addresses
-	twi->TWI_MMR |= TWI_MMR_IADRSZ(iadrsz);
+					TWI_MMR_IADRSZ(iadrsz);
 }
 
 void twi_set_internal_address(twi_reg_t *twi, uint32_t iadr) {
+	twi->TWI_IADR = 0;
 	twi->TWI_IADR = TWI_IADR(iadr);
 }
 
@@ -69,8 +71,10 @@ uint8_t twi_set_clock(twi_reg_t *twi, uint32_t bus_speed, uint32_t mck) {
 }
 
 void twi_init_master(twi_reg_t *twi) {
-	// enable Master Mode, disable Slave Mode
-	twi->TWI_CR = TWI_CR_MSEN | TWI_CR_SVDIS;
+	// disable Slave Mode
+	twi->TWI_CR = TWI_CR_SVDIS;
+	// enable Master Mode
+	twi->TWI_CR = TWI_CR_MSEN;
 }
 /*
 uint8_t twi_master_read(twi_reg_t *twi, twi_packet_t *packet){
@@ -161,10 +165,13 @@ uint8_t twi_write_master(twi_reg_t *twi, uint8_t *buffer, uint32_t length) {
 }
 
 void twi_init_slave(twi_reg_t *twi, uint8_t slave_address) {
+	twi->TWI_SMR = 0;
 	// set Slave Address
 	twi->TWI_SMR = TWI_SMR_SADR(slave_address);
-	// disable Master, enable Slave
-	twi->TWI_CR = TWI_CR_MSDIS | TWI_CR_SVEN;
+	// disable Master Mode
+	twi->TWI_CR = TWI_CR_MSDIS;
+	// enable Slave Mode
+	twi->TWI_CR = TWI_CR_SVEN;
 }
 
 void twi_read_slave(twi_reg_t *twi, uint8_t *buffer, uint32_t *length) {

@@ -6,6 +6,8 @@
  * @author Jonathan Bjarnason
  * @author Mathias Beckius
  * @date 20 October 2014
+ *
+ * @bug Only a part of the API is tested and also working!
  */
 
 #ifndef TWI_H_

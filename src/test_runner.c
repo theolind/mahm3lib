@@ -124,7 +124,7 @@ void run_tests(void) {
 	RUN_TEST(test_twi_set_internal_address, 90);
 	RUN_TEST(test_twi_set_clock_invalid_parameters, 90);
 	RUN_TEST(test_twi_set_clock_valid_parameters, 90);
-	RUN_TEST(test_twi_send_receive_SEMI_AUTOMATIC, 90);
+	//RUN_TEST(test_twi_send_receive_SEMI_AUTOMATIC, 90);
 
 	UnityEnd();
 }

@@ -202,8 +202,8 @@ uint8_t pio_get_interrupt_mask(pio_reg_t *port, uint32_t pin) {
 	return (port->PIO_IMR & (0x1u << pin)) > 0;
 }
 
-uint8_t pio_get_interrupt_status(pio_reg_t *port, uint32_t pin) {
-	return (port->PIO_ISR & (0x1u << pin)) > 0;
+uint32_t pio_get_interrupt_port_status(pio_reg_t *port) {
+	return port->PIO_ISR;
 }
 
 uint8_t pio_get_interrupt_additional_modes_mask(pio_reg_t *port,

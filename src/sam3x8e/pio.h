@@ -375,7 +375,7 @@ uint8_t pio_set_interrupt_to_level_detection(pio_reg_t *port, uint32_t pin);
  * @return
  */
 uint8_t pio_set_interrupt_method(pio_reg_t *port, uint32_t pin, uint32_t detection);
-/*
+/**
  * This function checks to see if interrupt is enabled for a certain pin.
  *
  * @param port The PIO-port to operate on.
@@ -383,14 +383,14 @@ uint8_t pio_set_interrupt_method(pio_reg_t *port, uint32_t pin, uint32_t detecti
  * @return Returns high if interrupt is enabled, otherwise zero.
  */
 uint8_t pio_get_interrupt_mask(pio_reg_t *port, uint32_t pin);
-/*
+/**
  * This function checks to see if an interrupt has occurred on a certain pin.
  *
  * @param port The PIO-port to operate on
  * @param pin The pin-number of the pio-port.
- * @return Returns 1 if an interrupt has occurred since last read of PIO_ISR.
+ * @return Returns all the interrupt flags of the pio-port.
  */
-uint8_t pio_get_interrupt_status(pio_reg_t *port, uint32_t pin);
+uint32_t pio_get_interrupt_port_status(pio_reg_t *port);
 /**
  * This function will return 1 if additional modes ar enabled for the given
  * pin.

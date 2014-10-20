@@ -20,8 +20,8 @@
  * implemented. The register mapping currently working is non conventional.
  */
 
-#include "sam3x8e/bitwise_operations.h"
-#include "sam3x8e/pwm.h"
+#include "bitwise_operations.h"
+#include "pwm.h"
 
 ///\cond
 /*

@@ -25,10 +25,6 @@
 #ifndef PWM_H_
 #define PWM_H_
 
-#ifndef ID_H_
-#define ID_H_
-#include "id.h"
-#endif
 
 ///@{
 /**
@@ -399,7 +395,7 @@ typedef struct {
  *
  * @return error, 1 = SUCCESS and 0 = FAIL
  */
-uint8_t pwm_init_peripheral(struct pwm_clk_setting clk_settings);
+uint8_t pwm_init_peripheral(pwm_clk_setting_t clk_settings);
 /**
  * Initialize the PWM peripheral with channel- polarity, alignment, prescaler
  * and initial duty cycle. Set use_CLKx to 1 if you want these clocks to be used
@@ -416,7 +412,7 @@ uint8_t pwm_init_peripheral(struct pwm_clk_setting clk_settings);
  * (See typedef pwm_channel_setting for more details.)
  * @return error, 1 = SUCCESS and 0 = FAIL
  */
-uint8_t pwm_init_channel(struct pwm_channel_setting settings);
+uint8_t pwm_init_channel(pwm_channel_setting_t settings);
 /**
  * This function will enable the selected channel, identified with predefined
  * values, like: PWM_CHANNEL_x_MASK

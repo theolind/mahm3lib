@@ -107,13 +107,13 @@ void run_tests(void) {
 	HORIZONTAL_LINE_BREAK();
 
 	// Run TC tests
-	// TODO: Why does test_read_counter fail if test_stop is not run before?
+	// TODO: Why does test_read_counter fail if test_stopped is not run before?
 	Unity.TestFile = "test/test_tc.c";
 	RUN_TEST(test_tc_conf_channel, 80);
 	RUN_TEST(test_tc_enable_clock, 80);
 	RUN_TEST(test_tc_disable_clock, 80);
 	RUN_TEST(test_tc_start_clock, 80);
-	RUN_TEST(test_tc_stop_clock, 80);
+	RUN_TEST(test_tc_counter_stopped, 80);
 	RUN_TEST(test_tc_read_counter_value, 80);
 	HORIZONTAL_LINE_BREAK();
 

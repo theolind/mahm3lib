@@ -120,7 +120,7 @@ void RespondSRQ(void)
     {
         IRQ_DISABLE_SAVE ();            /* need to protect the following      */
         cell = ServiceReq.cell[ServiceReq.head];  /* extract one cell         */
-        ServiceReq.head = (ServiceReq.head + 1) % /* move head (pop)          */
+        ServiceReq.head = (U8)(ServiceReq.head + 1) % /* move head (pop)          */
                      CFG_MAX_SERVICE_REQUEST;
         ServiceReq.cnt--;
         IRQ_ENABLE_RESTORE ();          /* now use the cell copy              */

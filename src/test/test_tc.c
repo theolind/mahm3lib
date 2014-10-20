@@ -2,7 +2,7 @@
  * Timer Counter (TC) unit tests
  *
  * Author: Andreas Drotth, Mattias Nilsson
- * Date: 17 Oktober 2014
+ * Date: 20 Oktober 2014
  */
 
 #include "unity/unity.h"
@@ -82,7 +82,6 @@ void test_tc_start_clock(void) {
 	TEST_ASSERT_TRUE(counter_tc2 > 0);
 }
 
-// TODO: Unnecessary. There is no stop_clock function.
 void test_tc_stop_clock(void) {
 	uint32_t counter_tc0 = 0, counter_tc1 = 0, counter_tc2 = 0
 			, counter_ref_tc0 = 0, counter_ref_tc1 = 0, counter_ref_tc2 = 0;

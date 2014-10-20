@@ -8,6 +8,7 @@
 #ifndef SAM3X8E_SPI_HARDCODED_H_
 #define SAM3X8E_SPI_HARDCODED_H_
 
+#include <inttypes.h>
 
 void spi_init_hardcoded(void);
 void spi_select_slave_hardcoded(void);

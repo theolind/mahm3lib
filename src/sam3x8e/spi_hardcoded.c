@@ -24,6 +24,7 @@ void spi_init_hardcoded(void) {
 	*p_SPI0_CR = 0x1u; //enable SPI
 	//*p_SPI0_WPMR &= (0x535049<<8); //if a value is written in WPEN, the WPKEY has to be "SPI" in hex.
 	//*p_SPI0_WPMR &= 0x0u; //clear WPEN bit to be able to write to Mode Register
+	//*p_SPI0_WPMR &= (0x53504900);	//this is probably the correct way to clear WPEN bit (writing WPEN & WPKEY at the same time)
 
 	*p_SPI0_MR = 0x1u; //master
 	*p_SPI0_MR |= (0x0u<<1); //fixed PS
@@ -37,7 +38,7 @@ void spi_init_hardcoded(void) {
 	*p_SPI0_CSR |= (0x0u<<3); //CSAAT = 0
 
 	*p_SPI0_CSR |= (0x0u<<4); //BITS = 0 (8-bit transfer)
-	*p_SPI0_CSR |= (0x4u<<8); //SCBRR = 4 (MCK/4 baud rate div) (change to mask later)
+	*p_SPI0_CSR |= (0x4u<<8); //SCBRR = 4 (MCK/4 baud rate div) (change to mask later) (testa att skriva samtliga SCBR)
 }
 
 void spi_select_slave_hardcoded(void) {

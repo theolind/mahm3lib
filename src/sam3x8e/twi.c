@@ -1,30 +1,81 @@
-/**
- * @brief TWI, Two Wire Interface
+/*
+ * twi.c
  *
- * @author Jonathan Bjarnason
- * @date 10 October 2014
+ * TWI, Two Wire Interface
+ *
+ * Authors:	Jonathan Bjarnason
+ * 			Mathias Beckius
+ *
+ * Date:	20 October 2014
  */
 
 #include "twi.h"
 
-uint8_t twi_master_init(twi_reg_t *twi, twi_settings_t *settings){
+void twi_set_device_address(twi_reg_t *twi, uint32_t dadr, uint32_t iadrsz) {
+	// keep current setting for Master Read Direction
+	twi->TWI_MMR &= TWI_MMR_MREAD(1);
+	// set device address of slave
+	twi->TWI_MMR |= TWI_MMR_DADR(dadr);
+	// specify size of the slave's internal addresses
+	twi->TWI_MMR |= TWI_MMR_IADRSZ(iadrsz);
+}
 
-	twi_reset(twi);
+void twi_set_internal_address(twi_reg_t *twi, uint32_t iadr) {
+	twi->TWI_IADR = TWI_IADR(iadr);
+}
 
-	if(!(twi_set_clocks(twi, settings))){
-		return 0;
+uint8_t twi_set_clock(twi_reg_t *twi, uint32_t bus_speed, uint32_t mck) {
+	uint32_t freq_ratio = TWI_CWGR_FREQ_RATIO(bus_speed, mck);
+	// Clock Low Divider (half of the bus clock period)
+	uint32_t cldiv;
+	// Clock Divider
+	uint32_t ckdiv = 0;
+
+	/*
+	 * Invalid parameters?
+	 * 	- desired bus speed to high?
+	 * 	- Master Clock to small in relation to Bus Speed?
+	 */
+	if (bus_speed > TWI_FAST_MODE_SPEED ||
+		freq_ratio < TWI_CWGR_MIN_FREQ_RATIO) {
+		return 1;	// indicate "failure" !
 	}
 
-	// Set Master Disable bit
-	twi->TWI_CR = TWI_CR_MSDIS;
+	/*
+	 * Calculate Clock Low Divider, which must fit within 8 bits.
+	 * If the value doesn't fit, then the Clock Divider is increased.
+	 * Important! Clock Divider can't be larger than 3 bits!
+	 */
+	while (1) {
+		cldiv = (freq_ratio - TWI_CWGR_MIN_FREQ_RATIO) >> ckdiv;
+		// does Clock Low Divider fit within 8 bits?
+		if (cldiv <= TWI_CWGR_CLDIV_MAX_VALUE) {
+			break;		// cancel further calculation!
+		}
 
-	// Set Slave Disable bit
+		ckdiv++;
+		// Clock Divider to large? (invalid parameters)
+		if (ckdiv > TWI_CWGR_CKDIV_MAX_VALUE) {
+			return 1;	// indicate "failure" !
+		}
+	}
+
+	// Set clock waveform generator register
+	twi->TWI_CWGR = TWI_CWGR_CLDIV(cldiv) | TWI_CWGR_CHDIV(cldiv) |
+					TWI_CWGR_CKDIV(ckdiv);
+
+	// indicate "success" !
+	return 0;
+}
+/*
+void twi_init_master(twi_reg_t *twi, twi_settings_t *settings) {
+	// reset the peripheral
+	twi_reset(twi);
+
+	// disable Slave Mode
 	twi->TWI_CR = TWI_CR_SVDIS;
-
-	// Set Master Enable bit
+	// enable Master Mode
 	twi->TWI_CR = TWI_CR_MSEN;
-
-	return 1;
 }
 
 uint8_t twi_master_read(twi_reg_t *twi, twi_packet_t *packet){
@@ -82,7 +133,7 @@ uint8_t twi_master_write(twi_reg_t *twi, twi_packet_t *packet){
 	twi->TWI_MMR = TWI_MMR_MREAD(0x0u) | TWI_MMR_DADR(packet->chip) |
 			(TWI_MMR_IADRSZ(packet->address_length) & TWI_MMR_IADRSZ(0x3u));
 
-	/* Set internal address for remote chip */
+	// Set internal address for remote chip
 	twi->TWI_IADR = 0;
 	twi->TWI_IADR = twi_mk_addr(packet->address, packet->address_length);
 
@@ -205,51 +256,7 @@ uint32_t twi_convert_address(uint8_t *address, uint8_t address_length){
 	return result;
 }
 
-uint8_t twi_set_clocks(twi_reg_t *twi, twi_settings_t *settings){
-	uint32_t clock_divider = 0;
-	uint32_t clock_low_high_divider;
-
-	if (settings->baudrate > TWI_FAST_MODE_SPEED) {
-		return 0;
-	}
-
-	// Calculate clock low devider and clock high devider
-	clock_low_high_divider = settings->baudrate / (settings->master_clk *
-			raise_to_the_power_of(2 ,clock_divider)) -
-			(4/raise_to_the_power_of(2 ,clock_divider));
-
-	// clock_low_high_divider must fit in 8 bits,
-	// clock_divider must fit in 3 bits
-	while ((clock_low_high_divider > 0xFF) && (clock_divider < 7)) {
-		clock_divider++;
-		// Calculate clock low devider and clock high devider
-		clock_low_high_divider = settings->baudrate / (settings->master_clk *
-				raise_to_the_power_of(2 ,clock_divider)) -
-				(4/raise_to_the_power_of(2 ,clock_divider));
-	}
-
-	// If clock_low_high_divider does not fit in 8 bits
-	if(clock_low_high_divider > 0xFF){
-		return 0;
-	}
-
-	// Set clock waveform generator register
-	twi->TWI_CWGR = TWI_CWGR_CLDIV(clock_low_high_divider);
-	twi->TWI_CWGR = TWI_CWGR_CHDIV(clock_low_high_divider);
-	twi->TWI_CWGR = TWI_CWGR_CKDIV(clock_divider);
-
-	return 1;
-}
-
-int raise_to_the_power_of(int base, int exponent){
-	int result=1;
-	for(int i=0; i<exponent; i++){
-		result = result * base;
-	}
-	return result;
-}
-
-void twi_reset(twi_reg_t *twi){
+void twi_reset(twi_reg_t *twi) {
 	twi->TWI_CR = TWI_CR_SWRST;
-	// twi->TWI_RHR;
 }
+*/

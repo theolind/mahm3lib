@@ -39,7 +39,7 @@ P_OSTCB DlyList   = NULL;               /*!< Header pointer to the DELAY list.*/
  */
 void InsertDelayList(P_OSTCB ptcb,U32 ticks)
 {
-    U32 deltaTicks;
+    S32 deltaTicks;
     P_OSTCB dlyNext;
     
     if(ticks == 0)                      /* Is delay tick == 0?                */
@@ -295,8 +295,8 @@ StatusType  CoTimeDelay(U8 hour,U8 minute,U8 sec,U16 millsec)
     }	
     
     /* Get tick counter from time */
-    ticks = ((U32)((hour*3600) + (minute*60) + (sec)) * (CFG_SYSTICK_FREQ))\
-            + ((U32)millsec*CFG_SYSTICK_FREQ + 500)/1000;
+    ticks = ((hour*3600) + (minute*60) + (sec)) * (CFG_SYSTICK_FREQ)\
+            + (millsec*CFG_SYSTICK_FREQ + 500)/1000;
     
     CoTickDelay(ticks);                 /* Call tick delay                    */
     return E_OK;                        /* Return OK                          */

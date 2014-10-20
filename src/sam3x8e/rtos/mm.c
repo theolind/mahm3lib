@@ -66,9 +66,9 @@ OS_MMID CoCreateMemPartition(U8* memBuf,U32 blockSize,U32 blockNum)
     OsSchedLock();                      /* Lock schedule                      */
     for(i = 0; i < CFG_MAX_MM; i++)
     {
-        if((MemoryIDVessel & (U32)(1 << i)) == 0)  /* Is free memory ID?           */
+        if((MemoryIDVessel & (1 << i)) == 0)  /* Is free memory ID?           */
         {
-            MemoryIDVessel |= (U32)(1<<i);   /* Yes,assign ID to this memory block */
+            MemoryIDVessel |= (1<<i);   /* Yes,assign ID to this memory block */
             OsSchedUnlock();            /* Unlock schedule                    */
             MemoryTbl[i].memAddr   = memory;/* Initialize memory control block*/
             MemoryTbl[i].freeBlock = memory;  	
@@ -110,14 +110,14 @@ StatusType CoDelMemoryPartition(OS_MMID mmID)
     {
         return E_INVALID_ID;
     }
-    if( ((U32)(1<<mmID)&MemoryIDVessel) == 0)
+    if( ((1<<mmID)&MemoryIDVessel) == 0)
     {
         return E_INVALID_ID;
     }
 #endif	
     OsSchedLock();                      /* Lock schedule                      */
     memCtl = &MemoryTbl[mmID];          /* Release memory control block       */
-    MemoryIDVessel &= ~(U32)(1<<mmID);
+    MemoryIDVessel &= ~(1<<mmID);
     OsSchedUnlock();                    /* Unlock schedule                    */
     
     memCtl->memAddr   = NULL;
@@ -153,7 +153,7 @@ U32 CoGetFreeBlockNum(OS_MMID mmID,StatusType* perr)
         *perr = E_INVALID_ID;
         return 0;
     }
-    if( ((U32)(1<<mmID)&MemoryIDVessel) == 0)
+    if( ((1<<mmID)&MemoryIDVessel) == 0)
     {
         *perr = E_INVALID_ID;           /* Invalid memory id,return 0         */
         return 0;
@@ -195,7 +195,7 @@ void* CoGetMemoryBuffer(OS_MMID mmID)
     {
         return NULL;
     }
-    if( ((U32)(1<<mmID)&MemoryIDVessel)  == 0)
+    if( ((1<<mmID)&MemoryIDVessel)  == 0)
     {
         return NULL;
     }
@@ -238,7 +238,7 @@ StatusType CoFreeMemoryBuffer(OS_MMID mmID,void* buf)
     {
         return E_INVALID_ID;
     }
-    if( ((U32)(1<<mmID)&MemoryIDVessel) == 0)
+    if( ((1<<mmID)&MemoryIDVessel) == 0)
     {
         return E_INVALID_ID;
     }

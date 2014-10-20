@@ -50,11 +50,11 @@ OS_FlagID CoCreateFlag(BOOL bAutoReset,BOOL bInitialState)
     for(i=0;i<FLAG_MAX_NUM;i++)
     {
         /* Assign a free flag control block                                   */
-        if((FlagCrl.flagActive&(U32)(1<<i)) == 0 )
+        if((FlagCrl.flagActive&(1<<i)) == 0 )
         {
-            FlagCrl.flagActive |= (U32)(1<<i);         /* Initialize active flag   */
-            FlagCrl.flagRdy    |= (U32)(bInitialState<<i);/* Initialize ready flag */
-            FlagCrl.resetOpt   |= (U32)(bAutoReset<<i);/* Initialize reset option  */
+            FlagCrl.flagActive |= (1<<i);         /* Initialize active flag   */
+            FlagCrl.flagRdy    |= (bInitialState<<i);/* Initialize ready flag */
+            FlagCrl.resetOpt   |= (bAutoReset<<i);/* Initialize reset option  */
             OsSchedUnlock();
             return i ;                  /* Return Flag ID                     */
         }	
@@ -91,7 +91,7 @@ StatusType CoDelFlag(OS_FlagID id,U8 opt)
         return E_CALL;
     }
 #if CFG_PAR_CHECKOUT_EN >0
-    if((pfcb->flagActive&(U32)(1<<id)) == 0) /* Flag is valid or not               */
+    if((pfcb->flagActive&(1<<id)) == 0) /* Flag is valid or not               */
     {
         return E_INVALID_ID;	
     }
@@ -101,7 +101,7 @@ StatusType CoDelFlag(OS_FlagID id,U8 opt)
     
     while(pnode != NULL)                /* Ready all tasks waiting for flags  */
     {
-        if((pnode->waitFlags&(U32)(1<<id)) != 0) /* If no task is waiting on flags */
+        if((pnode->waitFlags&(1<<id)) != 0) /* If no task is waiting on flags */
     	  {
             if(opt == OPT_DEL_NO_PEND)      /* Delete flag if no task waiting */
             {
@@ -113,7 +113,7 @@ StatusType CoDelFlag(OS_FlagID id,U8 opt)
                 if(pnode->waitType == OPT_WAIT_ALL)
                 {
                     /* If the flag is only required by NODE                   */
-                    if( pnode->waitFlags == (U32)(1<<id) )
+                    if( pnode->waitFlags == (1<<id) )	
                     {
                         /* Remove the NODE from waiting list                  */
                         pnode = RemoveFromLink(pnode); 	
@@ -121,7 +121,7 @@ StatusType CoDelFlag(OS_FlagID id,U8 opt)
                     }	
                     else
                     {
-                        pnode->waitFlags &= ~(U32)(1<<id);   /* Update waitflags   */
+                        pnode->waitFlags &= ~(1<<id);   /* Update waitflags   */
                     }		
                 }
                 else   							
@@ -135,9 +135,9 @@ StatusType CoDelFlag(OS_FlagID id,U8 opt)
     }
     
     /* Remove the flag from the flags list */
-    pfcb->flagActive &= ~(U32)(1<<id);
-    pfcb->flagRdy    &= ~(U32)(1<<id);
-    pfcb->resetOpt   &= ~(U32)(1<<id);
+    pfcb->flagActive &= ~(1<<id);			
+    pfcb->flagRdy    &= ~(1<<id);
+    pfcb->resetOpt   &= ~(1<<id);
     OsSchedUnlock();
     return E_OK;
 }
@@ -166,15 +166,15 @@ StatusType CoAcceptSingleFlag(OS_FlagID id)
     {
         return E_INVALID_ID;            /* Invalid 'id',return error          */
     }
-    if((pfcb->flagActive&(U32)(1<<id)) == 0)
+    if((pfcb->flagActive&(1<<id)) == 0) 
     {
         return E_INVALID_ID;            /* Flag is deactive,return error      */
     }	
 #endif
-    if((pfcb->flagRdy&(U32)(1<<id)) != 0)    /* If the required flag is set        */
+    if((pfcb->flagRdy&(1<<id)) != 0)    /* If the required flag is set        */
     {
         OsSchedLock()
-        pfcb->flagRdy &= ~((FlagCrl.resetOpt)&(U32)(1<<id)); /* Clear the flag     */
+        pfcb->flagRdy &= ~((FlagCrl.resetOpt)&(1<<id)); /* Clear the flag     */
         OsSchedUnlock();
         return E_OK;
     }
@@ -283,7 +283,7 @@ StatusType CoWaitForSingleFlag(OS_FlagID id,U32 timeout)
     {
         return E_INVALID_ID;            /* Invalid 'id'                       */      	
     }
-    if((FlagCrl.flagActive&(U32)(1<<id)) == 0 )/* Judge flag is active or not?       */
+    if((FlagCrl.flagActive&(1<<id)) == 0 )/* Judge flag is active or not?       */
     {
         return E_INVALID_ID;            /* Flag is deactive ,return error     */
     }	
@@ -292,9 +292,9 @@ StatusType CoWaitForSingleFlag(OS_FlagID id,U32 timeout)
    	OsSchedLock();
 	pfcb = &FlagCrl;
     /* See if the required flag is set */
-    if((pfcb->flagRdy&(U32)(1<<id)) != 0)    /* If the required flag is set        */
+    if((pfcb->flagRdy&(1<<id)) != 0)    /* If the required flag is set        */
     {
-        pfcb->flagRdy &= ~((pfcb->resetOpt&(U32)(1<<id))); /* Clear the flag       */
+        pfcb->flagRdy &= ~((pfcb->resetOpt&(1<<id))); /* Clear the flag       */
         OsSchedUnlock();
     }
     else                                /* If the required flag is not set    */
@@ -303,7 +303,7 @@ StatusType CoWaitForSingleFlag(OS_FlagID id,U32 timeout)
         if(timeout == 0)                /* If time-out is not configured      */
         {
             /* Block task until the required flag is set                      */
-            FlagBlock (&flagNode,(U32)(1<<id),OPT_WAIT_ONE);
+            FlagBlock (&flagNode,(1<<id),OPT_WAIT_ONE);  
             curTCB->state  = TASK_WAITING;	
 			TaskSchedReq   = TRUE;
             OsSchedUnlock();
@@ -313,13 +313,13 @@ StatusType CoWaitForSingleFlag(OS_FlagID id,U32 timeout)
             OsSchedLock();
             
             /* Clear the required flag or not                                 */	
-            pfcb->flagRdy &= ~((U32)(1<<id)&(pfcb->resetOpt));
+            pfcb->flagRdy &= ~((1<<id)&(pfcb->resetOpt)); 
             OsSchedUnlock();
         }
         else                            /* If time-out is configured          */
         {
             /* Block task until the required flag is set or time-out occurs   */
-            FlagBlock(&flagNode,(U32)(1<<id),OPT_WAIT_ONE);
+            FlagBlock(&flagNode,(1<<id),OPT_WAIT_ONE);
             InsertDelayList(curTCB,timeout);
             
             OsSchedUnlock();
@@ -333,7 +333,7 @@ StatusType CoWaitForSingleFlag(OS_FlagID id,U32 timeout)
                 OsSchedLock();
                 
                 /* Clear the required flag or not                             */
-                pfcb->flagRdy &= ~((U32)(1<<id)&(pfcb->resetOpt));
+                pfcb->flagRdy &= ~((1<<id)&(pfcb->resetOpt));	 
                 OsSchedUnlock();
             }	
         }
@@ -472,13 +472,13 @@ StatusType CoClearFlag(OS_FlagID id)
     {
         return E_INVALID_ID;                /* Invalid id                     */	
     }
-    if((pfcb->flagActive&(U32)(1<<id)) == 0)
+    if((pfcb->flagActive&(1<<id)) == 0)     
     {
         return E_INVALID_ID;                /* Invalid flag                   */
     }
 #endif
 
-    pfcb->flagRdy &= ~(U32)(1<<id);              /* Clear the flag                 */
+    pfcb->flagRdy &= ~(1<<id);              /* Clear the flag                 */
     return E_OK;
 }
 
@@ -507,18 +507,18 @@ StatusType CoSetFlag(OS_FlagID id)
     {
         return E_INVALID_ID;            /* Invalid flag id                    */      	
     }
-    if((pfcb->flagActive&(U32)(1<<id)) == 0)
+    if((pfcb->flagActive&(1<<id)) == 0)  
     {
         return E_INVALID_ID;            /* Flag is not exist                  */
     }
 #endif
     
-    if((pfcb->flagRdy&(U32)(1<<id)) != 0)    /* Flag had already been set          */
+    if((pfcb->flagRdy&(1<<id)) != 0)    /* Flag had already been set          */
     {
     	return E_OK;
     }
     
-    pfcb->flagRdy |= (U32)(1<<id);           /* Update the flags ready list        */
+    pfcb->flagRdy |= (1<<id);           /* Update the flags ready list        */
     
     OsSchedLock();
     pnode = pfcb->headNode;	  		
@@ -530,7 +530,7 @@ StatusType CoSetFlag(OS_FlagID id)
             {
                /* Remove the flag node from the wait list                    */
                 pnode = RemoveFromLink(pnode);		
-                if((pfcb->resetOpt&(U32)(1<<id)) != 0)/* If the flags is auto-reset*/
+                if((pfcb->resetOpt&(1<<id)) != 0)/* If the flags is auto-reset*/	
                 {
                     break;							
                 }
@@ -543,7 +543,7 @@ StatusType CoSetFlag(OS_FlagID id)
             {
                 /* Remove the flag node from the wait list                    */
                 pnode = RemoveFromLink(pnode);	 	
-                if((pfcb->resetOpt&(U32)(1<<id)) != 0)
+                if((pfcb->resetOpt&(1<<id)) != 0)
                 {
                     break;              /* The flags is auto-reset            */	
                 }

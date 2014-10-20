@@ -41,13 +41,13 @@ void CoTickToTime(U32 ticks,U8* hour,U8* minute,U8* sec,U16* millsec)
     
     /* Convert ticks to time*/
     totalTime = ticks * (1000/CFG_SYSTICK_FREQ);
-    *millsec  = (U16)totalTime%1000;
+    *millsec  = totalTime%1000;
     totalTime = totalTime/1000;
-    *sec      = (U8)totalTime%60;
+    *sec      = totalTime%60;
     totalTime = totalTime/60;
-    *minute   = (U8)totalTime%60;
+    *minute   = totalTime%60;
     totalTime = totalTime/60;
-    *hour     = (U8)totalTime;
+    *hour     = totalTime;		
 }
 #endif    /* CFG_TICK_TO_TIME_EN    */
 
@@ -77,8 +77,8 @@ StatusType  CoTimeToTick(U8 hour,U8 minute,U8 sec,U16 millsec,U32* ticks)
 #endif
 
     /* Convert time to ticks */
-    *ticks = ((U32)((hour*3600) + (minute*60) + (sec)) * (CFG_SYSTICK_FREQ))\
-              + ((U32)millsec*CFG_SYSTICK_FREQ + 500)/1000;
+    *ticks = ((hour*3600) + (minute*60) + (sec)) * (CFG_SYSTICK_FREQ)\
+              + (millsec*CFG_SYSTICK_FREQ + 500)/1000;
     return E_OK;
 }
 #endif    /* CFG_TIME_TO_TICK_EN  */

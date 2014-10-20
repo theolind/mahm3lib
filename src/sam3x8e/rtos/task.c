@@ -829,7 +829,7 @@ OS_TID CreateTask(FUNCPtr task,void *argv,U32 parameter,OS_STK *stk)
 #endif
    
 #if CFG_STK_CHECKOUT_EN >0              /* Check validity of parameter        */
-    U32 sktSz;
+    U16 sktSz;
     sktSz = (parameter&0xfff00)>>8;    
 #endif
     prio = parameter&0xff;
@@ -888,7 +888,7 @@ OS_TID CreateTask(FUNCPtr task,void *argv,U32 parameter,OS_STK *stk)
     ptcb->TCBprev = NULL;
 
 #if CFG_ROBIN_EN >0						/* Set task time slice for task robin */
-    timeSlice = (U16)(parameter&0x7fff0000)>>20;
+    timeSlice = (parameter&0x7fff0000)>>20; 
     if(timeSlice == 0)
     {
         timeSlice = CFG_TIME_SLICE;

@@ -59,9 +59,12 @@ void InsertDelayList(P_OSTCB ptcb,U32 ticks)
         while(dlyNext != NULL)
         {		
             /* Get delta ticks with previous item */ 
-            deltaTicks -= dlyNext->delayTick;  
+        	deltaTicks -= dlyNext->delayTick;
             if(deltaTicks < 0)          /* Is delta ticks<0?                  */
-            {	  
+            {
+            	/* Get delta ticks with previous item */
+            	deltaTicks -= dlyNext->delayTick;
+
                 /* Yes,get correct place */
                 if(dlyNext->TCBprev != NULL)   /* Is head item of DELAY list? */
                 {							   
@@ -81,8 +84,11 @@ void InsertDelayList(P_OSTCB ptcb,U32 ticks)
                 break;
             }
             /* Is last item in DELAY list? */
-            else if((deltaTicks >= 0) && (dlyNext->TCBnext == NULL) )
-            {								   
+            else if(/*(deltaTicks >= 0) && */(dlyNext->TCBnext == NULL) )
+            {
+            	/* Get delta ticks with previous item */
+            	deltaTicks -= dlyNext->delayTick;
+
                 ptcb->TCBprev    = dlyNext; /* Yes,insert into                */
                 dlyNext->TCBnext = ptcb;	
                 ptcb->delayTick  = deltaTicks;

@@ -128,54 +128,55 @@ uint8_t pio_conf_pin_to_peripheral(pio_reg_t *port, uint32_t periph,
 uint8_t pio_conf_interrupt(pio_reg_t *port, uint32_t pin, uint32_t detection) {
 	if(detection == PIO_INT_DISABLE){
 		// disable interrupt and additional interrupts mode
-		port->PIO_IDR = (1 << pin);
-		port->PIO_AIMDR = (1 << pin);
+		port->PIO_IDR = (0x1u << pin);
+		port->PIO_AIMDR = (0x1u << pin);
 	}else if(detection == PIO_INT_EDGE_CHANGE){
 		// Enable interrupt but disable additional modes
-		port->PIO_IER = (1 << pin);
-		port->PIO_AIMDR = (1 << pin);
+		port->PIO_IER = (0x1u << pin);
+		port->PIO_AIMDR = (0x1u << pin);
 	}else if(detection == PIO_INT_EDGE_RISING){
 		// Enable interrupt and enable additional modes
-		port->PIO_IER = (1 << pin);
-		port->PIO_AIMER = (1 << pin);
+		port->PIO_IER = (0x1u << pin);
+		port->PIO_AIMER = (0x1u << pin);
 		// Set to edge detection
-		port->PIO_ESR = (1 << pin);
+		port->PIO_ESR = (0x1u << pin);
 		// set to detect rising edge
-		port->PIO_REHLSR = (1 << pin);
+		port->PIO_REHLSR = (0x1u << pin);
 	}else if(detection == PIO_INT_EDGE_FALLING){
 		// Enable interrupt and enable additional modes
-		port->PIO_IER = (1 << pin);
-		port->PIO_AIMER = (1 << pin);
+		port->PIO_IER = (0x1u << pin);
+		port->PIO_AIMER = (0x1u << pin);
 		// Set to edge detection
-		port->PIO_ESR = (1 << pin);
+		port->PIO_ESR = (0x1u << pin);
 		// set to detect falling edge
-		port->PIO_FELLSR = (1 << pin);
+		port->PIO_FELLSR = (0x1u << pin);
 	}else if(detection == PIO_INT_LEVEL_HIGH){
 		// Enable interrupt and enable additional modes
-		port->PIO_IER = (1 << pin);
-		port->PIO_AIMER = (1 << pin);
+		port->PIO_IER = (0x1u << pin);
+		port->PIO_AIMER = (0x1u << pin);
 		// Set to level detection
-		port->PIO_LSR = (1 << pin);
+		port->PIO_LSR = (0x1u << pin);
 		// set to detect high level
-		port->PIO_REHLSR = (1 << pin);
+		port->PIO_REHLSR = (0x1u << pin);
 	}else if(detection == PIO_INT_LEVEL_LOW){
 		// Enable interrupt and enable additional modes
-		port->PIO_IER = (1 << pin);
-		port->PIO_AIMER = (1 << pin);
+		port->PIO_IER = (0x1u << pin);
+		port->PIO_AIMER = (0x1u << pin);
 		// Set to level detection
-		port->PIO_LSR = (1 << pin);
+		port->PIO_LSR = (0x1u << pin);
 		// set to detect low level
-		port->PIO_FELLSR = (1 << pin);
+		port->PIO_FELLSR = (0x1u << pin);
 	}
 	return 1;
 }
+
 uint8_t pio_interrupt_enable(pio_reg_t *port, uint32_t pin) {
-	port->PIO_IER = (1 << pin);
+	port->PIO_IER = (0x1u << pin);
 	return 1;
 }
 
 uint8_t pio_interrupt_disable(pio_reg_t *port, uint32_t pin) {
-	port->PIO_IDR = (1 << pin);
+	port->PIO_IDR = (0x1u << pin);
 	return 1;
 }
 /*
@@ -186,8 +187,7 @@ uint8_t pio_interrupt_disable(pio_reg_t *port, uint32_t pin) {
  * @return Returns 1 if an interrupt has occurred since last read of PIO_ISR.
  */
 uint8_t pio_get_interrupt_status(pio_reg_t *port, uint32_t pin) {
-	return port->PIO_ISR & (1 << pin) > 0;
-	return 1;
+	return (port->PIO_ISR & (0x1u << pin)) > 0;
 }
 
 /*
@@ -198,7 +198,7 @@ uint8_t pio_get_interrupt_status(pio_reg_t *port, uint32_t pin) {
  * @return Returns high if interrupt is enabled, otherwise zero.
  */
 uint8_t pio_get_interrupt_mask(pio_reg_t *port, uint32_t pin) {
-	return port->PIO_IMR & (1 << pin) > 0;
+	return (port->PIO_IMR & (0x1u << pin)) > 0;
 }
 
 /*
@@ -213,7 +213,7 @@ uint8_t pio_get_interrupt_mask(pio_reg_t *port, uint32_t pin) {
  */
 uint8_t pio_interrupt_additional_modes_enable(pio_reg_t *port,
 		uint32_t pin) {
-	port->PIO_AIMER = (1 << pin);
+	port->PIO_AIMER = (0x1u << pin);
 	return 1;
 }
 /*
@@ -228,7 +228,7 @@ uint8_t pio_interrupt_additional_modes_enable(pio_reg_t *port,
  */
 uint8_t pio_interrupt_additional_modes_disable(pio_reg_t *port,
 		uint32_t pin) {
-	port->PIO_AIMDR = (1 << pin);
+	port->PIO_AIMDR = (0x1u << pin);
 	return 1;
 }
 
@@ -242,7 +242,7 @@ uint8_t pio_interrupt_additional_modes_disable(pio_reg_t *port,
  */
 uint8_t pio_get_interrupt_additional_modes_mask(pio_reg_t *port,
 		uint32_t pin) {
-	return port->PIO_AIMMR & (1 << pin) > 0;
+	return (port->PIO_AIMMR & (0x1u << pin)) > 0;
 }
 
 /**
@@ -253,7 +253,7 @@ uint8_t pio_get_interrupt_additional_modes_mask(pio_reg_t *port,
  * @return
  */
 uint8_t pio_set_interrupt_to_edge_detection(pio_reg_t *port, uint32_t pin) {
-	port->PIO_ESR = (1 << pin);
+	port->PIO_ESR = (0x1u << pin);
 	return 1;
 }
 
@@ -265,12 +265,19 @@ uint8_t pio_set_interrupt_to_edge_detection(pio_reg_t *port, uint32_t pin) {
  * @return
  */
 uint8_t pio_set_interrupt_to_level_detection(pio_reg_t *port, uint32_t pin) {
-	port->PIO_LSR = (1 << pin);
+	port->PIO_LSR = (0x1u << pin);
 	return 1;
 }
 
+/**
+ * This function will return the detection method for a given pin interrupt.
+ *
+ * @param port
+ * @param pin
+ * @return if high then detection method is ...
+ */
 uint8_t pio_get_interrupt_detection_method(pio_reg_t *port, uint32_t pin) {
-	return port->PIO_ELSR & (1 << pin);
+	return (port->PIO_ELSR & (0x1u << pin)) > 0;
 }
 
 
@@ -288,12 +295,14 @@ uint8_t pio_get_interrupt_detection_method(pio_reg_t *port, uint32_t pin) {
 uint8_t pio_set_interrupt_method(pio_reg_t *port, uint32_t pin,
 		uint32_t detection) {
 	if (detection == PIO_INT_EDGE_FALLING || detection == PIO_INT_LEVEL_LOW) {
-		port->PIO_FELLSR = (1 << pin);
+		port->PIO_FELLSR = (1U << pin);
 	} else if (detection == PIO_INT_EDGE_RISING || detection == PIO_INT_LEVEL_HIGH) {
-		port->PIO_REHLSR = (1 << pin);
+		port->PIO_REHLSR = (0x1u << pin);
 	}
 	return 1;
 }
+
+
 
 
 /*

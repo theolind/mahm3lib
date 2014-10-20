@@ -110,21 +110,24 @@ void run_tests(void) {
 	// Run TC tests
 	Unity.TestFile = "test/test_tc.c";
 	RUN_TEST(test_tc_conf_channel, 80);
+	RUN_TEST(test_tc_conf_block, 80);
 	RUN_TEST(test_tc_enable_clock, 80);
 	RUN_TEST(test_tc_disable_clock, 80);
 	RUN_TEST(test_tc_start_clock, 80);
-	RUN_TEST(test_tc_stop_clock, 80);
+	RUN_TEST(test_tc_counter_stopped, 80);
 	RUN_TEST(test_tc_read_counter_value, 80);
+	RUN_TEST(test_tc_sync, 80);
+	RUN_TEST(test_register, 80);
 	HORIZONTAL_LINE_BREAK();
 
 	// Run TWI tests
 	Unity.TestFile = "test/test_twi.c";
+	RUN_TEST(test_twi_init_slave, 90);
 	RUN_TEST(test_twi_set_device_address, 90);
 	RUN_TEST(test_twi_set_internal_address, 90);
 	RUN_TEST(test_twi_set_clock_invalid_parameters, 90);
 	RUN_TEST(test_twi_set_clock_valid_parameters, 90);
-	RUN_TEST(test_twi_send_receive_SEMI_AUTOMATIC, 90);
-	RUN_TEST(test_tc_read_counter_value, 80);
+	//RUN_TEST(test_twi_send_receive_SEMI_AUTOMATIC, 90);
 
 	UnityEnd();
 }

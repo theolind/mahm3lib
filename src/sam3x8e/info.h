@@ -21,6 +21,10 @@
 #ifndef INFO_H_
 #define INFO_H_
 
+/**
+ * This function will return the kernel name and version by means of the uart.
+ */
+inline void info_send_kernel_version(void);
 inline void info_send_kernel_version(void){
 	uart_write_str("\n\r");
 	uart_write_str(KERNEL_INFO);

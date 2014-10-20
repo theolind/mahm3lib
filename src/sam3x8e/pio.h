@@ -66,6 +66,7 @@
 #define PIO_PIN_101_PBC19		(19)
 #define PIO_PIN_116_PC4			(4)
 #define PIO_PIN_140_PB14		(14)
+#define PIO_PIN_8_PA15			(15)
 // These should be extended (These are MCU pin mappings and not arduino pin mappings)
 ///@}
 

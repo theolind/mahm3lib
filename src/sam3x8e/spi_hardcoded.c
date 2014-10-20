@@ -26,6 +26,8 @@ void spi_init_hardcoded(void) {
 	//*p_SPI0_WPMR &= 0x0u; //clear WPEN bit to be able to write to Mode Register
 	//*p_SPI0_WPMR &= (0x53504900);	//this is probably the correct way to clear WPEN bit (writing WPEN & WPKEY at the same time)
 
+	//spi 0 - perip. id 24
+
 	*p_SPI0_MR = 0x1u; //master
 	*p_SPI0_MR |= (0x0u<<1); //fixed PS
 	*p_SPI0_MR |= (0x0u<<2); // chip select direct connect to peripheral device

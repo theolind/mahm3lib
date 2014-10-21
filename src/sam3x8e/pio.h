@@ -11,6 +11,7 @@
  * @author Theodor Lindquist
  * @author Soded Alatia
  * @author Felix Ruponen
+ * @author Saeed Ghasemi
  *
  * @date 29 September 2014
  *
@@ -49,24 +50,33 @@
  *
  * PIO_PIN_[package pin number]_[port and bit number]
  */
-#define PIN_PIO_1_PB26			(26)
-#define PIN_PIO_42_PA19			(19)
-#define PIN_PIO_59_PC2			(2)
-#define PIN_PIO_60_PC3			(3)
-#define PIN_PIO_63_PC5			(5)
-#define PIN_PIO_64_PC6			(6)
-#define PIN_PIO_65_PC7			(7)
-#define PIN_PIO_66_PC8			(8)
-#define PIN_PIO_67_PC9			(9)
-#define PIN_PIO_72_PA20			(20)
-#define PIN_PIO_95_PC13			(13)
-#define PIN_PIO_97_PC15			(15)
-#define PIN_PIO_99_PC17			(17)
-#define PIN_PIO_100_PC18		(18)
-#define PIN_PIO_101_PBC19		(19)
-#define PIN_PIO_116_PC4			(4)
-#define PIN_PIO_140_PB14		(14)
+#define PIO_PIN_1_PB26			(26)
+#define PIO_PIN_42_PA19			(19)
+#define PIO_PIN_59_PC2			(2)
+#define PIO_PIN_60_PC3			(3)
+#define PIO_PIN_63_PC5			(5)
+#define PIO_PIN_64_PC6			(6)
+#define PIO_PIN_65_PC7			(7)
+#define PIO_PIN_66_PC8			(8)
+#define PIO_PIN_67_PC9			(9)
+#define PIO_PIN_72_PA20			(20)
+#define PIO_PIN_95_PC13			(13)
+#define PIO_PIN_97_PC15			(15)
+#define PIO_PIN_99_PC17			(17)
+#define PIO_PIN_100_PC18		(18)
+#define PIO_PIN_101_PBC19		(19)
+#define PIO_PIN_116_PC4			(4)
+#define PIO_PIN_140_PB14		(14)
+#define PIO_PIN_8_PA15			(15)
 // These should be extended (These are MCU pin mappings and not arduino pin mappings)
+///@}
+///@{
+#define PIO_INT_EDGE_CHANGE				(0)
+#define PIO_INT_EDGE_RISING				(1)
+#define PIO_INT_EDGE_FALLING			(2)
+#define PIO_INT_LEVEL_HIGH				(3)
+#define PIO_INT_LEVEL_LOW				(4)
+#define PIO_INT_DISABLE					(5)
 ///@}
 
 
@@ -289,19 +299,135 @@ uint32_t pio_read_port(pio_reg_t *port);
  */
 uint8_t pio_conf_pin_to_peripheral(pio_reg_t *port, uint32_t periph,
 		uint8_t pin_number);
+/**
+ * This function will enable the interrupt on a given pin.
+ * The interrupt can be configured in all conditions as they can always detect
+ * changes, even when in peripheral mode.
+ *
+ * This function is the primary function for using interrupts. There are
+ * however, additional interrupt functions that can be used.
+ *
+ *
+ * @param port The PIO-port to operate on
+ * @param pin The pin-number of the pio-port.
+ * @param detection The detection method to be used for the interrupt.
+ * Use one of the predefines for this input with prefix: PIO_INT_
+ * @return
+ */
+uint8_t pio_conf_interrupt(pio_reg_t *port, uint32_t pin, uint32_t detection);
+/**
+ * This function will enable interrupt for the given pin. The interrupt
+ * detection method will be both rising and falling edge detection.
+ *
+ * @param port
+ * @param pin
+ * @return
+ */
+uint8_t pio_interrupt_enable(pio_reg_t *port, uint32_t pin);
+/**
+ * This function disables all interrupt for the given pin.
+ *
+ * @param port
+ * @param pin
+ * @return
+ */
+uint8_t pio_interrupt_disable(pio_reg_t *port, uint32_t pin);
+/**
+ * This function will enable additional modes for the interrupt of a given pin.
+ * If additional modes are disabled the interrupt mode will be the basic one
+ * which is to fire at both rising and falling edge. If level detection or just
+ * falling edge is wanted then additional modes are needed.
+ *
+ * @param port The PIO-port to operate on.
+ * @param pin The pin-number of the pio-port.
+ * @return error, 1 = SUCCESS and 0 = FAIL
+ */
+uint8_t pio_interrupt_additional_modes_enable(pio_reg_t *port, uint32_t pin);
+/**
+ * This function will disable additional modes for the interrupt of a given pin.
+ * If additional modes are disabled the interrupt mode will be the basic one
+ * which is to fire at both rising and falling edge. If level detection or just
+ * falling edge is wanted then additional modes are needed.
+ *
+ * @param port The PIO-port to operate on.
+ * @param pin The pin-number of the pio-port.
+ * @return error, 1 = SUCCESS and 0 = FAIL
+ */
+uint8_t pio_interrupt_additional_modes_disable(pio_reg_t *port, uint32_t pin);
+/**
+ * This function will set the additional interrupt mode to edge detection.
+ *
+ * @param port
+ * @param pin
+ * @return
+ */
+uint8_t pio_set_interrupt_to_edge_detection(pio_reg_t *port, uint32_t pin);
+/**
+ * This function will set the additional interrupt mode to level detection.
+ *
+ * @param port
+ * @param pin
+ * @return
+ */
+uint8_t pio_set_interrupt_to_level_detection(pio_reg_t *port, uint32_t pin);
+/**
+ * This function will set the final step in defining an interrupt for a pin.
+ * If additional modes are enabled, then this function can let you choose
+ * between rising/high edge/level detection or falling/low edge/level detection.
+ *
+ * @param port
+ * @param pin
+ * @param detection
+ * @return
+ */
+uint8_t pio_set_interrupt_method(pio_reg_t *port, uint32_t pin, uint32_t detection);
+/**
+ * This function checks to see if interrupt is enabled for a certain pin.
+ *
+ * @param port The PIO-port to operate on.
+ * @param pin The pin-number of the pio-port.
+ * @return Returns high if interrupt is enabled, otherwise zero.
+ */
+uint8_t pio_get_interrupt_mask(pio_reg_t *port, uint32_t pin);
+/**
+ * This function checks to see if an interrupt has occurred on a certain pin.
+ *
+ * @param port The PIO-port to operate on
+ * @param pin The pin-number of the pio-port.
+ * @return Returns all the interrupt flags of the pio-port.
+ */
+uint32_t pio_get_interrupt_port_status(pio_reg_t *port);
+/**
+ * This function will return 1 if additional modes ar enabled for the given
+ * pin.
+ *
+ * @param port
+ * @param pin
+ * @return
+ */
+uint8_t pio_get_interrupt_additional_modes_mask(pio_reg_t *port, uint32_t pin);
+/**
+ * This function will return the detection method for a given pin interrupt.
+ *
+ * @param port
+ * @param pin
+ * @return if high then detection method is ...
+ */
+uint8_t pio_get_interrupt_detection_method(pio_reg_t *port, uint32_t pin);
+
 
 
 /**
  * Checks if debounce filter is enabled for a specific pin
  * @return 1 if debounce filter is selected
  */
-uint32_t pio_debounce_filter_selected(pio_reg_t *port, uint32_t pin_number);
+uint8_t pio_debounce_filter_selected(pio_reg_t *port, uint32_t pin_number);
 
 /**
  * Checks if glitch filter is selected for a specific pin
  * @return 1 if glitch filter is selected
  */
-uint32_t pio_glitch_filter_selected(pio_reg_t *port, uint32_t pin_number);
+uint8_t pio_glitch_filter_selected(pio_reg_t *port, uint32_t pin_number);
 
 
 /**
@@ -321,13 +447,15 @@ void pio_select_glitch_filter(pio_reg_t *port, uint32_t pin_number);
  */
 void pio_select_debounce_filter(pio_reg_t *port, uint32_t pin_number);
 
+void pio_set_debounce_prescaler(pio_reg_t *port, uint32_t pin_number, uint32_t prescaler);
+
 /**
  * Enables glitch filter for a specified port/pin
  * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
  * @param pin_number the pin number (on the port) to enable filter on
  * @pre The peripheral clock must be enabled for this to work
  */
-void pio_enable_glitch_filter(pio_reg_t *port, uint32_t pin_number);
+void pio_enable_input_filter(pio_reg_t *port, uint32_t pin_number);
 
 /**
  * Disable glitch filter for a specified port and pin
@@ -335,14 +463,14 @@ void pio_enable_glitch_filter(pio_reg_t *port, uint32_t pin_number);
  * @param pin_number the pin number (on the port) to enable filter on
  * @pre The peripheral clock must be enabled for this to work
  */
-void pio_disable_glitch_filter(pio_reg_t *port, uint32_t pin_number);
+void pio_disable_input_filter(pio_reg_t *port, uint32_t pin_number);
 
 /**
  * Returns 1 if glitch filter is enabled on the selected pin/port
  * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
  * @param pin_number the pin number (on the port) to enable filter on
  */
-uint32_t pio_glitch_filter_enabled(pio_reg_t *port, uint32_t pin_number);
+uint32_t pio_input_filter_enabled(pio_reg_t *port, uint32_t pin_number);
 
 
 

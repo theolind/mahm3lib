@@ -25,11 +25,6 @@
 #ifndef PWM_H_
 #define PWM_H_
 
-#ifndef ID_H_
-#define ID_H_
-#include "sam3x8e/id.h"
-#endif
-
 ///@{
 /**
  * These define the pins that can be used with the PWM peripheral.
@@ -96,7 +91,6 @@
 #define PWM_CHANNEL_5					(5)
 #define PWM_CHANNEL_6					(6)
 #define PWM_CHANNEL_7					(7)
-//#define PWM_CHANNEL_ALL_MASK			(0xFF)
 ///@}
 ///@{
 /**
@@ -215,7 +209,7 @@
  * @typedef pwm_reg_t
  * This structure defines the register mapping of the PWM peripheral.
  */
-typedef struct pwm_reg_t {
+typedef struct pwm_reg {
 	uint32_t PWM_CLK; ///< PWM Clock Register, offset 0x000
 	uint32_t PWM_ENA; ///< PWM Enable Register, offset 0x004
 	uint32_t PWM_DIS; ///< PWM Disable Register, offset 0x008
@@ -372,7 +366,7 @@ typedef struct pwm_clk_setting {
 	uint32_t clkA_divisor; ///<This is the divisor for clock A. Set this between 0 and 255. 0 will turn the clock off.
 	uint32_t clkB_prescaler; ///<This is the prescaler for clock B. Parameter prefix: PWM_CLK_PRES_
 	uint32_t clkB_divisor; ///<This is the divisor for clock B. Set this between 0 and 255. 0 will turn the clock off.
-} pwm_clk_setting;
+} pwm_clk_setting_t;
 /**
  * @typedef pwm_channel_setting
  * This structure is used with pwm_init_channel() to set the settings of a
@@ -386,7 +380,7 @@ typedef struct pwm_channel_setting {
 	uint32_t use_CLKx; ///<Must be 1 or 0 to indicate whether to use one of the CLKx clocks to set the frequency or just the channel prescalers and period must be used.
 	uint32_t frequency; ///<The frequency of the PWM waveform for this channel.
 	uint32_t clock_ID; ///<In case that use_CLKx is set to 1, then clock_ID must specify which CLKx can be used for this purpose. Prefix: PWM_CLK_ID_
-} pwm_channel_setting;
+} pwm_channel_setting_t;
 ///@}
 
 
@@ -400,7 +394,7 @@ typedef struct pwm_channel_setting {
  *
  * @return error, 1 = SUCCESS and 0 = FAIL
  */
-uint8_t pwm_init_peripheral(struct pwm_clk_setting clk_settings);
+uint8_t pwm_init_peripheral(pwm_clk_setting_t clk_settings);
 /**
  * Initialize the PWM peripheral with channel- polarity, alignment, prescaler
  * and initial duty cycle. Set use_CLKx to 1 if you want these clocks to be used
@@ -417,7 +411,7 @@ uint8_t pwm_init_peripheral(struct pwm_clk_setting clk_settings);
  * (See typedef pwm_channel_setting for more details.)
  * @return error, 1 = SUCCESS and 0 = FAIL
  */
-uint8_t pwm_init_channel(struct pwm_channel_setting settings);
+uint8_t pwm_init_channel(pwm_channel_setting_t settings);
 /**
  * This function will enable the selected channel, identified with predefined
  * values, like: PWM_CHANNEL_x_MASK

@@ -18,6 +18,8 @@
 #include "test/test_eefc.h"
 #include "test/test_bitwise_operations.h"
 #include "test/test_pwm.h"
+#include "test/test_tc.h"
+#include "test/test_twi.h"
 
 void run_tests(void) {
 	UnityBegin();
@@ -91,12 +93,32 @@ void run_tests(void) {
 
 	// Run PWM tests
 	Unity.TestFile = "test/test_pwm.c";
-	RUN_TEST(test_pwm_channel_enabled, 30);
-	RUN_TEST(test_pwm_channel_disabled, 30);
-	RUN_TEST(test_pwm_channel_prescaler, 30);
-	RUN_TEST(test_pwm_channel_duty_cycle, 30);
-	RUN_TEST(test_pwm_channel_polarity, 30);
-	RUN_TEST(test_pwm_channel_alignment, 30);
+	RUN_TEST(test_pwm_channel_enabled, 70);
+	RUN_TEST(test_pwm_channel_disabled, 70);
+	RUN_TEST(test_pwm_channel_prescaler, 70);
+	RUN_TEST(test_pwm_channel_duty_cycle, 70);
+	RUN_TEST(test_pwm_channel_polarity, 70);
+	RUN_TEST(test_pwm_channel_alignment, 70);
+	HORIZONTAL_LINE_BREAK();
+
+	// Run TC tests
+	Unity.TestFile = "test/test_tc.c";
+	RUN_TEST(test_tc_conf_channel, 80);
+	RUN_TEST(test_tc_enable_clock, 80);
+	RUN_TEST(test_tc_disable_clock, 80);
+	RUN_TEST(test_tc_start_clock, 80);
+	RUN_TEST(test_tc_stop_clock, 80);
+	RUN_TEST(test_tc_read_counter_value, 80);
+	HORIZONTAL_LINE_BREAK();
+
+	// Run TWI tests
+	Unity.TestFile = "test/test_twi.c";
+	RUN_TEST(test_twi_init_slave, 90);
+	RUN_TEST(test_twi_set_device_address, 90);
+	RUN_TEST(test_twi_set_internal_address, 90);
+	RUN_TEST(test_twi_set_clock_invalid_parameters, 90);
+	RUN_TEST(test_twi_set_clock_valid_parameters, 90);
+	RUN_TEST(test_twi_send_receive_SEMI_AUTOMATIC, 90);
 
 	UnityEnd();
 }

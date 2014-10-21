@@ -30,6 +30,7 @@ typedef struct FlagNode
     U32               waitFlags;        /*!< Flag value                       */
     P_OSTCB           waitTask;         /*!< A pointer to task waitting flag  */
     U8                waitType;         /*!< Wait type                        */
+    U8					_padding[3];
 }FLAG_NODE,*P_FLAG_NODE;
 
 

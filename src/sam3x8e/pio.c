@@ -115,14 +115,17 @@ uint8_t pio_conf_interrupt(pio_reg_t *port, uint32_t pin, uint32_t detection) {
 	if(detection == PIO_INT_DISABLE){
 		// disable interrupt and additional interrupts mode
 		port->PIO_IDR = (0x1u << pin);
+		delay_micros(100); // it works better this way
 		port->PIO_AIMDR = (0x1u << pin);
 	}else if(detection == PIO_INT_EDGE_CHANGE){
 		// Enable interrupt but disable additional modes
 		port->PIO_IER = (0x1u << pin);
+		delay_micros(100); // it works better this way
 		port->PIO_AIMDR = (0x1u << pin);
 	}else if(detection == PIO_INT_EDGE_RISING){
 		// Enable interrupt and enable additional modes
 		port->PIO_IER = (0x1u << pin);
+		delay_micros(100); // it works better this way
 		port->PIO_AIMER = (0x1u << pin);
 		// Set to edge detection
 		port->PIO_ESR = (0x1u << pin);
@@ -131,6 +134,7 @@ uint8_t pio_conf_interrupt(pio_reg_t *port, uint32_t pin, uint32_t detection) {
 	}else if(detection == PIO_INT_EDGE_FALLING){
 		// Enable interrupt and enable additional modes
 		port->PIO_IER = (0x1u << pin);
+		delay_micros(100); // it works better this way
 		port->PIO_AIMER = (0x1u << pin);
 		// Set to edge detection
 		port->PIO_ESR = (0x1u << pin);
@@ -139,6 +143,7 @@ uint8_t pio_conf_interrupt(pio_reg_t *port, uint32_t pin, uint32_t detection) {
 	}else if(detection == PIO_INT_LEVEL_HIGH){
 		// Enable interrupt and enable additional modes
 		port->PIO_IER = (0x1u << pin);
+		delay_micros(100); // it works better this way
 		port->PIO_AIMER = (0x1u << pin);
 		// Set to level detection
 		port->PIO_LSR = (0x1u << pin);
@@ -147,6 +152,7 @@ uint8_t pio_conf_interrupt(pio_reg_t *port, uint32_t pin, uint32_t detection) {
 	}else if(detection == PIO_INT_LEVEL_LOW){
 		// Enable interrupt and enable additional modes
 		port->PIO_IER = (0x1u << pin);
+		delay_micros(100); // it works better this way
 		port->PIO_AIMER = (0x1u << pin);
 		// Set to level detection
 		port->PIO_LSR = (0x1u << pin);

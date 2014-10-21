@@ -2,15 +2,19 @@
  * @file delay.h
  * @brief Delay - Software delay
  * @details The delays are not accurate enough for real time applications,
- * however the delays are accurate enough for most applications.
+ * however the delays are accurate enough for most applications. The
+ * largest deviation occures right after 10 microseconds, the
+ * deviation are up to +20%.
  *
- * The longer the delay, the more accurate. Below 10 us, the deviation
- * fluctuates from +2us to -2us. The shortest delay that is 2 us.
+ * The deviation then gets lower and in the area between 20 - 500
+ * microseconds the average deviation are +/- 5%. Below 10 microseconds the
+ * deviation are down to 10-50 ns and above 500 microseconds the
+ * deviation is between +/- 1-2% off.
  *
  * @pre Initialize the board
  *
  * @author Mattias Nilsson
- * @date 21 October 2014
+ * @date 6 October 2014
  *
  */
 
@@ -18,7 +22,6 @@
 #define DELAY_H_
 
 #include <inttypes.h>
-extern void wait(void);
 
 /**
  * The function makes a pause in the system.

@@ -31,13 +31,15 @@ typedef struct ServiceReqCell
 {
     U8      type;
     U8      id;
+    U8		_padding[2];
     void*   arg;
 }SQC,*P_SQC;
 
 typedef struct ServiceReqQueue
 {
     U8    cnt;
-    U8    head;    
+    U8    head;
+    U8		_padding[2];
     SQC   cell[CFG_MAX_SERVICE_REQUEST];
 }SRQ,*P_SRQ;
 

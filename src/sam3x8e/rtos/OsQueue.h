@@ -29,6 +29,7 @@ typedef struct Queue
 {
     void    **qStart;                   /*!<                                  */
     U8      id;                         /*!<                                  */
+    U8		_padding[3];
     U16     head;                       /*!< The header of queue              */
     U16     tail;                       /*!< The end of queue                 */
     U16     qMaxSize;                   /*!< The max size of queue            */

@@ -198,13 +198,20 @@ uint8_t pio_set_interrupt_method(pio_reg_t *port, uint32_t pin,
 	return 1;
 }
 
-
-uint32_t pio_debounce_filter_selected(pio_reg_t *port, uint32_t pin_number) {
-	return (port->PIO_IFDGSR & (1u << pin_number));
+uint8_t pio_debounce_filter_selected(pio_reg_t *port, uint32_t pin_number) {
+	if((port->PIO_IFDGSR & (1u << pin_number)) == (1u << pin_number)) {
+			return 1;
+		}else {
+			return 0;
+		}
 }
 
-uint32_t pio_glitch_filter_selected(pio_reg_t *port, uint32_t pin_number) {
-	return ~(port->PIO_IFDGSR & (1u << pin_number));
+uint8_t pio_glitch_filter_selected(pio_reg_t *port, uint32_t pin_number) {
+	if((port->PIO_IFDGSR & (1u << pin_number)) == (1u << pin_number)) {
+		return 0;
+	}else {
+		return 1;
+	}
 }
 
 void pio_select_glitch_filter(pio_reg_t *port, uint32_t pin_number) {
@@ -212,20 +219,25 @@ void pio_select_glitch_filter(pio_reg_t *port, uint32_t pin_number) {
 }
 
 void pio_select_debounce_filter(pio_reg_t *port, uint32_t pin_number) {
-	port->PIO_DIFSR |= (1u << pin_number);
+	port->PIO_DIFSR = (1u << pin_number);
 }
 
-void pio_enable_glitch_filter(pio_reg_t *port, uint32_t pin_number) {
-	port->PIO_IFER |= (1u << pin_number);
+void pio_set_debounce_prescaler(pio_reg_t *port, uint32_t pin_number, uint32_t prescaler) {
+	//port->PIO_SCDR = prescaler;
 }
 
-void pio_disable_glitch_filter(pio_reg_t *port, uint32_t pin_number) {
-	port->PIO_IFDR |= (1u << pin_number);
+void pio_enable_input_filter(pio_reg_t *port, uint32_t pin_number) {
+	port->PIO_IFER = (1u << pin_number);
 }
 
-uint32_t pio_glitch_filter_enabled(pio_reg_t *port, uint32_t pin_number) {
+void pio_disable_input_filter(pio_reg_t *port, uint32_t pin_number) {
+	port->PIO_IFDR = (1u << pin_number);
+}
+
+uint32_t pio_input_filter_enabled(pio_reg_t *port, uint32_t pin_number) {
 	return (port->PIO_IFSR & (1u << pin_number));
 }
+
 
 uint8_t pio_get_interrupt_mask(pio_reg_t *port, uint32_t pin) {
 	return (port->PIO_IMR & (0x1u << pin)) > 0;

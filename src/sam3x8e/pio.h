@@ -421,13 +421,13 @@ uint8_t pio_get_interrupt_detection_method(pio_reg_t *port, uint32_t pin);
  * Checks if debounce filter is enabled for a specific pin
  * @return 1 if debounce filter is selected
  */
-uint32_t pio_debounce_filter_selected(pio_reg_t *port, uint32_t pin_number);
+uint8_t pio_debounce_filter_selected(pio_reg_t *port, uint32_t pin_number);
 
 /**
  * Checks if glitch filter is selected for a specific pin
  * @return 1 if glitch filter is selected
  */
-uint32_t pio_glitch_filter_selected(pio_reg_t *port, uint32_t pin_number);
+uint8_t pio_glitch_filter_selected(pio_reg_t *port, uint32_t pin_number);
 
 
 /**
@@ -447,13 +447,15 @@ void pio_select_glitch_filter(pio_reg_t *port, uint32_t pin_number);
  */
 void pio_select_debounce_filter(pio_reg_t *port, uint32_t pin_number);
 
+void pio_set_debounce_prescaler(pio_reg_t *port, uint32_t pin_number, uint32_t prescaler);
+
 /**
  * Enables glitch filter for a specified port/pin
  * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
  * @param pin_number the pin number (on the port) to enable filter on
  * @pre The peripheral clock must be enabled for this to work
  */
-void pio_enable_glitch_filter(pio_reg_t *port, uint32_t pin_number);
+void pio_enable_input_filter(pio_reg_t *port, uint32_t pin_number);
 
 /**
  * Disable glitch filter for a specified port and pin
@@ -461,14 +463,14 @@ void pio_enable_glitch_filter(pio_reg_t *port, uint32_t pin_number);
  * @param pin_number the pin number (on the port) to enable filter on
  * @pre The peripheral clock must be enabled for this to work
  */
-void pio_disable_glitch_filter(pio_reg_t *port, uint32_t pin_number);
+void pio_disable_input_filter(pio_reg_t *port, uint32_t pin_number);
 
 /**
  * Returns 1 if glitch filter is enabled on the selected pin/port
  * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
  * @param pin_number the pin number (on the port) to enable filter on
  */
-uint32_t pio_glitch_filter_enabled(pio_reg_t *port, uint32_t pin_number);
+uint32_t pio_input_filter_enabled(pio_reg_t *port, uint32_t pin_number);
 
 
 

@@ -36,15 +36,22 @@ void test_twi_init_slave(void) {
 
 /*
  * This test performs a control of:
- * 	1) is Device Address set?
- * 	2) is a 8-bit Device Address ignored?
- * 	3) is Internal Address Size set?
- * 	4) can the setting for the Internal Address Size be larger than 2 bits?
+ * 	1) is current Master Read Direction modified?
+ * 	2) is Device Address set?
+ * 	3) is a 8-bit Device Address ignored?
+ * 	4) is Internal Address Size set?
+ * 	5) can the setting for the Internal Address Size be larger than 2 bits?
  */
 void test_twi_set_device_address(void) {
+	// Set Master Read Direction
+	TWI0->TWI_MMR = (1 << 12);
+	TWI1->TWI_MMR = (1 << 12);
 	// Set Device Address and Internal Address Size
 	twi_set_device_address(TWI0, 0xFF, 7);
 	twi_set_device_address(TWI1, 0xFF, 7);
+	// Master Read Direction shouldn't be modified
+	TEST_ASSERT_TRUE(TWI0->TWI_MMR & (1 << 12));
+	TEST_ASSERT_TRUE(TWI1->TWI_MMR & (1 << 12));
 	// Device Address should be set
 	TEST_ASSERT_TRUE(TWI0->TWI_MMR & (0xFF << 16));
 	TEST_ASSERT_TRUE(TWI1->TWI_MMR & (0xFF << 16));
@@ -127,12 +134,12 @@ void test_twi_set_clock_valid_parameters(void) {
 /*
  * This test is semi-automatic and requires that SDA and SCL of
  * both TWI peripherals are connected.
- * NOT WORKING!!!!!!!!!!!!!!
  */
 void test_twi_send_receive_SEMI_AUTOMATIC(void) {
-	volatile uint32_t i;
-	uint32_t result, status;
-	uint8_t slave_address = 0xFF;
+	uint32_t i;
+	uint32_t result;
+	uint32_t status;
+	uint8_t slave_address = 100;
 	uint8_t data_in = 0;
 	uint8_t data_out;
 
@@ -146,31 +153,16 @@ void test_twi_send_receive_SEMI_AUTOMATIC(void) {
 	/*
 	 * initialize TWI Master
 	 */
-	twi_set_clock(TWI0, TWI_STANDARD_MODE_SPEED, 84000000);
-	twi_init_master(TWI0);
+	twi_set_clock(TWI0, TWI_FAST_MODE_SPEED, 84000000);
 	twi_set_device_address(TWI0, slave_address, 0);
-	//twi_set_internal_address(TWI0, 0);
-	/*
-	 * send data to slave
-	 */
-	data_out = 65;
-	// set Master Write Direction
-	//TWI0->TWI_MMR |= TWI_MMR_MASTER_WRITE;
-	// write data to slave
-	TWI0->TWI_THR = data_out;
-	// Wait for Transmission Completed flag to set
-	//while (!(TWI0->TWI_SR & TWI_SR_TXCOMP));
-
-	/*
-	 * check if the slave address on the TWI line matches the slave device
-	 */
+	twi_set_internal_address(TWI0, 0);
+	twi_init_master(TWI0);
+	// If the slave address on the TWI line matches this slave device
 	result = 0;
-	for (i = 0; result == 0 && i < 10000; i++) {
+	for (i = 0; (i < 100 && result == 0); i++) {
 		result = TWI1->TWI_SR & TWI_SR_SVACC;
 	}
 	TEST_ASSERT_TRUE(result);
-	// send STOP command from Master
-	TWI0->TWI_CR = TWI_CR_STOP;
 
 	/*
 	 * send data to slave
@@ -180,7 +172,6 @@ void test_twi_send_receive_SEMI_AUTOMATIC(void) {
 	TWI0->TWI_MMR |= TWI_MMR_MASTER_WRITE;
 	// write data to slave
 	TWI0->TWI_THR = data_out;
-
 
 	/*
 	 * read data from master

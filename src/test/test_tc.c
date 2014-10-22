@@ -198,7 +198,7 @@ void test_tc_read_counter_value(void) {
 }
 
 void test_tc_sync(void){
-	uint32_t counter0 = 0, counter1 = 0, counter2 = 0, counter3 = 0;
+	uint32_t counter0 = 0, counter1 = 0, counter2 = 0;
 
 	tc_channel_settings_t tc_settings0 = {
 		.wave = 0,
@@ -266,4 +266,11 @@ void test_register(void){
 	TEST_ASSERT_TRUE(tc_read_reg_a(TC0, 0));
 	TEST_ASSERT_TRUE(tc_read_reg_b(TC1, 1));
 	TEST_ASSERT_TRUE(tc_read_reg_c(TC2, 2));
+
+	tc_disable_clock(TC0, TC_CHANNEL_0);
+	tc_disable_clock(TC0, TC_CHANNEL_1);
+	tc_disable_clock(TC0, TC_CHANNEL_2);
+	tc_disable_clock(TC1, TC_CHANNEL_1);
+	tc_disable_clock(TC2, TC_CHANNEL_2);
+
 }

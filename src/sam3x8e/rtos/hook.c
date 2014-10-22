@@ -30,6 +30,7 @@
  */
 void CoIdleTask(void* pdata)
 {
+	if (pdata == 0) {} // dummy statement, just to prevent warnings!
     /* Add your codes here */
     for(; ;) 
     {
@@ -51,6 +52,7 @@ void CoIdleTask(void* pdata)
  */
 void CoStkOverflowHook(OS_TID taskID)
 {
+	taskID++; //dummy statement, just to prevent warning!
     /* Process stack overflow  here */
     for(; ;) 
     {

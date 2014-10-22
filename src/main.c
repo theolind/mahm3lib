@@ -8,7 +8,5 @@ int main(void) {
 	// run unit tests
 	run_tests();
 
-	while(1);
-
 	return 0;
 }

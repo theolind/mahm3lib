@@ -41,6 +41,7 @@ extern U64      OSTickCnt;          /*!< Counter for current system ticks.    */
 
 /*!< Initial context of task being created	*/
 extern OS_STK  *InitTaskContext(FUNCPtr task,void *param,OS_STK *pstk);
+extern void SysTick_Handler(void);
 extern void    SwitchContext(void);         /*!< Switch context                   */
 extern void    SetEnvironment(OS_STK *pstk);/*!< Set environment for run          */
 extern U8      Inc8 (volatile U8 *data);

@@ -10,7 +10,7 @@
  * @author Mattias Nilsson
  * @author Prince Balabis
  * @author Andreas Drotth
- * @date 30 September 2014
+ * @date 16 October 2014
  */
 
 #ifndef ADC_H_

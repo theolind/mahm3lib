@@ -32,6 +32,7 @@ typedef struct tmrCtrl                  /* Timer Control Block Define.        */
     OS_TCID          tmrID;             /*!< Timer ID.                        */
     U8               tmrType;           /*!< Timer Type.                      */
     U8               tmrState;          /*!< Timer State.                     */
+    U8				_padding;
     U32              tmrCnt;            /*!< Timer Counter.                   */
     U32              tmrReload;         /*!< Timer Reload Counter Value.      */	
     vFUNCPtr         tmrCallBack; /*!< Call-back Function When Timer overrun. */	

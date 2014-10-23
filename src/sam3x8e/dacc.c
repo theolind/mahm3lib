@@ -14,7 +14,6 @@
 void dacc_init(const dacc_settings_t *settings) {
 	// Software reset
 	DACC->DACC_CR = (0x1u << 0);
-
 	// Word transfer
 	DACC->DACC_MR |= (settings->word_transfer << DACC_MR_WORD_POS);
 	// Refresh period

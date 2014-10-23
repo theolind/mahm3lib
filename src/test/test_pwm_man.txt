@@ -1,0 +1,161 @@
+
+
+
+#include <stdio.h>
+#include <inttypes.h>
+#include "unity/unity_hw_setup.h"
+#include "unity/unity.h"
+#include "test_runner.h"
+#include "sam3x8e/pio.h"
+#include "sam3x8e/pmc.h"
+#include "sam3x8e/delay.h"
+#include "sam3x8e/pwm.h"
+#include "sam3x8e/bitwise_operations.h"
+#include "sam3x8e/arduino_due.h"
+#include "sam3x8e/nvic.h"
+
+#define NVIC_ISER0			*((uint32_t *)0xE000E100)
+
+void PIOA_Handler(void);
+
+int main(void) {
+	// basic initialization of hardware and UART communication.
+	unity_hw_setup();
+
+	pmc_enable_peripheral_clock(ID_PWM);
+	pmc_enable_peripheral_clock(ID_PIOA);
+	pmc_enable_peripheral_clock(ID_PIOC);
+
+	// MCU pin = PC3   -   DUE pin = 35    -    PWM pin = PWMH0
+	pio_conf_pin_to_peripheral(PIOC, PIO_PERIPH_B, PIN_PWMH0_PC3_B); //35
+	pio_conf_pin_to_peripheral(PIOC, PIO_PERIPH_B, PIN_PWMH1_PC5_B); //37
+	pio_conf_pin_to_peripheral(PIOC, PIO_PERIPH_B, PIN_PWMH2_PC7_B); //39
+	pio_conf_pin_to_peripheral(PIOC, PIO_PERIPH_B, PIN_PWMH3_PC9_B); //41
+	pio_conf_pin_to_peripheral(PIOA, PIO_PERIPH_B, PIN_PWML2_PA20_B); //43
+	pio_conf_pin_to_peripheral(PIOC, PIO_PERIPH_B, PIN_PWMH6_PC18_B); //45
+
+	pwm_channel_setting_t channel_0;
+	channel_0.channel = PWM_CHANNEL_0;
+	channel_0.alignment = PWM_CHANNEL_ALIGN_LEFT;
+	channel_0.polarity = PWM_CHANNEL_POLARITY_HIGH;
+	channel_0.duty_cycle = 0;
+	channel_0.use_CLKx = FALSE;
+	channel_0.frequency = 25000;
+	channel_0.clock_ID = PWM_CLK_ID_CLKA;
+
+	pwm_channel_setting_t channel_1;
+	channel_1.channel = PWM_CHANNEL_1;
+	channel_1.alignment = PWM_CHANNEL_ALIGN_LEFT;
+	channel_1.polarity = PWM_CHANNEL_POLARITY_HIGH;
+	channel_1.duty_cycle = 0;
+	channel_1.use_CLKx = FALSE;
+	channel_1.frequency = 25000;
+	channel_1.clock_ID = PWM_CLK_ID_CLKB;
+
+	pwm_init_channel(channel_0);
+	pwm_init_channel(channel_1);
+
+	pwm_set_channel_alignment(PWM_CHANNEL_2, PWM_CHANNEL_ALIGN_CENTER);
+	pwm_set_channel_polarity(PWM_CHANNEL_2, PWM_CHANNEL_POLARITY_LOW);
+	pwm_set_channel_frequency(PWM_CHANNEL_2, 25000);
+
+	pwm_set_channel_alignment(PWM_CHANNEL_3, PWM_CHANNEL_ALIGN_CENTER);
+	pwm_set_channel_polarity(PWM_CHANNEL_3, PWM_CHANNEL_POLARITY_LOW);
+	pwm_set_channel_frequency(PWM_CHANNEL_3, 25000);
+	pwm_set_channel_duty_cycle(PWM_CHANNEL_3,
+			pwm_get_channel_period(PWM_CHANNEL_3));
+
+	pwm_set_channel_alignment(PWM_CHANNEL_6, PWM_CHANNEL_ALIGN_LEFT);
+	pwm_set_channel_polarity(PWM_CHANNEL_6, PWM_CHANNEL_POLARITY_LOW);
+	pwm_set_channel_frequency(PWM_CHANNEL_6, 25000);
+	pwm_set_channel_duty_cycle(PWM_CHANNEL_6,
+			pwm_get_channel_period(PWM_CHANNEL_6));
+
+	//pwm_set_channel_polarity(channel_0.channel, PWM_CHANNEL_POLARITY_LOW);
+	//pwm_set_channel_alignment(channel_0.channel, PWM_CHANNEL_ALIGN_CENTER);
+	//pwm_set_channel_frequency(PWM_CHANNEL_0, 25000);
+
+	pwm_set_channel_duty_cycle(PWM_CHANNEL_0,
+			(pwm_get_channel_period(PWM_CHANNEL_0) * 30) / 100);
+	pwm_channel_enable(PWM_CHANNEL_0);
+
+	pwm_set_channel_duty_cycle(PWM_CHANNEL_1,
+			(pwm_get_channel_period(PWM_CHANNEL_1) * 20) / 100);
+	pwm_channel_enable(PWM_CHANNEL_1);
+
+	pwm_set_channel_duty_cycle(PWM_CHANNEL_2,
+			(pwm_get_channel_period(PWM_CHANNEL_2) * 10) / 100);
+	pwm_channel_enable(PWM_CHANNEL_2);
+
+	pwm_channel_enable(PWM_CHANNEL_3);
+	pwm_channel_enable(PWM_CHANNEL_6);
+
+	////////////////////////////////////
+	pwm_set_channel_duty_cycle(PWM_CHANNEL_0,
+			(pwm_get_channel_period(PWM_CHANNEL_0) * 20) / 100);
+
+	delay_ms(1000);
+
+	pwm_channel_disable(PWM_CHANNEL_0);
+	pwm_set_channel_frequency(PWM_CHANNEL_0, 20000);
+	pwm_channel_enable(PWM_CHANNEL_0);
+
+	pwm_set_channel_duty_cycle(PWM_CHANNEL_0,
+			(pwm_get_channel_period(PWM_CHANNEL_0) * 20) / 100);
+
+	delay_ms(1000);
+
+	pwm_set_channel_prescaler(PWM_CHANNEL_0, PWM_PRES_CLOCKA);
+
+	delay_ms(1000);
+
+	pwm_set_clkx(PWM_CLK_ID_CLKA, PWM_PRES_MCK_DIV_32, 12);
+
+	delay_ms(1000);
+
+	pwm_set_clkx_frequency(PWM_CHANNEL_0, 84000000, PWM_CLK_ID_CLKA);
+
+	delay_ms(1000);
+
+	pwm_set_channel_period(PWM_CHANNEL_0, 100);
+	pwm_set_channel_duty_cycle(PWM_CHANNEL_0, 50);
+
+	delay_ms(2000);
+
+	pwm_set_channel_frequency(PWM_CHANNEL_0, 20000000);
+	pwm_set_channel_duty_cycle(PWM_CHANNEL_0,
+			(pwm_get_channel_period(PWM_CHANNEL_0)*90)/100);
+
+	delay_ms(10000);
+
+	pwm_set_channel_frequency(PWM_CHANNEL_0, 25000);
+
+	uint8_t direction = 1;
+	uint32_t dc = 0;
+	while (1) {
+		delay_ms(5);
+		pwm_set_channel_duty_cycle(PWM_CHANNEL_0,
+				(pwm_get_channel_period(PWM_CHANNEL_0) * dc) / 100);
+		pwm_set_channel_duty_cycle(PWM_CHANNEL_1,
+				(pwm_get_channel_period(PWM_CHANNEL_1) * dc) / 100);
+		pwm_set_channel_duty_cycle(PWM_CHANNEL_2,
+				(pwm_get_channel_period(PWM_CHANNEL_2) * dc) / 100);
+//		pwm_set_channel_duty_cycle(PWM_CHANNEL_3,
+//				(pwm_get_channel_period(PWM_CHANNEL_3) * dc) / 100);
+//		pwm_set_channel_duty_cycle(PWM_CHANNEL_6,
+//				(pwm_get_channel_period(PWM_CHANNEL_6) * dc) / 100);
+		if (direction == 1) {
+			dc++;
+		} else if (direction == 0) {
+			dc--;
+		}
+		if (dc == 100) {
+			direction = 0;
+		} else if (dc == 5) {
+			direction = 1;
+		}
+	}
+
+	return 0;
+}
+

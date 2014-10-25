@@ -32,7 +32,6 @@
  * the pins are being defined like this:
  * PWM_[PIN POLAITY][CHANNEL NUMBER]_P[PORT][PIN NUMBER]_[PIO MUX PERIPHERAL]
  */
-
 #define PWM_HIGH0_PA8_B			(8)
 #define PWM_HIGH0_PB12_B		(12)
 #define PWM_HIGH0_PC3_B			(3)

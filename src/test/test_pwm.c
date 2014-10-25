@@ -22,17 +22,17 @@
 void test_pwm_channel_enabled() {
 	pmc_enable_peripheral_clock(ID_PWM);
 	pwm_reset_peripheral();
-	pwm_channel_enable(PWM_CHANNEL_3);
+	pwm_enable_channel(PWM_CHANNEL_3);
 	TEST_ASSERT_EQUAL_HEX32(0x00000008, PWM->PWM_SR);
-	pwm_channel_enable(PWM_CHANNEL_4);
+	pwm_enable_channel(PWM_CHANNEL_4);
 	TEST_ASSERT_EQUAL_HEX32(0x00000018, PWM->PWM_SR);
 }
 
 void test_pwm_channel_disabled() {
 	pwm_reset_peripheral();
-	pwm_channel_enable(PWM_CHANNEL_3);
+	pwm_enable_channel(PWM_CHANNEL_3);
 	TEST_ASSERT_BITS_HIGH((1<<PWM_CHANNEL_3), PWM->PWM_SR);
-	pwm_channel_disable(PWM_CHANNEL_3);
+	pwm_disable_channel(PWM_CHANNEL_3);
 	TEST_ASSERT_BITS_LOW((1<<PWM_CHANNEL_3), PWM->PWM_SR);
 }
 
@@ -54,13 +54,13 @@ void test_pwm_channel_duty_cycle() {
 	pwm_set_channel_duty_cycle(PWM_CHANNEL_3, 50);
 	TEST_ASSERT_EQUAL_UINT32(50,
 			get_section_in_register(&PWM->PWM_CDTY3,PWM_CDTYx_CDTY_MASK));
-	TEST_ASSERT_EQUAL_UINT32(50, pwm_channel_read(PWM_CHANNEL_3)); //TODO
+	TEST_ASSERT_EQUAL_UINT32(50, pwm_read_channel(PWM_CHANNEL_3)); //TODO
 	// change duty cycle when channel is enabled
-	pwm_channel_enable(PWM_CHANNEL_3);
+	pwm_enable_channel(PWM_CHANNEL_3);
 	pwm_set_channel_duty_cycle(PWM_CHANNEL_3, 60);
 	TEST_ASSERT_EQUAL_UINT32(60,
 			get_section_in_register(&PWM->PWM_CDTY3, PWM_CDTYx_CDTY_MASK));
-	TEST_ASSERT_EQUAL_UINT32(60, pwm_channel_read(PWM_CHANNEL_3));	//TODO
+	TEST_ASSERT_EQUAL_UINT32(60, pwm_read_channel(PWM_CHANNEL_3));	//TODO
 }
 void test_pwm_channel_polarity() {
 	pwm_reset_peripheral();

@@ -421,7 +421,7 @@ uint8_t pwm_init_channel(pwm_channel_setting_t settings);
  * @param channel The channel to be enabled, use prefix: PWM_CHANNEL_
  * @return error Will always return 1 = SUCCESS
  */
-uint8_t pwm_channel_enable(uint32_t channel);
+uint8_t pwm_enable_channel(uint32_t channel);
 /**
  * This function will disable the selected channel, identified with predefined
  * values, like: PWM_CHANNEL_x_MASK.
@@ -431,14 +431,14 @@ uint8_t pwm_channel_enable(uint32_t channel);
  * @param channel The channel to be disabled, use prefix: PWM_CHANNEL_
  * @return error, 1 = SUCCESS and 0 = FAIL
  */
-uint8_t pwm_channel_disable(uint32_t channel);
+uint8_t pwm_disable_channel(uint32_t channel);
 /**
  * This function will return the state of the PWM channel.
  *
  * @param channel the channel to get the status for
  * @return 1 if the channel is enabled, 0 if it is disabled
  */
-uint8_t pwm_channel_status(uint32_t channel);
+uint8_t pwm_channel_enabled(uint32_t channel);
 ///@}
 ///@{
 /**
@@ -561,7 +561,7 @@ uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle);
  * @return Previously set duty cycle (if 0 is received then it could mean
  * error)
  */
-uint32_t pwm_channel_read(uint32_t channel);
+uint32_t pwm_read_channel(uint32_t channel);
 /**
  * This function will return the maximum value that the duty cycle can be set
  * to. The highest value that this function can return is 65535.

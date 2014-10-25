@@ -56,9 +56,9 @@ uint8_t pwm_init_peripheral(pwm_clk_setting_t clk_settings) {
 uint8_t pwm_init_channel(pwm_channel_setting_t settings) {
 	uint8_t reenable = 0;
 	// Disable the channel and remember the initial state of it
-	if (pwm_channel_status(settings.channel) == 1) {
+	if (pwm_channel_enabled(settings.channel) == 1) {
 		reenable = 1;
-		pwm_channel_disable(settings.channel);
+		pwm_disable_channel(settings.channel);
 	}
 	if (settings.use_CLKx == 1) {
 		if (pwm_set_channel_frequency(settings.channel, settings.frequency)
@@ -73,7 +73,7 @@ uint8_t pwm_init_channel(pwm_channel_setting_t settings) {
 	pwm_set_channel_polarity(settings.channel, settings.polarity);
 	pwm_set_channel_duty_cycle(settings.channel, settings.duty_cycle);
 	if (reenable == 1) {
-		pwm_channel_enable(settings.channel);
+		pwm_enable_channel(settings.channel);
 	}
 	return 1;
 }
@@ -83,7 +83,7 @@ uint8_t pwm_init_channel(pwm_channel_setting_t settings) {
  *
  * Alternatively use PWM_CHANNEL_ALL_MASK to enable all channel at once.
  */
-uint8_t pwm_channel_enable(uint32_t channel) {
+uint8_t pwm_enable_channel(uint32_t channel) {
 	set_section_in_register(&PWM->PWM_ENA, (1u << channel), 1);
 	return 1;
 }
@@ -96,10 +96,10 @@ uint8_t pwm_channel_enable(uint32_t channel) {
  *
  * Alternatively use PWM_CHANNEL_ALL_MASK to disable all channel at once.
  */
-uint8_t pwm_channel_disable(uint32_t channel) {
-	if (pwm_channel_status(channel)) {
+uint8_t pwm_disable_channel(uint32_t channel) {
+	if (pwm_channel_enabled(channel)) {
 		set_section_in_register(&PWM->PWM_DIS, (1u << channel), 1);
-		while (pwm_channel_status(channel)) {
+		while (pwm_channel_enabled(channel)) {
 		}
 	}
 	return 1;
@@ -107,7 +107,7 @@ uint8_t pwm_channel_disable(uint32_t channel) {
 /*
  * This function will read the status of a single channel.
  */
-uint8_t pwm_channel_status(uint32_t channel) {
+uint8_t pwm_channel_enabled(uint32_t channel) {
 	return get_bit(&PWM->PWM_SR, (uint8_t) channel);
 }
 /*
@@ -140,7 +140,7 @@ uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
  * will set the period for you.
  */
 uint8_t pwm_set_channel_period(uint32_t channel, uint32_t period) {
-	if (pwm_channel_status(channel)) {
+	if (pwm_channel_enabled(channel)) {
 		set_section_in_register((&PWM->PWM_CPRDUPD0) + (ch_dis * channel),
 		PWM_CPRDUPDx_CPRDUPD_MASK, period);
 	} else {
@@ -188,16 +188,16 @@ uint8_t pwm_set_channel_frequency(uint32_t channel, uint32_t frequency) {
 	// Check result and implement
 	if ((CPRD < 65535) && (i < 11)) {
 		// Disable the channel and remember the initial state of it
-		if (pwm_channel_status(channel) == 1) {
+		if (pwm_channel_enabled(channel) == 1) {
 			reenable = 1;
-			pwm_channel_disable(channel);
+			pwm_disable_channel(channel);
 		}
 		// Implement
 		pwm_set_channel_period(channel, CPRD);
 		pwm_set_channel_prescaler(channel, i);
 		// Reenable if nessessary
 		if (reenable == 1) {
-			pwm_channel_enable(channel);
+			pwm_enable_channel(channel);
 		}
 	} else {
 		return 0;
@@ -236,16 +236,16 @@ uint8_t pwm_set_clkx_frequency(uint32_t channel, uint32_t frequency,
 			return 0; // parameter error
 		}
 		// Disable the channel and remember the initial state of it
-		if (pwm_channel_status(channel) == 1) {
+		if (pwm_channel_enabled(channel) == 1) {
 			reenable = 1;
-			pwm_channel_disable(channel);
+			pwm_disable_channel(channel);
 		}
 		// Initialize the CLKx with the found settings
 		pwm_set_clkx(pwm_clk_id, prescaler, divisor);
 		// Set the channel prescaler to the chosen CLKx
 		pwm_set_channel_prescaler(channel, pwm_channel_pres);
 		if (reenable == 1) {
-			pwm_channel_enable(channel);
+			pwm_enable_channel(channel);
 		}
 		return 1; // All set (no error)
 	} else {
@@ -270,7 +270,7 @@ uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor) {
 /*
  * This function reads the earlier written duty cycle to the channel.
  */
-uint32_t pwm_channel_read(uint32_t channel) {
+uint32_t pwm_read_channel(uint32_t channel) {
 	return get_section_in_register((&PWM->PWM_CDTY0) + (ch_dis * channel),
 	PWM_CDTYx_CDTY_MASK);
 }
@@ -278,7 +278,7 @@ uint32_t pwm_channel_read(uint32_t channel) {
  * Writes an output to a given channel by setting the channel duty cycle.
  */
 uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
-	if (pwm_channel_status(channel)) {
+	if (pwm_channel_enabled(channel)) {
 		set_section_in_register((&PWM->PWM_CDTYUPD0) + (ch_dis * channel),
 		PWM_CDTYUPDx_CDTYUPD_MASK, duty_cycle);
 	} else {
@@ -329,7 +329,7 @@ uint8_t pwm_turn_off_clkx(uint8_t clock_id) {
  * Resets the channel and disables it
  */
 uint8_t pwm_reset_channel(uint32_t channel) {
-	pwm_channel_disable(channel);
+	pwm_disable_channel(channel);
 	clear_register((&PWM->PWM_CMR0) + (ch_dis * channel));
 	clear_register((&PWM->PWM_CDTY0) + (ch_dis * channel));
 	clear_register((&PWM->PWM_CDTYUPD0) + (ch_dis * channel));

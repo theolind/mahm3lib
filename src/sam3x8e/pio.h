@@ -79,10 +79,8 @@
 #define PIO_INT_DISABLE					(5)
 ///@}
 
-
-#define PIO_FILTER_GLITCH	(0) /// Selector for glitch filter mode
-#define PIO_FILTER_DEBOUNCE (0)	/// Selector for debounce filter mode
-
+/// PIO DEBOUNCE DIVIDER
+#define PIO_DEBOUNCE_DIVIDER(value)	(value << 0)
 
 
 ///@cond
@@ -447,6 +445,16 @@ void pio_select_glitch_filter(pio_reg_t *port, uint32_t pin_number);
  */
 void pio_select_debounce_filter(pio_reg_t *port, uint32_t pin_number);
 
+/**
+ *
+ * Sets the clock divider
+ *
+ * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
+ * @param pin_number the pin number (on the port) to enable filter on
+ * @param prescaler the divider that is to be used. Uses PIO_DEBOUNCE_DIVIDER(value) as
+ * helper function
+ * @pre The peripheral clock must be enabled for this to work
+ */
 void pio_set_debounce_prescaler(pio_reg_t *port, uint32_t pin_number, uint32_t prescaler);
 
 /**

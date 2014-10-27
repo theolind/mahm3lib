@@ -236,16 +236,19 @@ uint16_t spi_tranceive(spi_reg_t *spi, uint16_t data);
  * slave using the selector-pins. This function will check first to see if a
  * transfer is in progress before it selects the next selector.
  *
- * @param spi
- * @param slave
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
+ * @param slave This parameter defines which selector to assert.
+ * (Use one of the predefines values with prefix: SPI_SELECTOR_)
  */
 void spi_master_select_slave(spi_reg_t *spi, uint8_t slave);
 /**
  * Write 8 bits of data (a char). This fills the receive register with data sent to the processor
  * After each write a spi_read has to be performed to clear the receive register
+ *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
- * @param data the data to send
+ * @param data The data to be transmitted of max length 16-bit
  */
 void spi_write(spi_reg_t *spi, uint16_t data);
 /**
@@ -253,15 +256,15 @@ void spi_write(spi_reg_t *spi, uint16_t data);
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
- * @pre You need to spi_write_char before you can spi_read_char
- * @return received char
+ * @param dummy_data Any byte or double byte of your choice
+ * @return Returns the data that it received when transferring the dummy_data
  */
-uint16_t spi_read(spi_reg_t *spi);
+uint16_t spi_read(spi_reg_t *spi, uint16_t dummy_data);
 /**
  * Test if we are able to send data
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
- * @return true if all data has been sent and we are ready to send new data
+ * @return Returns 1 if the transmit buffer is empty and new data can be send
  */
 uint8_t spi_write_ready(spi_reg_t *spi);
 /**
@@ -279,30 +282,60 @@ uint8_t spi_transmission_done(spi_reg_t *spi);
  * We want to test if we are able to read data. It is good to do this before you read data.
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
- * @return true if we have data in the receive register
+ * @return returns 1 if we have data in the receive register
  */
 uint8_t spi_read_ready(spi_reg_t *spi);
-
+/**
+ * This function will generate a software reset of the entire peripheral.
+ * This function is used in spi_init()
+ *
+ * @param spi
+ * @return error (1 = SUCCESS and 0 = FAIL)
+ */
 uint8_t spi_software_reset(spi_reg_t *spi);
-
+/**
+ * This enables an interrupts.
+ *
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
+ * @param interrupt
+ * @return error (1 = SUCCESS and 0 = FAIL)
+ */
 uint8_t spi_interrupt_enable(spi_reg_t *spi, uint8_t interrupt);
-
+/**
+ * This function disables interrupts.
+ *
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
+ * @param interrupt
+ * @return error (1 = SUCCESS and 0 = FAIL)
+ */
 uint8_t spi_interrupt_disable(spi_reg_t *spi, uint8_t interrupt);
-
+/**
+ * This function will disable the SPI-peripheral. As soon as this function is
+ * run, SPI finishes its transfer. All pins are set in input mode and no data
+ * is received or transmitted. If a transfer is in progress, the transfer is
+ * finished before the SPI is disabled.
+ *
+ * @param spi
+ * @return error (1 = SUCCESS and 0 = FAIL)
+ */
 uint8_t spi_disable(spi_reg_t *spi);
 /**
  * Used only in test purposes. Enable this to connect MOSI to MISO in the
  * peripheral.
  *
- * @param spi
- * @return
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
+ * @return error (1 = SUCCESS and 0 = FAIL)
  */
 uint8_t spi_loopback_enable(spi_reg_t *spi);
 /**
  * run this to disconnect MOSI from MISO in the peripheral internally.
  *
- * @param spi
- * @return
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
+ * @return error (1 = SUCCESS and 0 = FAIL)
  */
 uint8_t spi_loopback_disable(spi_reg_t *spi);
 /**
@@ -311,8 +344,8 @@ uint8_t spi_loopback_disable(spi_reg_t *spi);
  * the setting for keeping the device asserted between transfers as set by
  * spi_keep_line_assertion().
  *
- * @return
+ * @return error (1 = SUCCESS and 0 = FAIL)
  */
-uint8_t spi_selector_close();
+uint8_t spi_selector_close(void);
 
 #endif

@@ -153,9 +153,6 @@
 #define SPI_SELECTOR_NONE	(0b1111)
 ///@}
 
-
-
-
 ///\cond
 /**
  * @def
@@ -187,20 +184,36 @@ typedef struct spi_reg {
 } spi_reg_t;
 ///\endcond
 
+typedef struct spi_settings {
+	uint32_t master;
+	uint32_t selector;
+	uint32_t CPOL;
+	uint32_t NCPHA;
+	uint32_t baudR;
+	uint32_t bits;
+	uint32_t DLYBCT;
+	uint32_t DLYBS;
+	uint32_t DLYBCS;
+}spi_settings_t;
+
+
 /**
  * This function initializes the SPI peripheral.
  *
- * @param spi
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
  * @param settings
  */
 uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings);
-uint8_t spi_enable();
-uint8_t spi_set_master();
-uint8_t spi_set_slave();
-uint8_t spi_master_set_baud_rate();
-uint8_t spi_master_set_clk_polarity();
-uint8_t spi_master_set_clk_phase();
-uint16_t spi_tranceive(uint32_t *peripheral, uint16_t data);
+uint8_t spi_set_master(spi_reg_t *spi);
+uint8_t spi_set_slave(spi_reg_t *spi);
+
+uint8_t spi_enable(spi_reg_t *spi);
+
+uint8_t spi_master_set_baud_rate(spi_reg_t *spi, uint8_t selector, uint8_t baud_rate);
+uint8_t spi_master_set_clk_polarity(spi_reg_t *spi, uint8_t selector, uint8_t polarity);
+uint8_t spi_master_set_clk_phase(spi_reg_t *spi, uint8_t selector, uint8_t phase);
+uint16_t spi_tranceive(spi_reg_t *spi, uint16_t data);
 
 
 // deselects the current slave then selects a new slave
@@ -212,14 +225,17 @@ void spi_master_select_slave(spi_reg_t *spi, uint8_t slave);
 /**
  * Write 8 bits of data (a char). This fills the receive register with data sent to the processor
  * After each write a spi_read has to be performed to clear the receive register
- * @param spi
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
  * @param data the data to send
  */
 void spi_write(spi_reg_t *spi, uint16_t data);
 
 /**
- * Reads data that has been received
- * @param spi
+ * Reads data that has been received.
+ *
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
  * @pre You need to spi_write_char before you can spi_read_char
  * @return received char
  */
@@ -227,20 +243,38 @@ uint16_t spi_read(spi_reg_t *spi);
 
 /**
  * Test if we are able to send data
- * @param spi
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
  * @return true if all data has been sent and we are ready to send new data
  */
-uint32_t spi_write_ready(spi_reg_t *spi);
+uint8_t spi_write_ready(spi_reg_t *spi);
+
+/**
+ * This function returns 1 if the write buffer and the shift-registers are
+ * empty. This means that no transmission is taking place and is used primarily
+ * in master-mode.
+ *
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
+ * @return Will return 1 if transmissions are complete or 0 if there are pending
+ * or ongoing transmission.
+ */
+uint8_t spi_transmission_done(spi_reg_t *spi);
 
 /**
  * We want to test if we are able to read data. It is good to do this before you read data.
- * @param spi
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
  * @return true if we have data in the receive register
  */
 uint8_t spi_read_ready(spi_reg_t *spi);
 
 uint8_t spi_software_reset(spi_reg_t *spi);
 
-uint8_t spi_disable();
+uint8_t spi_interrupt_enable(spi_reg_t *spi, uint8_t interrupt);
+
+uint8_t spi_interrupt_disable(spi_reg_t *spi, uint8_t interrupt);
+
+uint8_t spi_disable(spi_reg_t *spi);
 
 #endif

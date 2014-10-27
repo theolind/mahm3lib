@@ -217,22 +217,50 @@ typedef struct spi_selector_settings {
  * @param settings
  */
 uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings);
-
-uint8_t spi_set_master(spi_reg_t *spi);
-
-uint8_t spi_set_slave(spi_reg_t *spi);
-
-uint8_t spi_enable(spi_reg_t *spi);
-
-uint8_t spi_master_set_baud_rate(spi_reg_t *spi, uint8_t selector, uint8_t baud_rate);
-
-uint8_t spi_master_set_clk_polarity(spi_reg_t *spi, uint8_t selector, uint8_t polarity);
-
-uint8_t spi_master_set_clk_phase(spi_reg_t *spi, uint8_t selector, uint8_t phase);
-
-uint16_t spi_tranceive(spi_reg_t *spi, uint16_t data);
 /**
- * This function is only useful when in master mode and is ussed to select a
+ * Sets the peripheral into master-mode.
+ *
+ * @param spi
+ * @return
+ */
+uint8_t spi_set_master(spi_reg_t *spi);
+/**
+ *
+ * @param spi
+ * @return
+ */
+uint8_t spi_set_slave(spi_reg_t *spi);
+/**
+ *
+ * @param spi
+ * @return
+ */
+uint8_t spi_enable(spi_reg_t *spi);
+/**
+ *
+ * @param spi
+ * @param selector
+ * @param baud_rate
+ * @return
+ */
+uint8_t spi_selector_set_baud_rate(spi_reg_t *spi, uint8_t selector, uint8_t baud_rate);
+
+uint8_t spi_selector_set_clk_polarity(spi_reg_t *spi, uint8_t selector, uint8_t polarity);
+
+uint8_t spi_selector_set_clk_phase(spi_reg_t *spi, uint8_t selector, uint8_t phase);
+/**
+ * This function  is the primary function for sending and receiving data with
+ * the SPI-peripheral. SPI is a true full-duplex communication peripheral and
+ * this function makes use of this ability. The function spi_read() and
+ * spi_write() are for one-way transmitions if they are needed.
+ *
+ * @param spi
+ * @param data
+ * @return
+ */
+uint16_t spi_master_tranceive(spi_reg_t *spi, uint16_t data);
+/**
+ * This function is only useful when in master mode and is used to select a
  * slave using the selector-pins. This function will check first to see if a
  * transfer is in progress before it selects the next selector.
  *
@@ -241,41 +269,53 @@ uint16_t spi_tranceive(spi_reg_t *spi, uint16_t data);
  * @param slave This parameter defines which selector to assert.
  * (Use one of the predefines values with prefix: SPI_SELECTOR_)
  */
-void spi_master_select_slave(spi_reg_t *spi, uint8_t slave);
+void spi_select_slave(spi_reg_t *spi, uint8_t slave);
 /**
- * Write 8 bits of data (a char). This fills the receive register with data sent to the processor
- * After each write a spi_read has to be performed to clear the receive register
+ * Write a data of max 16 bits in length. This will make the SPI receive a
+ * equally long data that it will discard and avoid overrun error in the
+ * peripheral.
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
  * @param data The data to be transmitted of max length 16-bit
  */
-void spi_write(spi_reg_t *spi, uint16_t data);
+uint8_t spi_master_write(spi_reg_t *spi, uint16_t data);
 /**
- * Reads data that has been received.
+ * This function is only intended for the slave mode of this peripheral and
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
+ * @param data Data to be placed on the shift-registers for sending.
+ * @return
+ */
+uint8_t spi_slave_write(spi_reg_t *spi, uint16_t data);
+/**
+ * This function will requenst a but by sending a dummy data to the remote
+ * device and return the received data.
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
- * @param dummy_data Any byte or double byte of your choice
- * @return Returns the data that it received when transferring the dummy_data
+ * @param dummy_data Any data of your choice (Choose something that is ignored by the slave-device)
+ * @return Returns the data that is received when transferring the dummy_data
  */
-uint16_t spi_read(spi_reg_t *spi, uint16_t dummy_data);
+uint16_t spi_master_read(spi_reg_t *spi, uint16_t dummy_data);
 /**
- * Test if we are able to send data
+ * Yhis function will check and see that a new byte can be placed in the
+ * transmit buffer of the peripheral.
+ *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
  * @return Returns 1 if the transmit buffer is empty and new data can be send
  */
 uint8_t spi_write_ready(spi_reg_t *spi);
 /**
- * This function returns 1 if the write buffer and the shift-registers are
- * empty. This means that no transmission is taking place and is used primarily
- * in master-mode.
+ * This function returns 1 if the write buffer and the shift-registers for
+ * transfer are empty. This means that no transmission is taking place and is
+ * used primarily in master-mode.
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
- * @return Will return 1 if transmissions are complete or 0 if there are pending
- * or ongoing transmission.
+ * @return Will return 1 if transmissions are complete or 0 if there are
+ * pending or ongoing transmission.
  */
 uint8_t spi_transmission_done(spi_reg_t *spi);
 /**

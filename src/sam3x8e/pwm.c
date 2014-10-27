@@ -1,26 +1,13 @@
-/**
- * @file pwm.c
- * @brief Pulse Width Modulation (PWM)
- * @details An API for controlling the PWM peripheral inside a SAM3X8E MCU.
- * This peripheral is an embedded macrocell within the MCU and all of its 44
- * registers are physically mapped on this macrocell, therefore modifying the
- * register requires that the peripheral clock is enabled in PMC. However, when
- * modified, the register values are stored even it the peripheral clock is
- * turned off and the peripheral will continue its operation when the clock is
- * turned back on.
- * This API implements all 8 independent channels and their change of polarity,
- * alignment, PWM frequency and handles the pin multiplexing for all 16 outputs
- * of the peripheral. The API does not stop any clock once it has started them.
- * @author Saeed Ghasemi
- * @date 28 sep 2014
- * @pre The API handles all of its dependencies on other peripherals
- * internally and will start other clocks in order to properly operate.
- * @bug Manually tested all functions to comply with all demands.
- * The only problem is that the register set defined below is not working when
- * implemented. The register mapping currently working is non conventional.
+/*
+ * pwm.c
+ *
+ * PWM - Pulse Width Modulation
+ * An API for controlling the PWM peripheral inside a SAM3X8E MCU.
+ *
+ * Author: Saeed Ghasemi
+ * Date: 28 sep 2014
  */
 
-#include "bitwise_operations.h"
 #include "pwm.h"
 
 ///\cond
@@ -84,7 +71,7 @@ uint8_t pwm_init_channel(pwm_channel_setting_t settings) {
  * Alternatively use PWM_CHANNEL_ALL_MASK to enable all channel at once.
  */
 uint8_t pwm_enable_channel(uint32_t channel) {
-	set_section_in_register(&PWM->PWM_ENA, (1u << channel), 1);
+	PWM->PWM_ENA = (0x1u << channel);
 	return 1;
 }
 
@@ -98,7 +85,7 @@ uint8_t pwm_enable_channel(uint32_t channel) {
  */
 uint8_t pwm_disable_channel(uint32_t channel) {
 	if (pwm_channel_enabled(channel)) {
-		set_section_in_register(&PWM->PWM_DIS, (1u << channel), 1);
+		PWM->PWM_DIS = (0x1u << channel);
 		while (pwm_channel_enabled(channel)) {
 		}
 	}
@@ -108,8 +95,9 @@ uint8_t pwm_disable_channel(uint32_t channel) {
  * This function will read the status of a single channel.
  */
 uint8_t pwm_channel_enabled(uint32_t channel) {
-	return get_bit(&PWM->PWM_SR, (uint8_t) channel);
+	return (uint8_t) (((PWM->PWM_SR >> channel) & 0x01U) == 0x1U);
 }
+
 /*
  * Set the channel polarity.
  * This can reverse the duty cycle. Important when using the PWMLx pins.
@@ -350,3 +338,70 @@ uint8_t pwm_reset_peripheral() {
 	return 1;
 }
 
+//-------------------BITWISE OPERATIONS-----------------
+
+/*
+ * This function return the bit-number of the first bit being high in a 32-bit
+ * long value. The main purpose of this function is to find the start-bit of a
+ * given mask. The start-bit can then be used to left-bit-shift a value into
+ * position relative to a section in a register.
+ *
+ * Be sure not to pass mask = 0 into this function, the output will be
+ * misleading and equal to 0.
+ *
+ * @param mask {The mask to be examined}
+ * @return {bit-number of the first position (0 could indicate error)}
+ */
+uint8_t get_position_of_first_highbit(uint32_t mask) {
+	uint8_t j = 0;
+	if (mask != 0x0U) {
+		// 0x80000000 has one bit to the far left only
+		while (mask != 0x80000000) {
+			mask = (mask << 1);
+			j++;
+		}
+		return (uint8_t) (0x1F - j); // = (31 - j)
+	}
+	return 0;
+}
+/*
+ * This function will modify a section of a given register as indicated by'
+ * mask with the value specified in 'value'.
+ *
+ * @param reg {This specifies a pointer to the register}
+ * @param mask {The mask for the section in question (it may not be inverted)}
+ * @param value {The value the section must store}
+ * @return error (1 = SUCCESS and 0 = FAIL)
+ */
+uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value) {
+	// Retrieving the register and modifying it (Storing error output in shift)
+	uint8_t shift = get_position_of_first_highbit(mask);
+	*reg = ((~mask) & *reg) | (value << shift);
+	return shift; // 0 from shift could means fail
+}
+/*
+ * This function will only return the value of a specified section in a given
+ * register. The value in the section will be right-shifted so that the value
+ * returned is the value stored in the section.
+ *
+ * @param reg This specifies a pointer to the register
+ * @param mask The area for which the value must be returned (high bit are read)
+ * @return The value of the section in the register
+ */
+uint32_t get_section_in_register(uint32_t *reg, uint32_t mask) {
+	return ((*reg & mask) >> get_position_of_first_highbit(mask));
+}
+/*
+ * This function will clear the entire register.
+ *
+ * @param reg The pointer to the register to be cleared.
+ * @return error (1 = SUCCESS and 0 = FAIL)
+ */
+uint8_t clear_register(uint32_t *reg) {
+	set_section_in_register(reg, 0xFFFFFFFFU, 0x0U);
+	if (*reg == 0x0U) {
+		return 1;
+	} else {
+		return 0;
+	}
+}

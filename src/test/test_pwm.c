@@ -6,12 +6,10 @@
  * Date:	01 October 2014
  */
 
-#include <sam3x8e/bitwise_operations.h>
 #include <sam3x8e/id.h>
 #include <sam3x8e/pmc.h>
 #include <sam3x8e/pwm.h>
 #include <unity/unity.h>
-#include <unity/unity_internals.h>
 #include "test_pwm.h"
 
 //#include "sam3x8e/id.h"

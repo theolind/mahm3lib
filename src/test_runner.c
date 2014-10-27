@@ -16,7 +16,6 @@
 #include "test/test_dacc.h"
 #include "test/test_uart.h"
 #include "test/test_eefc.h"
-#include "test/test_bitwise_operations.h"
 #include "test/test_pwm.h"
 #include "test/test_tc.h"
 #include "test/test_twi.h"
@@ -81,43 +80,30 @@ void run_tests(void) {
 	RUN_TEST(test_adc_set_resolution_12_bit, 50);
 	HORIZONTAL_LINE_BREAK();
 
-	// Run bitwise_operations tests
-	Unity.TestFile = "test/test_bitwise_operations.c";
-	RUN_TEST(test_is_bit_high, 60);
-	RUN_TEST(test_get_position_of_first_highbit, 60);
-	RUN_TEST(test_get_section_in_register, 60);
-	RUN_TEST(test_set_section_in_register, 60);
-	RUN_TEST(test_set_section_in_register2, 60);
-	RUN_TEST(test_clear_register, 60);
-	RUN_TEST(test_set_register, 60);
-	RUN_TEST(test_clear_bit_in_register, 60);
-	RUN_TEST(test_set_bit_in_register, 60);
-	HORIZONTAL_LINE_BREAK();
-
 	// Run PWM tests
 	Unity.TestFile = "test/test_pwm.c";
-	RUN_TEST(test_pwm_channel_enabled, 70);
-	RUN_TEST(test_pwm_channel_disabled, 70);
-	RUN_TEST(test_pwm_channel_prescaler, 70);
-	RUN_TEST(test_pwm_channel_duty_cycle, 70);
-	RUN_TEST(test_pwm_channel_polarity, 70);
-	RUN_TEST(test_pwm_channel_alignment, 70);
-	RUN_TEST(test_pwm_channel_period, 70);
-	RUN_TEST(test_pwm_set_clkx, 70);
-	RUN_TEST(test_set_frequency, 70);
+	RUN_TEST(test_pwm_channel_enabled, 60);
+	RUN_TEST(test_pwm_channel_disabled, 60);
+	RUN_TEST(test_pwm_channel_prescaler, 60);
+	RUN_TEST(test_pwm_channel_duty_cycle, 60);
+	RUN_TEST(test_pwm_channel_polarity, 60);
+	RUN_TEST(test_pwm_channel_alignment, 60);
+	RUN_TEST(test_pwm_channel_period, 60);
+	RUN_TEST(test_pwm_set_clkx, 60);
+	RUN_TEST(test_set_frequency, 60);
 	HORIZONTAL_LINE_BREAK();
 
 	// Run TC tests
 	Unity.TestFile = "test/test_tc.c";
-	RUN_TEST(test_tc_conf_channel, 80);
-	RUN_TEST(test_tc_conf_block, 80);
-	RUN_TEST(test_tc_enable_clock, 80);
-	RUN_TEST(test_tc_disable_clock, 80);
-	RUN_TEST(test_tc_start_clock, 80);
-	RUN_TEST(test_tc_counter_stopped, 80);
-	RUN_TEST(test_tc_read_counter_value, 80);
-	RUN_TEST(test_tc_sync, 80);
-	RUN_TEST(test_register, 80);
+	RUN_TEST(test_tc_conf_channel, 70);
+	RUN_TEST(test_tc_conf_block, 70);
+	RUN_TEST(test_tc_enable_clock, 70);
+	RUN_TEST(test_tc_disable_clock, 70);
+	RUN_TEST(test_tc_start_clock, 70);
+	RUN_TEST(test_tc_counter_stopped, 70);
+	RUN_TEST(test_tc_read_counter_value, 70);
+	RUN_TEST(test_tc_sync, 70);
+	RUN_TEST(test_register, 70);
 	HORIZONTAL_LINE_BREAK();
 
 	// Run TWI tests

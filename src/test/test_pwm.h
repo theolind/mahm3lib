@@ -9,8 +9,6 @@
 #ifndef TEST_PWM_H_
 #define TEST_PWM_H_
 
-
-
 void test_pwm_channel_enabled(void);
 void test_pwm_channel_disabled(void);
 void test_pwm_channel_prescaler(void);

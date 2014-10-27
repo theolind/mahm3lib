@@ -17,13 +17,19 @@
  * internally and wont start the necessary clocks for it own operation. The
  * programmer refer to the documentation for PMC and PIO to deal with the
  * dependencies of this API on them.
- * @bug Manually tested all functions to comply with all demands.
- * The only problem is that the register set defined below is not working when
- * implemented. The register mapping currently working is non conventional.
+ * @bug The register set defined below is not working when implemented.
+ * The register mapping currently working is non conventional.
  */
 
 #ifndef PWM_H_
 #define PWM_H_
+
+#include <inttypes.h>
+
+/**
+ * The Master clock speed of the SAM3X8E microprocessor.
+ */
+#define SYS_CLK_FREQ		84000000
 
 ///@{
 /**
@@ -601,5 +607,50 @@ uint8_t pwm_reset_channel(uint32_t channel);
  */
 uint8_t pwm_reset_peripheral(void);
 ///@}
+
+
+
+//-------------------BITWISE OPERATIONS-----------------
+
+/**
+ * This function return the bit-number of the first bit being high in a 32-bit
+ * long value. The main purpose of this function is to find the start-bit of a
+ * given mask. The start-bit can then be used to left-bit-shift a value into
+ * position relative to a section in a register.
+ *
+ * Be sure not to pass mask = 0 into this function, the output will be
+ * misleading and equal to 0.
+ *
+ * @param mask {The mask to be examined}
+ * @return {bit-number of the first position (0 could indicate error)}
+ */
+uint8_t get_position_of_first_highbit(uint32_t mask);
+/**
+ * This function will modify a section of a given register as indicated by
+ * mask with the value specified in 'value'.
+ *
+ * @param reg This specifies a pointer to the register
+ * @param mask It must have the same length as the register, with ones across the section
+ * @param value The value the section must store
+ * @return error (1 = SUCCESS and 0 = FAIL)
+ */
+uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value);
+/**
+ * This function will only return the value of a specified section in a given
+ * register. The value in the section will be right-shifted so that the value
+ * returned is the value stored in the section.
+ *
+ * @param reg This specifies a pointer to the register
+ * @param mask The area for which the value must be returned (high bit are read)
+ * @return The value of the section in the register
+ */
+uint32_t get_section_in_register(uint32_t *reg, uint32_t mask);
+/**
+ * This function will clear the entire register.
+ *
+ * @param reg The pointer to the register to be cleared.
+ * @return error (1 = SUCCESS and 0 = FAIL)
+ */
+uint8_t clear_register(uint32_t *reg);
 
 #endif /* PWM_H_ */

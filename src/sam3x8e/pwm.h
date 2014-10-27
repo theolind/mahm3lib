@@ -645,12 +645,5 @@ uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value);
  * @return The value of the section in the register
  */
 uint32_t get_section_in_register(uint32_t *reg, uint32_t mask);
-/**
- * This function will clear the entire register.
- *
- * @param reg The pointer to the register to be cleared.
- * @return error (1 = SUCCESS and 0 = FAIL)
- */
-uint8_t clear_register(uint32_t *reg);
 
 #endif /* PWM_H_ */

@@ -318,20 +318,20 @@ uint8_t pwm_turn_off_clkx(uint8_t clock_id) {
  */
 uint8_t pwm_reset_channel(uint32_t channel) {
 	pwm_disable_channel(channel);
-	clear_register((&PWM->PWM_CMR0) + (ch_dis * channel));
-	clear_register((&PWM->PWM_CDTY0) + (ch_dis * channel));
-	clear_register((&PWM->PWM_CDTYUPD0) + (ch_dis * channel));
-	clear_register((&PWM->PWM_CPRD0) + (ch_dis * channel));
-	clear_register((&PWM->PWM_CPRDUPD0) + (ch_dis * channel));
-	clear_register((&PWM->PWM_DT0) + (ch_dis * channel));
-	clear_register((&PWM->PWM_DTUPD0) + (ch_dis * channel));
+	set_section_in_register((&PWM->PWM_CMR0) + (ch_dis * channel), 0xFFFFFFFFU, 0x0U);
+	set_section_in_register((&PWM->PWM_CDTY0) + (ch_dis * channel), 0xFFFFFFFFU, 0x0U);
+	set_section_in_register((&PWM->PWM_CDTYUPD0) + (ch_dis * channel), 0xFFFFFFFFU, 0x0U);
+	set_section_in_register((&PWM->PWM_CPRD0) + (ch_dis * channel), 0xFFFFFFFFU, 0x0U);
+	set_section_in_register((&PWM->PWM_CPRDUPD0) + (ch_dis * channel), 0xFFFFFFFFU, 0x0U);
+	set_section_in_register((&PWM->PWM_DT0) + (ch_dis * channel), 0xFFFFFFFFU, 0x0U);
+	set_section_in_register((&PWM->PWM_DTUPD0) + (ch_dis * channel), 0xFFFFFFFFU, 0x0U);
 	return 1;
 }
 /*
  * Disables and resets all channels and the peripheral
  */
 uint8_t pwm_reset_peripheral() {
-	clear_register(&PWM->PWM_CLK);
+	set_section_in_register(&PWM->PWM_CLK, 0xFFFFFFFFU, 0x0U);
 	for (uint32_t channel = 0; channel < 8; channel++) {
 		pwm_reset_channel(channel);
 	}
@@ -390,18 +390,4 @@ uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value) {
  */
 uint32_t get_section_in_register(uint32_t *reg, uint32_t mask) {
 	return ((*reg & mask) >> get_position_of_first_highbit(mask));
-}
-/*
- * This function will clear the entire register.
- *
- * @param reg The pointer to the register to be cleared.
- * @return error (1 = SUCCESS and 0 = FAIL)
- */
-uint8_t clear_register(uint32_t *reg) {
-	set_section_in_register(reg, 0xFFFFFFFFU, 0x0U);
-	if (*reg == 0x0U) {
-		return 1;
-	} else {
-		return 0;
-	}
 }

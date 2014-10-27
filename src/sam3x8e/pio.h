@@ -240,7 +240,7 @@ void pio_set_pins(pio_reg_t *port, uint32_t pin_numbers, uint32_t level);
 /**
  * Set an entire port to either high or low levels
  * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
- * @param levels set a bit to 1 to set a high level for the correspondingpin, 0 to set a low level
+ * @param levels set a bit to 1 to set a high level for the corresponding pin, 0 to set a low level
  */
 void pio_set_port(pio_reg_t *port, uint32_t levels);
 

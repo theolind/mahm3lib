@@ -81,7 +81,7 @@ void run_tests(void) {
 	RUN_TEST(test_adc_channel_status, 30);
 	RUN_TEST(test_adc_set_resolution_10_bit, 30);
 	RUN_TEST(test_adc_set_resolution_12_bit, 30);
-	HORIZONTAL_LINE_BREAK();
+	HORIZONTAL_LINE_BREAK();*/
 
 	// Run SPI tests
 	// Have yet to run tests due to error messages
@@ -93,14 +93,14 @@ void run_tests(void) {
 	RUN_TEST(test_spi_write, 30);
 	RUN_TEST(test_spi_read_ready, 30);
 
-	Unity.TestFile = "test/test_spi_hardcoded.c";
+	/*Unity.TestFile = "test/test_spi_hardcoded.c";
 	RUN_TEST(test_spi_init_hardcoded, 30);
 	RUN_TEST(test_spi_select_slave_hardcoded, 30);
 	RUN_TEST(test_spi_tx_ready_hardcoded, 30);
 	RUN_TEST(test_spi_tx_hardcoded, 30);
 	RUN_TEST(test_spi_tx_complete_hardcoded, 30);
 	RUN_TEST(test_spi_rx_ready_hardcoded, 30);
-	RUN_TEST(test_spi_rx_hardcoded, 30);
+	RUN_TEST(test_spi_rx_hardcoded, 30);*/
 
 
 	// Run bitwise_operations tests

@@ -29,6 +29,7 @@ void test_spi_setup(void) {
 	//dummy comment, u can remove this :)
 
 	pmc_enable_peripheral_clock(ID_SPI0);
+	pmc_enable_peripheral_clock(ID_PIOA);
 
 	pio_conf_pin_to_peripheral(PIOA, 0, 25);	//MISO
 	pio_conf_pin_to_peripheral(PIOA, 0, 26);	//MOSI
@@ -55,20 +56,21 @@ void test_spi_write_ready() {
 }
 
 void test_spi_write() {
-	pio_enable_pin(PIOC, 14);
-	pio_conf_pin(PIOC, 14, 0, 1);
-
-	pio_set_pin(PIOC, 14, 0);
-	delay_ms(2000);
-	pio_set_pin(PIOC, 14, 1);
-	delay_ms(2000);
-	pio_set_pin(PIOC, 14, 0);
+//	pio_enable_pin(PIOC, 14);
+//	pio_conf_pin(PIOC, 14, 0, 1);
+//
+//	pio_set_pin(PIOC, 14, 0);
+//	delay_ms(2000);
+//	pio_set_pin(PIOC, 14, 1);
+//	delay_ms(2000);
+//	pio_set_pin(PIOC, 14, 0);
 
 	spi_select_slave(SPI0, 0);
 
-	TEST_ASSERT_TRUE( SPI0->SPI_SR & (0x1u << 9) );
+	TEST_ASSERT_TRUE( SPI0->SPI_SR & (0x1u << 1) );
 	spi_write(SPI0, 0b00110101);
-	TEST_ASSERT_FALSE(SPI0->SPI_SR & (0x1u << 9));
+	delay_ms(100);
+	TEST_ASSERT_TRUE(SPI0->SPI_SR & (0x1u << 9));
 }
 
 void test_spi_read_ready() {

@@ -277,4 +277,21 @@ uint8_t spi_interrupt_disable(spi_reg_t *spi, uint8_t interrupt);
 
 uint8_t spi_disable(spi_reg_t *spi);
 
+/**
+ * Used only in test purposes. Enable this to connect MOSI to MISO in the
+ * peripheral.
+ *
+ * @param spi
+ * @return
+ */
+uint8_t spi_loopback_enable(spi_reg_t *spi);
+/**
+ * run this to disconnect MOSI from MISO in the peripheral internally.
+ *
+ * @param spi
+ * @return
+ */
+uint8_t spi_loopback_disable(spi_reg_t *spi);
+
+
 #endif

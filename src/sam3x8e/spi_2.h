@@ -96,39 +96,39 @@
  * Masks for SPI_IDR
  */
 #define SPI_IDR_RDRF_MASK			(1 << 0)
-#define SPI_IDR_TDRE_MASK			(1 << 0)
-#define SPI_IDR_MODF_MASK			(1 << 0)
-#define SPI_IDR_OVRES_MASK			(1 << 0)
-#define SPI_IDR_NSSR_MASK			(1 << 0)
-#define SPI_IDR_TXEMPTY_MASK		(1 << 0)
-#define SPI_IDR_UNDES_MASK			(1 << 0)
+#define SPI_IDR_TDRE_MASK			(1 << 1)
+#define SPI_IDR_MODF_MASK			(1 << 2)
+#define SPI_IDR_OVRES_MASK			(1 << 3)
+#define SPI_IDR_NSSR_MASK			(1 << 8)
+#define SPI_IDR_TXEMPTY_MASK		(1 << 9)
+#define SPI_IDR_UNDES_MASK			(1 << 10)
 ///@}
 ///@{
 /**
  * @def
  * Masks for SPI_IMR (Read-Only)
  */
-#define SPI_IMR_RDRF_MASK
-#define SPI_IMR_TDRE_MASK
-#define SPI_IMR_MODF_MASK
-#define SPI_IMR_OVRES_MASK
-#define SPI_IMR_NSSR_MASK
-#define SPI_IMR_TXEMPTY_MASK
-#define SPI_IMR_UNDES_MASK
+#define SPI_IMR_RDRF_MASK			(1 << 0)
+#define SPI_IMR_TDRE_MASK			(1 << 1)
+#define SPI_IMR_MODF_MASK			(1 << 2)
+#define SPI_IMR_OVRES_MASK			(1 << 3)
+#define SPI_IMR_NSSR_MASK			(1 << 8)
+#define SPI_IMR_TXEMPTY_MASK		(1 << 9)
+#define SPI_IMR_UNDES_MASK			(1 << 10)
 ///@}
 ///@{
 /**
  * @def
  * Masks for SPI_CSRx
  */
-#define SPI_CSRx_CPOL_MASK
-#define SPI_CSRx_NCPHA_MASK
-#define SPI_CSRx_CSNAAT_MASK
-#define SPI_CSRx_CSAAT_MASK
-#define SPI_CSRx_BITS_MASK
-#define SPI_CSRx_SCBR_MASK
-#define SPI_CSRx_DLYBS_MASK
-#define SPI_CSRx_DLYBCT_MASK
+#define SPI_CSRx_CPOL_MASK			(1 << 0)
+#define SPI_CSRx_NCPHA_MASK			(1 << 1)
+#define SPI_CSRx_CSNAAT_MASK		(1 << 2)
+#define SPI_CSRx_CSAAT_MASK			(1 << 3)
+#define SPI_CSRx_BITS_MASK			(0xF << 4)
+#define SPI_CSRx_SCBR_MASK			(0xFF << 8)
+#define SPI_CSRx_DLYBS_MASK			(0xFF << 16)
+#define SPI_CSRx_DLYBCT_MASK		(0xFF << 24)
 ///@}
 ///@{
 /**
@@ -146,11 +146,11 @@
  * method you can have as many devices connected to the peripheral as there are
  * pins to use.
  */
-#define SPI_SELECTOR_1		(0b1110)
-#define SPI_SELECTOR_2		(0b1101)
-#define SPI_SELECTOR_3		(0b1011)
-#define SPI_SELECTOR_4		(0b0111)
-#define SPI_SELECTOR_NONE	(0b1111)
+#define SPI_SELECTOR_1			(0b1110)
+#define SPI_SELECTOR_2			(0b1101)
+#define SPI_SELECTOR_3			(0b1011)
+#define SPI_SELECTOR_4			(0b0111)
+#define SPI_SELECTOR_NONE		(0b1111)
 ///@}
 
 ///\cond
@@ -158,8 +158,8 @@
  * @def
  * These are the base addresses for the two SPI peripherals
  */
-#define SPI0 ((spi_reg_t *) 0x40008000U)
-#define SPI1 ((spi_reg_t *) 0x4000C000U)
+#define SPI0		((spi_reg_t *) 0x40008000U)
+#define SPI1		((spi_reg_t *) 0x4000C000U)
 /**
  * SPI register mapping
  */

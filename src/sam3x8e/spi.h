@@ -32,12 +32,12 @@ typedef struct spi_reg_t {
 	uint32_t SPI_IER;		//0x14, interrupt enable register
 	uint32_t SPI_IDR;		//0x18, interrupt disable register
 	uint32_t SPI_IMR;		//0x1c, interrupt mask register
-	uint32_t reserved0[3];	//0x20-0x2c, reserved
+	uint32_t reserved0[4];	//0x20-0x2c, reserved
 	uint32_t SPI_CSR0;		//0x30, chip select register 0
 	uint32_t SPI_CSR1;		//0X34, chip select register 1
 	uint32_t SPI_CSR2;		//0X38, chip select register 2
 	uint32_t SPI_CSR3;		//0X3C, chip select register 3
-	uint32_t reserved1[40];	//0x40 - 0xe0, reserved
+	uint32_t reserved1[41];	//0x40 - 0xe0, reserved
 	uint32_t SPI_WPMR;		//0xE4, write protection control register
 	uint32_t SPI_WPSR;		//0xE8, write protection status register
 	//registers 0xec - 0xfc reserved
@@ -100,6 +100,11 @@ uint32_t spi_write_ready(spi_reg_t *spi);
  */
 uint8_t spi_read_ready(spi_reg_t *spi);
 
-
+/**
+ * We want to be sure that we have completed the transmission. Good thing to do after you write data.
+ * @param spi
+ * @return true if transmission is completed.
+ */
+uint32_t spi_write_complete(spi_reg_t *spi);
 
 #endif /* SPI_H_ */

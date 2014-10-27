@@ -164,37 +164,42 @@
  * SPI register mapping
  */
 typedef struct spi_reg {
-	uint32_t SPI_CR;		//0x00, control register
-	uint32_t SPI_MR;		//0x04, mode register
-	uint32_t SPI_RDR;		//0x08, receive data register
-	uint32_t SPI_TDR;		//0x0c, transmit data register
-	uint32_t SPI_SR;		//0x10, status register
-	uint32_t SPI_IER;		//0x14, interrupt enable register
-	uint32_t SPI_IDR;		//0x18, interrupt disable register
-	uint32_t SPI_IMR;		//0x1c, interrupt mask register
-	uint32_t reserved0[4];	//0x20-0x2c, reserved
-	uint32_t SPI_CSR0;		//0x30, chip select register 0
-	uint32_t SPI_CSR1;		//0X34, chip select register 1
-	uint32_t SPI_CSR2;		//0X38, chip select register 2
-	uint32_t SPI_CSR3;		//0X3C, chip select register 3
-	uint32_t reserved1[41];	//0x40 - 0xe0, reserved
-	uint32_t SPI_WPMR;		//0xE4, write protection control register
-	uint32_t SPI_WPSR;		//0xE8, write protection status register
+	uint32_t SPI_CR;		///< 0x00, Control Register
+	uint32_t SPI_MR;		///< 0x04, Mode Register
+	uint32_t SPI_RDR;		///< 0x08, Receive Data Register
+	uint32_t SPI_TDR;		///< 0x0c, Transmit Data Register
+	uint32_t SPI_SR;		///< 0x10, Status Register
+	uint32_t SPI_IER;		///< 0x14, Interrupt Enable Register
+	uint32_t SPI_IDR;		///< 0x18, Interrupt Disable Register
+	uint32_t SPI_IMR;		///< 0x1c, Interrupt Mask Register
+	uint32_t reserved0[4];	///< 0x20-0x2c, Reserved
+	uint32_t SPI_CSR0;		///< 0x30, Chip Select Register 0
+	uint32_t SPI_CSR1;		///< 0X34, Chip Select Register 1
+	uint32_t SPI_CSR2;		///< 0X38, Chip Select Register 2
+	uint32_t SPI_CSR3;		///< 0X3C, Chip Select Register 3
+	uint32_t reserved1[41];	///< 0x40 - 0xe0, Reserved
+	uint32_t SPI_WPMR;		///< 0xE4, Write Protection Control Register
+	uint32_t SPI_WPSR;		///< 0xE8, Write Protection Status Register
 	//registers 0xec - 0xfc reserved
 } spi_reg_t;
 ///\endcond
 
 typedef struct spi_settings {
-	uint32_t master;
-	uint32_t selector;
-	uint32_t CPOL;
-	uint32_t NCPHA;
-	uint32_t baudR;
-	uint32_t bits;
-	uint32_t DLYBCT;
-	uint32_t DLYBS;
-	uint32_t DLYBCS;
+	uint8_t master;				///< Used to set the peripheral in slave or master mode
+	uint8_t perip_select_mode;	///< Used to set the peripheral in fixed or variable chip select
+//	uint8_t DLYBCT;				///< Used to set the
+//	uint8_t DLYBS;				///<
+	uint8_t DLYBCS;				///< Used to set the delay between chip selects
 }spi_settings_t;
+
+typedef struct spi_selector_settings {
+	uint8_t baudR;				///< Used to set the baud rate of the selector
+	uint8_t CPOL;				///< CPOL: Clock polarity
+	uint8_t NCPHA;				///< NCPHA: Clock phase
+	uint8_t BITS_pr_transfer;	///< The amount of bits to be transmitted
+	uint8_t DLYBCT;				///< Used to set the delay between consecutive transfers
+	uint8_t DLYBS;				///< Used to set the Delay Before SPCK starts
+}spi_selector_settings_t;
 
 
 /**

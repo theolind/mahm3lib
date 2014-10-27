@@ -183,15 +183,21 @@ typedef struct spi_reg {
 	//registers 0xec - 0xfc reserved
 } spi_reg_t;
 ///\endcond
-
+///@{
 typedef struct spi_settings {
 	uint8_t master;				///< Used to set the peripheral in slave or master mode
 	uint8_t perip_select_mode;	///< Used to set the peripheral in fixed or variable chip select
-//	uint8_t DLYBCT;				///< Used to set the
-//	uint8_t DLYBS;				///<
 	uint8_t DLYBCS;				///< Used to set the delay between chip selects
-}spi_settings_t;
 
+}spi_settings_t;
+/**
+ * @typedef
+ * Consider the selectors as channels of the SPI peripheral. With this struct
+ * one can set the SPI channel/selector with different settings and simply
+ * select one of the selectors for the next transfer. The selector pins
+ * themselves can be used for selecting different devices connected to the
+ * peripheral.
+ */
 typedef struct spi_selector_settings {
 	uint8_t baudR;				///< Used to set the baud rate of the selector
 	uint8_t CPOL;				///< CPOL: Clock polarity
@@ -200,8 +206,9 @@ typedef struct spi_selector_settings {
 	uint8_t DLYBCT;				///< Used to set the delay between consecutive transfers
 	uint8_t DLYBS;				///< Used to set the Delay Before SPCK starts
 }spi_selector_settings_t;
+///@}
 
-
+/////// PROTOTYPES ////////////////////////////////////////////////
 /**
  * This function initializes the SPI peripheral.
  *
@@ -210,23 +217,29 @@ typedef struct spi_selector_settings {
  * @param settings
  */
 uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings);
+
 uint8_t spi_set_master(spi_reg_t *spi);
+
 uint8_t spi_set_slave(spi_reg_t *spi);
 
 uint8_t spi_enable(spi_reg_t *spi);
 
 uint8_t spi_master_set_baud_rate(spi_reg_t *spi, uint8_t selector, uint8_t baud_rate);
+
 uint8_t spi_master_set_clk_polarity(spi_reg_t *spi, uint8_t selector, uint8_t polarity);
+
 uint8_t spi_master_set_clk_phase(spi_reg_t *spi, uint8_t selector, uint8_t phase);
+
 uint16_t spi_tranceive(spi_reg_t *spi, uint16_t data);
-
-
-// deselects the current slave then selects a new slave
-// this either requires a global variable,
-// or it requires another function spi_deselect_periphial(uint8_t peripheral)
-// or the two functions could be in one: spi_select_periphial(uint8_t old, uint8_t new)
+/**
+ * This function is only useful when in master mode and is ussed to select a
+ * slave using the selector-pins. This function will check first to see if a
+ * transfer is in progress before it selects the next selector.
+ *
+ * @param spi
+ * @param slave
+ */
 void spi_master_select_slave(spi_reg_t *spi, uint8_t slave);
-
 /**
  * Write 8 bits of data (a char). This fills the receive register with data sent to the processor
  * After each write a spi_read has to be performed to clear the receive register
@@ -235,7 +248,6 @@ void spi_master_select_slave(spi_reg_t *spi, uint8_t slave);
  * @param data the data to send
  */
 void spi_write(spi_reg_t *spi, uint16_t data);
-
 /**
  * Reads data that has been received.
  *
@@ -245,7 +257,6 @@ void spi_write(spi_reg_t *spi, uint16_t data);
  * @return received char
  */
 uint16_t spi_read(spi_reg_t *spi);
-
 /**
  * Test if we are able to send data
  * @param spi The base-address of the SPI-peripheral that shall be used.
@@ -253,7 +264,6 @@ uint16_t spi_read(spi_reg_t *spi);
  * @return true if all data has been sent and we are ready to send new data
  */
 uint8_t spi_write_ready(spi_reg_t *spi);
-
 /**
  * This function returns 1 if the write buffer and the shift-registers are
  * empty. This means that no transmission is taking place and is used primarily
@@ -265,7 +275,6 @@ uint8_t spi_write_ready(spi_reg_t *spi);
  * or ongoing transmission.
  */
 uint8_t spi_transmission_done(spi_reg_t *spi);
-
 /**
  * We want to test if we are able to read data. It is good to do this before you read data.
  * @param spi The base-address of the SPI-peripheral that shall be used.
@@ -281,7 +290,6 @@ uint8_t spi_interrupt_enable(spi_reg_t *spi, uint8_t interrupt);
 uint8_t spi_interrupt_disable(spi_reg_t *spi, uint8_t interrupt);
 
 uint8_t spi_disable(spi_reg_t *spi);
-
 /**
  * Used only in test purposes. Enable this to connect MOSI to MISO in the
  * peripheral.
@@ -297,6 +305,14 @@ uint8_t spi_loopback_enable(spi_reg_t *spi);
  * @return
  */
 uint8_t spi_loopback_disable(spi_reg_t *spi);
-
+/**
+ * Indicates that the last transfer or the current transfer is the last one.
+ * This will make the chip select line become deasserted (raised) regardless of
+ * the setting for keeping the device asserted between transfers as set by
+ * spi_keep_line_assertion().
+ *
+ * @return
+ */
+uint8_t spi_selector_close();
 
 #endif

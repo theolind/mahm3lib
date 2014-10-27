@@ -43,15 +43,9 @@ void test_twi_init_slave(void) {
  * 	5) can the setting for the Internal Address Size be larger than 2 bits?
  */
 void test_twi_set_device_address(void) {
-	// Set Master Read Direction
-	TWI0->TWI_MMR = (1 << 12);
-	TWI1->TWI_MMR = (1 << 12);
 	// Set Device Address and Internal Address Size
 	twi_set_device_address(TWI0, 0xFF, 7);
 	twi_set_device_address(TWI1, 0xFF, 7);
-	// Master Read Direction shouldn't be modified
-	TEST_ASSERT_TRUE(TWI0->TWI_MMR & (1 << 12));
-	TEST_ASSERT_TRUE(TWI1->TWI_MMR & (1 << 12));
 	// Device Address should be set
 	TEST_ASSERT_TRUE(TWI0->TWI_MMR & (0xFF << 16));
 	TEST_ASSERT_TRUE(TWI1->TWI_MMR & (0xFF << 16));

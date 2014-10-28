@@ -11,15 +11,22 @@
 #include "adc.h"
 #include "pmc.h"
 
-uint32_t mux0 = 6; //			(6)
+#define mux0 			(6)
 #define mux1 			(5)
 #define mux2 			(3)
+
+
 
 //	pio_conf_pin(PIOA, 23, ((mux&7)>>2), 0);		// A2
 //	pio_conf_pin(PIOA, 24,((mux&3)>>1) , 0); 		// A1
 //	pio_conf_pin(PIOA, 16, (mux&1), 0); 			// A0
 
+void mux_digital_in();
+void mux_digital_out();
+void mux_analog_in();
 
 void enable_mux_pin(uint32_t mux, uint32_t pin);
+void disable_mux_pin(uint32_t mux, uint32_t pin);
+
 
 #endif /* SAM3X8E_MUX_H_ */

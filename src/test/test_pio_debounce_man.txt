@@ -1,0 +1,96 @@
+#include "unity/unity_hw_setup.h"
+
+#include "unity/unity.h"
+
+#include "sam3x8e/pio.h"
+#include "sam3x8e/delay.h"
+#include "sam3x8e/pmc.h"
+
+#define MAX_SAMPLE  5000
+
+/*
+ * A manual test for debounce filter.
+ *
+ * The test reads two pins for input.
+ * One with a debounce filter (pin 15) and one without a debounce filter (pin 17).
+ *
+ * The test uses one pin (13) for output that turns on
+ * an electronic switch that is wired to the two
+ * input pins.
+ *
+ */
+
+
+int main(void) {
+	// basic initialization of hardware and UART communication.
+	unity_hw_setup();
+
+	//run_tests();
+
+	char filtered_inputs[MAX_SAMPLE];
+	char unfiltered_inputs[MAX_SAMPLE];
+
+	// Manual test for Glitch Filtering
+	pmc_enable_peripheral_clock(ID_PIOC);
+
+	// Enable switch pin
+	pio_enable_pin(PIOC, 13);
+
+	// Enable switch pin for output
+	pio_conf_pin(PIOC, 13, 0, 1);
+
+	// Enable both pins
+	pio_enable_pin(PIOC, 15);
+	pio_enable_pin(PIOC, 17);
+
+	// Enable debounce filter on pin 15
+	pio_enable_input_filter(PIOC, 15);
+	pio_select_debounce_filter(PIOC, 15);
+	pio_set_debounce_prescaler(PIOC, 200);
+
+	// Conf both pins for input
+	pio_conf_pin(PIOC, 15, 1, 1);
+	pio_conf_pin(PIOC, 17, 1, 1);
+
+
+	if(!pio_debounce_filter_selected(PIOC, 15)) {
+		uart_write_str("Debounce not selected");
+		return 0;
+	}
+
+	// Turns on switch
+	pio_set_pin(PIOC, 13, 1);
+
+	for(int i = 0; i < MAX_SAMPLE; i++) {
+
+		uint32_t filtered_input = pio_read_pin(PIOC, 15);
+		uint32_t unfiltered_input = pio_read_pin(PIOC, 17);
+
+		filtered_inputs[i] = (char)filtered_input;
+		unfiltered_inputs[i] = (char)unfiltered_input;
+
+		delay_micros(1);
+	}
+
+
+	for (int i = 0; i < MAX_SAMPLE; i++) {
+		/*
+		uart_write_char(unfiltered_inputs[i] + 48);
+		while(!uart_tx_ready());
+
+		uart_write_char(',');
+		while(!uart_tx_ready());
+		*/
+
+		uart_write_char(filtered_inputs[i] + 48);
+		while(!uart_tx_ready());
+
+		uart_write_char(',');
+		while(!uart_tx_ready());
+
+	}
+
+	uart_write_str("DONE WITH TEST");
+
+	return 0;
+}

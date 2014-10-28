@@ -70,6 +70,16 @@
 #define PIO_PIN_8_PA15			(15)
 ///@}
 
+
+#define PIO_FILTER_GLITCH	(0) /// Selector for glitch filter mode
+#define PIO_FILTER_DEBOUNCE (0)	/// Selector for debounce filter mode
+
+#define PIO_SCDR_DIV_Pos 0
+#define PIO_SCDR_DIV_Msk (0x3fffu << PIO_SCDR_DIV_Pos) /**< \brief (PIO_SCDR) Slow Clock Divider Selection for Debouncing */
+#define PIO_SCDR_DIV(value) ((PIO_SCDR_DIV_Msk & ((value) << PIO_SCDR_DIV_Pos)))
+
+#define PIO_SLOW_CLOCK_FREQ			(32768)
+
 ///@cond
 /*
  * Mapping of PIO registers
@@ -283,5 +293,55 @@ uint32_t pio_read_port(pio_reg_t *port);
  */
 uint8_t pio_conf_pin_to_peripheral(pio_reg_t *port, uint32_t periph,
 		uint8_t pin_number);
+
+
+/**
+ * Checks if debounce filter is enabled for a specific pin
+ * @return 1 if debounce filter is selected
+ */
+uint8_t pio_debounce_filter_selected(pio_reg_t *port, uint32_t pin_number);
+
+/**
+ *
+ * Selects debounce filter  to use for a pin
+ * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
+ * @param pin_number the pin number (on the port) to enable filter on
+ * @pre The peripheral clock must be enabled for this to work
+ */
+void pio_select_debounce_filter(pio_reg_t *port, uint32_t pin_number);
+
+/**
+ * Decides the clock settings used by all debounce filters.
+ * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
+ * @param slow_clock This value decides the period that the filter uses for sampling
+ * (low value = longer sampling time, high value = shorter sampling time).
+ * Expects a value between 1 and 16384 (2^0 =< slow_clock =< 2^14).
+ */
+void pio_set_debounce_frequency(pio_reg_t *port, uint32_t slow_clock);
+
+/**
+ * Enables glitch filter for a specified port/pin
+ * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
+ * @param pin_number the pin number (on the port) to enable filter on
+ * @pre The peripheral clock must be enabled for this to work
+ */
+void pio_enable_input_filter(pio_reg_t *port, uint32_t pin_number);
+
+/**
+ * Disable glitch filter for a specified port and pin
+ * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
+ * @param pin_number the pin number (on the port) to enable filter on
+ * @pre The peripheral clock must be enabled for this to work
+ */
+void pio_disable_input_filter(pio_reg_t *port, uint32_t pin_number);
+
+/**
+ * Returns 1 if glitch filter is enabled on the selected pin/port
+ * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
+ * @param pin_number the pin number (on the port) to enable filter on
+ */
+uint32_t pio_input_filter_enabled(pio_reg_t *port, uint32_t pin_number);
+
+
 
 #endif

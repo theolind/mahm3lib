@@ -40,6 +40,7 @@ void test_spi_setup(void) {
 	pio_conf_pin_to_peripheral(PIOA, 0, 31);	//NPSC3
 
 	spi_init(SPI0, &spi_settings_t);
+	spi_select_slave(SPI0, 0);
 }
 
 void test_spi_init(void) {
@@ -56,49 +57,44 @@ void test_spi_write_ready() {
 }
 
 void test_spi_write() {
-//	pio_enable_pin(PIOC, 14);
-//	pio_conf_pin(PIOC, 14, 0, 1);
-//
-//	pio_set_pin(PIOC, 14, 0);
-//	delay_ms(2000);
-//	pio_set_pin(PIOC, 14, 1);
-//	delay_ms(2000);
-//	pio_set_pin(PIOC, 14, 0);
-
-	spi_select_slave(SPI0, 0);
-
+	spi_write(SPI0, 0b01011010);
+	TEST_ASSERT_FALSE( SPI0->SPI_SR & (0x1u << 1) );
+	delay_ms(1);
 	TEST_ASSERT_TRUE( SPI0->SPI_SR & (0x1u << 1) );
-	spi_write(SPI0, 0b00110101);
-	delay_ms(100);
+}
+
+void test_spi_transmission_complete() {
+	delay_ms(1);
+	spi_write(SPI0, 0b01011010);
+	spi_write(SPI0, 0b01011011);
+	TEST_ASSERT_FALSE(SPI0->SPI_SR & (0x1u << 1));
+	delay_ms(1);
+	TEST_ASSERT_TRUE(SPI0->SPI_SR & (0x1u << 1));
 	TEST_ASSERT_TRUE(SPI0->SPI_SR & (0x1u << 9));
 }
 
 void test_spi_read_ready() {
-	TEST_ASSERT_FALSE( spi_read_ready(SPI0) );
-	spi_select_slave(SPI0, 0);
-	spi_write(SPI0, 0b00110101);
-
-	uint32_t timeout = 1000;
-	while(!spi_read_ready(SPI0)) {
-		delay_ms(1);
-		if(--timeout <= 0) {
-			TEST_ASSERT_TRUE(0);
-			return;
-		}
-	}
-	TEST_ASSERT_TRUE(1);
+	spi_read(SPI0);
+	spi_write(SPI0, 0b00000000);
+	delay_ms(1);
+	TEST_ASSERT_TRUE( spi_read_ready(SPI0) );
 }
 
-void test_spi(void) {
+void test_spi_correct_transmission(void) {
 	while(!spi_write_ready(SPI0));
-
-	TEST_ASSERT_FALSE(spi_read(SPI0) == 0b00110101);
-
-	spi_write(SPI0, 0b00110101);
-
-	while(!spi_write_ready(SPI0));
-
-	TEST_ASSERT_TRUE(spi_read(SPI0) == 0b00110101);
+	// We wish to see if the byte transmitted is the same as the one received.
+	uint16_t data1 = 0b10101010;
+	uint16_t data2 = 0b10101011;
+	spi_write(SPI0, data1);
+	delay_ms(1);
+	TEST_ASSERT_FALSE(spi_read(SPI0) == ~data1);
+	TEST_ASSERT_TRUE(spi_read(SPI0) == data1);
+	// We also want to see the behavior when an overrun is occurred.
+	spi_write(SPI0, data1);
+	spi_write(SPI0, data2);
+	delay_ms(1);
+	TEST_ASSERT_FALSE(spi_read(SPI0) == ~data2);
+	TEST_ASSERT_TRUE(spi_read(SPI0) == data2);
 }
 /*
 void test_spi_0_write(void){

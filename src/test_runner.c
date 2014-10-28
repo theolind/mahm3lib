@@ -76,6 +76,8 @@ void run_tests(void) {
 	RUN_TEST(test_spi_write_ready, 30);
 	RUN_TEST(test_spi_write, 30);
 	RUN_TEST(test_spi_read_ready, 30);
+	RUN_TEST(test_spi_transmission_complete,30);
+	RUN_TEST(test_spi_correct_transmission, 30);
 
 	/*Unity.TestFile = "test/test_spi_hardcoded.c";
 	RUN_TEST(test_spi_init_hardcoded, 30);

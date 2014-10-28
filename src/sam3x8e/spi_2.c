@@ -22,7 +22,6 @@
 
 #include "spi_2.h"
 
-
 uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings);
 
 uint8_t spi_init_selector(spi_reg_t *spi,
@@ -39,10 +38,24 @@ uint8_t spi_selector_set_clk_phase(spi_reg_t *spi, uint8_t selector,
 		uint8_t phase);
 
 uint8_t spi_selector_set_baud_rate(spi_reg_t *spi, uint8_t selector,
-		uint8_t baud_rate);
+		uint8_t baud_rate) {
+	uint32_t *p_reg;
+	// Boundary test. Higher than these values will result in error or
+	// register corruption, because the selector is used to calculate a
+	// pointer.
+	if (baud_rate > 255 || selector > 3) {
+		return 0; // Error
+	}
+	// Calculate the pointer for the selector based on the first
+	// selector register being the offset.
+	p_reg = (&spi->SPI_CSR0) + selector; // pointer increment of 0 to 3.
+	// Bitwise operation to set the delay for the calculated register to use
+	*p_reg = ((~SPI_CSRx_SCBR_MASK) & *p_reg) | (baud_rate << 8);
+	return 1; // No error
+}
 
 uint8_t spi_selector_do_not_keep_cs_active(spi_reg_t *spi, uint8_t selector,
-		uint8_t option){
+		uint8_t option) {
 	uint32_t *p_reg;
 	// Boundary test. Higher than these values will result in error or
 	// register corruption, because the selector is used to calculate a

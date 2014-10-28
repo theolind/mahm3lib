@@ -200,7 +200,7 @@ typedef struct spi_selector_settings {
 	 * This will define the baud rate for the given selector. The value must be between 0 and 255 and the baud rate will be defined with
 	 * (MCK / baudR) were MCK is the main clock with 84MHz (84000000 Hz).
 	 */
-	uint8_t baudR;				///< Used to set the baud rate of the selector
+	uint8_t baud_rate;				///< Used to set the baud rate of the selector
 	/**
 	 * This will define the polarity of the SPI clock. The values are 0 or 1.
 	 * Set it to 1 to define the inactive state value of SPCK to be logic level
@@ -277,6 +277,12 @@ uint8_t spi_set_slave(spi_reg_t *spi);
  */
 uint8_t spi_enable(spi_reg_t *spi);//2
 /**
+ * This function will set the baudd rate for the given selector.
+ * The value for baud_rate must be between 0 and 255 and the baud rate will be
+ * defined with (MCK / baudR) were MCK is the main clock with 84MHz
+ * (84000000 Hz). If baud rate 84MHz is set by setting baud_rate = 1, then all
+ * the other selectors must use the same baud rate. This is only true for
+ * baud rate = 1 or in frequency 84MHz.
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)

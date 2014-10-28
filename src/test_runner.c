@@ -53,8 +53,6 @@ void run_tests(void) {
 	RUN_TEST(test_pio_set_output, 30);
 	RUN_TEST(test_pio_set_outputs, 30);
 	RUN_TEST(test_pio_conf_multiple_pins, 30);
-	RUN_TEST(test_pio_select_glitch_filter, 30);
-	RUN_TEST(test_pio_enable_glitch_filter, 30);
 	HORIZONTAL_LINE_BREAK();
 
 	// Run DACC tests

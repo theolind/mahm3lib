@@ -428,21 +428,6 @@ uint8_t pio_get_interrupt_detection_method(pio_reg_t *port, uint32_t pin);
 uint8_t pio_debounce_filter_selected(pio_reg_t *port, uint32_t pin_number);
 
 /**
- * Checks if glitch filter is selected for a specific pin
- * @return 1 if glitch filter is selected
- */
-uint8_t pio_glitch_filter_selected(pio_reg_t *port, uint32_t pin_number);
-
-
-/**
- * Selects glitch filter to use for a pin
- * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
- * @param pin_number the pin number (on the port) to enable filter on
- * @pre The peripheral clock must be enabled for this to work
- */
-void pio_select_glitch_filter(pio_reg_t *port, uint32_t pin_number);
-
-/**
  *
  * Selects debounce filter  to use for a pin
  * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h

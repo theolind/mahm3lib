@@ -206,18 +206,6 @@ uint8_t pio_debounce_filter_selected(pio_reg_t *port, uint32_t pin_number) {
 		}
 }
 
-uint8_t pio_glitch_filter_selected(pio_reg_t *port, uint32_t pin_number) {
-	if((port->PIO_IFDGSR & (1u << pin_number)) == (1u << pin_number)) {
-		return 0;
-	}else {
-		return 1;
-	}
-}
-
-void pio_select_glitch_filter(pio_reg_t *port, uint32_t pin_number) {
-	port->PIO_SCIFSR = (1u << pin_number);
-}
-
 void pio_select_debounce_filter(pio_reg_t *port, uint32_t pin_number) {
 	port->PIO_DIFSR = (1u << pin_number);
 }

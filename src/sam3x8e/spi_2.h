@@ -446,24 +446,6 @@ uint8_t spi_rx_ready(spi_reg_t *spi);
  */
 uint8_t spi_software_reset(spi_reg_t *spi);
 /**
- * This enables an interrupts.
- *
- * @param spi The base-address of the SPI-peripheral that shall be used.
- * (Use one of predefined values with prefix: SPI)
- * @param interrupt
- * @return error (1 = SUCCESS and 0 = FAIL)
- */
-uint8_t spi_interrupt_enable(spi_reg_t *spi, uint8_t interrupt);
-/**
- * This function disables interrupts.
- *
- * @param spi The base-address of the SPI-peripheral that shall be used.
- * (Use one of predefined values with prefix: SPI)
- * @param interrupt
- * @return error (1 = SUCCESS and 0 = FAIL)
- */
-uint8_t spi_interrupt_disable(spi_reg_t *spi, uint8_t interrupt);
-/**
  * This function will disable the SPI-peripheral. As soon as this function is
  * run, SPI finishes its transfer. All pins are set in input mode and no data
  * is received or transmitted. If a transfer is in progress, the transfer is

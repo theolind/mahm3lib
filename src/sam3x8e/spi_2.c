@@ -149,21 +149,25 @@ uint8_t spi_loopback_enable(spi_reg_t *spi);
 
 uint8_t spi_loopback_disable(spi_reg_t *spi);
 
+
 uint8_t spi_enable(spi_reg_t *spi);
 
 uint8_t spi_disable(spi_reg_t *spi);
+
 
 uint8_t spi_select_slave(spi_reg_t *spi, uint8_t slave);
 
 uint8_t spi_tx_ready(spi_reg_t *spi);
 
+uint8_t spi_rx_ready(spi_reg_t *spi);
+
+
 uint8_t spi_master_write(spi_reg_t *spi, uint16_t data);
 
 uint8_t spi_transmission_done(spi_reg_t *spi);
 
-uint8_t spi_rx_ready(spi_reg_t *spi);
 
-uint16_t spi__read(spi_reg_t *spi, uint16_t dummy_data);
+uint16_t spi_read(spi_reg_t *spi, uint16_t dummy_data);
 
 uint8_t spi_slave_write(spi_reg_t *spi, uint16_t data);
 

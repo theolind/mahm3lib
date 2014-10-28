@@ -39,9 +39,7 @@
  * Masks for SPI_MR
  */
 #define SPI_MR_MSTR_MASK			(0b01)(1 << 0)
-#define SPI_MR_PS_MASK				(0b10)(1 << 1)
-#define SPI_MR_MODFDIS_MASK			(0x10)(1 << 4)
-#define SPI_MR_WDRBT_MASK			(0x20)(1 << 5)
+//#define SPI_MR_MODFDIS_MASK			(0x10)(1 << 4)
 #define SPI_MR_LLB_MASK				(0x80)(1 << 7)
 #define SPI_MR_PCS_MASK				(0xF << 16)
 #define SPI_MR_DLYBCS_MASK			(0xFF << 24)
@@ -60,8 +58,6 @@
  * Masks for SPI_TDR
  */
 #define SPI_TDR_TD_MASK				(0xFFFF << 0)
-#define SPI_TDR_PCS_MASK			(0xF << 16)
-#define SPI_TDR_LASTXFER_MASK		(1 << 24)
 ///@}
 ///@{
 /**
@@ -70,11 +66,9 @@
  */
 #define SPI_SR_RDRF_MASK			(1 << 0)
 #define SPI_SR_TDRF_MASK			(1 << 1)
-#define SPI_SR_MODF_MASK			(1 << 2)
-#define SPI_SR_OVRES_MASK			(1 << 3)
-#define SPI_SR_NSSR_MASK			(1 << 8)
+//#define SPI_SR_NSSR_MASK			(1 << 8)
 #define SPI_SR_TXEMPTY_MASK			(1 << 9)
-#define SPI_SR_UNDES_MASK			(1 << 10)
+//#define SPI_SR_UNDES_MASK			(1 << 10) // Slave mode only
 #define SPI_SR_SPIENS_MASK			(1 << 16)
 ///@}
 ///@{
@@ -82,6 +76,7 @@
  * @def
  * Masks for SPI_IER
  */
+/*
 #define SPI_IER_RDRF_MASK			(1 << 0)
 #define SPI_IER_TDRE_MASK			(1 << 1)
 #define SPI_IER_MODF_MASK			(1 << 2)
@@ -89,12 +84,14 @@
 #define SPI_IER_NSSR_MASK			(1 << 8)
 #define SPI_IER_TXEMPTY_MASK		(1 << 9)
 #define SPI_IER_UNDES_MASK			(1 << 10)
+*/
 ///@}
 ///@{
 /**
  * @def
  * Masks for SPI_IDR
  */
+/*
 #define SPI_IDR_RDRF_MASK			(1 << 0)
 #define SPI_IDR_TDRE_MASK			(1 << 1)
 #define SPI_IDR_MODF_MASK			(1 << 2)
@@ -102,12 +99,14 @@
 #define SPI_IDR_NSSR_MASK			(1 << 8)
 #define SPI_IDR_TXEMPTY_MASK		(1 << 9)
 #define SPI_IDR_UNDES_MASK			(1 << 10)
+*/
 ///@}
 ///@{
 /**
  * @def
  * Masks for SPI_IMR (Read-Only)
  */
+/*
 #define SPI_IMR_RDRF_MASK			(1 << 0)
 #define SPI_IMR_TDRE_MASK			(1 << 1)
 #define SPI_IMR_MODF_MASK			(1 << 2)
@@ -115,6 +114,7 @@
 #define SPI_IMR_NSSR_MASK			(1 << 8)
 #define SPI_IMR_TXEMPTY_MASK		(1 << 9)
 #define SPI_IMR_UNDES_MASK			(1 << 10)
+*/
 ///@}
 ///@{
 /**

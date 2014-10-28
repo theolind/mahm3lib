@@ -222,8 +222,16 @@ void pio_select_debounce_filter(pio_reg_t *port, uint32_t pin_number) {
 	port->PIO_DIFSR = (1u << pin_number);
 }
 
-void pio_set_debounce_prescaler(pio_reg_t *port, uint32_t pin_number, uint32_t prescaler) {
-	//port->PIO_SCDR = prescaler;
+void pio_set_debounce_prescaler(pio_reg_t *port, uint32_t slow_clock) {
+	/*
+	 * The debouncing filter can filter a pulse of less than 1/2 Period of a
+	 * programmable Divided Slow Clock:
+	 * Tdiv_slclk = ((DIV+1)*2) * Tslow_clock
+	 *
+	 * DIV = Tdiv_slclk/(Tslow_clk * 2) - 1
+	 */
+	port->PIO_SCDR = (PIO_SLOW_CLOCK_FREQ /	(2 * (slow_clock))) - 1;
+
 }
 
 void pio_enable_input_filter(pio_reg_t *port, uint32_t pin_number) {

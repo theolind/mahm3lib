@@ -79,9 +79,15 @@
 #define PIO_INT_DISABLE					(5)
 ///@}
 
-/// PIO DEBOUNCE DIVIDER
-#define PIO_DEBOUNCE_DIVIDER(value)	(value << 0)
 
+#define PIO_FILTER_GLITCH	(0) /// Selector for glitch filter mode
+#define PIO_FILTER_DEBOUNCE (0)	/// Selector for debounce filter mode
+
+#define PIO_SCDR_DIV_Pos 0
+#define PIO_SCDR_DIV_Msk (0x3fffu << PIO_SCDR_DIV_Pos) /**< \brief (PIO_SCDR) Slow Clock Divider Selection for Debouncing */
+#define PIO_SCDR_DIV(value) ((PIO_SCDR_DIV_Msk & ((value) << PIO_SCDR_DIV_Pos)))
+
+#define PIO_SLOW_CLOCK_FREQ			(32768)
 
 ///@cond
 /*
@@ -446,16 +452,13 @@ void pio_select_glitch_filter(pio_reg_t *port, uint32_t pin_number);
 void pio_select_debounce_filter(pio_reg_t *port, uint32_t pin_number);
 
 /**
- *
- * Sets the clock divider
- *
+ * Decides the clock settings used by all debounce filters.
  * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
- * @param pin_number the pin number (on the port) to enable filter on
- * @param prescaler the divider that is to be used. Uses PIO_DEBOUNCE_DIVIDER(value) as
- * helper function
- * @pre The peripheral clock must be enabled for this to work
+ * @param slow_clock This value decides the period that the filter uses for sampling
+ * (low value = longer sampling time, high value = shorter sampling time).
+ * Expects a value between 1 and 16384 (2^0 =< slow_clock =< 2^14).
  */
-void pio_set_debounce_prescaler(pio_reg_t *port, uint32_t pin_number, uint32_t prescaler);
+void pio_set_debounce_frequency(pio_reg_t *port, uint32_t slow_clock);
 
 /**
  * Enables glitch filter for a specified port/pin

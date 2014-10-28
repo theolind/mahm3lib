@@ -42,8 +42,6 @@ uint8_t spi_selector_set_clk_polarity(spi_reg_t *spi, uint8_t selector, uint8_t 
 
 uint8_t spi_selector_set_clk_phase(spi_reg_t *spi, uint8_t selector, uint8_t phase);
 
-uint16_t spi_master_tranceive(spi_reg_t *spi, uint16_t data);
-
 uint8_t spi_select_slave(spi_reg_t *spi, uint8_t slave);
 
 uint8_t spi_master_write(spi_reg_t *spi, uint16_t data);

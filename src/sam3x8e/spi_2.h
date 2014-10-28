@@ -267,17 +267,6 @@ uint8_t spi_selector_set_clk_polarity(spi_reg_t *spi, uint8_t selector, uint8_t 
 
 uint8_t spi_selector_set_clk_phase(spi_reg_t *spi, uint8_t selector, uint8_t phase);
 /**
- * This function  is the primary function for sending and receiving data with
- * the SPI-peripheral. SPI is a true full-duplex communication peripheral and
- * this function makes use of this ability. The function spi_read() and
- * spi_write() are for one-way transmitions if they are needed.
- *
- * @param spi
- * @param data
- * @return
- */
-uint16_t spi_master_tranceive(spi_reg_t *spi, uint16_t data);
-/**
  * This function is only useful when in master mode and is used to select a
  * slave using the selector-pins. This function will check first to see if a
  * transfer is in progress before it selects the next selector.

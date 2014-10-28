@@ -28,40 +28,40 @@
  * @def
  * Masks for SPI_CR
  */
-#define SPI_CR_SPIEN_MASK			(0b01)
-#define SPI_CR_SPIDIS_MASK			(0b10)
-#define SPI_CR_SWRST_MASK			(0x80)
-#define SPI_CR_LASTXFER_MASK		(0x01000000)
+#define SPI_CR_SPIEN_MASK			(1 << 0)
+#define SPI_CR_SPIDIS_MASK			(1 << 1)
+#define SPI_CR_SWRST_MASK			(1 << 7)
+#define SPI_CR_LASTXFER_MASK		(1 << 24)
 ///@}
 ///@{
 /**
  * @def
  * Masks for SPI_MR
  */
-#define SPI_MR_MSTR_MASK			(0b01)
-#define SPI_MR_PS_MASK				(0b10)
-#define SPI_MR_MODFDIS_MASK			(0x10)
-#define SPI_MR_WDRBT_MASK			(0x20)
-#define SPI_MR_LLB_MASK				(0x80)
-#define SPI_MR_PCS_MASK				(0x000F0000)
-#define SPI_MR_DLYBCS_MASK			(0xFF000000)
+#define SPI_MR_MSTR_MASK			(0b01)(1 << 0)
+#define SPI_MR_PS_MASK				(0b10)(1 << 1)
+#define SPI_MR_MODFDIS_MASK			(0x10)(1 << 4)
+#define SPI_MR_WDRBT_MASK			(0x20)(1 << 5)
+#define SPI_MR_LLB_MASK				(0x80)(1 << 7)
+#define SPI_MR_PCS_MASK				(0xF << 16)
+#define SPI_MR_DLYBCS_MASK			(0xFF << 24)
 ///@}
 ///@{
 /**
  * @def
  * Masks for SPI_RDR
  */
-#define SPI_RDR_RD_MASK				(0x0000FFFF)
-#define SPI_RDR_PCS_MASK			(0x000F0000)
+#define SPI_RDR_RD_MASK				(0xFFFF << 0)
+#define SPI_RDR_PCS_MASK			(0xF << 16)
 ///@}
 ///@{
 /**
  * @def
  * Masks for SPI_TDR
  */
-#define SPI_TDR_TD_MASK				(0x0000FFFF)
-#define SPI_TDR_PCS_MASK			(0x000F0000)
-#define SPI_TDR_LASTXFER_MASK		(0x01000000)
+#define SPI_TDR_TD_MASK				(0xFFFF << 0)
+#define SPI_TDR_PCS_MASK			(0xF << 16)
+#define SPI_TDR_LASTXFER_MASK		(1 << 24)
 ///@}
 ///@{
 /**

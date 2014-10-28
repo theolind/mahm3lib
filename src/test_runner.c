@@ -25,7 +25,7 @@
 
 void run_tests(void) {
 	UnityBegin();
-
+	/*
 	// Run UART tests
 	Unity.TestFile = "test/test_uart.c";
 	RUN_TEST(test_uart_send_receive_char_local_loopback_mode, 0);
@@ -104,7 +104,7 @@ void run_tests(void) {
 	RUN_TEST(test_spi_rx_ready_hardcoded, 30);
 	RUN_TEST(test_spi_rx_hardcoded, 30);*/
 
-
+	/*
 	// Run bitwise_operations tests
 	Unity.TestFile = "test/test_bitwise_operations.c";
 	RUN_TEST(test_is_bit_high, 60);
@@ -152,6 +152,6 @@ void run_tests(void) {
 	RUN_TEST(test_twi_set_clock_invalid_parameters, 90);
 	RUN_TEST(test_twi_set_clock_valid_parameters, 90);
 	//RUN_TEST(test_twi_send_receive_SEMI_AUTOMATIC, 90);
-
+	*/
 	UnityEnd();
 }

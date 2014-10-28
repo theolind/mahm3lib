@@ -20,3 +20,54 @@
  * implemented. The register mapping currently working is non conventional.
  */
 
+#include "spi_2.h"
+
+uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings);
+
+uint8_t spi_init_selector(spi_reg_t *spi, const spi_selector_settings_t *settings);
+
+uint8_t spi_set_master(spi_reg_t *spi);
+
+uint8_t spi_set_slave(spi_reg_t *spi);
+
+uint8_t spi_enable(spi_reg_t *spi);
+
+uint8_t spi_disable(spi_reg_t *spi);
+
+
+
+uint8_t spi_selector_set_baud_rate(spi_reg_t *spi, uint8_t selector, uint8_t baud_rate);
+
+uint8_t spi_selector_set_clk_polarity(spi_reg_t *spi, uint8_t selector, uint8_t polarity);
+
+uint8_t spi_selector_set_clk_phase(spi_reg_t *spi, uint8_t selector, uint8_t phase);
+
+uint16_t spi_master_tranceive(spi_reg_t *spi, uint16_t data);
+
+uint8_t spi_select_slave(spi_reg_t *spi, uint8_t slave);
+
+uint8_t spi_master_write(spi_reg_t *spi, uint16_t data);
+
+uint8_t spi_slave_write(spi_reg_t *spi, uint16_t data);
+
+uint16_t spi_master_read(spi_reg_t *spi, uint16_t dummy_data);
+
+uint8_t spi_write_ready(spi_reg_t *spi);
+
+uint8_t spi_transmission_done(spi_reg_t *spi);
+
+uint8_t spi_read_ready(spi_reg_t *spi);
+
+uint8_t spi_software_reset(spi_reg_t *spi);
+
+uint8_t spi_interrupt_enable(spi_reg_t *spi, uint8_t interrupt);
+
+uint8_t spi_interrupt_disable(spi_reg_t *spi, uint8_t interrupt);
+
+
+uint8_t spi_loopback_enable(spi_reg_t *spi);
+
+uint8_t spi_loopback_disable(spi_reg_t *spi);
+
+uint8_t spi_selector_close(void);
+

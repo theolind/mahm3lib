@@ -192,11 +192,8 @@ typedef struct spi_settings {
 }spi_settings_t;
 /**
  * @typedef
- * Consider the selectors as channels of the SPI peripheral. With this struct
- * one can set the SPI channel/selector with different settings and simply
- * select one of the selectors for the next transfer. The selector pins
- * themselves can be used for selecting different devices connected to the
- * peripheral.
+ * This structure is used to initialize a selector of the SPI. There is a
+ * total of 4 selectors.
  */
 typedef struct spi_selector_settings {
 	uint8_t baudR;				///< Used to set the baud rate of the selector
@@ -214,31 +211,52 @@ typedef struct spi_selector_settings {
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
- * @param settings
+ * @param settings This is a struct of type spi_settings_t with different
+ * setting for the initialization of the peripheral.
  */
 uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings);
 /**
+ * This function will initialize a given selector.
+ * Consider the selectors as channels of the SPI peripheral. With this function
+ * one can set the SPI channel/selector with different settings and simply
+ * select one of the selectors for the next transfer when needed. The selector
+ * pins themselves can be used for selecting different devices connected to the
+ * peripheral. This way SPI peripheral can be seen merely like servicing the
+ * different selectors.
+ *
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
+ * @param settings This is a struct of type spi_selector_settings_t with the
+ * needed setting for the initialization of the selector.
+ * @return
+ */
+uint8_t spi_init_selector(spi_reg_t *spi, const spi_selector_settings_t *settings);
+/**
  * Sets the peripheral into master-mode.
  *
- * @param spi
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
  * @return
  */
 uint8_t spi_set_master(spi_reg_t *spi);
 /**
  *
- * @param spi
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
  * @return
  */
 uint8_t spi_set_slave(spi_reg_t *spi);
 /**
  *
- * @param spi
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
  * @return
  */
-uint8_t spi_enable(spi_reg_t *spi);
+uint8_t spi_enable(spi_reg_t *spi);//2
 /**
  *
- * @param spi
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
  * @param selector
  * @param baud_rate
  * @return
@@ -269,7 +287,7 @@ uint16_t spi_master_tranceive(spi_reg_t *spi, uint16_t data);
  * @param slave This parameter defines which selector to assert.
  * (Use one of the predefines values with prefix: SPI_SELECTOR_)
  */
-void spi_select_slave(spi_reg_t *spi, uint8_t slave);
+uint8_t spi_select_slave(spi_reg_t *spi, uint8_t slave);
 /**
  * Write a data of max 16 bits in length. This will make the SPI receive a
  * equally long data that it will discard and avoid overrun error in the
@@ -299,7 +317,7 @@ uint8_t spi_slave_write(spi_reg_t *spi, uint16_t data);
  */
 uint16_t spi_master_read(spi_reg_t *spi, uint16_t dummy_data);
 /**
- * Yhis function will check and see that a new byte can be placed in the
+ * This function will check and see that a new byte can be placed in the
  * transmit buffer of the peripheral.
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.

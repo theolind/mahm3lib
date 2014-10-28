@@ -196,12 +196,34 @@ typedef struct spi_settings {
  * total of 4 selectors.
  */
 typedef struct spi_selector_settings {
+	/**
+	 * This will define the baud rate for the given selector. The value must be between 0 and 255 and the baud rate will be defined with
+	 * (MCK / baudR) were MCK is the main clock with 84MHz (84000000 Hz).
+	 */
 	uint8_t baudR;				///< Used to set the baud rate of the selector
+	/**
+	 * This will define the polarity of the SPI clock. The values are 0 or 1.
+	 * Set it to 1 to define the inactive state value of SPCK to be logic level
+	 * one and vice versa if it's set to 0.
+	 */
 	uint8_t CPOL;				///< CPOL: Clock polarity
+	/**
+	 * This will define the phase of the SPI clock. The values are 0 or 1.
+	 * Set it to 1 to define that data is captured on the leading edge of SPCK
+	 * and changed on the following edge of SPCK and vice versa if it's set to 0.
+	 */
 	uint8_t NCPHA;				///< NCPHA: Clock phase
-	uint8_t BITS_pr_transfer;	///< The amount of bits to be transmitted
-	uint8_t DLYBCT;				///< Used to set the delay between consecutive transfers
-	uint8_t DLYBS;				///< Used to set the Delay Before SPCK starts
+	uint8_t BITS_pr_transfer;	///< The amount of bits to be transmitted on each transfer
+	/**
+	 * This will define the Delay Between Consecutive Transfers and must be set
+	 * between 0 and 97143 ns.
+	 */
+	uint8_t delay_transfers;	///< Used to set the delay between consecutive transfers
+	/**
+	 * This will define the Delay between the assertion of chip select line and
+	 * when the the SPI clock starts and must be set between 0 till 3036 ns.
+	 */
+	uint8_t delay_clk;			///< Used to set the Delay Before SPCK starts
 }spi_selector_settings_t;
 ///@}
 
@@ -222,7 +244,8 @@ uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings);
  * select one of the selectors for the next transfer when needed. The selector
  * pins themselves can be used for selecting different devices connected to the
  * peripheral. This way SPI peripheral can be seen merely like servicing the
- * different selectors.
+ * different selectors. The selector pins are also called "chip select" or just
+ * short 'cs'.
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
@@ -266,6 +289,82 @@ uint8_t spi_selector_set_baud_rate(spi_reg_t *spi, uint8_t selector, uint8_t bau
 uint8_t spi_selector_set_clk_polarity(spi_reg_t *spi, uint8_t selector, uint8_t polarity);
 
 uint8_t spi_selector_set_clk_phase(spi_reg_t *spi, uint8_t selector, uint8_t phase);
+/**
+ * Chip Select Not Active After Transfer.
+ * Even if the transfer buffer is continuously filled with data, the chip select
+ * line will deassert between transfers.
+ * This function explicitly tells the peripheral to deassert the cs-line between
+ * all transfers, even if new data is placed in the transfer buffer.
+ * Certain devices require this option to be set to indicate end of byte.
+ *
+ * @param spi
+ * @param selector
+ * @param option Set this value to 1 to activate the behavior. (deactivate = 0)
+ * @return
+ */
+uint8_t spi_selector_do_not_keep_cs_active(spi_reg_t *spi, uint8_t selector,
+		uint8_t option);
+/**
+ * Chip Select Active After Transfer.
+ * If the transfer buffer is continuously filled with data, the chip select (cs)
+ * line will not be deasserted before the new transfer is begun. This function
+ * explicitly tells the peripheral not to deassert the cs-line when a transfer
+ * is done, even if no new data is placed in the transfer buffer. The line will
+ * however be deasserted when another selector is selected or when
+ * spi_last_transfer() is invoked.
+ * Certain devices require this option to be set.
+ *
+ * @param spi
+ * @param selector
+ * @param option Set this value to 1 to activate the behavior. (deactivate = 0)
+ * @return
+ */
+uint8_t spi_selector_keep_cs_active(spi_reg_t *spi, uint8_t selector,
+		uint8_t option);
+/**
+ * This function set the amount of bits that a single transfer will transfer.
+ * At default this option is set to 8 bit on each transfer (1 byte), but the
+ * peripheral can handle up to 16 bits on each transfer.
+ * The bit_count parameter must be set between 0 and 8 for 8 till 16 bits.
+ *
+ * @param spi
+ * @param selector
+ * @param bit_count The amount of bits to be transfered when transfering.
+ * @return
+ */
+uint8_t spi_selector_set_bit_length(spi_reg_t *spi, uint8_t selector,
+		uint8_t bit_count);
+/**
+ * This function will set the delay between when the chip select (CS) line is
+ * asserted and when the clk starts for the transfer.
+ * This may be necessary for a particular device.
+ * The delay must be between 0 till 3036 ns with a resolution of 255.
+ * Therefore, the actual set values will be a multiply of about 11,905 ns.
+ * A higher value than 3036 will not be processed and will return an error.
+ * The same is true if selector is higher than 3.
+ *
+ * @param spi
+ * @param selector
+ * @param delay
+ * @return
+ */
+uint8_t spi_selector_set_delay_clk_start(spi_reg_t *spi, uint8_t selector,
+		uint8_t delay);
+/**
+ * This function will set the delay between consecutive transfers.
+ * This may be necessary for a particular device.
+ * The delay must be between 0 till 97143 ns with a resolution of 255.
+ * Therefore, the actual set values will be a multiply of 381 ns.
+ * A higher value than 97143 will not be processed and will return an error.
+ * The same is true if selector is higher than 3.
+ *
+ * @param spi
+ * @param selector The selector to be modified. (Use the predefined with prefix: SPI_SELECTOR_)
+ * @param delay The delay to be set. (Set between 0 and 97143)
+ * @return
+ */
+uint8_t spi_selector_set_delay_delay_transfers(spi_reg_t *spi, uint8_t selector,
+		uint32_t delay);
 /**
  * This function is only useful when in master mode and is used to select a
  * slave using the selector-pins. This function will check first to see if a
@@ -313,7 +412,7 @@ uint16_t spi_master_read(spi_reg_t *spi, uint16_t dummy_data);
  * (Use one of predefined values with prefix: SPI)
  * @return Returns 1 if the transmit buffer is empty and new data can be send
  */
-uint8_t spi_write_ready(spi_reg_t *spi);
+uint8_t spi_tx_ready(spi_reg_t *spi);
 /**
  * This function returns 1 if the write buffer and the shift-registers for
  * transfer are empty. This means that no transmission is taking place and is
@@ -331,7 +430,7 @@ uint8_t spi_transmission_done(spi_reg_t *spi);
  * (Use one of predefined values with prefix: SPI)
  * @return returns 1 if we have data in the receive register
  */
-uint8_t spi_read_ready(spi_reg_t *spi);
+uint8_t spi_rx_ready(spi_reg_t *spi);
 /**
  * This function will generate a software reset of the entire peripheral.
  * This function is used in spi_init()
@@ -386,11 +485,12 @@ uint8_t spi_loopback_enable(spi_reg_t *spi);
  */
 uint8_t spi_loopback_disable(spi_reg_t *spi);
 /**
- * Indicates that the last transfer or the current transfer is the last one.
- * This will make the chip select line become deasserted (raised) regardless of
- * the setting for keeping the device asserted between transfers as set by
- * spi_keep_line_assertion().
- *
+ * This will indicate that the last transfer is done for now and will raise the
+ * chip select pin to high and deassert the slave device connected to it. If
+ * spi_selector_keep_cs_active() is used, then this will close the open line to
+ * the device by raising the CS-line and indicate an end of transfer. If a
+ * transfer is ongoing this change will take effect after that the current
+ * transfer is complete.
  * @return error (1 = SUCCESS and 0 = FAIL)
  */
 uint8_t spi_selector_close(void);

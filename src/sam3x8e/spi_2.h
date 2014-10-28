@@ -146,11 +146,11 @@
  * method you can have as many devices connected to the peripheral as there are
  * pins to use.
  */
-#define SPI_SELECTOR_1			(0b1110)
-#define SPI_SELECTOR_2			(0b1101)
-#define SPI_SELECTOR_3			(0b1011)
-#define SPI_SELECTOR_4			(0b0111)
-#define SPI_SELECTOR_NONE		(0b1111)
+#define SPI_SELECTOR_0			(0)//(0b1110)
+#define SPI_SELECTOR_1			(1)//(0b1101)
+#define SPI_SELECTOR_2			(2)//(0b1011)
+#define SPI_SELECTOR_3			(3)//(0b0111)
+#define SPI_SELECTOR_NONE		(4)//(0b1111)
 ///@}
 
 ///\cond

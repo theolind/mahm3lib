@@ -35,8 +35,9 @@ typedef struct EventCtrBlk
 {
     void*   eventPtr;                   /*!< Point to mailbox or queue struct */
     U8      id;                         /*!< ECB id                           */
-    U8      eventType:4;                /*!< Type of event                    */
-    U8      eventSortType:4;            /*!< 0:FIFO 1: Preemptive by prio     */
+    U8      eventType;                /*!< Type of event                    */
+    U8      eventSortType;            /*!< 0:FIFO 1: Preemptive by prio     */
+    U8		_padding;
     U16     eventCounter;               /*!< Counter of semaphore.            */
     U16     initialEventCounter;        /*!< Initial counter of semaphore.    */
     P_OSTCB eventTCBList;               /*!< Task waitting list.              */

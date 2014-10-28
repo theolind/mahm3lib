@@ -157,6 +157,7 @@ void IRQ_DISABLE_SAVE(void)
  */
 void SetEnvironment (OS_STK *pstk)
 {
+	if (pstk == 0) {} // dummy statement, just to prevent warnings!
     __asm volatile
     (   
        " SUB    R0,#28 \n"

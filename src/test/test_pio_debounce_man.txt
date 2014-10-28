@@ -46,7 +46,7 @@ int main(void) {
 	// Enable debounce filter on pin 15
 	pio_enable_input_filter(PIOC, 15);
 	pio_select_debounce_filter(PIOC, 15);
-	pio_set_debounce_prescaler(PIOC, 200);
+	pio_set_debounce_frequency(PIOC, 200);
 
 	// Conf both pins for input
 	pio_conf_pin(PIOC, 15, 1, 1);

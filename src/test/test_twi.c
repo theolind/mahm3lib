@@ -43,15 +43,9 @@ void test_twi_init_slave(void) {
  * 	5) can the setting for the Internal Address Size be larger than 2 bits?
  */
 void test_twi_set_device_address(void) {
-	// Set Master Read Direction
-	TWI0->TWI_MMR = (1 << 12);
-	TWI1->TWI_MMR = (1 << 12);
 	// Set Device Address and Internal Address Size
 	twi_set_device_address(TWI0, 0xFF, 7);
 	twi_set_device_address(TWI1, 0xFF, 7);
-	// Master Read Direction shouldn't be modified
-	TEST_ASSERT_TRUE(TWI0->TWI_MMR & (1 << 12));
-	TEST_ASSERT_TRUE(TWI1->TWI_MMR & (1 << 12));
 	// Device Address should be set
 	TEST_ASSERT_TRUE(TWI0->TWI_MMR & (0xFF << 16));
 	TEST_ASSERT_TRUE(TWI1->TWI_MMR & (0xFF << 16));
@@ -136,8 +130,10 @@ void test_twi_set_clock_valid_parameters(void) {
  * both TWI peripherals are connected.
  */
 void test_twi_send_receive_SEMI_AUTOMATIC(void) {
+	uint32_t i;
+	uint32_t result;
 	uint32_t status;
-	uint8_t slave_address = 0xFF;
+	uint8_t slave_address = 100;
 	uint8_t data_in = 0;
 	uint8_t data_out;
 
@@ -155,7 +151,12 @@ void test_twi_send_receive_SEMI_AUTOMATIC(void) {
 	twi_set_device_address(TWI0, slave_address, 0);
 	twi_set_internal_address(TWI0, 0);
 	twi_init_master(TWI0);
-	TEST_ASSERT_TRUE(TWI1->TWI_SR & TWI_SR_SVACC);
+	// If the slave address on the TWI line matches this slave device
+	result = 0;
+	for (i = 0; (i < 100 && result == 0); i++) {
+		result = TWI1->TWI_SR & TWI_SR_SVACC;
+	}
+	TEST_ASSERT_TRUE(result);
 
 	/*
 	 * send data to slave

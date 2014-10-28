@@ -25,7 +25,7 @@ void mux_digital_in();
 void mux_digital_out();
 void mux_analog_in();
 
-void enable_mux_pin(uint32_t mux, uint32_t pin);
+public void enable_mux_pin(S);
 void disable_mux_pin(uint32_t mux, uint32_t pin);
 
 

@@ -47,16 +47,38 @@ uint8_t spi_selector_set_baud_rate(spi_reg_t *spi, uint8_t selector,
  * @param option Set this value to 1 to activate the behavior. (deactivate = 0)
  * @return
  */
-//uint8_t spi_selector_must_assert_cs(spi_reg_t *spi, uint8_t selector, uint8_t option);
+uint8_t spi_selector_do_not_keep_cs_active(spi_reg_t *spi, uint8_t selector, uint8_t option);
 /**
- * Chip Select Active After Transfer
+ * Chip Select Active After Transfer.
+ * If the transfer buffer is continuously filled with data, the chip select (cs)
+ * line will not be deasserted before the new transfer is begun. This function
+ * explicitly tells the peripheral not to deassert the cs-line when a transfer
+ * is done, even if no new data is placed in the transfer buffer. The line will
+ * however be deasserted when another selector is selected or when
+ * spi_last_transfer() is invoked.
+ * Certain devices require this option to be set.
  *
  * @param spi
  * @param selector
  * @param option Set this value to 1 to activate the behavior. (deactivate = 0)
  * @return
  */
-//uint8_t spi_selector_do_not_assert_cs(spi_reg_t *spi, uint8_t selector, uint8_t option);
+uint8_t spi_selector_keep_cs_active(spi_reg_t *spi, uint8_t selector,
+		uint8_t option) {
+	uint32_t *p_reg;
+	// Boundary test. Higher than these values will result in error or
+	// register corruption, because the selector is used to calculate a
+	// pointer.
+	if (option > 1 | selector > 3) {
+		return 0; // Error
+	}
+	// Calculate the pointer for the selector based on the first
+	// selector register being the offset.
+	p_reg = (&spi->SPI_CSR0) + selector; // pointer increment of 0 to 3.
+	// Bitwise operation to set the delay for the calculated register to use
+	*p_reg = ((~SPI_CSRx_CSAAT_MASK) & *p_reg) | (option << 3);
+	return 1; // No error
+}
 /**
  * This function set the amount of bits that a single transfer will transfer.
  * At default this option is set to 8 bit on each transfer (1 byte), but the
@@ -109,7 +131,7 @@ uint8_t spi_selector_set_delay_clk_start(spi_reg_t *spi, uint8_t selector,
 		return 0; // Error
 	}
 	// Calculate the pointer for the selector based on the first
-		// selector register being the offset.
+	// selector register being the offset.
 	p_reg = (&spi->SPI_CSR0) + selector; // pointer increment of 0 to 3.
 	// Calculate the divisor having though of round-downs with integers
 	divisor = (uint8_t) ((delay * 84U) / 1000U);
@@ -141,7 +163,7 @@ uint8_t spi_selector_set_delay_delay_transfers(spi_reg_t *spi, uint8_t selector,
 		return 0; // Error
 	}
 	// Calculate the pointer for the selector based on the first
-		// selector register being the offset.
+	// selector register being the offset.
 	p_reg = (&spi->SPI_CSR0) + selector; // pointer increment of 0 to 3.
 	// Calculate the divisor having though of round-downs with integers
 	divisor = (uint8_t) ((delay * 84U) / 32U) / 1000U;

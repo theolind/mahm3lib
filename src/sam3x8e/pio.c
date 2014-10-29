@@ -5,15 +5,12 @@
 *			Soded Alatia
 * 			Felix Ruponen
 * 			Mathias Beckius
+* 			Saeed Ghasemi
 *
-* Date:		29 September 2014
+* Date:		12 October 2014
 */
 
 #include "pio.h"
-
-// Internally used (not for user)
-#define PERIPH_A			0
-#define PERIPH_B			1
 
 /*
  * This register can only be written if the WPEN bit is cleared in
@@ -31,19 +28,21 @@ void pio_disable_pin(pio_reg_t *port, uint32_t pin) {
 	port->PIO_PDR = (1u << pin);
 }
 
-void pio_conf_pin(pio_reg_t *port, uint32_t pin, uint32_t input, uint32_t pullup) {
+void pio_conf_pin(pio_reg_t *port, uint32_t pin, uint32_t input,
+		uint32_t pullup) {
 	pio_conf_pins(port, (0x1u << pin), input, pullup);
 }
 
-void pio_conf_pins(pio_reg_t *port, uint32_t pins, uint32_t input, uint32_t pullup) {
+void pio_conf_pins(pio_reg_t *port, uint32_t pins, uint32_t input,
+		uint32_t pullup) {
 	//set output/input
 	if (input == 1) {
 		//use the output disable register to enable inputs
 		port->PIO_ODR = pins;
 	} else {
-		//use the output enable register to enalbe outputs
+		//use the output enable register to enable outputs
 		port->PIO_OER = pins;
-}
+	}
 	//set pullups
 	if (pullup == 1) {
 		//use the pull up enable register
@@ -81,31 +80,31 @@ void pio_set_pins(pio_reg_t *port, uint32_t pins, uint32_t level) {
 
 void pio_set_port(pio_reg_t *port, uint32_t levels) {
 	port->PIO_SODR = levels;
+	port->PIO_CODR = ~levels;
 }
 
 uint32_t pio_read_pin(pio_reg_t *port, uint32_t pin) {
-	return ((pio_read_port(port) & (1U << pin)) >> pin);
+	return ((pio_read_port(port) & (1U << pin)) != 0);
 }
 
 uint32_t pio_read_port(pio_reg_t *port) {
 	return port->PIO_PDSR;
 }
 
+uint8_t pio_conf_pin_to_peripheral(pio_reg_t *port, uint32_t periph,
+		uint8_t pin_number) {
+	// Disable interrupts on the pin
+	port->PIO_IDR |= (0x1U << pin_number);
 
-uint8_t pio_conf_pin_to_peripheral(pio_reg_t *port,
-		uint32_t periph, uint32_t pin_number){
-	//uint32_t *p_reg;
-
-	// The will be set in peripheral mode (not controllable by PIO)
-	//p_reg = (uint32_t *) (port + PIO_PDR);
-	port->PIO_PDR = (0x1U << pin_number);
-	// The will be set to peripheral B
-	//p_reg = (uint32_t *) (port + PIO_ABSR);
-	if(periph){
+	// The pin will be set to peripheral B
+	if (periph == PIO_PERIPH_B) { // 0 is peripheral A and 1 is B
+		// Set to peripheral B
 		port->PIO_ABSR |= (0x1U << pin_number);
-	}else{
+	} else if (periph == PIO_PERIPH_A) {
+		// Clear for peripheral A
 		port->PIO_ABSR &= ~(0x1U << pin_number);
 	}
+	// The pin will be set in peripheral mode (not controllable by PIO)
+	port->PIO_PDR |= (0x1U << pin_number);
 	return 1;
 }
-

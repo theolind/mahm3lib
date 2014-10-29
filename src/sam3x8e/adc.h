@@ -10,7 +10,7 @@
  * @author Mattias Nilsson
  * @author Prince Balabis
  * @author Andreas Drotth
- * @date 30 September 2014
+ * @date 16 October 2014
  */
 
 #ifndef ADC_H_
@@ -48,8 +48,7 @@
 ///@cond
 /*
  * Set specified bit levels in a register at specified position.
- * The bit mask should consist of a number of high bits. The number of bits
- * is determined of the length of bits to set.
+ * The bit mask should consist of a number of high bits.
  * This macro function could be of common use.....
  */
 #define _SET_BIT_LEVELS(reg, levels, bit_mask, pos)	\

@@ -9,7 +9,7 @@
 #ifndef TEST_PWM_H_
 #define TEST_PWM_H_
 
-#include "sam3x8e/pwm.h"
+
 
 void test_pwm_channel_enabled(void);
 void test_pwm_channel_disabled(void);
@@ -17,7 +17,9 @@ void test_pwm_channel_prescaler(void);
 void test_pwm_channel_duty_cycle(void);
 void test_pwm_channel_polarity(void);
 void test_pwm_channel_alignment(void);
-
+void test_pwm_channel_period(void);
+void test_pwm_set_clkx(void);
+void test_pwm_set_frequency(void);
 
 #endif
 

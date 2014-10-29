@@ -9,6 +9,7 @@
  */
 
 #include "unity/unity.h"
+#include "sam3x8e/pmc.h"
 #include "sam3x8e/id.h"
 #include "sam3x8e/spi_2.h"
 #include "sam3x8e/pio.h"
@@ -17,14 +18,8 @@
 #include "sam3x8e/delay.h"
 
 void test_spi_setup(void) {
-	const spi_settings_t spi_settings_t = {
-		.master = 1,
-		.CPOL = 0,
-		.NCPHA = 0,
-		.baud[0] = 255,
-		.bits[0] = 0,
-		.DLYBS = 0,
-		.DLYBCT = 0
+	const spi_settings_t setting = {
+		.delay_between_cs = 12,
 	};
 	//dummy comment, u can remove this :)
 
@@ -39,7 +34,7 @@ void test_spi_setup(void) {
 	pio_conf_pin_to_peripheral(PIOA, 0, 30);	//NPSC2
 	pio_conf_pin_to_peripheral(PIOA, 0, 31);	//NPSC3
 
-	spi_init(SPI0, &spi_settings_t);
+	spi_init(SPI0, &setting);
 	spi_select_slave(SPI0, 0);
 }
 

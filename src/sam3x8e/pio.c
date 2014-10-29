@@ -111,11 +111,7 @@ uint8_t pio_conf_pin_to_peripheral(pio_reg_t *port, uint32_t periph,
 }
 
 uint8_t pio_debounce_filter_selected(pio_reg_t *port, uint32_t pin_number) {
-	if((port->PIO_IFDGSR & (1u << pin_number)) == (1u << pin_number)) {
-			return 1;
-		}else {
-			return 0;
-		}
+	return(port->PIO_IFDGSR & (1u << pin_number)) == (1u << pin_number);
 }
 
 void pio_select_debounce_filter(pio_reg_t *port, uint32_t pin_number) {
@@ -128,9 +124,9 @@ void pio_set_debounce_frequency(pio_reg_t *port, uint32_t slow_clock) {
 	 * programmable Divided Slow Clock:
 	 * Tdiv_slclk = ((DIV+1)*2) * Tslow_clock
 	 *
-	 * DIV = Tdiv_slclk/(Tslow_clk * 2) - 1
+	 * DIV = Tdiv_slclk/(2 * Tslow_clk) - 1
 	 */
-	port->PIO_SCDR = (PIO_SLOW_CLOCK_FREQ /	(2 * (slow_clock))) - 1;
+	port->PIO_SCDR = (PIO_SLOW_CLOCK_FREQ /	(2 * slow_clock)) - 1;
 
 }
 

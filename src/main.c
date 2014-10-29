@@ -18,7 +18,7 @@ int main(void) {
 	//	run_tests();
 
 		mux_shield_init(); //Initialize mux shield
-		mux_shield_set_mode(mux0, 1); // Set mux0 as DIGITAL OUTPUT
+		mux_shield_set_mode(MUX0, 1); // Set mux0 as DIGITAL OUTPUT
 		mux_shield_set_channel(0); // Set channel to 0
-		mux_shield_set_datapin(mux0, 1); // Set mux0 to HIGH
+		mux_shield_set_datapin(MUX0, 1); // Set mux0 to HIGH
 }

@@ -196,11 +196,16 @@ uint8_t spi_select_slave(spi_reg_t *spi, uint8_t slave) {
 	return 1;
 }
 
-uint8_t spi_tx_ready(spi_reg_t *spi);
+uint8_t spi_tx_ready(spi_reg_t *spi){
+	// transfer of data to shift register is indicated by TDRE bit in SPI_SR
+	return (spi->SPI_SR & (0x1u << 1));
+}
 
-uint8_t spi_rx_ready(spi_reg_t *spi);
+uint8_t spi_rx_ready(spi_reg_t *spi){
+	return (spi->SPI_SR & (0x1u << 0));
+}
 
-uint8_t spi_master_write(spi_reg_t *spi, uint16_t data){
+uint8_t spi_write(spi_reg_t *spi, uint16_t data){
 	// transfer begins when processor writes to spi->SPI_TDR
 	// before writing SPI_TDR, PCS field in SPI_MR must be set in order to select slave
 
@@ -211,11 +216,16 @@ uint8_t spi_master_write(spi_reg_t *spi, uint16_t data){
 	spi->SPI_TDR = (spi->SPI_TDR & 0xFFFF0000) | data;
 }
 
-uint8_t spi_transmission_done(spi_reg_t *spi);
+uint8_t spi_transmission_done(spi_reg_t *spi){
+	// transmission completion is indicated by TXEMPTY bit in SPI_SR
+	return (spi->SPI_SR & (0x1u << 1));
+}
 
-uint16_t spi_read(spi_reg_t *spi, uint16_t dummy_data);
-
-uint8_t spi_slave_write(spi_reg_t *spi, uint16_t data);
+uint16_t spi_read(spi_reg_t *spi, uint16_t dummy_data){
+	// SPI_RDR holds received data, this register is full when RDRF bit in SPI_SR is set
+	//When data is read, this bit is cleared
+	return (spi->SPI_RDR & 0x0000FFFF);
+}
 
 uint8_t spi_software_reset(spi_reg_t *spi);
 

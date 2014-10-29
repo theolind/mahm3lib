@@ -10,7 +10,7 @@
 
 #include "unity/unity.h"
 #include "sam3x8e/id.h"
-#include "sam3x8e/spi.h"
+#include "sam3x8e/spi_2.h"
 #include "sam3x8e/pio.h"
 #include "test/test_spi.h"
 

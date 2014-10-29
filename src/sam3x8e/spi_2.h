@@ -381,15 +381,7 @@ uint8_t spi_select_slave(spi_reg_t *spi, uint8_t slave);
  * (Use one of predefined values with prefix: SPI)
  * @param data The data to be transmitted of max length 16-bit
  */
-uint8_t spi_master_write(spi_reg_t *spi, uint16_t data);
-/**
- * This function is only intended for the slave mode of this peripheral and
- * @param spi The base-address of the SPI-peripheral that shall be used.
- * (Use one of predefined values with prefix: SPI)
- * @param data Data to be placed on the shift-registers for sending.
- * @return
- */
-uint8_t spi_slave_write(spi_reg_t *spi, uint16_t data);
+uint8_t spi_write(spi_reg_t *spi, uint16_t data);
 /**
  * This function will requenst a but by sending a dummy data to the remote
  * device and return the received data.
@@ -399,7 +391,7 @@ uint8_t spi_slave_write(spi_reg_t *spi, uint16_t data);
  * @param dummy_data Any data of your choice (Choose something that is ignored by the slave-device)
  * @return Returns the data that is received when transferring the dummy_data
  */
-uint16_t spi_master_read(spi_reg_t *spi, uint16_t dummy_data);
+uint16_t spi_read(spi_reg_t *spi, uint16_t dummy_data);
 /**
  * This function will check and see that a new byte can be placed in the
  * transmit buffer of the peripheral.

@@ -28,7 +28,7 @@
 
 void mux_shield_init(void);
 void mux_shield_set_channel(uint32_t channel);
-uint32_t mux_shield_set_mode(uint32_t mux, uint32_t mode);
+void mux_shield_set_mode(uint32_t mux, uint32_t mode);
 void mux_shield_set_channel(uint32_t channel);
 void mux_shield_set_datapin(uint32_t mux, uint32_t level);
 uint32_t mux_shield_read_datapin(uint32_t mux);

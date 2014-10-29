@@ -383,7 +383,8 @@ uint8_t spi_select_slave(spi_reg_t *spi, uint8_t slave);
  */
 uint8_t spi_write(spi_reg_t *spi, uint16_t data);
 /**
- * This function will red a previously received byte by an earlier transmission.
+ * This function will read a previously received byte with an earlier
+ * transmission.
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)

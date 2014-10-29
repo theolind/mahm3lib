@@ -221,7 +221,7 @@ uint8_t spi_transmission_done(spi_reg_t *spi){
 	return (spi->SPI_SR & (0x1u << 1));
 }
 
-uint16_t spi_read(spi_reg_t *spi, uint16_t dummy_data){
+uint16_t spi_read(spi_reg_t *spi){
 	// SPI_RDR holds received data, this register is full when RDRF bit in SPI_SR is set
 	//When data is read, this bit is cleared
 	return (spi->SPI_RDR & 0x0000FFFF);

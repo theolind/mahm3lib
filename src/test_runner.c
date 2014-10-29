@@ -16,7 +16,6 @@
 #include "test/test_dacc.h"
 #include "test/test_uart.h"
 #include "test/test_spi.h"
-#include "test/test_spi_hardcoded.h"
 #include "test/test_eefc.h"
 #include "test/test_bitwise_operations.h"
 #include "test/test_pwm.h"

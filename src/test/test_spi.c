@@ -48,7 +48,7 @@ void test_spi_select_slave(void) {
 }
 
 void test_spi_write_ready() {
-	TEST_ASSERT_TRUE( spi_write_ready(SPI0) );
+	TEST_ASSERT_TRUE( spi_tx_ready(SPI0) );
 }
 
 void test_spi_write() {
@@ -72,11 +72,11 @@ void test_spi_read_ready() {
 	spi_read(SPI0);
 	spi_write(SPI0, 0b00000000);
 	delay_ms(1);
-	TEST_ASSERT_TRUE( spi_read_ready(SPI0) );
+	TEST_ASSERT_TRUE( spi_rx_ready(SPI0) );
 }
 
 void test_spi_correct_transmission(void) {
-	while(!spi_write_ready(SPI0));
+	while(!spi_tx_ready(SPI0));
 	// We wish to see if the byte transmitted is the same as the one received.
 	uint16_t data1 = 0b10101010;
 	uint16_t data2 = 0b10101011;

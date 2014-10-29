@@ -182,7 +182,7 @@ typedef struct spi_selector_settings {
 	uint8_t delay_transfers;	///< Used to set the delay between consecutive transfers
 	/**
 	 * This will define the Delay between the assertion of chip select line and
-	 * when the the SPI clock starts and must be set between 0 till 3036 ns.
+	 * when the the SPI clock starts and must be set between 0 and 3036 ns.
 	 */
 	uint8_t delay_clk;			///< Used to set the Delay Before SPCK starts
 }spi_selector_settings_t;
@@ -330,7 +330,7 @@ uint8_t spi_selector_set_delay_between_cs(spi_reg_t *spi, uint8_t selector,
  * This function will set the delay between when the chip select (CS) line is
  * asserted and when the clk starts for the transfer.
  * This may be necessary for a particular device.
- * The delay must be between 0 till 3036 ns with a resolution of 255.
+ * The delay must be between 0 and 3036 ns with a resolution of 255.
  * Therefore, the actual set values will be a multiply of about 11,905 ns.
  * A higher value than 3036 will not be processed and will return an error.
  * The same is true if selector is higher than 3.
@@ -347,7 +347,7 @@ uint8_t spi_selector_set_delay_clk_start(spi_reg_t *spi, uint8_t selector,
 /**
  * This function will set the delay between consecutive transfers.
  * This may be necessary for a particular device.
- * The delay must be between 0 till 97143 ns with a resolution of 255.
+ * The delay must be between 0 and 97143 ns with a resolution of 255.
  * Therefore, the actual set values will be a multiply of 381 ns.
  * A higher value than 97143 will not be processed and will return an error.
  * The same is true if selector is higher than 3.

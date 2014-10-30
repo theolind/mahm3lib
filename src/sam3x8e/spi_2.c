@@ -212,13 +212,14 @@ uint8_t spi_enable(spi_reg_t *spi) {
 }
 
 uint8_t spi_disable(spi_reg_t *spi) {
-	// TODO
+	// Set the disable pin in control register
+	spi->SPI_CR |= SPI_CR_SPIDIS_MASK;
 	return 1;
 }
 
 uint8_t spi_enable_status(spi_reg_t *spi) {
-	// TODO
-	return 1;
+	// read the status bit of SPI being enabled in status register
+	return (spi->SPI_SR & SPI_SR_SPIENS_MASK) > 0;
 }
 
 uint8_t spi_select_slave(spi_reg_t *spi, uint8_t slave) {

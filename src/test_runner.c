@@ -24,7 +24,7 @@
 
 void run_tests(void) {
 	UnityBegin();
-	/*
+
 	// Run UART tests
 	Unity.TestFile = "test/test_uart.c";
 	RUN_TEST(test_uart_send_receive_char_local_loopback_mode, 0);
@@ -42,11 +42,6 @@ void run_tests(void) {
 	RUN_TEST(test_pmc_PIOB_enabled, 20);
 	RUN_TEST(test_pmc_disable_PIOB, 20);
 	RUN_TEST(test_pmc_PIOB_disabled2, 20);
-	RUN_TEST(test_pmc_PWM_disabled1, 20);
-	RUN_TEST(test_pmc_enable_PWM, 20);
-	RUN_TEST(test_pmc_PWM_enabled, 20);
-	RUN_TEST(test_pmc_disable_PWM, 20);
-	RUN_TEST(test_pmc_PWM_disabled2, 20);
 	HORIZONTAL_LINE_BREAK();
 
 	// Run PIO tests
@@ -80,7 +75,7 @@ void run_tests(void) {
 	RUN_TEST(test_adc_channel_status, 30);
 	RUN_TEST(test_adc_set_resolution_10_bit, 30);
 	RUN_TEST(test_adc_set_resolution_12_bit, 30);
-	HORIZONTAL_LINE_BREAK();*/
+	HORIZONTAL_LINE_BREAK();
 
 	// Run SPI tests
 	// Have yet to run tests due to error messages
@@ -103,7 +98,7 @@ void run_tests(void) {
 	RUN_TEST(test_spi_rx_ready_hardcoded, 30);
 	RUN_TEST(test_spi_rx_hardcoded, 30);*/
 
-	/*
+
 	// Run bitwise_operations tests
 	Unity.TestFile = "test/test_bitwise_operations.c";
 	RUN_TEST(test_is_bit_high, 60);
@@ -125,9 +120,6 @@ void run_tests(void) {
 	RUN_TEST(test_pwm_channel_duty_cycle, 70);
 	RUN_TEST(test_pwm_channel_polarity, 70);
 	RUN_TEST(test_pwm_channel_alignment, 70);
-	RUN_TEST(test_pwm_channel_period, 70);
-	RUN_TEST(test_pwm_set_clkx, 70);
-	RUN_TEST(test_pwm_set_frequency, 70);
 	HORIZONTAL_LINE_BREAK();
 
 	// Run TC tests
@@ -151,6 +143,6 @@ void run_tests(void) {
 	RUN_TEST(test_twi_set_clock_invalid_parameters, 90);
 	RUN_TEST(test_twi_set_clock_valid_parameters, 90);
 	//RUN_TEST(test_twi_send_receive_SEMI_AUTOMATIC, 90);
-	*/
+
 	UnityEnd();
 }

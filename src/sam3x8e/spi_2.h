@@ -1,5 +1,5 @@
 /**
- * @file spi.h
+ * @file spi_2.h
  * @brief Serial Peripheral Interface (SPI)
  * @details An API for controlling the two SPI peripherals inside a SAM3X8E MCU.
  * This API has implemented all of the peripherals setting flexibility and is
@@ -25,7 +25,6 @@
 
 ///@{
 /**
- * @def
  * Masks for SPI_CR
  */
 #define SPI_CR_SPIEN_MASK			(1u << 0)
@@ -35,7 +34,6 @@
 ///@}
 ///@{
 /**
- * @def
  * Masks for SPI_MR
  */
 #define SPI_MR_MSTR_MASK			(1u << 0)
@@ -49,7 +47,6 @@
 ///@}
 ///@{
 /**
- * @def
  * Masks for SPI_RDR
  */
 #define SPI_RDR_RD_MASK				(0xFFFFu << 0)
@@ -57,14 +54,12 @@
 ///@}
 ///@{
 /**
- * @def
  * Masks for SPI_TDR
  */
 #define SPI_TDR_TD_MASK				(0xFFFFu << 0)
 ///@}
 ///@{
 /**
- * @def
  * Masks for SPI_SR
  */
 #define SPI_SR_RDRF_MASK			(1u << 0)
@@ -74,7 +69,6 @@
 ///@}
 ///@{
 /**
- * @def
  * Masks for SPI_CSRx
  */
 #define SPI_CSRx_CPOL_MASK			(1u << 0)
@@ -88,7 +82,6 @@
 ///@}
 ///@{
 /**
- * @def
  * These are the different possible slaves that can be selected in master mode.
  * There is a method for selecting as many devices as needed. The method is as
  * followed:
@@ -111,7 +104,6 @@
 
 ///\cond
 /**
- * @def
  * These are the base addresses for the two SPI peripherals
  */
 #define SPI0		((spi_reg_t *) 0x40008000u)
@@ -140,6 +132,11 @@ typedef struct spi_reg {
 } spi_reg_t;
 ///\endcond
 ///@{
+/**
+ * @typedef spi_settings_t
+ * This structure defines the input variable to be used with the spi_init()
+ * function.
+ */
 typedef struct spi_settings {
 	/**
 	 * This defines the Delay Between Chip Selects. The delay time guarantees
@@ -151,7 +148,7 @@ typedef struct spi_settings {
 	uint8_t delay_between_cs;	///< Used to set the delay between chip selects
 } spi_settings_t;
 /**
- * @typedef
+ * @typedef spi_selector_settings_t
  * This structure is used to initialize a selector of the SPI. There is a
  * total of 4 selectors.
  */
@@ -311,8 +308,6 @@ uint8_t spi_selector_set_bit_length(spi_reg_t *spi, uint8_t selector,
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
- * @param selector The selector to be modified.
- * (Use the predefined with prefix: SPI_SELECTOR_)
  * @param delay
  * @return
  */

@@ -142,12 +142,6 @@ typedef struct spi_reg {
 ///@{
 typedef struct spi_settings {
 	/**
-	 * There are two SPI peripheral in the MCU, this value defines which of the
-	 * two peripheral must be taken in use. (Use one of the predefined values
-	 * with prefix: SPI (ex. SPI0 or SPI1) )
-	 */
-	uint32_t spi_periph;
-	/**
 	 * This defines the Delay Between Chip Selects. The delay time guarantees
 	 * non-overlapping chip selects and solves bus contentions in case of
 	 * peripherals having long data float times. The minimum is 71 ns and

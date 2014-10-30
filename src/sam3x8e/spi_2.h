@@ -252,10 +252,10 @@ uint8_t spi_selector_set_baud_rate(spi_reg_t *spi, uint8_t selector,
 		uint32_t baud_rate);
 
 uint8_t spi_selector_set_clk_polarity(spi_reg_t *spi, uint8_t selector,
-		uint8_t polarity);
+		uint32_t polarity);
 
 uint8_t spi_selector_set_clk_phase(spi_reg_t *spi, uint8_t selector,
-		uint8_t phase);
+		uint32_t phase);
 /**
  * Chip Select Not Active After Transfer.
  * Even if the transfer buffer is continuously filled with data, the chip select

@@ -38,8 +38,8 @@ uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings) {
 
 	// set Delay Between Chip Selects
 	spi_selector_set_delay_between_cs(spi, settings->delay_between_cs);
-	//TODO deselect all selectors
-	spi_select_slave();
+	// Initialy select none of the selectors (slaves)
+	spi_select_slave(spi, SPI_SELECTOR_NONE);
 	return 1;
 }
 
@@ -51,7 +51,7 @@ uint8_t spi_init_selector(spi_reg_t *spi,
 }
 
 uint8_t spi_selector_set_clk_polarity(spi_reg_t *spi, uint8_t selector,
-		uint8_t polarity) {
+		uint32_t polarity) {
 	uint32_t *p_reg;
 	// Boundary test. Higher than these values will result in error or
 	// register corruption, because the selector is used to calculate a
@@ -68,7 +68,7 @@ uint8_t spi_selector_set_clk_polarity(spi_reg_t *spi, uint8_t selector,
 }
 
 uint8_t spi_selector_set_clk_phase(spi_reg_t *spi, uint8_t selector,
-		uint8_t phase) {
+		uint32_t phase) {
 	uint32_t *p_reg;
 	// Boundary test. Higher than these values will result in error or
 	// register corruption, because the selector is used to calculate a

@@ -60,7 +60,7 @@
  * @def
  * Masks for SPI_TDR
  */
-#define SPI_TDR_TD_MASK				(0xFFFF << 0)
+#define SPI_TDR_TD_MASK				(0xFFFFu << 0)
 ///@}
 ///@{
 /**
@@ -460,6 +460,13 @@ uint8_t spi_loopback_disable(spi_reg_t *spi);
  * transfer is complete.
  * @return error (1 = SUCCESS and 0 = FAIL)
  */
-uint8_t spi_selector_close(void);
+uint8_t spi_selector_close(spi_reg_t *spi);
+/**
+ * This function will return 1 if the SPI peripheral is enabled.
+ *
+ * @param spi
+ * @return
+ */
+uint8_t spi_enable_status(spi_reg_t *spi);
 
 #endif

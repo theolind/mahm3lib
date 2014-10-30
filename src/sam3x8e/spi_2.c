@@ -194,21 +194,29 @@ uint8_t spi_selector_set_delay_transfers(spi_reg_t *spi, uint8_t selector,
 }
 
 uint8_t spi_loopback_enable(spi_reg_t *spi) {
-	// TODO
+	// Set the loopback bit in mode register
+	spi->SPI_MR |= SPI_MR_LLB_MASK;
 	return 1;
 }
 
 uint8_t spi_loopback_disable(spi_reg_t *spi) {
-	// TODO
+	// Clear the loopback bit in mode register
+	spi->SPI_MR &= ~SPI_MR_LLB_MASK;
 	return 1;
 }
 
 uint8_t spi_enable(spi_reg_t *spi) {
-	// TODO
+	// Set the enable pin in control register
+	spi->SPI_CR = SPI_CR_SPIEN_MASK;
 	return 1;
 }
 
 uint8_t spi_disable(spi_reg_t *spi) {
+	// TODO
+	return 1;
+}
+
+uint8_t spi_enable_status(spi_reg_t *spi) {
 	// TODO
 	return 1;
 }

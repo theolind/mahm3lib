@@ -10,7 +10,38 @@
 
 // Struct containing an instace of a tft screen
 typedef struct tft_screen {
-	//To be determined, might be joined to tft_settings
+	uint32_t PORT_CS;
+	uint32_t PIN_CS;
+
+	uint32_t PORT_WR;
+	uint32_t PIN_WR;
+
+	uint32_t PORT_RS;
+	uint32_t PIN_RS;
+
+	uint32_t PORT_D0;
+	uint32_t PIN_D0;
+
+	uint32_t PORT_D1;
+	uint32_t PIN_D1;
+
+	uint32_t PORT_D2;
+	uint32_t PIN_D2;
+
+	uint32_t PORT_D3;
+	uint32_t PIN_D3;
+
+	uint32_t PORT_D4;
+	uint32_t PIN_D4;
+
+	uint32_t PORT_D5;
+	uint32_t PIN_D5;
+
+	uint32_t PORT_D6;
+	uint32_t PIN_D6;
+
+	uint32_t PORT_D7;
+	uint32_t PIN_D7;
 } tft_screen;
 
 /**

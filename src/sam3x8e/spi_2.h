@@ -43,7 +43,7 @@
 #define SPI_MR_PCSDEC_MASK			(1 << 2)
 #define SPI_MR_MODFDIS_MASK			(1 << 4)
 #define SPI_MR_WDRBT_MASK			(1 << 5)
-#define SPI_MR_LLB_MASK				(1 << 7)
+#define SPI_MR_LLB_MASK				(1u << 7)
 #define SPI_MR_PCS_MASK				(0xFu << 16)
 #define SPI_MR_DLYBCS_MASK			(0xFFu << 24)
 ///@}

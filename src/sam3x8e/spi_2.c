@@ -207,7 +207,7 @@ uint8_t spi_loopback_disable(spi_reg_t *spi) {
 
 uint8_t spi_enable(spi_reg_t *spi) {
 	// Set the enable pin in control register
-	spi->SPI_CR = SPI_CR_SPIEN_MASK;
+	spi->SPI_CR |= SPI_CR_SPIEN_MASK;
 	return 1;
 }
 

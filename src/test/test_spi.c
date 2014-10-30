@@ -14,8 +14,10 @@
 #include "sam3x8e/spi_2.h"
 #include "sam3x8e/pio.h"
 #include "test/test_spi.h"
-
 #include "sam3x8e/delay.h"
+
+// TODO We will be needing a test for all functions.
+// and tests for functionality that are largely done so far.
 
 void test_spi_setup(void) {
 	const spi_settings_t setting = {
@@ -43,7 +45,7 @@ void test_spi_init(void) {
 }
 
 void test_spi_select_slave(void) {
-	spi_select_slave(SPI0, 0);
+	spi_select_slave(SPI0, SPI_SELECTOR_0);
 	//TODO write a test for this
 }
 

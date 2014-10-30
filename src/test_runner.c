@@ -15,6 +15,7 @@
 #include "test/test_adc.h"
 #include "test/test_dacc.h"
 #include "test/test_uart.h"
+#include "test/test_spi.h"
 #include "test/test_eefc.h"
 #include "test/test_bitwise_operations.h"
 #include "test/test_pwm.h"
@@ -69,12 +70,34 @@ void run_tests(void) {
 
 	// Run ADC tests
 	Unity.TestFile = "test/test_adc.c";
-	RUN_TEST(test_adc_channel_enabled, 50);
-	RUN_TEST(test_adc_channel_disabled, 50);
-	RUN_TEST(test_adc_channel_status, 50);
-	RUN_TEST(test_adc_set_resolution_10_bit, 50);
-	RUN_TEST(test_adc_set_resolution_12_bit, 50);
+	RUN_TEST(test_adc_channel_enabled, 30);
+	RUN_TEST(test_adc_channel_disabled, 30);
+	RUN_TEST(test_adc_channel_status, 30);
+	RUN_TEST(test_adc_set_resolution_10_bit, 30);
+	RUN_TEST(test_adc_set_resolution_12_bit, 30);
 	HORIZONTAL_LINE_BREAK();
+
+	// Run SPI tests
+	// Have yet to run tests due to error messages
+	Unity.TestFile = "test/test_spi.c";
+	test_spi_setup();
+	RUN_TEST(test_spi_init, 30);
+	RUN_TEST(test_spi_select_slave, 30);
+	RUN_TEST(test_spi_write_ready, 30);
+	RUN_TEST(test_spi_write, 30);
+	RUN_TEST(test_spi_read_ready, 30);
+	RUN_TEST(test_spi_transmission_complete,30);
+	RUN_TEST(test_spi_correct_transmission, 30);
+
+	/*Unity.TestFile = "test/test_spi_hardcoded.c";
+	RUN_TEST(test_spi_init_hardcoded, 30);
+	RUN_TEST(test_spi_select_slave_hardcoded, 30);
+	RUN_TEST(test_spi_tx_ready_hardcoded, 30);
+	RUN_TEST(test_spi_tx_hardcoded, 30);
+	RUN_TEST(test_spi_tx_complete_hardcoded, 30);
+	RUN_TEST(test_spi_rx_ready_hardcoded, 30);
+	RUN_TEST(test_spi_rx_hardcoded, 30);*/
+
 
 	// Run bitwise_operations tests
 	Unity.TestFile = "test/test_bitwise_operations.c";

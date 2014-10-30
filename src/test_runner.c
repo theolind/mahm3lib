@@ -89,15 +89,6 @@ void run_tests(void) {
 	RUN_TEST(test_spi_transmission_complete,30);
 	RUN_TEST(test_spi_correct_transmission, 30);
 
-	/*Unity.TestFile = "test/test_spi_hardcoded.c";
-	RUN_TEST(test_spi_init_hardcoded, 30);
-	RUN_TEST(test_spi_select_slave_hardcoded, 30);
-	RUN_TEST(test_spi_tx_ready_hardcoded, 30);
-	RUN_TEST(test_spi_tx_hardcoded, 30);
-	RUN_TEST(test_spi_tx_complete_hardcoded, 30);
-	RUN_TEST(test_spi_rx_ready_hardcoded, 30);
-	RUN_TEST(test_spi_rx_hardcoded, 30);*/
-
 
 	// Run bitwise_operations tests
 	Unity.TestFile = "test/test_bitwise_operations.c";

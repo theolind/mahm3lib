@@ -222,12 +222,10 @@ uint8_t spi_select_slave(spi_reg_t *spi, uint8_t slave) {
 
 uint8_t spi_tx_ready(spi_reg_t *spi) {
 	// transfer of data to shift register is indicated by TDRE bit in SPI_SR
-	// TODO
 	return (spi->SPI_SR & SPI_SR_TDRF_MASK) > 0;
 }
 
 uint8_t spi_rx_ready(spi_reg_t *spi) {
-	// TODO
 	return (spi->SPI_SR & SPI_SR_RDRF_MASK);
 }
 
@@ -240,30 +238,29 @@ uint8_t spi_write(spi_reg_t *spi, uint16_t data) {
 
 	// Retrieving the register and modifying it (Storing error output in shift)
 	spi->SPI_TDR = (spi->SPI_TDR & (~SPI_TDR_TD_MASK)) | data;
-	// TODO
 	return 1;
 }
 
 uint8_t spi_transmission_done(spi_reg_t *spi) {
 	// transmission completion is indicated by TXEMPTY bit in SPI_SR
-	// TODO
 	return (spi->SPI_SR & SPI_SR_TXEMPTY_MASK) > 0;
 }
 
 uint16_t spi_read(spi_reg_t *spi) {
 	// SPI_RDR holds received data, this register is full when RDRF bit in SPI_SR is set
 	//When data is read, this bit is cleared
-	// TODO
 	return (spi->SPI_RDR & SPI_RDR_RD_MASK);
 }
 
 uint8_t spi_software_reset(spi_reg_t *spi) {
-	// TODO
+	// Set the software reset bit in control register
+	spi->SPI_CR |= SPI_CR_SWRST_MASK;
 	return 1;
 }
 
-uint8_t spi_selector_close() {
-	// TODO
+uint8_t spi_selector_close(spi_reg_t *spi) {
+	// Set the last transfer bit in control register
+	spi->SPI_CR |= SPI_CR_LASTXFER_MASK;
 	return 1;
 }
 

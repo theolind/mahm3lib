@@ -106,10 +106,10 @@
  * MASKs are being defined like this:
  * [PERIPHERAL]_[REGISTER]_[SECTION]_MASK
  */
-#define PWM_CLK_PREA_MASK	(0x00000F00)
-#define PWM_CLK_PREB_MASK	(0x0F000000)
-#define PWM_CLK_DIVA_MASK	(0x000000FF)
-#define PWM_CLK_DIVB_MASK	(0x00FF0000)
+#define PWM_CLK_PREA_MASK	(0x00000F00u)
+#define PWM_CLK_PREB_MASK	(0x0F000000u)
+#define PWM_CLK_DIVA_MASK	(0x000000FFu)
+#define PWM_CLK_DIVB_MASK	(0x00FF0000u)
 ///@}
 ///@{
 /**
@@ -119,13 +119,13 @@
  * MASKs are being defined like this:
  * [PERIPHERAL]_[REGISTER]_[SECTION]_MASK
  */
-#define PWM_CMRx_CPRE_MASK				(0x0000000F)
-#define PWM_CMRx_CALG_MASK				(1 << 8)
-#define PWM_CMRx_CPOL_MASK				(1 << 9)
-#define PWM_CMRx_CES_MASK				(1 << 10)
-#define PWM_CMRx_DTE_MASK				(1 << 16)
-#define PWM_CMRx_DTHI_MASK				(1 << 17)
-#define PWM_CMRx_DTLI_MASK				(1 << 18)
+#define PWM_CMRx_CPRE_MASK				(0x0000000Fu)
+#define PWM_CMRx_CALG_MASK				(0x0100u)//(1 << 8)
+#define PWM_CMRx_CPOL_MASK				(0x0200u)//(1 << 9)
+#define PWM_CMRx_CES_MASK				(0x040u)//(1 << 10)
+#define PWM_CMRx_DTE_MASK				(0x010000u)//(1 << 16)
+#define PWM_CMRx_DTHI_MASK				(0x020000u)//(1 << 17)
+#define PWM_CMRx_DTLI_MASK				(0x040000u)//(1 << 18)
 ///@}
 ///@{
 /**
@@ -135,8 +135,8 @@
  * MASKs are being defined like this:
  * [PERIPHERAL]_[REGISTER]_[SECTION]_MASK
  */
-#define PWM_CDTYx_CDTY_MASK				(0x0000FFFF)
-#define PWM_CDTYUPDx_CDTYUPD_MASK		(0x0000FFFF)
+#define PWM_CDTYx_CDTY_MASK				(0x0000FFFFu)
+#define PWM_CDTYUPDx_CDTYUPD_MASK		(0x0000FFFFu)
 ///@}
 ///@{
 /**
@@ -146,8 +146,8 @@
  * MASKs are being defined like this:
  * [PERIPHERAL]_[REGISTER]_[SECTION]_MASK
  */
-#define PWM_CPRDx_CPRD_MASK				(0x0000FFFF)
-#define PWM_CPRDUPDx_CPRDUPD_MASK		(0x0000FFFF)
+#define PWM_CPRDx_CPRD_MASK				(0x0000FFFFu)
+#define PWM_CPRDUPDx_CPRDUPD_MASK		(0x0000FFFFu)
 ///@}
 
 //PESCALLERS FOR CHANNEL MODE AND CLOCK REGISTER
@@ -160,19 +160,19 @@
  * Parameters are being defined like this:
  * [PERIPHERAL]_[SECTION]_VALUE
  */
-#define PWM_PRES_MCK_DIV_1				(0b0000)
-#define PWM_PRES_MCK_DIV_2				(0b0001)
-#define PWM_PRES_MCK_DIV_4				(0b0010)
-#define PWM_PRES_MCK_DIV_8				(0b0011)
-#define PWM_PRES_MCK_DIV_16				(0b0100)
-#define PWM_PRES_MCK_DIV_32				(0b0101)
-#define PWM_PRES_MCK_DIV_64				(0b0110)
-#define PWM_PRES_MCK_DIV_128			(0b0111)
-#define PWM_PRES_MCK_DIV_256			(0b1000)
-#define PWM_PRES_MCK_DIV_512			(0b1001)
-#define PWM_PRES_MCK_DIV_1024			(0b1010)
-#define PWM_PRES_CLOCKA					(0b1011)
-#define PWM_PRES_CLOCKB					(0b1100)
+#define PWM_PRES_MCK_DIV_1				(0b0000u)
+#define PWM_PRES_MCK_DIV_2				(0b0001u)
+#define PWM_PRES_MCK_DIV_4				(0b0010u)
+#define PWM_PRES_MCK_DIV_8				(0b0011u)
+#define PWM_PRES_MCK_DIV_16				(0b0100u)
+#define PWM_PRES_MCK_DIV_32				(0b0101u)
+#define PWM_PRES_MCK_DIV_64				(0b0110u)
+#define PWM_PRES_MCK_DIV_128			(0b0111u)
+#define PWM_PRES_MCK_DIV_256			(0b1000u)
+#define PWM_PRES_MCK_DIV_512			(0b1001u)
+#define PWM_PRES_MCK_DIV_1024			(0b1010u)
+#define PWM_PRES_CLOCKA					(0b1011u)
+#define PWM_PRES_CLOCKB					(0b1100u)
 ///@}
 /**
  * Divisors for the CLKx are all values between 0 and 255. But here only the

@@ -39,7 +39,7 @@ uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings) {
 	// set Delay Between Chip Selects
 	spi_selector_set_delay_between_cs(spi, settings->delay_between_cs);
 	//TODO deselect all selectors
-
+	spi_select_slave();
 	return 1;
 }
 
@@ -52,14 +52,36 @@ uint8_t spi_init_selector(spi_reg_t *spi,
 
 uint8_t spi_selector_set_clk_polarity(spi_reg_t *spi, uint8_t selector,
 		uint8_t polarity) {
-	// TODO
-	return 1;
+	uint32_t *p_reg;
+	// Boundary test. Higher than these values will result in error or
+	// register corruption, because the selector is used to calculate a
+	// pointer.
+	if (selector > 3 || polarity > 1) {
+		return 0; // Error
+	}
+	// Calculate the pointer for the selector based on the first
+	// selector register being the offset.
+	p_reg = (&spi->SPI_CSR0) + selector; // pointer increment of 0 to 3.
+	// Bitwise operation to set the delay for the calculated register to use
+	*p_reg = ((~SPI_CSRx_CPOL_MASK) & *p_reg) | (polarity << 0);
+	return 1; // No error
 }
 
 uint8_t spi_selector_set_clk_phase(spi_reg_t *spi, uint8_t selector,
 		uint8_t phase) {
-	// TODO
-	return 1;
+	uint32_t *p_reg;
+	// Boundary test. Higher than these values will result in error or
+	// register corruption, because the selector is used to calculate a
+	// pointer.
+	if (selector > 3 || phase > 1) {
+		return 0; // Error
+	}
+	// Calculate the pointer for the selector based on the first
+	// selector register being the offset.
+	p_reg = (&spi->SPI_CSR0) + selector; // pointer increment of 0 to 3.
+	// Bitwise operation to set the delay for the calculated register to use
+	*p_reg = ((~SPI_CSRx_NCPHA_MASK) & *p_reg) | (phase << 1);
+	return 1; // No error
 }
 
 uint8_t spi_selector_set_baud_rate(spi_reg_t *spi, uint8_t selector,
@@ -225,7 +247,7 @@ uint8_t spi_enable_status(spi_reg_t *spi) {
 uint8_t spi_select_slave(spi_reg_t *spi, uint8_t slave) {
 	// TODO Change this later into one line (update spi_mr once)
 	spi->SPI_MR = ((~SPI_MR_PCS_MASK) & spi->SPI_MR); //clear bit 16 to 19 in SPI_MR
-	spi->SPI_MR |= ((0b111u >> (3 - slave)) << 16); //set bit 16 to 18 in SPI_MR (could be predefined)
+	spi->SPI_MR |= ((0b1111u >> (4 - slave)) << 16); //set bit 16 to 18 in SPI_MR (could be predefined)
 	return 1;
 }
 

@@ -20,11 +20,6 @@
 // and tests for functionality that are largely done so far.
 
 void test_spi_setup(void) {
-	const spi_settings_t setting = {
-		.delay_between_cs = 12,
-	};
-	//dummy comment, u can remove this :)
-
 	pmc_enable_peripheral_clock(ID_SPI0);
 	pmc_enable_peripheral_clock(ID_PIOA);
 
@@ -36,8 +31,36 @@ void test_spi_setup(void) {
 	pio_conf_pin_to_peripheral(PIOA, 0, 30);	//NPSC2
 	pio_conf_pin_to_peripheral(PIOA, 0, 31);	//NPSC3
 
+	const spi_settings_t setting = { .delay_between_cs = 12, };
+
+	// initialize selector 0
+	spi_selector_settings_t selector_0;
+	selector_0.selector = SPI_SELECTOR_0;
+	selector_0.CPOL = SPI_POLARITY_LOW;
+	selector_0.NCPHA = SPI_PHASE_LOW;
+	selector_0.baud_rate = 255;
+	selector_0.bits_pr_transfer = SPI_BITS_8;
+	selector_0.delay_clk = 492; // 41*12ns = 492 ns
+	selector_0.delay_transfers = 381;
+
+	// initialize selector 1
+	spi_selector_settings_t selector_1;
+	selector_0.selector = SPI_SELECTOR_1;
+	selector_0.CPOL = SPI_POLARITY_HIGH;
+	selector_0.NCPHA = SPI_PHASE_LOW;
+	selector_0.baud_rate = 128;
+	selector_0.bits_pr_transfer = SPI_BITS_8;
+	selector_0.delay_clk = 1000; // 41*12ns = 492 ns
+	selector_0.delay_transfers = 1000;
+
 	spi_init(SPI0, &setting);
-	spi_select_slave(SPI0, 0);
+	spi_init_selector(SPI0, &selector_0);
+	spi_init_selector(SPI0, &selector_1);
+
+	spi_loopback_enable(SPI0);
+
+	spi_select_slave(SPI0, SPI_SELECTOR_0); // Slave 0
+
 }
 
 void test_spi_init(void) {
@@ -50,14 +73,14 @@ void test_spi_select_slave(void) {
 }
 
 void test_spi_write_ready() {
-	TEST_ASSERT_TRUE( spi_tx_ready(SPI0) );
+	TEST_ASSERT_TRUE(spi_tx_ready(SPI0));
 }
 
 void test_spi_write() {
 	spi_write(SPI0, 0b01011010);
-	TEST_ASSERT_FALSE( SPI0->SPI_SR & (0x1u << 1) );
+	TEST_ASSERT_FALSE(SPI0->SPI_SR & (0x1u << 1));
 	delay_ms(1);
-	TEST_ASSERT_TRUE( SPI0->SPI_SR & (0x1u << 1) );
+	TEST_ASSERT_TRUE(SPI0->SPI_SR & (0x1u << 1));
 }
 
 void test_spi_transmission_complete() {
@@ -74,11 +97,12 @@ void test_spi_read_ready() {
 	spi_read(SPI0);
 	spi_write(SPI0, 0b00000000);
 	delay_ms(1);
-	TEST_ASSERT_TRUE( spi_rx_ready(SPI0) );
+	TEST_ASSERT_TRUE(spi_rx_ready(SPI0));
 }
 
 void test_spi_correct_transmission(void) {
-	while(!spi_tx_ready(SPI0));
+	while (!spi_tx_ready(SPI0))
+		;
 	// We wish to see if the byte transmitted is the same as the one received.
 	uint16_t data1 = 0b10101010;
 	uint16_t data2 = 0b10101011;
@@ -94,21 +118,21 @@ void test_spi_correct_transmission(void) {
 	TEST_ASSERT_TRUE(spi_read(SPI0) == data2);
 }
 /*
-void test_spi_0_write(void){
-	// Check if new data has been received since last read
-	TEST_ASSERT_FALSE(SPI1->SPI_SR & (0x1u << SPI_SR_RDRF));
-	// Write new data
-	spi_write(SPI0, CHAR_TEST_VALUE);
-	// Check if new data has been received since last read
-	TEST_ASSERT_TRUE(SPI0->SPI_SR & (0x1u << SPI_SR_RDRF));
-	// TDRE should give out 0
-}
+ void test_spi_0_write(void){
+ // Check if new data has been received since last read
+ TEST_ASSERT_FALSE(SPI1->SPI_SR & (0x1u << SPI_SR_RDRF));
+ // Write new data
+ spi_write(SPI0, CHAR_TEST_VALUE);
+ // Check if new data has been received since last read
+ TEST_ASSERT_TRUE(SPI0->SPI_SR & (0x1u << SPI_SR_RDRF));
+ // TDRE should give out 0
+ }
 
-void test_spi_0_read(void){
-	// Check if new data has been received since last read
-	TEST_ASSERT_TRUE(SPI1->SPI_SR & (0x1u << SPI_SR_RDRF));
-	// Read data
-	TEST_ASSERT_TRUE(spi_read(ID_SPI0) == CHAR_TEST_VALUE);
-	// Check if new data has been received since last read
-	TEST_ASSERT_FALSE(SPI1->SPI_SR & (0x1u << SPI_SR_RDRF));
-}*/
+ void test_spi_0_read(void){
+ // Check if new data has been received since last read
+ TEST_ASSERT_TRUE(SPI1->SPI_SR & (0x1u << SPI_SR_RDRF));
+ // Read data
+ TEST_ASSERT_TRUE(spi_read(ID_SPI0) == CHAR_TEST_VALUE);
+ // Check if new data has been received since last read
+ TEST_ASSERT_FALSE(SPI1->SPI_SR & (0x1u << SPI_SR_RDRF));
+ }*/

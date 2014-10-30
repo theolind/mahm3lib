@@ -194,6 +194,40 @@ typedef struct spi_selector_settings {
 	uint8_t delay_clk;			///< Used to set the Delay Before SPCK starts
 } spi_selector_settings_t;
 ///@}
+///@{
+/**
+ * These variable define the inactive state value of the SPI clock
+ */
+#define SPI_POLARITY_HIGH			(1)
+#define SPI_POLARITY_LOW			(0)
+///@}
+///@{
+/**
+ * These variable define the actions taken at different time relative to the
+ * SPI clock.
+ * 0 = Data is changed on the leading edge of SPCK and captured on the
+ * following edge of SPCK.
+ * 1 = Data is captured on the leading edge of SPCK and changed on the
+ * following edge of SPCK.
+ */
+#define SPI_PHASE_HIGH			(1)
+#define SPI_PHASE_LOW			(0)
+///@}
+///@{
+/**
+ * These variable define the amount of bits to be tranfered on each
+ * transmission.
+ */
+#define SPI_BITS_8				(0)
+#define SPI_BITS_9				(1)
+#define SPI_BITS_10				(2)
+#define SPI_BITS_11				(3)
+#define SPI_BITS_12				(4)
+#define SPI_BITS_13				(5)
+#define SPI_BITS_14				(6)
+#define SPI_BITS_15				(7)
+#define SPI_BITS_16				(8)
+///@}
 
 /////// PROTOTYPES ////////////////////////////////////////////////
 /**

@@ -254,7 +254,7 @@ uint16_t spi_read(spi_reg_t *spi) {
 	// SPI_RDR holds received data, this register is full when RDRF bit in SPI_SR is set
 	//When data is read, this bit is cleared
 	// TODO
-	return (spi->SPI_RDR & 0x0000FFFF);
+	return (spi->SPI_RDR & SPI_RDR_RD_MASK);
 }
 
 uint8_t spi_software_reset(spi_reg_t *spi) {

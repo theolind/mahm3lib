@@ -13,19 +13,6 @@ typedef struct tft_screen {
 	//To be determined, might be joined to tft_settings
 } tft_screen;
 
-// Struct defining a point on the screen
-typedef struct tft_point {
-	uint32_t x;
-	uint32_t y;
-} tft_point;
-
-// Struct defining a color
-typedef struct tft_color {
-	uint32_t r;
-	uint32_t g;
-	uint32_t b;
-} tft_color;
-
 /**
  * Initialize the tft screen
  * @param screen the screen instance
@@ -35,19 +22,20 @@ void *tft_init(tft_screen &screen);
 /**
  * Writes a pixel to the screen memory. Alternative name tft_write_pixel / tft_put_pixel / tft_render_pixel
  * @param screen screen instance
- * @param point point on screen to render to
- * @param color color of pixel
+ * @param x xpos
+ * @param y ypos
+ * @param color color of pixel, format: 0xRRGGBB
  */
-void tft_write(tft_screen &screen, tft_point &point, tft_color &color);
+void tft_write(tft_screen &screen, uint32_t x, uint32_t y, uint32_t color);
 
 /**
  * Reads a pixel from the screen, this will be useful if a user wants to
  * render things with alpha values (transperancy)
  * @param screen screen instance
  * @param point point of pixel to get data from
- * @return tft_color, the color of the pixel
+ * @return the color of the pixel, format: 0xRRGGBB
  */
-tft_color *tft_read(tft_screen &screen, tft_point &point);
+uint32_t tft_read(tft_screen &screen, uint32_t &x, uint32_t &y);
 
 /**
  * Updates the screen. This must be done to show new data.
@@ -58,6 +46,8 @@ void tft_update(tft_screen &screen);
 /**
  * Poll for input
  * @param screen screen instance
- * @return tft_point the point where the screen was touched
+ * @param x will contain the x-coordinate of the touch
+ * @param y will contain the y-coordinate of the touch
+ * @return true if touch is occuring
  */
-tft_point *tft_read_input(tft_screen &screen);
+uint32_t tft_read_input(tft_screen &screen, uint32_t *x, uint32_t *y);

@@ -45,16 +45,18 @@ uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings) {
 
 uint8_t spi_init_selector(spi_reg_t *spi,
 		const spi_selector_settings_t *settings) {
-	// TODO
-	spi_sele
-	settings->CPOL;
-	settings->NCPHA;
-	settings->baud_rate;
-	settings->bits_pr_transfer;
-	settings->delay_clk;
-	settings->delay_transfers;
-
-
+	// Set the clock polarity for the transfer
+	spi_set_selector_clk_polarity(spi, settings->selector, settings->CPOL);
+	// Set the clock phase for the transfer
+	spi_set_selector_clk_phase(spi, settings->selector, settings->NCPHA);
+	// Set the baud rate of the transfer
+	spi_set_selector_baud_rate(spi, settings->selector, settings->baud_rate);
+	// Set the amount of bits to transfer
+	spi_set_selector_bit_length(spi, settings->selector, settings->bits_pr_transfer);
+	// Set delay before spi clock starts after cs assertion
+	spi_set_selector_delay_clk_start(spi, settings->selector, settings->delay_clk);
+	// Set delay between consecutive transfers
+	spi_set_selector_delay_transfers(spi, settings->selector, settings->delay_transfers);
 	return 1;
 }
 

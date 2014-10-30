@@ -154,6 +154,12 @@ typedef struct spi_settings {
  */
 typedef struct spi_selector_settings {
 	/**
+	 * This will define the selector to initialize out of 4 in total.
+	 * The values are going from 0 till 3.
+	 * (Use the predefines values with prefix: SPI_SELECTOR_)
+	 */
+	uint8_t selector;
+	/**
 	 * This will define the baud rate for the given selector. The value must be between 0 and 255 and the baud rate will be defined with
 	 * (MCK / baudR) were MCK is the main clock with 84MHz (84000000 Hz).
 	 */

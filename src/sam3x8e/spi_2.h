@@ -28,21 +28,21 @@
  * @def
  * Masks for SPI_CR
  */
-#define SPI_CR_SPIEN_MASK			(1 << 0)
-#define SPI_CR_SPIDIS_MASK			(1 << 1)
-#define SPI_CR_SWRST_MASK			(1 << 7)
-#define SPI_CR_LASTXFER_MASK		(1 << 24)
+#define SPI_CR_SPIEN_MASK			(1u << 0)
+#define SPI_CR_SPIDIS_MASK			(1u << 1)
+#define SPI_CR_SWRST_MASK			(1u << 7)
+#define SPI_CR_LASTXFER_MASK		(1u << 24)
 ///@}
 ///@{
 /**
  * @def
  * Masks for SPI_MR
  */
-#define SPI_MR_MSTR_MASK			(1 << 0)
-#define SPI_MR_PS_MASK				(1 << 1)
-#define SPI_MR_PCSDEC_MASK			(1 << 2)
-#define SPI_MR_MODFDIS_MASK			(1 << 4)
-#define SPI_MR_WDRBT_MASK			(1 << 5)
+#define SPI_MR_MSTR_MASK			(1u << 0)
+#define SPI_MR_PS_MASK				(1u << 1)
+#define SPI_MR_PCSDEC_MASK			(1u << 2)
+#define SPI_MR_MODFDIS_MASK			(1u << 4)
+#define SPI_MR_WDRBT_MASK			(1u << 5)
 #define SPI_MR_LLB_MASK				(1u << 7)
 #define SPI_MR_PCS_MASK				(0xFu << 16)
 #define SPI_MR_DLYBCS_MASK			(0xFFu << 24)
@@ -52,8 +52,8 @@
  * @def
  * Masks for SPI_RDR
  */
-#define SPI_RDR_RD_MASK				(0xFFFF << 0)
-#define SPI_RDR_PCS_MASK			(0xF << 16)
+#define SPI_RDR_RD_MASK				(0xFFFFu << 0)
+#define SPI_RDR_PCS_MASK			(0xFu << 16)
 ///@}
 ///@{
 /**
@@ -67,24 +67,24 @@
  * @def
  * Masks for SPI_SR
  */
-#define SPI_SR_RDRF_MASK			(1 << 0)
-#define SPI_SR_TDRF_MASK			(1 << 1)
-#define SPI_SR_TXEMPTY_MASK			(1 << 9)
-#define SPI_SR_SPIENS_MASK			(1 << 16)
+#define SPI_SR_RDRF_MASK			(1u << 0)
+#define SPI_SR_TDRF_MASK			(1u << 1)
+#define SPI_SR_TXEMPTY_MASK			(1u << 9)
+#define SPI_SR_SPIENS_MASK			(1u << 16)
 ///@}
 ///@{
 /**
  * @def
  * Masks for SPI_CSRx
  */
-#define SPI_CSRx_CPOL_MASK			(1U << 0)
-#define SPI_CSRx_NCPHA_MASK			(1U << 1)
-#define SPI_CSRx_CSNAAT_MASK		(1U << 2)
-#define SPI_CSRx_CSAAT_MASK			(1U << 3)
-#define SPI_CSRx_BITS_MASK			(0xFU << 4)
-#define SPI_CSRx_SCBR_MASK			(0xFFU << 8)
-#define SPI_CSRx_DLYBS_MASK			(0xFFU << 16)
-#define SPI_CSRx_DLYBCT_MASK		(0xFFU << 24)
+#define SPI_CSRx_CPOL_MASK			(1u << 0)
+#define SPI_CSRx_NCPHA_MASK			(1u << 1)
+#define SPI_CSRx_CSNAAT_MASK		(1u << 2)
+#define SPI_CSRx_CSAAT_MASK			(1u << 3)
+#define SPI_CSRx_BITS_MASK			(0xFu << 4)
+#define SPI_CSRx_SCBR_MASK			(0xFFu << 8)
+#define SPI_CSRx_DLYBS_MASK			(0xFFu << 16)
+#define SPI_CSRx_DLYBCT_MASK		(0xFFu << 24)
 ///@}
 ///@{
 /**
@@ -102,11 +102,11 @@
  * method you can have as many devices connected to the peripheral as there are
  * pins to use.
  */
-#define SPI_SELECTOR_0			(0)//(0b1110)
-#define SPI_SELECTOR_1			(1)//(0b1101)
-#define SPI_SELECTOR_2			(2)//(0b1011)
-#define SPI_SELECTOR_3			(3)//(0b0111)
-#define SPI_SELECTOR_NONE		(4)//(0b1111)
+#define SPI_SELECTOR_0			(0) //(0b1110)
+#define SPI_SELECTOR_1			(1) //(0b1101)
+#define SPI_SELECTOR_2			(2) //(0b1011)
+#define SPI_SELECTOR_3			(3) //(0b0111)
+#define SPI_SELECTOR_NONE		(4) //(0b1111)
 ///@}
 
 ///\cond
@@ -114,8 +114,8 @@
  * @def
  * These are the base addresses for the two SPI peripherals
  */
-#define SPI0		((spi_reg_t *) 0x40008000U)
-#define SPI1		((spi_reg_t *) 0x4000C000U)
+#define SPI0		((spi_reg_t *) 0x40008000u)
+#define SPI1		((spi_reg_t *) 0x4000C000u)
 /**
  * SPI register mapping
  */

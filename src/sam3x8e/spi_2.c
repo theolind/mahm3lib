@@ -214,21 +214,21 @@ uint8_t spi_disable(spi_reg_t *spi) {
 }
 
 uint8_t spi_select_slave(spi_reg_t *spi, uint8_t slave) {
-	spi->SPI_MR = (spi->SPI_MR & ~(0xFU << 16));//clear bit 16 to 19 in SPI_MR
-	spi->SPI_MR |= ((0b111u >> (uint32_t) (3 - slave)) << 16); //set bit 16 to 18 in SPI_MR (could be predefined)
-	// TODO
+	// TODO Change this later into one line (update spi_mr once)
+	spi->SPI_MR = ((~SPI_MR_PCS_MASK) & spi->SPI_MR); //clear bit 16 to 19 in SPI_MR
+	spi->SPI_MR |= ((0b111u >> (3 - slave)) << 16); //set bit 16 to 18 in SPI_MR (could be predefined)
 	return 1;
 }
 
 uint8_t spi_tx_ready(spi_reg_t *spi) {
 	// transfer of data to shift register is indicated by TDRE bit in SPI_SR
 	// TODO
-	return (spi->SPI_SR & (0x1u << 1));
+	return (spi->SPI_SR & SPI_SR_TDRF_MASK) > 0;
 }
 
 uint8_t spi_rx_ready(spi_reg_t *spi) {
 	// TODO
-	return (spi->SPI_SR & (0x1u << 0));
+	return (spi->SPI_SR & SPI_SR_RDRF_MASK);
 }
 
 uint8_t spi_write(spi_reg_t *spi, uint16_t data) {
@@ -239,7 +239,7 @@ uint8_t spi_write(spi_reg_t *spi, uint16_t data) {
 	//user has to read SPI_SR to clear OVRES
 
 	// Retrieving the register and modifying it (Storing error output in shift)
-	spi->SPI_TDR = (spi->SPI_TDR & 0xFFFF0000) | data;
+	spi->SPI_TDR = (spi->SPI_TDR & (~SPI_TDR_TD_MASK)) | data;
 	// TODO
 	return 1;
 }
@@ -247,7 +247,7 @@ uint8_t spi_write(spi_reg_t *spi, uint16_t data) {
 uint8_t spi_transmission_done(spi_reg_t *spi) {
 	// transmission completion is indicated by TXEMPTY bit in SPI_SR
 	// TODO
-	return (spi->SPI_SR & (0x1u << 1));
+	return (spi->SPI_SR & SPI_SR_TXEMPTY_MASK) > 0;
 }
 
 uint16_t spi_read(spi_reg_t *spi) {

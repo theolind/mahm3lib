@@ -38,8 +38,12 @@
  * @def
  * Masks for SPI_MR
  */
-#define SPI_MR_MSTR_MASK			(0b01)(1 << 0)
-#define SPI_MR_LLB_MASK				(0x80)(1 << 7)
+#define SPI_MR_MSTR_MASK			(1 << 0)
+#define SPI_MR_PS_MASK				(1 << 1)
+#define SPI_MR_PCSDEC_MASK			(1 << 2)
+#define SPI_MR_MODFDIS_MASK			(1 << 4)
+#define SPI_MR_WDRBT_MASK			(1 << 5)
+#define SPI_MR_LLB_MASK				(1 << 7)
 #define SPI_MR_PCS_MASK				(0xF << 16)
 #define SPI_MR_DLYBCS_MASK			(0xFF << 24)
 ///@}
@@ -73,14 +77,14 @@
  * @def
  * Masks for SPI_CSRx
  */
-#define SPI_CSRx_CPOL_MASK			(1 << 0)
-#define SPI_CSRx_NCPHA_MASK			(1 << 1)
-#define SPI_CSRx_CSNAAT_MASK		(1 << 2)
-#define SPI_CSRx_CSAAT_MASK			(1 << 3)
-#define SPI_CSRx_BITS_MASK			(0xF << 4)
-#define SPI_CSRx_SCBR_MASK			(0xFF << 8)
-#define SPI_CSRx_DLYBS_MASK			(0xFF << 16)
-#define SPI_CSRx_DLYBCT_MASK		(0xFF << 24)
+#define SPI_CSRx_CPOL_MASK			(1U << 0)
+#define SPI_CSRx_NCPHA_MASK			(1U << 1)
+#define SPI_CSRx_CSNAAT_MASK		(1U << 2)
+#define SPI_CSRx_CSAAT_MASK			(1U << 3)
+#define SPI_CSRx_BITS_MASK			(0xFU << 4)
+#define SPI_CSRx_SCBR_MASK			(0xFFU << 8)
+#define SPI_CSRx_DLYBS_MASK			(0xFFU << 16)
+#define SPI_CSRx_DLYBCT_MASK		(0xFFU << 24)
 ///@}
 ///@{
 /**
@@ -138,6 +142,12 @@ typedef struct spi_reg {
 ///@{
 typedef struct spi_settings {
 	/**
+	 * There are two SPI peripheral in the MCU, this value defines which of the
+	 * two peripheral must be taken in use. (Use one of the predefined values
+	 * with prefix: SPI (ex. SPI0 or SPI1) )
+	 */
+	uint32_t spi_periph;
+	/**
 	 * This defines the Delay Between Chip Selects. The delay time guarantees
 	 * non-overlapping chip selects and solves bus contentions in case of
 	 * peripherals having long data float times. The minimum is 71 ns and
@@ -145,7 +155,7 @@ typedef struct spi_settings {
 	 * rounded down.
 	 */
 	uint8_t delay_between_cs;	///< Used to set the delay between chip selects
-}spi_settings_t;
+} spi_settings_t;
 /**
  * @typedef
  * This structure is used to initialize a selector of the SPI. There is a
@@ -156,7 +166,7 @@ typedef struct spi_selector_settings {
 	 * This will define the baud rate for the given selector. The value must be between 0 and 255 and the baud rate will be defined with
 	 * (MCK / baudR) were MCK is the main clock with 84MHz (84000000 Hz).
 	 */
-	uint8_t baud_rate;				///< Used to set the baud rate of the selector
+	uint8_t baud_rate;			///< Used to set the baud rate of the selector
 	/**
 	 * This will define the polarity of the SPI clock. The values are 0 or 1.
 	 * Set it to 1 to define the inactive state value of SPCK to be logic level
@@ -174,18 +184,18 @@ typedef struct spi_selector_settings {
 	 * be between 8 bits and 16 bits. This variable must be set between 0 and 8,
 	 * were 0 means 8 bits and 8 means 16 bits.
 	 */
-	uint8_t bits_pr_transfer;	///< The amount of bits to be transmitted on each transfer
+	uint8_t bits_pr_transfer;///< The amount of bits to be transmitted on each transfer
 	/**
 	 * This will define the Delay Between Consecutive Transfers and must be set
 	 * between 0 and 97143 ns.
 	 */
-	uint8_t delay_transfers;	///< Used to set the delay between consecutive transfers
+	uint8_t delay_transfers;///< Used to set the delay between consecutive transfers
 	/**
 	 * This will define the Delay between the assertion of chip select line and
 	 * when the the SPI clock starts and must be set between 0 and 3036 ns.
 	 */
 	uint8_t delay_clk;			///< Used to set the Delay Before SPCK starts
-}spi_selector_settings_t;
+} spi_selector_settings_t;
 ///@}
 
 /////// PROTOTYPES ////////////////////////////////////////////////
@@ -214,33 +224,19 @@ uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings);
  * needed setting for the initialization of the selector.
  * @return
  */
-uint8_t spi_init_selector(spi_reg_t *spi, const spi_selector_settings_t *settings);
-/**
- * Sets the peripheral into master-mode.
- *
- * @param spi The base-address of the SPI-peripheral that shall be used.
- * (Use one of predefined values with prefix: SPI)
- * @return
- */
-uint8_t spi_set_master(spi_reg_t *spi);
+uint8_t spi_init_selector(spi_reg_t *spi,
+		const spi_selector_settings_t *settings);
 /**
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
  * @return
  */
-uint8_t spi_set_slave(spi_reg_t *spi);
+uint8_t spi_enable(spi_reg_t *spi);
 /**
- *
- * @param spi The base-address of the SPI-peripheral that shall be used.
- * (Use one of predefined values with prefix: SPI)
- * @return
- */
-uint8_t spi_enable(spi_reg_t *spi);//2
-/**
- * This function will set the baudd rate for the given selector.
+ * This function will set the baud rate for the given selector.
  * The value for baud_rate must be between 0 and 255 and the baud rate will be
- * defined with (MCK / baudR) were MCK is the main clock with 84MHz
+ * defined by (MCK / baudR) [Hz] were MCK is the main clock with 84MHz
  * (84000000 Hz). If baud rate 84MHz is set by setting baud_rate = 1, then all
  * the other selectors must use the same baud rate. This is only true for
  * baud rate = 1 or in frequency 84MHz.
@@ -252,11 +248,14 @@ uint8_t spi_enable(spi_reg_t *spi);//2
  * @param baud_rate
  * @return
  */
-uint8_t spi_selector_set_baud_rate(spi_reg_t *spi, uint8_t selector, uint8_t baud_rate);
+uint8_t spi_selector_set_baud_rate(spi_reg_t *spi, uint8_t selector,
+		uint32_t baud_rate);
 
-uint8_t spi_selector_set_clk_polarity(spi_reg_t *spi, uint8_t selector, uint8_t polarity);
+uint8_t spi_selector_set_clk_polarity(spi_reg_t *spi, uint8_t selector,
+		uint8_t polarity);
 
-uint8_t spi_selector_set_clk_phase(spi_reg_t *spi, uint8_t selector, uint8_t phase);
+uint8_t spi_selector_set_clk_phase(spi_reg_t *spi, uint8_t selector,
+		uint8_t phase);
 /**
  * Chip Select Not Active After Transfer.
  * Even if the transfer buffer is continuously filled with data, the chip select
@@ -273,7 +272,7 @@ uint8_t spi_selector_set_clk_phase(spi_reg_t *spi, uint8_t selector, uint8_t pha
  * @return
  */
 uint8_t spi_selector_do_not_keep_cs_active(spi_reg_t *spi, uint8_t selector,
-		uint8_t option);
+		uint32_t option);
 /**
  * Chip Select Active After Transfer.
  * If the transfer buffer is continuously filled with data, the chip select (cs)
@@ -292,7 +291,7 @@ uint8_t spi_selector_do_not_keep_cs_active(spi_reg_t *spi, uint8_t selector,
  * @return
  */
 uint8_t spi_selector_keep_cs_active(spi_reg_t *spi, uint8_t selector,
-		uint8_t option);
+		uint32_t option);
 /**
  * This function set the amount of bits that a single transfer will transfer.
  * At default this option is set to 8 bit on each transfer (1 byte), but the
@@ -307,15 +306,14 @@ uint8_t spi_selector_keep_cs_active(spi_reg_t *spi, uint8_t selector,
  * @return
  */
 uint8_t spi_selector_set_bit_length(spi_reg_t *spi, uint8_t selector,
-		uint8_t bit_count);
+		uint32_t bit_count);
 /**
  * This function will set the Delay Between Chip Selects.
  * The delay time guarantees non-overlapping chip selects and solves bus
  * contentions in case of peripherals having long data float times.
- * The delay must be between 12 and 3036 ns with a resolution of 255.
+ * The delay can be set between 12 and 3036 ns with a resolution of 255.
  * Therefore, the actual set values will be a multiply of 12 ns.
- * A higher value than 3036 will not be processed and will return an error.
- * The same is true if selector is higher than 3.
+ * A higher value than 3036 will be reduced to 3036 ns.
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
@@ -324,16 +322,16 @@ uint8_t spi_selector_set_bit_length(spi_reg_t *spi, uint8_t selector,
  * @param delay
  * @return
  */
-uint8_t spi_selector_set_delay_between_cs(spi_reg_t *spi, uint8_t selector,
-		uint8_t delay);
+uint8_t spi_selector_set_delay_between_cs(spi_reg_t *spi, uint16_t delay);
 /**
  * This function will set the delay between when the chip select (CS) line is
  * asserted and when the clk starts for the transfer.
  * This may be necessary for a particular device.
  * The delay must be between 0 and 3036 ns with a resolution of 255.
- * Therefore, the actual set values will be a multiply of about 11,905 ns.
- * A higher value than 3036 will not be processed and will return an error.
- * The same is true if selector is higher than 3.
+ * Therefore, the actual set values will be a multiply of about 12 ns.
+ * A higher value than 3036 will be reduced to 3036 ns.
+ * An error is produced if the selector is higher than 3. No change will take
+ * effect.
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
@@ -343,7 +341,7 @@ uint8_t spi_selector_set_delay_between_cs(spi_reg_t *spi, uint8_t selector,
  * @return
  */
 uint8_t spi_selector_set_delay_clk_start(spi_reg_t *spi, uint8_t selector,
-		uint8_t delay);
+		uint16_t delay);
 /**
  * This function will set the delay between consecutive transfers.
  * This may be necessary for a particular device.
@@ -359,7 +357,7 @@ uint8_t spi_selector_set_delay_clk_start(spi_reg_t *spi, uint8_t selector,
  * @param delay The delay to be set. (Set between 0 and 97143)
  * @return
  */
-uint8_t spi_selector_set_delay_delay_transfers(spi_reg_t *spi, uint8_t selector,
+uint8_t spi_selector_set_delay_transfers(spi_reg_t *spi, uint8_t selector,
 		uint32_t delay);
 /**
  * This function is only useful when in master mode and is used to select a

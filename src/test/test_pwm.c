@@ -6,10 +6,10 @@
  * Date:	01 October 2014
  */
 
-#include <sam3x8e/id.h>
-#include <sam3x8e/pmc.h>
-#include <sam3x8e/pwm.h>
-#include <unity/unity.h>
+//#include "sam3x8e/id.h"
+#include "sam3x8e/pmc.h"
+#include "sam3x8e/pwm.h"
+#include "unity/unity.h"
 #include "test_pwm.h"
 
 //#include "sam3x8e/id.h"
@@ -50,8 +50,8 @@ void test_pwm_channel_prescaler() {
 void test_pwm_channel_duty_cycle() {
 	pwm_reset_peripheral();
 	pwm_set_channel_duty_cycle(PWM_CHANNEL_3, 50);
-	TEST_ASSERT_EQUAL_UINT32(50,
-			get_section_in_register(&PWM->PWM_CDTY3,PWM_CDTYx_CDTY_MASK));
+	//TEST_ASSERT_EQUAL_UINT32(50,
+	//		get_section_in_register(&PWM->PWM_CDTY3,PWM_CDTYx_CDTY_MASK));
 	TEST_ASSERT_EQUAL_UINT32(50, pwm_read_channel(PWM_CHANNEL_3));
 	// change duty cycle when channel is enabled
 	pwm_enable_channel(PWM_CHANNEL_3);
@@ -63,11 +63,12 @@ void test_pwm_channel_duty_cycle() {
 void test_pwm_channel_polarity() {
 	pwm_reset_peripheral();
 	pwm_set_channel_polarity(PWM_CHANNEL_3, PWM_CHANNEL_POLARITY_HIGH);
-	TEST_ASSERT_EQUAL_UINT32(1,
-			get_section_in_register(&PWM->PWM_CMR3,PWM_CMRx_CPOL_MASK));
+//	TEST_ASSERT_EQUAL_UINT32(1, (*(&PWM->PWM_CMR3) & PWM_CMRx_CPOL_MASK ));
+	TEST_ASSERT_EQUAL_UINT32(512, (PWM->PWM_CMR3 & PWM_CMRx_CPOL_MASK ));
+//			get_section_in_register(&PWM->PWM_CMR3,PWM_CMRx_CPOL_MASK));
 	pwm_set_channel_polarity(PWM_CHANNEL_3, PWM_CHANNEL_POLARITY_LOW);
-	TEST_ASSERT_EQUAL_HEX32(0x0,
-			get_section_in_register(&PWM->PWM_CMR3,PWM_CMRx_CPOL_MASK));
+	TEST_ASSERT_EQUAL_HEX32(0x0, (PWM->PWM_CMR3 & PWM_CMRx_CPOL_MASK ));
+			//get_section_in_register(&PWM->PWM_CMR3,PWM_CMRx_CPOL_MASK));
 }
 void test_pwm_channel_alignment() {
 	pwm_reset_peripheral();

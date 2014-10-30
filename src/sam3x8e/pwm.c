@@ -103,23 +103,39 @@ uint8_t pwm_channel_enabled(uint32_t channel) {
  * This can reverse the duty cycle. Important when using the PWMLx pins.
  */
 uint8_t pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity) {
-	return set_section_in_register((&PWM->PWM_CMR0) + (ch_dis * channel),
-	PWM_CMRx_CPOL_MASK, pwm_polarity);
+	uint32_t *p_reg;
+	p_reg = (&PWM->PWM_CMR0) + (ch_dis * channel);
+	*p_reg = ((~PWM_CDTYUPDx_CDTYUPD_MASK) & *p_reg) |
+						(pwm_polarity << 9);
+
+//	return set_section_in_register((&PWM->PWM_CMR0) + (ch_dis * channel),
+//	PWM_CMRx_CPOL_MASK, pwm_polarity);
+	return 1;
 
 }
 /*
  * Set the channel alignment
  */
 uint8_t pwm_set_channel_alignment(uint32_t channel, uint32_t pwm_alignment) {
-	return set_section_in_register((&PWM->PWM_CMR0) + (ch_dis * channel),
-	PWM_CMRx_CALG_MASK, pwm_alignment);
+	uint32_t *p_reg;
+	p_reg = (&PWM->PWM_CMR0) + (ch_dis * channel);
+	*p_reg = ((~PWM_CMRx_CALG_MASK) & *p_reg) |
+							(pwm_alignment << 8);
+	return 1;
+//	return set_section_in_register((&PWM->PWM_CMR0) + (ch_dis * channel),
+//	PWM_CMRx_CALG_MASK, pwm_alignment);
 }
 /*
  * Set the channel prescaler
  */
 uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
-	return set_section_in_register((&PWM->PWM_CMR0) + (ch_dis * channel),
-	PWM_CMRx_CPRE_MASK, prescaler);
+	uint32_t *p_reg;
+	p_reg = (&PWM->PWM_CMR0) + (ch_dis * channel);
+	*p_reg = ((~PWM_CMRx_CPRE_MASK) & *p_reg) |
+							(prescaler << 0);
+	return 1;
+//	return set_section_in_register((&PWM->PWM_CMR0) + (ch_dis * channel),
+//	PWM_CMRx_CPRE_MASK, prescaler);
 }
 /*
  * This function will set the period value used by a given PWM channel.
@@ -128,12 +144,19 @@ uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
  * will set the period for you.
  */
 uint8_t pwm_set_channel_period(uint32_t channel, uint32_t period) {
+	uint32_t *p_reg;
 	if (pwm_channel_enabled(channel)) {
-		set_section_in_register((&PWM->PWM_CPRDUPD0) + (ch_dis * channel),
-		PWM_CPRDUPDx_CPRDUPD_MASK, period);
+		p_reg = (&PWM->PWM_CPRDUPD0) + (ch_dis * channel);
+		*p_reg = ((~PWM_CPRDUPDx_CPRDUPD_MASK) & *p_reg) |
+								(period << 0);
+//		set_section_in_register((&PWM->PWM_CPRDUPD0) + (ch_dis * channel),
+//		PWM_CPRDUPDx_CPRDUPD_MASK, period);
 	} else {
-		set_section_in_register((&PWM->PWM_CPRD0) + (ch_dis * channel),
-		PWM_CPRDx_CPRD_MASK, period);
+		p_reg = (&PWM->PWM_CPRD0) + (ch_dis * channel);
+		*p_reg = ((~PWM_CPRDx_CPRD_MASK) & *p_reg) |
+								(period << 0);
+//		set_section_in_register((&PWM->PWM_CPRD0) + (ch_dis * channel),
+//		PWM_CPRDx_CPRD_MASK, period);
 	}
 	return 1;
 }
@@ -244,13 +267,20 @@ uint8_t pwm_set_clkx_frequency(uint32_t channel, uint32_t frequency,
  * This function will set the indicated clock with prescaler and divisor.
  */
 uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor) {
+	uint32_t *p_reg;
 	if (clock_id == PWM_CLK_ID_CLKA) {
-		set_section_in_register(&PWM->PWM_CLK, PWM_CLK_PREA_MASK, prescaler);
-		set_section_in_register(&PWM->PWM_CLK, PWM_CLK_DIVA_MASK, divisor);
+		p_reg = (&PWM->PWM_CLK);
+		*p_reg = ((~PWM_CLK_PREA_MASK) & *p_reg) | (prescaler << 8);
+		*p_reg = ((~PWM_CLK_DIVA_MASK) & *p_reg) | (divisor << 0);
+		//set_section_in_register(&PWM->PWM_CLK, PWM_CLK_PREA_MASK, prescaler);
+		//set_section_in_register(&PWM->PWM_CLK, PWM_CLK_DIVA_MASK, divisor);
 		return 1;
 	} else if (clock_id == PWM_CLK_ID_CLKB) {
-		set_section_in_register(&PWM->PWM_CLK, PWM_CLK_PREB_MASK, prescaler);
-		set_section_in_register(&PWM->PWM_CLK, PWM_CLK_DIVB_MASK, divisor);
+		p_reg = (&PWM->PWM_CLK);
+		*p_reg = ((~PWM_CLK_PREB_MASK) & *p_reg) | (prescaler << 24);
+		*p_reg = ((~PWM_CLK_DIVB_MASK) & *p_reg) | (divisor << 16);
+//		set_section_in_register(&PWM->PWM_CLK, PWM_CLK_PREB_MASK, prescaler);
+//		set_section_in_register(&PWM->PWM_CLK, PWM_CLK_DIVB_MASK, divisor);
 		return 1;
 	}
 	return 0;
@@ -259,20 +289,32 @@ uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor) {
  * This function reads the earlier written duty cycle to the channel.
  */
 uint32_t pwm_read_channel(uint32_t channel) {
-	return get_section_in_register((&PWM->PWM_CDTY0) + (ch_dis * channel),
-	PWM_CDTYx_CDTY_MASK);
+	return (*((&PWM->PWM_CDTY0) + (ch_dis *channel)) & PWM_CDTYx_CDTY_MASK);
+//	return get_section_in_register((&PWM->PWM_CDTY0) + (ch_dis * channel),
+//	PWM_CDTYx_CDTY_MASK);
 }
 /*
  * Writes an output to a given channel by setting the channel duty cycle.
  */
 uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
-	if (pwm_channel_enabled(channel)) {
-		set_section_in_register((&PWM->PWM_CDTYUPD0) + (ch_dis * channel),
-		PWM_CDTYUPDx_CDTYUPD_MASK, duty_cycle);
-	} else {
-		set_section_in_register((&PWM->PWM_CDTY0) + (ch_dis * channel),
-		PWM_CDTYx_CDTY_MASK, duty_cycle);
-	}
+	uint32_t *p_reg;
+		if (pwm_channel_enabled(channel)) {
+			p_reg = (&PWM->PWM_CDTYUPD0) + (ch_dis * channel);
+			*p_reg = ((~PWM_CDTYUPDx_CDTYUPD_MASK) & *p_reg) |
+					(duty_cycle << 0);
+		} else {
+			p_reg = (&PWM->PWM_CDTY0) + (ch_dis * channel);
+			*p_reg = ((~PWM_CDTYx_CDTY_MASK) & *p_reg) |
+					(duty_cycle << 0);
+		}
+
+//	if (pwm_channel_enabled(channel)) {
+//		set_section_in_register((&PWM->PWM_CDTYUPD0) + (ch_dis * channel),
+//		PWM_CDTYUPDx_CDTYUPD_MASK, duty_cycle);
+//	} else {
+//		set_section_in_register((&PWM->PWM_CDTY0) + (ch_dis * channel),
+//		PWM_CDTYx_CDTY_MASK, duty_cycle);
+//	}
 	return 1;
 
 }

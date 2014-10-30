@@ -239,13 +239,13 @@ uint8_t spi_enable(spi_reg_t *spi);
  * @param baud_rate
  * @return
  */
-uint8_t spi_selector_set_baud_rate(spi_reg_t *spi, uint8_t selector,
+uint8_t spi_set_selector_baud_rate(spi_reg_t *spi, uint8_t selector,
 		uint32_t baud_rate);
 
-uint8_t spi_selector_set_clk_polarity(spi_reg_t *spi, uint8_t selector,
+uint8_t spi_set_selector_clk_polarity(spi_reg_t *spi, uint8_t selector,
 		uint32_t polarity);
 
-uint8_t spi_selector_set_clk_phase(spi_reg_t *spi, uint8_t selector,
+uint8_t spi_set_selector_clk_phase(spi_reg_t *spi, uint8_t selector,
 		uint32_t phase);
 /**
  * Chip Select Not Active After Transfer.
@@ -262,7 +262,7 @@ uint8_t spi_selector_set_clk_phase(spi_reg_t *spi, uint8_t selector,
  * @param option Set this value to 1 to activate the behavior. (deactivate = 0)
  * @return
  */
-uint8_t spi_selector_do_not_keep_cs_active(spi_reg_t *spi, uint8_t selector,
+uint8_t spi_set_selector_do_not_keep_cs_active(spi_reg_t *spi, uint8_t selector,
 		uint32_t option);
 /**
  * Chip Select Active After Transfer.
@@ -281,7 +281,7 @@ uint8_t spi_selector_do_not_keep_cs_active(spi_reg_t *spi, uint8_t selector,
  * @param option Set this value to 1 to activate the behavior. (deactivate = 0)
  * @return
  */
-uint8_t spi_selector_keep_cs_active(spi_reg_t *spi, uint8_t selector,
+uint8_t spi_set_selector_keep_cs_active(spi_reg_t *spi, uint8_t selector,
 		uint32_t option);
 /**
  * This function set the amount of bits that a single transfer will transfer.
@@ -296,7 +296,7 @@ uint8_t spi_selector_keep_cs_active(spi_reg_t *spi, uint8_t selector,
  * @param bit_count The amount of bits to be transfered when transfering.
  * @return
  */
-uint8_t spi_selector_set_bit_length(spi_reg_t *spi, uint8_t selector,
+uint8_t spi_set_selector_bit_length(spi_reg_t *spi, uint8_t selector,
 		uint32_t bit_count);
 /**
  * This function will set the Delay Between Chip Selects.
@@ -311,7 +311,7 @@ uint8_t spi_selector_set_bit_length(spi_reg_t *spi, uint8_t selector,
  * @param delay
  * @return
  */
-uint8_t spi_selector_set_delay_between_cs(spi_reg_t *spi, uint16_t delay);
+uint8_t spi_set_delay_between_cs(spi_reg_t *spi, uint16_t delay);
 /**
  * This function will set the delay between when the chip select (CS) line is
  * asserted and when the clk starts for the transfer.
@@ -329,7 +329,7 @@ uint8_t spi_selector_set_delay_between_cs(spi_reg_t *spi, uint16_t delay);
  * @param delay The delay to be set. (Set between 12 and 3036)
  * @return
  */
-uint8_t spi_selector_set_delay_clk_start(spi_reg_t *spi, uint8_t selector,
+uint8_t spi_set_selector_delay_clk_start(spi_reg_t *spi, uint8_t selector,
 		uint16_t delay);
 /**
  * This function will set the delay between consecutive transfers.
@@ -346,7 +346,7 @@ uint8_t spi_selector_set_delay_clk_start(spi_reg_t *spi, uint8_t selector,
  * @param delay The delay to be set. (Set between 0 and 97143)
  * @return
  */
-uint8_t spi_selector_set_delay_transfers(spi_reg_t *spi, uint8_t selector,
+uint8_t spi_set_selector_delay_transfers(spi_reg_t *spi, uint8_t selector,
 		uint32_t delay);
 /**
  * This function is only useful when in master mode and is used to select a

@@ -37,7 +37,7 @@ uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings) {
 	spi->SPI_MR &= ~(0x1U << 5);
 
 	// set Delay Between Chip Selects
-	spi_selector_set_delay_between_cs(spi, settings->delay_between_cs);
+	spi_set_delay_between_cs(spi, settings->delay_between_cs);
 	// Initialy select none of the selectors (slaves)
 	spi_select_slave(spi, SPI_SELECTOR_NONE);
 	return 1;
@@ -46,11 +46,19 @@ uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings) {
 uint8_t spi_init_selector(spi_reg_t *spi,
 		const spi_selector_settings_t *settings) {
 	// TODO
+	spi_sele
+	settings->CPOL;
+	settings->NCPHA;
+	settings->baud_rate;
+	settings->bits_pr_transfer;
+	settings->delay_clk;
+	settings->delay_transfers;
+
 
 	return 1;
 }
 
-uint8_t spi_selector_set_clk_polarity(spi_reg_t *spi, uint8_t selector,
+uint8_t spi_set_selector_clk_polarity(spi_reg_t *spi, uint8_t selector,
 		uint32_t polarity) {
 	uint32_t *p_reg;
 	// Boundary test. Higher than these values will result in error or
@@ -67,7 +75,7 @@ uint8_t spi_selector_set_clk_polarity(spi_reg_t *spi, uint8_t selector,
 	return 1; // No error
 }
 
-uint8_t spi_selector_set_clk_phase(spi_reg_t *spi, uint8_t selector,
+uint8_t spi_set_selector_clk_phase(spi_reg_t *spi, uint8_t selector,
 		uint32_t phase) {
 	uint32_t *p_reg;
 	// Boundary test. Higher than these values will result in error or
@@ -84,7 +92,7 @@ uint8_t spi_selector_set_clk_phase(spi_reg_t *spi, uint8_t selector,
 	return 1; // No error
 }
 
-uint8_t spi_selector_set_baud_rate(spi_reg_t *spi, uint8_t selector,
+uint8_t spi_set_selector_baud_rate(spi_reg_t *spi, uint8_t selector,
 		uint32_t baud_rate) {
 	uint32_t *p_reg;
 	// Boundary test. Higher than these values will result in error or
@@ -104,7 +112,7 @@ uint8_t spi_selector_set_baud_rate(spi_reg_t *spi, uint8_t selector,
 	return 1; // No error
 }
 
-uint8_t spi_selector_do_not_keep_cs_active(spi_reg_t *spi, uint8_t selector,
+uint8_t spi_set_selector_do_not_keep_cs_active(spi_reg_t *spi, uint8_t selector,
 		uint32_t option) {
 	uint32_t *p_reg;
 	// Boundary test. Higher than these values will result in error or
@@ -121,7 +129,7 @@ uint8_t spi_selector_do_not_keep_cs_active(spi_reg_t *spi, uint8_t selector,
 	return 1; // No error
 }
 
-uint8_t spi_selector_keep_cs_active(spi_reg_t *spi, uint8_t selector,
+uint8_t spi_set_selector_keep_cs_active(spi_reg_t *spi, uint8_t selector,
 		uint32_t option) {
 	uint32_t *p_reg;
 	// Boundary test. Higher than these values will result in error or
@@ -138,7 +146,7 @@ uint8_t spi_selector_keep_cs_active(spi_reg_t *spi, uint8_t selector,
 	return 1; // No error
 }
 
-uint8_t spi_selector_set_bit_length(spi_reg_t *spi, uint8_t selector,
+uint8_t spi_set_selector_bit_length(spi_reg_t *spi, uint8_t selector,
 		uint32_t bit_count) {
 	uint32_t *p_reg;
 	// Boundary test. Higher than these values will result in error or
@@ -155,7 +163,7 @@ uint8_t spi_selector_set_bit_length(spi_reg_t *spi, uint8_t selector,
 	return 1; // No error
 }
 
-uint8_t spi_selector_set_delay_between_cs(spi_reg_t *spi, uint16_t delay) {
+uint8_t spi_set_delay_between_cs(spi_reg_t *spi, uint16_t delay) {
 	uint32_t divisor;
 	// If the value is below 12 ns, it's OK. The MCU will adjust it itself to
 	// the minimum value of 12 ns.
@@ -169,7 +177,7 @@ uint8_t spi_selector_set_delay_between_cs(spi_reg_t *spi, uint16_t delay) {
 	return 1; // No error
 }
 
-uint8_t spi_selector_set_delay_clk_start(spi_reg_t *spi, uint8_t selector,
+uint8_t spi_set_selector_delay_clk_start(spi_reg_t *spi, uint8_t selector,
 		uint16_t delay) {
 	uint32_t *p_reg;
 	uint32_t divisor;
@@ -192,7 +200,7 @@ uint8_t spi_selector_set_delay_clk_start(spi_reg_t *spi, uint8_t selector,
 	return 1; // No error
 }
 
-uint8_t spi_selector_set_delay_transfers(spi_reg_t *spi, uint8_t selector,
+uint8_t spi_set_selector_delay_transfers(spi_reg_t *spi, uint8_t selector,
 		uint32_t delay) {
 	uint32_t *p_reg;
 	uint32_t divisor;

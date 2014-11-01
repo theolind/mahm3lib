@@ -17,4 +17,4 @@ void test_tft_write(void);
 void test_tft_set_bus(void);
 void test_tft_clear_bus(void);
 
-#endif TEST_TFT_H_
+#endif //TEST_TFT_H_

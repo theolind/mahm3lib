@@ -7,8 +7,8 @@
 #include "tft.h"
 
 void tft_init(tft_screen *screen) {
-	pio_set_pin(screen->PORT_WR, screen->PIN_WR, 1);	//WR high
-	pio_set_pin(screen->PORT_CS, screen->PIN_CS, 0);	//CS low
+	pio_set_pin((pio_reg_t *)screen->PORT_WR, screen->PIN_WR, 1);	//WR high
+	pio_set_pin((pio_reg_t *)screen->PORT_CS, screen->PIN_CS, 0);	//CS low
 
 	//write commands to initialize screen
 	tft_write_com(screen, 0x11); tft_write_data(screen, 0x2004);
@@ -56,36 +56,36 @@ void tft_init(tft_screen *screen) {
 	tft_write_com(screen, 0x79); tft_write_data(screen, 0x0000);
 	tft_write_com(screen, 0x22);
 
-	pio_set_pin(screen->PORT_CS, screen->PIN_CS, 1);	//CS high
+	pio_set_pin((pio_reg_t *)screen->PORT_CS, screen->PIN_CS, 1);	//CS high
 }
 
 void tft_clear(tft_screen *screen) {
-	pio_set_pin(screen->PORT_CS, screen->PIN_CS, 0);
+	pio_set_pin((pio_reg_t *)screen->PORT_CS, screen->PIN_CS, 0);
 	uint16_t x,y;
-	tft_set_xy(screen, 0, screen->width, 0, screen->height);
+	tft_set_xy(screen, 0, (uint16_t) screen->width, 0, (uint16_t) screen->height);
 	for(x = 0; x <= screen->width; x++) {
 		for(y = 0; y <= screen->height; y++) {
 			tft_write_data(screen, 0x0000);
 		}
 	}
-	pio_set_pin(screen->PORT_CS, screen->PIN_CS, 1);
+	pio_set_pin((pio_reg_t *)screen->PORT_CS, screen->PIN_CS, 1);
 }
 
-void tft_write(tft_screen *screen, uint32_t x, uint32_t y, uint16_t color) {
-	pio_set_pin(screen->PORT_CS, screen->PIN_CS, 0);
+void tft_write(tft_screen *screen, uint16_t x, uint16_t y, uint16_t color) {
+	pio_set_pin((pio_reg_t *)screen->PORT_CS, screen->PIN_CS, 0);
 	tft_set_xy(screen, x, x, y, y);
 	tft_write_data(screen, color);
 }
 
-uint32_t tft_read_input(tft_screen *screen, uint32_t *x, uint32_t *y) {
+/*uint32_t tft_read_input(tft_screen *screen, uint32_t *x, uint32_t *y) {
 	return 0;
-}
+}*/
 
 // The funcitons below should not be used by the API user
 // They are only intended as "helper" functions for the tft-api
 
 void tft_set_xy(tft_screen *screen, uint16_t x1, uint16_t x2, uint16_t y1, uint16_t y2) {
-	tft_write_com(screen, 0x46); tft_write_data(screen, (x2 << 8) | x1);
+	tft_write_com(screen, 0x46); tft_write_data(screen, (uint16_t) ((x2 << 8) | x1) );
 	tft_write_com(screen, 0x47); tft_write_data(screen, y2 );
 	tft_write_com(screen, 0x48); tft_write_data(screen, y1 );
 	tft_write_com(screen, 0x20); tft_write_data(screen, x1 );
@@ -95,51 +95,51 @@ void tft_set_xy(tft_screen *screen, uint16_t x1, uint16_t x2, uint16_t y1, uint1
 
 void tft_write_com(tft_screen *screen, uint8_t com) {
 	//RS low
-	pio_set_pin(screen->PORT_RS, screen->PIN_RS, 0);
+	pio_set_pin((pio_reg_t *)screen->PORT_RS, screen->PIN_RS, 0);
 	tft_write_bus(screen, com);
 }
 
 void tft_write_data(tft_screen *screen, uint16_t data) {
 	//RS high
-	pio_set_pin(screen->PORT_RS, screen->PIN_RS, 1);
+	pio_set_pin((pio_reg_t *)screen->PORT_RS, screen->PIN_RS, 1);
 	tft_write_bus(screen, data);
 }
 
 //bus functions
 
 void tft_clear_bus(tft_screen *screen) {
-	pio_set_pin(screen->PORT_D0, screen->PIN_D0, 0);
-	pio_set_pin(screen->PORT_D1, screen->PIN_D1, 0);
-	pio_set_pin(screen->PORT_D2, screen->PIN_D2, 0);
-	pio_set_pin(screen->PORT_D3, screen->PIN_D3, 0);
-	pio_set_pin(screen->PORT_D4, screen->PIN_D4, 0);
-	pio_set_pin(screen->PORT_D5, screen->PIN_D5, 0);
-	pio_set_pin(screen->PORT_D6, screen->PIN_D6, 0);
-	pio_set_pin(screen->PORT_D7, screen->PIN_D7, 0);
+	pio_set_pin((pio_reg_t *)screen->PORT_D0, screen->PIN_D0, 0);
+	pio_set_pin((pio_reg_t *)screen->PORT_D1, screen->PIN_D1, 0);
+	pio_set_pin((pio_reg_t *)screen->PORT_D2, screen->PIN_D2, 0);
+	pio_set_pin((pio_reg_t *)screen->PORT_D3, screen->PIN_D3, 0);
+	pio_set_pin((pio_reg_t *)screen->PORT_D4, screen->PIN_D4, 0);
+	pio_set_pin((pio_reg_t *)screen->PORT_D5, screen->PIN_D5, 0);
+	pio_set_pin((pio_reg_t *)screen->PORT_D6, screen->PIN_D6, 0);
+	pio_set_pin((pio_reg_t *)screen->PORT_D7, screen->PIN_D7, 0);
 }
 
 void tft_set_bus(tft_screen *screen, uint8_t value) {
-	pio_set_pin(screen->PORT_D0, screen->PIN_D0, value & (1<<0));
-	pio_set_pin(screen->PORT_D1, screen->PIN_D1, value & (1<<1));
-	pio_set_pin(screen->PORT_D2, screen->PIN_D2, value & (1<<2));
-	pio_set_pin(screen->PORT_D3, screen->PIN_D3, value & (1<<3));
-	pio_set_pin(screen->PORT_D4, screen->PIN_D4, value & (1<<4));
-	pio_set_pin(screen->PORT_D5, screen->PIN_D5, value & (1<<5));
-	pio_set_pin(screen->PORT_D6, screen->PIN_D6, value & (1<<6));
-	pio_set_pin(screen->PORT_D7, screen->PIN_D7, value & (1<<7));
+	pio_set_pin((pio_reg_t *)screen->PORT_D0, screen->PIN_D0, value & (1<<0));
+	pio_set_pin((pio_reg_t *)screen->PORT_D1, screen->PIN_D1, value & (1<<1));
+	pio_set_pin((pio_reg_t *)screen->PORT_D2, screen->PIN_D2, value & (1<<2));
+	pio_set_pin((pio_reg_t *)screen->PORT_D3, screen->PIN_D3, value & (1<<3));
+	pio_set_pin((pio_reg_t *)screen->PORT_D4, screen->PIN_D4, value & (1<<4));
+	pio_set_pin((pio_reg_t *)screen->PORT_D5, screen->PIN_D5, value & (1<<5));
+	pio_set_pin((pio_reg_t *)screen->PORT_D6, screen->PIN_D6, value & (1<<6));
+	pio_set_pin((pio_reg_t *)screen->PORT_D7, screen->PIN_D7, value & (1<<7));
 }
 
 void tft_commit_bus(tft_screen *screen) {
 	//pulse WR
-	pio_set_pin(screen->PORT_WR, screen->PIN_WR, 0);
-	pio_set_pin(screen->PORT_WR, screen->PIN_WR, 1);
+	pio_set_pin((pio_reg_t *)screen->PORT_WR, screen->PIN_WR, 0);
+	pio_set_pin((pio_reg_t *)screen->PORT_WR, screen->PIN_WR, 1);
 }
 
 void tft_write_bus(tft_screen *screen, uint16_t data) {
 	tft_clear_bus(screen);
-	tft_set_bus(screen, data>>8);
+	tft_set_bus(screen, (uint8_t)(data>>8));
 	tft_commit_bus(screen);
 	tft_clear_bus(screen);
-	tft_set_bus(screen, data);
+	tft_set_bus(screen, (uint8_t)data);
 	tft_commit_bus(screen);
 }

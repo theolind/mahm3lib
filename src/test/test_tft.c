@@ -41,17 +41,28 @@ void test_tft_setup(void) {
 }
 
 void test_tft_setup2(void) {
-	pio_enable_pin(tft.PORT_CS, tft.PIN_CS); pio_conf_pin(tft.PORT_CS, tft.PIN_CS, 0, 1);
-	pio_enable_pin(tft.PORT_WR, tft.PIN_WR); pio_conf_pin(tft.PORT_WR, tft.PIN_WR, 0, 1);
-	pio_enable_pin(tft.PORT_RS, tft.PIN_RS); pio_conf_pin(tft.PORT_RS, tft.PIN_RS, 0, 1);
-	pio_enable_pin(tft.PORT_D0, tft.PIN_D0); pio_conf_pin(tft.PORT_D0, tft.PIN_D0, 0, 1);
-	pio_enable_pin(tft.PORT_D1, tft.PIN_D1); pio_conf_pin(tft.PORT_D1, tft.PIN_D1, 0, 1);
-	pio_enable_pin(tft.PORT_D2, tft.PIN_D2); pio_conf_pin(tft.PORT_D2, tft.PIN_D2, 0, 1);
-	pio_enable_pin(tft.PORT_D3, tft.PIN_D3); pio_conf_pin(tft.PORT_D3, tft.PIN_D3, 0, 1);
-	pio_enable_pin(tft.PORT_D4, tft.PIN_D4); pio_conf_pin(tft.PORT_D4, tft.PIN_D4, 0, 1);
-	pio_enable_pin(tft.PORT_D5, tft.PIN_D5); pio_conf_pin(tft.PORT_D5, tft.PIN_D5, 0, 1);
-	pio_enable_pin(tft.PORT_D6, tft.PIN_D6); pio_conf_pin(tft.PORT_D6, tft.PIN_D6, 0, 1);
-	pio_enable_pin(tft.PORT_D7, tft.PIN_D7); pio_conf_pin(tft.PORT_D7, tft.PIN_D7, 0, 1);
+	pio_enable_pin((pio_reg_t *) tft.PORT_CS, tft.PIN_CS);
+	pio_conf_pin((pio_reg_t *) tft.PORT_CS, tft.PIN_CS, 0, 1);
+	pio_enable_pin((pio_reg_t *) tft.PORT_WR, tft.PIN_WR);
+	pio_conf_pin((pio_reg_t *) tft.PORT_WR, tft.PIN_WR, 0, 1);
+	pio_enable_pin((pio_reg_t *) tft.PORT_RS, tft.PIN_RS);
+	pio_conf_pin((pio_reg_t *) tft.PORT_RS, tft.PIN_RS, 0, 1);
+	pio_enable_pin((pio_reg_t *) tft.PORT_D0, tft.PIN_D0);
+	pio_conf_pin((pio_reg_t *) tft.PORT_D0, tft.PIN_D0, 0, 1);
+	pio_enable_pin((pio_reg_t *) tft.PORT_D1, tft.PIN_D1);
+	pio_conf_pin((pio_reg_t *) tft.PORT_D1, tft.PIN_D1, 0, 1);
+	pio_enable_pin((pio_reg_t *) tft.PORT_D2, tft.PIN_D2);
+	pio_conf_pin((pio_reg_t *) tft.PORT_D2, tft.PIN_D2, 0, 1);
+	pio_enable_pin((pio_reg_t *) tft.PORT_D3, tft.PIN_D3);
+	pio_conf_pin((pio_reg_t *) tft.PORT_D3, tft.PIN_D3, 0, 1);
+	pio_enable_pin((pio_reg_t *) tft.PORT_D4, tft.PIN_D4);
+	pio_conf_pin((pio_reg_t *) tft.PORT_D4, tft.PIN_D4, 0, 1);
+	pio_enable_pin((pio_reg_t *) tft.PORT_D5, tft.PIN_D5);
+	pio_conf_pin((pio_reg_t *) tft.PORT_D5, tft.PIN_D5, 0, 1);
+	pio_enable_pin((pio_reg_t *) tft.PORT_D6, tft.PIN_D6);
+	pio_conf_pin((pio_reg_t *) tft.PORT_D6, tft.PIN_D6, 0, 1);
+	pio_enable_pin((pio_reg_t *) tft.PORT_D7, tft.PIN_D7);
+	pio_conf_pin((pio_reg_t *) tft.PORT_D7, tft.PIN_D7, 0, 1);
 }
 
 void test_tft_init(void) {

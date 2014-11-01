@@ -93,7 +93,7 @@ typedef struct tft_screen {
 void tft_init(tft_screen *screen);
 
 /**
- * Clears the tft screen
+ * Clears the tft screen (fills it with black)
  * @param screen the screen instance
  */
 void tft_clear(tft_screen *screen);
@@ -103,9 +103,9 @@ void tft_clear(tft_screen *screen);
  * @param screen screen instance
  * @param x xpos
  * @param y ypos
- * @param color color of pixel, format: 0xRRGGBB
+ * @param color color of pixel, format: 0bRRRRRGGGGGBBBBB
  */
-void tft_write(tft_screen *screen, uint32_t x, uint32_t y, uint16_t color);
+void tft_write(tft_screen *screen, uint16_t x, uint16_t y, uint16_t color);
 
 /**
  * Poll for input (not implemented)
@@ -122,7 +122,6 @@ void tft_write_com(tft_screen *screen, uint8_t com);
 
 void tft_write_data(tft_screen *screen, uint16_t data);
 
-//defines an area to draw
 void tft_set_xy(tft_screen *screen, uint16_t x1, uint16_t x2, uint16_t y1, uint16_t y2);
 
 // bus functions
@@ -136,4 +135,4 @@ void tft_write_bus(tft_screen *screen, uint16_t data);
 
 void tft_fast_fill(tft_screen *screen);
 
-#endif TFT_H_
+#endif //TFT_H_

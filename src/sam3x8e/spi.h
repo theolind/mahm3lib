@@ -279,6 +279,14 @@ uint8_t spi_init_selector(spi_reg_t *spi,
  */
 uint8_t spi_enable(spi_reg_t *spi);
 /**
+ * This function will return 1 if the SPI peripheral is enabled.
+ *
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
+ * @return Returns 1 if the SPI peripheral is enabled
+ */
+uint8_t spi_enable_status(spi_reg_t *spi);
+/**
  * This function will set the baud rate for the given selector.
  * The value for baud_rate must be between 0 and 255 and the baud rate will be
  * defined by (MCK / baudR) [Hz] were MCK is the main clock with 84MHz
@@ -464,6 +472,15 @@ uint8_t spi_write(spi_reg_t *spi, uint16_t data);
  */
 uint16_t spi_read(spi_reg_t *spi);
 /**
+ * We want to test if we are able to read data. It is good to do this before
+ * you read data.
+ *
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
+ * @return Returns 1 if there is data in the receive register that is not read
+ */
+uint8_t spi_rx_ready(spi_reg_t *spi);
+/**
  * This function will check and see that a new byte can be placed in the
  * transmit buffer of the peripheral.
  *
@@ -483,24 +500,6 @@ uint8_t spi_tx_ready(spi_reg_t *spi);
  * pending or ongoing transmission.
  */
 uint8_t spi_transmission_done(spi_reg_t *spi);
-/**
- * We want to test if we are able to read data. It is good to do this before
- * you read data.
- *
- * @param spi The base-address of the SPI-peripheral that shall be used.
- * (Use one of predefined values with prefix: SPI)
- * @return Returns 1 if there is data in the receive register that is not read
- */
-uint8_t spi_rx_ready(spi_reg_t *spi);
-/**
- * This function will tell the peripheral to generate a software reset of the
- * entire peripheral.
- *
- * @param spi The base-address of the SPI-peripheral that shall be used.
- * (Use one of predefined values with prefix: SPI)
- * @return error (1 = SUCCESS and 0 = FAIL)
- */
-uint8_t spi_reset(spi_reg_t *spi);
 /**
  * This function will disable the SPI-peripheral. As soon as this function is
  * run, SPI finishes its transfer. All pins are set in input mode and no data
@@ -530,6 +529,15 @@ uint8_t spi_enable_loopback(spi_reg_t *spi);
  */
 uint8_t spi_disable_loopback(spi_reg_t *spi);
 /**
+ * This function will tell the peripheral to generate a software reset of the
+ * entire peripheral.
+ *
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
+ * @return error (1 = SUCCESS and 0 = FAIL)
+ */
+uint8_t spi_reset(spi_reg_t *spi);
+/**
  * This will indicate that the last transfer is done for now and will raise the
  * chip select pin to high and deassert the slave device connected to it. If
  * spi_selector_keep_cs_active() is used, then this will close the open line to
@@ -542,13 +550,6 @@ uint8_t spi_disable_loopback(spi_reg_t *spi);
  * @return error (1 = SUCCESS and 0 = FAIL)
  */
 uint8_t spi_close_selector(spi_reg_t *spi);
-/**
- * This function will return 1 if the SPI peripheral is enabled.
- *
- * @param spi The base-address of the SPI-peripheral that shall be used.
- * (Use one of predefined values with prefix: SPI)
- * @return Returns 1 if the SPI peripheral is enabled
- */
-uint8_t spi_enable_status(spi_reg_t *spi);
+
 
 #endif /* SPI_H_ */

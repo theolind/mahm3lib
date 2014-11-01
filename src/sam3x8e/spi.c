@@ -63,6 +63,37 @@ uint8_t spi_init_selector(spi_reg_t *spi,
 	return 1;
 }
 
+uint8_t spi_enable(spi_reg_t *spi) {
+	// Set the enable pin in control register
+	spi->SPI_CR |= SPI_CR_SPIEN_MASK;
+	return 1;
+}
+
+uint8_t spi_enable_status(spi_reg_t *spi) {
+	// read the status bit of SPI being enabled in status register
+	return (spi->SPI_SR & SPI_SR_SPIENS_MASK) > 0;
+}
+
+uint8_t spi_set_selector_baud_rate(spi_reg_t *spi, uint8_t selector,
+		uint32_t baud_rate) {
+	uint32_t *p_reg;
+	// Boundary test. Higher than these values will result in error or
+	// register corruption, because the selector is used to calculate a
+	// pointer.
+	if (selector > 3) {
+		return 0; // Error
+	}
+	if (baud_rate > 255) {
+		baud_rate = 255;
+	}
+	// Calculate the pointer for the selector based on the first
+	// selector register being the offset.
+	p_reg = (&spi->SPI_CSR0) + selector; // pointer increment of 0 to 3.
+	// Bitwise operation to set the delay for the calculated register to use
+	*p_reg = ((~SPI_CSRx_SCBR_MASK) & *p_reg) | (baud_rate << 8);
+	return 1; // No error
+}
+
 uint8_t spi_set_selector_clk_polarity(spi_reg_t *spi, uint8_t selector,
 		uint32_t polarity) {
 	uint32_t *p_reg;
@@ -94,26 +125,6 @@ uint8_t spi_set_selector_clk_phase(spi_reg_t *spi, uint8_t selector,
 	p_reg = (&spi->SPI_CSR0) + selector; // pointer increment of 0 to 3.
 	// Bitwise operation to set the delay for the calculated register to use
 	*p_reg = ((~SPI_CSRx_NCPHA_MASK) & *p_reg) | (phase << 1);
-	return 1; // No error
-}
-
-uint8_t spi_set_selector_baud_rate(spi_reg_t *spi, uint8_t selector,
-		uint32_t baud_rate) {
-	uint32_t *p_reg;
-	// Boundary test. Higher than these values will result in error or
-	// register corruption, because the selector is used to calculate a
-	// pointer.
-	if (selector > 3) {
-		return 0; // Error
-	}
-	if (baud_rate > 255) {
-		baud_rate = 255;
-	}
-	// Calculate the pointer for the selector based on the first
-	// selector register being the offset.
-	p_reg = (&spi->SPI_CSR0) + selector; // pointer increment of 0 to 3.
-	// Bitwise operation to set the delay for the calculated register to use
-	*p_reg = ((~SPI_CSRx_SCBR_MASK) & *p_reg) | (baud_rate << 8);
 	return 1; // No error
 }
 
@@ -223,49 +234,11 @@ uint8_t spi_set_selector_delay_transfers(spi_reg_t *spi, uint8_t selector,
 	return 1; // No error
 }
 
-uint8_t spi_enable_loopback(spi_reg_t *spi) {
-	// Set the loopback bit in mode register
-	spi->SPI_MR |= SPI_MR_LLB_MASK;
-	return 1;
-}
-
-uint8_t spi_disable_loopback(spi_reg_t *spi) {
-	// Clear the loopback bit in mode register
-	spi->SPI_MR &= ~SPI_MR_LLB_MASK;
-	return 1;
-}
-
-uint8_t spi_enable(spi_reg_t *spi) {
-	// Set the enable pin in control register
-	spi->SPI_CR |= SPI_CR_SPIEN_MASK;
-	return 1;
-}
-
-uint8_t spi_disable(spi_reg_t *spi) {
-	// Set the disable pin in control register
-	spi->SPI_CR |= SPI_CR_SPIDIS_MASK;
-	return 1;
-}
-
-uint8_t spi_enable_status(spi_reg_t *spi) {
-	// read the status bit of SPI being enabled in status register
-	return (spi->SPI_SR & SPI_SR_SPIENS_MASK) > 0;
-}
-
 uint8_t spi_select_slave(spi_reg_t *spi, uint8_t slave) {
 	spi->SPI_MR = ((~SPI_MR_PCS_MASK) & spi->SPI_MR);
 	spi->SPI_MR = ((~SPI_MR_PCS_MASK) & spi->SPI_MR)
 			| ((0b1111u >> (4 - slave)) << 16);
 	return 1;
-}
-
-uint8_t spi_tx_ready(spi_reg_t *spi) {
-	// transfer of data to shift register is indicated by TDRE bit in SPI_SR
-	return (uint8_t)((spi->SPI_SR & SPI_SR_TDRF_MASK) >> 1);
-}
-
-uint8_t spi_rx_ready(spi_reg_t *spi) {
-	return (spi->SPI_SR & SPI_SR_RDRF_MASK);
 }
 
 uint8_t spi_write(spi_reg_t *spi, uint16_t data) {
@@ -280,15 +253,42 @@ uint8_t spi_write(spi_reg_t *spi, uint16_t data) {
 	return 1;
 }
 
+uint16_t spi_read(spi_reg_t *spi) {
+	// SPI_RDR holds received data, this register is full when RDRF bit in SPI_SR is set
+	//When data is read, this bit is cleared
+	return (spi->SPI_RDR & SPI_RDR_RD_MASK);
+}
+
+uint8_t spi_rx_ready(spi_reg_t *spi) {
+	return (spi->SPI_SR & SPI_SR_RDRF_MASK);
+}
+
+uint8_t spi_tx_ready(spi_reg_t *spi) {
+	// transfer of data to shift register is indicated by TDRE bit in SPI_SR
+	return (uint8_t)((spi->SPI_SR & SPI_SR_TDRF_MASK) >> 1);
+}
+
 uint8_t spi_transmission_done(spi_reg_t *spi) {
 	// transmission completion is indicated by TXEMPTY bit in SPI_SR
 	return (spi->SPI_SR & SPI_SR_TXEMPTY_MASK) > 0;
 }
 
-uint16_t spi_read(spi_reg_t *spi) {
-	// SPI_RDR holds received data, this register is full when RDRF bit in SPI_SR is set
-	//When data is read, this bit is cleared
-	return (spi->SPI_RDR & SPI_RDR_RD_MASK);
+uint8_t spi_disable(spi_reg_t *spi) {
+	// Set the disable pin in control register
+	spi->SPI_CR |= SPI_CR_SPIDIS_MASK;
+	return 1;
+}
+
+uint8_t spi_enable_loopback(spi_reg_t *spi) {
+	// Set the loopback bit in mode register
+	spi->SPI_MR |= SPI_MR_LLB_MASK;
+	return 1;
+}
+
+uint8_t spi_disable_loopback(spi_reg_t *spi) {
+	// Clear the loopback bit in mode register
+	spi->SPI_MR &= ~SPI_MR_LLB_MASK;
+	return 1;
 }
 
 uint8_t spi_reset(spi_reg_t *spi) {

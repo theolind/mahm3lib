@@ -41,6 +41,9 @@
  *
  */
 
+#ifndef TFT_H_
+#define TFT_H_
+
 #include <inttypes.h>
 #include "sam3x8e/pio.h"
 
@@ -105,22 +108,7 @@ void tft_clear(tft_screen *screen);
 void tft_write(tft_screen *screen, uint32_t x, uint32_t y, uint16_t color);
 
 /**
- * Reads a pixel from the screen, this will be useful if a user wants to
- * render things with alpha values (transperancy)
- * @param screen screen instance
- * @param point point of pixel to get data from
- * @return the color of the pixel, format: 0xRRGGBB
- */
-void tft_read(tft_screen *screen, uint32_t *x, uint32_t *y);
-
-/**
- * Updates the screen. This must be done to show new data.
- * @param screen screen instance
- */
-void tft_update(tft_screen *screen);
-
-/**
- * Poll for input
+ * Poll for input (not implemented)
  * @param screen screen instance
  * @param x will contain the x-coordinate of the touch
  * @param y will contain the y-coordinate of the touch
@@ -145,3 +133,7 @@ void tft_set_bus(tft_screen *screen, uint8_t value);
 void tft_commit_bus(tft_screen *screen);
 
 void tft_write_bus(tft_screen *screen, uint16_t data);
+
+void tft_fast_fill(tft_screen *screen);
+
+#endif TFT_H_

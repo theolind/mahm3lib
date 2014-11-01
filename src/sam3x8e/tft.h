@@ -9,6 +9,7 @@
  */
 
 #include <inttypes.h>
+#include "sam3x8e/pio.h"
 
 // Struct containing an instace of a tft screen
 typedef struct tft_screen {
@@ -84,3 +85,17 @@ void tft_update(tft_screen *screen);
  * @return true if touch is occuring
  */
 uint32_t tft_read_input(tft_screen *screen, uint32_t *x, uint32_t *y);
+
+// The funcitons below should not be used by the API user
+// They are only intended as "helper" functions for the tft-api
+void tft_clear_bus(tft_screen *screen);
+
+void tft_set_bus(tft_screen *screen, uint8_t value);
+
+void tft_commit_bus(tft_screen *screen);
+
+void tft_write_bus(tft_screen *screen, uint8_t vh, uint8_t vl);
+
+void tft_write_com(tft_screen *screen, uint8_t vl);
+
+void tft_write_data(tft_screen *screen, uint16_t data);

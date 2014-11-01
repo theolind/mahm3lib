@@ -23,93 +23,6 @@
 
 #include <inttypes.h>
 
-///@{
-/**
- * Masks for SPI_CR
- */
-#define SPI_CR_SPIEN_MASK			(1u << 0)
-#define SPI_CR_SPIDIS_MASK			(1u << 1)
-#define SPI_CR_SWRST_MASK			(1u << 7)
-#define SPI_CR_LASTXFER_MASK		(1u << 24)
-///@}
-///@{
-/**
- * Masks for SPI_MR
- */
-#define SPI_MR_MSTR_MASK			(1u << 0)
-#define SPI_MR_PS_MASK				(1u << 1)
-#define SPI_MR_PCSDEC_MASK			(1u << 2)
-#define SPI_MR_MODFDIS_MASK			(1u << 4)
-#define SPI_MR_WDRBT_MASK			(1u << 5)
-#define SPI_MR_LLB_MASK				(1u << 7)
-#define SPI_MR_PCS_MASK				(0xFu << 16)
-#define SPI_MR_DLYBCS_MASK			(0xFFu << 24)
-///@}
-///@{
-/**
- * Masks for SPI_RDR
- */
-#define SPI_RDR_RD_MASK				(0xFFFFu << 0)
-#define SPI_RDR_PCS_MASK			(0xFu << 16)
-///@}
-///@{
-/**
- * Masks for SPI_TDR
- */
-#define SPI_TDR_TD_MASK				(0xFFFFu << 0)
-///@}
-///@{
-/**
- * Masks for SPI_SR
- */
-#define SPI_SR_RDRF_MASK			(1u << 0)
-#define SPI_SR_TDRF_MASK			(1u << 1)
-#define SPI_SR_TXEMPTY_MASK			(1u << 9)
-#define SPI_SR_SPIENS_MASK			(1u << 16)
-///@}
-///@{
-/**
- * Masks for SPI_CSRx
- */
-#define SPI_CSRx_CPOL_MASK			(1u << 0)
-#define SPI_CSRx_NCPHA_MASK			(1u << 1)
-#define SPI_CSRx_CSNAAT_MASK		(1u << 2)
-#define SPI_CSRx_CSAAT_MASK			(1u << 3)
-#define SPI_CSRx_BITS_MASK			(0xFu << 4)
-#define SPI_CSRx_SCBR_MASK			(0xFFu << 8)
-#define SPI_CSRx_DLYBS_MASK			(0xFFu << 16)
-#define SPI_CSRx_DLYBCT_MASK		(0xFFu << 24)
-///@}
-///@{
-/**
- * These are the different possible slaves that can be selected in master mode.
- * There is a method for selecting as many devices as needed. The method is as
- * followed:
- * Use the first selector, but don't wire it to any device. Instead use the PIO
- * to pull the 'Slave Select' pin of the device low instead of using this of
- * the peripheral. Then for each device that you want to select, modify the
- * appropriate register of the selector and set the baud rate and clock polarity
- * and phase as needed for the device you intent to communicate with, and then
- * select it with Selector_1 and pull its PIO-pin low at the same time. Now you
- * have selected the device but not using the actual Selector_1 pin. With this
- * method you can have as many devices connected to the peripheral as there are
- * pins to use.
- */
-#define SPI_SELECTOR_0			(0u) //(0b1110)
-#define SPI_SELECTOR_1			(1u) //(0b1101)
-#define SPI_SELECTOR_2			(2u) //(0b1011)
-#define SPI_SELECTOR_3			(3u) //(0b0111)
-#define SPI_SELECTOR_NONE		(4u) //(0b1111)
-///@}
-///@{
-/**
- * These are variables used with the
- */
-#define SPI_OPTION_KEEP_CS_ACTIVE			(0)
-#define SPI_OPTION_DONT_KEEP_CS_ACTIVE		(1)
-#define SPI_OPTION_DISABLE_CS_OPTIONS		(2)
-///@}
-
 ///\cond
 /**
  * These are the base addresses for the two SPI peripherals
@@ -203,6 +116,93 @@ typedef struct spi_selector_settings {
 	uint8_t reserved;
 } spi_selector_settings_t;
 ///@}
+
+///@{
+/**
+ * Masks for SPI_CR
+ */
+#define SPI_CR_SPIEN_MASK			(1u << 0)
+#define SPI_CR_SPIDIS_MASK			(1u << 1)
+#define SPI_CR_SWRST_MASK			(1u << 7)
+#define SPI_CR_LASTXFER_MASK		(1u << 24)
+///@}
+///@{
+/**
+ * Masks for SPI_MR
+ */
+#define SPI_MR_MSTR_MASK			(1u << 0)
+#define SPI_MR_PS_MASK				(1u << 1)
+#define SPI_MR_PCSDEC_MASK			(1u << 2)
+#define SPI_MR_MODFDIS_MASK			(1u << 4)
+#define SPI_MR_WDRBT_MASK			(1u << 5)
+#define SPI_MR_LLB_MASK				(1u << 7)
+#define SPI_MR_PCS_MASK				(0xFu << 16)
+#define SPI_MR_DLYBCS_MASK			(0xFFu << 24)
+///@}
+///@{
+/**
+ * Masks for SPI_RDR
+ */
+#define SPI_RDR_RD_MASK				(0xFFFFu << 0)
+#define SPI_RDR_PCS_MASK			(0xFu << 16)
+///@}
+///@{
+/**
+ * Masks for SPI_TDR
+ */
+#define SPI_TDR_TD_MASK				(0xFFFFu << 0)
+///@}
+///@{
+/**
+ * Masks for SPI_SR
+ */
+#define SPI_SR_RDRF_MASK			(1u << 0)
+#define SPI_SR_TDRF_MASK			(1u << 1)
+#define SPI_SR_TXEMPTY_MASK			(1u << 9)
+#define SPI_SR_SPIENS_MASK			(1u << 16)
+///@}
+///@{
+/**
+ * Masks for SPI_CSRx
+ */
+#define SPI_CSRx_CPOL_MASK			(1u << 0)
+#define SPI_CSRx_NCPHA_MASK			(1u << 1)
+#define SPI_CSRx_CSNAAT_MASK		(1u << 2)
+#define SPI_CSRx_CSAAT_MASK			(1u << 3)
+#define SPI_CSRx_BITS_MASK			(0xFu << 4)
+#define SPI_CSRx_SCBR_MASK			(0xFFu << 8)
+#define SPI_CSRx_DLYBS_MASK			(0xFFu << 16)
+#define SPI_CSRx_DLYBCT_MASK		(0xFFu << 24)
+///@}
+///@{
+/**
+ * These are the different possible slaves that can be selected in master mode.
+ * There is a method for selecting as many devices as needed. The method is as
+ * followed:
+ * Use the first selector, but don't wire it to any device. Instead use the PIO
+ * to pull the 'Slave Select' pin of the device low instead of using this of
+ * the peripheral. Then for each device that you want to select, modify the
+ * appropriate register of the selector and set the baud rate and clock polarity
+ * and phase as needed for the device you intent to communicate with, and then
+ * select it with Selector_1 and pull its PIO-pin low at the same time. Now you
+ * have selected the device but not using the actual Selector_1 pin. With this
+ * method you can have as many devices connected to the peripheral as there are
+ * pins to use.
+ */
+#define SPI_SELECTOR_0			(0u) //(0b1110)
+#define SPI_SELECTOR_1			(1u) //(0b1101)
+#define SPI_SELECTOR_2			(2u) //(0b1011)
+#define SPI_SELECTOR_3			(3u) //(0b0111)
+#define SPI_SELECTOR_NONE		(4u) //(0b1111)
+///@}
+///@{
+/**
+ * These are variables used with the
+ */
+#define SPI_OPTION_KEEP_CS_ACTIVE			(0u)
+#define SPI_OPTION_DONT_KEEP_CS_ACTIVE		(1u)
+#define SPI_OPTION_DISABLE_CS_OPTIONS		(2u)
+///@}
 ///@{
 /**
  * These variable define the inactive state value of the SPI clock
@@ -227,18 +227,17 @@ typedef struct spi_selector_settings {
  * These variable define the amount of bits to be tranfered on each
  * transmission.
  */
-#define SPI_BITS_8				(0)
-#define SPI_BITS_9				(1)
-#define SPI_BITS_10				(2)
-#define SPI_BITS_11				(3)
-#define SPI_BITS_12				(4)
-#define SPI_BITS_13				(5)
-#define SPI_BITS_14				(6)
-#define SPI_BITS_15				(7)
-#define SPI_BITS_16				(8)
+#define SPI_BITS_8				(0u)
+#define SPI_BITS_9				(1u)
+#define SPI_BITS_10				(2u)
+#define SPI_BITS_11				(3u)
+#define SPI_BITS_12				(4u)
+#define SPI_BITS_13				(5u)
+#define SPI_BITS_14				(6u)
+#define SPI_BITS_15				(7u)
+#define SPI_BITS_16				(8u)
 ///@}
 
-/////// PROTOTYPES ////////////////////////////////////////////////
 /**
  * This function initializes the SPI peripheral.
  *

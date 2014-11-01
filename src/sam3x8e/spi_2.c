@@ -54,7 +54,7 @@ uint8_t spi_init_selector(spi_reg_t *spi,
 	// Set the amount of bits to transfer
 	spi_set_selector_bit_length(spi, settings->selector,
 			settings->bits_pr_transfer);
-	// Set delay before spi clock starts after cs assertion
+	// Set delay before spi clock starts after CS assertion
 	spi_set_selector_delay_clk_start(spi, settings->selector,
 			settings->delay_clk);
 	// Set delay between consecutive transfers
@@ -291,7 +291,7 @@ uint16_t spi_read(spi_reg_t *spi) {
 	return (spi->SPI_RDR & SPI_RDR_RD_MASK);
 }
 
-uint8_t spi_software_reset(spi_reg_t *spi) {
+uint8_t spi_reset(spi_reg_t *spi) {
 	// Set the software reset bit in control register
 	spi->SPI_CR |= SPI_CR_SWRST_MASK;
 	return 1;

@@ -10,27 +10,11 @@
 
 #include "unity/unity.h"
 #include "sam3x8e/pmc.h"
-#include "sam3x8e/id.h"
-#include "sam3x8e/spi_2.h"
 #include "sam3x8e/pio.h"
+
+#include "sam3x8e/spi_2.h"
 #include "test/test_spi.h"
 #include "sam3x8e/delay.h"
-
-// TODO We will be needing a test for all functions.
-// and tests for functionality that are largely done so far.
-
-void print_register(uint32_t reg, char *name) {
-	uart_write_str("\n\r");
-	uart_write_str(name);
-	uart_write_str(" = ");
-	char chr;
-	for (int i = 31; i >= 0; i--) {
-		chr = (char) (48u + (((reg & (1u << i)) >> i)));
-		uart_write_char(chr);
-		uart_write_str(" ");
-	}
-	uart_write_str("\n\r");
-}
 
 void spi_setup(void) {
 	pmc_enable_peripheral_clock(ID_SPI0);
@@ -44,7 +28,7 @@ void spi_setup(void) {
 	pio_conf_pin_to_peripheral(PIOA, 0, 30);	//NPSC2
 	pio_conf_pin_to_peripheral(PIOA, 0, 31);	//NPSC3
 
-	spi_software_reset(SPI0);
+	spi_reset(SPI0);
 }
 
 void test_spi_initial_state(void) {
@@ -124,14 +108,17 @@ void test_spi_after_init(void) {
 	TEST_ASSERT_TRUE((SPI0->SPI_MR & SPI_MR_DLYBCS_MASK) >> 24 > 0);
 	// Testing initial values of selector 0
 	TEST_ASSERT_TRUE((SPI0->SPI_CSR0 & SPI_CSRx_CPOL_MASK) == SPI_POLARITY_LOW);
-	TEST_ASSERT_TRUE((SPI0->SPI_CSR0 & SPI_CSRx_NCPHA_MASK) >> 1 == SPI_PHASE_LOW);
+	TEST_ASSERT_TRUE(
+			(SPI0->SPI_CSR0 & SPI_CSRx_NCPHA_MASK) >> 1 == SPI_PHASE_LOW);
 	TEST_ASSERT_TRUE((SPI0->SPI_CSR0 & SPI_CSRx_SCBR_MASK) >> 8 == 255);
 	TEST_ASSERT_TRUE((SPI0->SPI_CSR0 & SPI_CSRx_BITS_MASK) >> 4 == SPI_BITS_8);
 	TEST_ASSERT_TRUE((SPI0->SPI_CSR0 & SPI_CSRx_DLYBS_MASK) >> 16 > 0);
 	TEST_ASSERT_TRUE((SPI0->SPI_CSR0 & SPI_CSRx_DLYBCT_MASK) >> 24 > 0);
 	// Testing initial values of selector 1
-	TEST_ASSERT_TRUE((SPI0->SPI_CSR1 & SPI_CSRx_CPOL_MASK) >> 0 == SPI_POLARITY_HIGH);
-	TEST_ASSERT_TRUE((SPI0->SPI_CSR1 & SPI_CSRx_NCPHA_MASK) >> 1 == SPI_PHASE_HIGH);
+	TEST_ASSERT_TRUE(
+			(SPI0->SPI_CSR1 & SPI_CSRx_CPOL_MASK) >> 0 == SPI_POLARITY_HIGH);
+	TEST_ASSERT_TRUE(
+			(SPI0->SPI_CSR1 & SPI_CSRx_NCPHA_MASK) >> 1 == SPI_PHASE_HIGH);
 	TEST_ASSERT_TRUE((SPI0->SPI_CSR1 & SPI_CSRx_SCBR_MASK) >> 8 == 128);
 	TEST_ASSERT_TRUE((SPI0->SPI_CSR1 & SPI_CSRx_BITS_MASK) >> 4 == SPI_BITS_9);
 	TEST_ASSERT_TRUE((SPI0->SPI_CSR1 & SPI_CSRx_DLYBS_MASK) >> 16 > 0);
@@ -139,6 +126,7 @@ void test_spi_after_init(void) {
 }
 
 void test_spi_select_slave(void) {
+	delay_ms(1);
 	spi_select_slave(SPI0, SPI_SELECTOR_0);
 	TEST_ASSERT_TRUE((SPI0->SPI_MR & SPI_MR_PCS_MASK) >> 16 == 0b0000);
 	spi_select_slave(SPI0, SPI_SELECTOR_1);
@@ -148,8 +136,10 @@ void test_spi_select_slave(void) {
 }
 
 void test_spi_write_ready() {
+	delay_ms(1);
 	spi_enable(SPI0);
 	spi_select_slave(SPI0, SPI_SELECTOR_0);
+	TEST_ASSERT_TRUE(spi_tx_ready(SPI0));
 	spi_write(SPI0, 0x34);
 	TEST_ASSERT_FALSE(spi_tx_ready(SPI0));
 	delay_ms(1);
@@ -157,20 +147,24 @@ void test_spi_write_ready() {
 }
 
 void test_spi_write() {
-	delay_ms(1);
+	// Copy of test_spi_write_ready()
+	spi_enable(SPI0);
 	spi_select_slave(SPI0, SPI_SELECTOR_0);
 	TEST_ASSERT_TRUE(spi_tx_ready(SPI0));
 	spi_write(SPI0, 0b01011010);
 	TEST_ASSERT_FALSE(spi_tx_ready(SPI0));
 	delay_ms(1);
-//	TEST_ASSERT_TRUE(spi_tx_ready(SPI0));
+	TEST_ASSERT_TRUE(spi_tx_ready(SPI0));
 }
 
 void test_spi_transmission_complete() {
 	delay_ms(1);
+	spi_enable(SPI0);
+	spi_select_slave(SPI0, SPI_SELECTOR_0);
 	spi_write(SPI0, 0b01011010);
 	spi_write(SPI0, 0b01011011);
 	TEST_ASSERT_FALSE(SPI0->SPI_SR & (0x1u << 1));
+	TEST_ASSERT_FALSE(SPI0->SPI_SR & (0x1u << 9));
 	delay_ms(1);
 	TEST_ASSERT_TRUE(SPI0->SPI_SR & (0x1u << 1));
 	TEST_ASSERT_TRUE(SPI0->SPI_SR & (0x1u << 9));
@@ -178,45 +172,32 @@ void test_spi_transmission_complete() {
 
 void test_spi_read_ready() {
 	delay_ms(1);
+	spi_enable(SPI0);
+	spi_select_slave(SPI0, SPI_SELECTOR_0);
 	spi_read(SPI0);
-	spi_write(SPI0, 0b00000000);
+	spi_write(SPI0, 0b00011100);
+	TEST_ASSERT_FALSE(spi_rx_ready(SPI0));
 	delay_ms(1);
 	TEST_ASSERT_TRUE(spi_rx_ready(SPI0));
 }
 
 void test_spi_correct_transmission(void) {
-	while (!spi_tx_ready(SPI0))
-		;
+	delay_ms(1);
 	// We wish to see if the byte transmitted is the same as the one received.
 	uint16_t data1 = 0b10101010;
 	uint16_t data2 = 0b10101011;
 	spi_write(SPI0, data1);
 	delay_ms(1);
-	TEST_ASSERT_FALSE(spi_read(SPI0) == ~data1);
-	TEST_ASSERT_TRUE(spi_read(SPI0) == data1);
+	TEST_ASSERT_EQUAL_HEX32(~data1, ~spi_read(SPI0));
 	// We also want to see the behavior when an overrun is occurred.
 	spi_write(SPI0, data1);
 	spi_write(SPI0, data2);
 	delay_ms(1);
-	TEST_ASSERT_FALSE(spi_read(SPI0) == ~data2);
-	TEST_ASSERT_TRUE(spi_read(SPI0) == data2);
+	TEST_ASSERT_EQUAL_HEX32(data2, spi_read(SPI0));
+	// Now we test sending a double byte and see if one byte is returned while
+	// the bits_pr_transfer is set to 8 bits.
+	data1 = 0b0101011101001001;
+	spi_write(SPI0, 0x00FF & data1);
+	TEST_ASSERT_EQUAL_HEX32( 0x00FF & data1, spi_read(SPI0));
 }
-/*
- void test_spi_0_write(void){
- // Check if new data has been received since last read
- TEST_ASSERT_FALSE(SPI1->SPI_SR & (0x1u << SPI_SR_RDRF));
- // Write new data
- spi_write(SPI0, CHAR_TEST_VALUE);
- // Check if new data has been received since last read
- TEST_ASSERT_TRUE(SPI0->SPI_SR & (0x1u << SPI_SR_RDRF));
- // TDRE should give out 0
- }
 
- void test_spi_0_read(void){
- // Check if new data has been received since last read
- TEST_ASSERT_TRUE(SPI1->SPI_SR & (0x1u << SPI_SR_RDRF));
- // Read data
- TEST_ASSERT_TRUE(spi_read(ID_SPI0) == CHAR_TEST_VALUE);
- // Check if new data has been received since last read
- TEST_ASSERT_FALSE(SPI1->SPI_SR & (0x1u << SPI_SR_RDRF));
- }*/

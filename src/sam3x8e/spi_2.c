@@ -1,4 +1,4 @@
-/**
+/*
  * @file pwm.c
  * @brief Pulse Width Modulation (PWM)
  * @details An API for controlling the PWM peripheral inside a SAM3X8E MCU.
@@ -38,7 +38,7 @@ uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings) {
 
 	// set Delay Between Chip Selects
 	spi_set_delay_between_cs(spi, settings->delay_between_cs);
-	// Initialy select none of the selectors (slaves)
+	// Initially select none of the selectors (slaves)
 	spi_select_slave(spi, SPI_SELECTOR_NONE);
 	return 1;
 }
@@ -52,11 +52,14 @@ uint8_t spi_init_selector(spi_reg_t *spi,
 	// Set the baud rate of the transfer
 	spi_set_selector_baud_rate(spi, settings->selector, settings->baud_rate);
 	// Set the amount of bits to transfer
-	spi_set_selector_bit_length(spi, settings->selector, settings->bits_pr_transfer);
+	spi_set_selector_bit_length(spi, settings->selector,
+			settings->bits_pr_transfer);
 	// Set delay before spi clock starts after cs assertion
-	spi_set_selector_delay_clk_start(spi, settings->selector, settings->delay_clk);
+	spi_set_selector_delay_clk_start(spi, settings->selector,
+			settings->delay_clk);
 	// Set delay between consecutive transfers
-	spi_set_selector_delay_transfers(spi, settings->selector, settings->delay_transfers);
+	spi_set_selector_delay_transfers(spi, settings->selector,
+			settings->delay_transfers);
 	return 1;
 }
 
@@ -71,7 +74,7 @@ uint8_t spi_set_selector_clk_polarity(spi_reg_t *spi, uint8_t selector,
 	}
 	// Calculate the pointer for the selector based on the first
 	// selector register being the offset.
-	p_reg = (&spi->SPI_CSR0) + selector; // pointer increment of 0 to 3.
+	p_reg = (&spi->SPI_CSR0) + (uint32_t) selector; // pointer increment of 0 to 3.
 	// Bitwise operation to set the delay for the calculated register to use
 	*p_reg = ((~SPI_CSRx_CPOL_MASK) & *p_reg) | (polarity << 0);
 	return 1; // No error
@@ -114,37 +117,31 @@ uint8_t spi_set_selector_baud_rate(spi_reg_t *spi, uint8_t selector,
 	return 1; // No error
 }
 
-uint8_t spi_set_selector_do_not_keep_cs_active(spi_reg_t *spi, uint8_t selector,
+uint8_t spi_set_selector_option(spi_reg_t *spi, uint8_t selector,
 		uint32_t option) {
 	uint32_t *p_reg;
 	// Boundary test. Higher than these values will result in error or
 	// register corruption, because the selector is used to calculate a
 	// pointer.
-	if (option > 1 || selector > 3) {
+	if (option > 2 || selector > 3) {
 		return 0; // Error
 	}
 	// Calculate the pointer for the selector based on the first
 	// selector register being the offset.
 	p_reg = (&spi->SPI_CSR0) + selector; // pointer increment of 0 to 3.
-	// Bitwise operation to set the delay for the calculated register to use
-	*p_reg = ((~SPI_CSRx_CSNAAT_MASK) & *p_reg) | (option << 2);
-	return 1; // No error
-}
+	// Bitwise operation to set the option for the calculated register to use
+	if (option == SPI_OPTION_DONT_KEEP_CS_ACTIVE) {
+		*p_reg |= SPI_CSRx_CSNAAT_MASK;
+		*p_reg &= ~SPI_CSRx_CSAAT_MASK;
 
-uint8_t spi_set_selector_keep_cs_active(spi_reg_t *spi, uint8_t selector,
-		uint32_t option) {
-	uint32_t *p_reg;
-	// Boundary test. Higher than these values will result in error or
-	// register corruption, because the selector is used to calculate a
-	// pointer.
-	if (option > 1 || selector > 3) {
-		return 0; // Error
+	} else if (option == SPI_OPTION_KEEP_CS_ACTIVE) {
+		*p_reg &= ~SPI_CSRx_CSNAAT_MASK;
+		*p_reg |= SPI_CSRx_CSAAT_MASK;
+
+	} else if (option == SPI_OPTION_DISABLE_CS_OPTIONS) {
+		*p_reg &= ~SPI_CSRx_CSNAAT_MASK;
+		*p_reg &= ~SPI_CSRx_CSAAT_MASK;
 	}
-	// Calculate the pointer for the selector based on the first
-	// selector register being the offset.
-	p_reg = (&spi->SPI_CSR0) + selector; // pointer increment of 0 to 3.
-	// Bitwise operation to set the delay for the calculated register to use
-	*p_reg = ((~SPI_CSRx_CSAAT_MASK) & *p_reg) | (option << 3);
 	return 1; // No error
 }
 
@@ -159,6 +156,7 @@ uint8_t spi_set_selector_bit_length(spi_reg_t *spi, uint8_t selector,
 	}
 	// Calculate the pointer for the selector based on the first
 	// selector register being the offset.
+
 	p_reg = (&spi->SPI_CSR0) + selector; // pointer increment of 0 to 3.
 	// Bitwise operation to set the delay for the calculated register to use
 	*p_reg = ((~SPI_CSRx_BITS_MASK) & *p_reg) | (bit_count << 4);
@@ -225,13 +223,13 @@ uint8_t spi_set_selector_delay_transfers(spi_reg_t *spi, uint8_t selector,
 	return 1; // No error
 }
 
-uint8_t spi_loopback_enable(spi_reg_t *spi) {
+uint8_t spi_enable_loopback(spi_reg_t *spi) {
 	// Set the loopback bit in mode register
 	spi->SPI_MR |= SPI_MR_LLB_MASK;
 	return 1;
 }
 
-uint8_t spi_loopback_disable(spi_reg_t *spi) {
+uint8_t spi_disable_loopback(spi_reg_t *spi) {
 	// Clear the loopback bit in mode register
 	spi->SPI_MR &= ~SPI_MR_LLB_MASK;
 	return 1;
@@ -255,15 +253,15 @@ uint8_t spi_enable_status(spi_reg_t *spi) {
 }
 
 uint8_t spi_select_slave(spi_reg_t *spi, uint8_t slave) {
-	// TODO Change this later into one line (update spi_mr once)
-	spi->SPI_MR = ((~SPI_MR_PCS_MASK) & spi->SPI_MR); //clear bit 16 to 19 in SPI_MR
-	spi->SPI_MR |= ((0b1111u >> (4 - slave)) << 16); //set bit 16 to 18 in SPI_MR (could be predefined)
+	spi->SPI_MR = ((~SPI_MR_PCS_MASK) & spi->SPI_MR);
+	spi->SPI_MR = ((~SPI_MR_PCS_MASK) & spi->SPI_MR)
+			| ((0b1111u >> (4 - slave)) << 16);
 	return 1;
 }
 
 uint8_t spi_tx_ready(spi_reg_t *spi) {
 	// transfer of data to shift register is indicated by TDRE bit in SPI_SR
-	return (spi->SPI_SR & SPI_SR_TDRF_MASK) > 0;
+	return (uint8_t)((spi->SPI_SR & SPI_SR_TDRF_MASK) >> 1);
 }
 
 uint8_t spi_rx_ready(spi_reg_t *spi) {
@@ -274,11 +272,11 @@ uint8_t spi_write(spi_reg_t *spi, uint16_t data) {
 	// transfer begins when processor writes to spi->SPI_TDR
 	// before writing SPI_TDR, PCS field in SPI_MR must be set in order to select slave
 
-	//if SPI_RDR has not been read OVRES in SPI_SR is set
+	//if SPI_RDR has not been read OVRES in SPI_SR will be set after this transfer
 	//user has to read SPI_SR to clear OVRES
 
 	// Retrieving the register and modifying it (Storing error output in shift)
-	spi->SPI_TDR = (spi->SPI_TDR & (~SPI_TDR_TD_MASK)) | data;
+	spi->SPI_TDR = (spi->SPI_TDR & (~SPI_TDR_TD_MASK)) | (uint32_t) data;
 	return 1;
 }
 
@@ -299,7 +297,7 @@ uint8_t spi_software_reset(spi_reg_t *spi) {
 	return 1;
 }
 
-uint8_t spi_selector_close(spi_reg_t *spi) {
+uint8_t spi_close_selector(spi_reg_t *spi) {
 	// Set the last transfer bit in control register
 	spi->SPI_CR |= SPI_CR_LASTXFER_MASK;
 	return 1;

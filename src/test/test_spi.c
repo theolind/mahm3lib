@@ -19,7 +19,20 @@
 // TODO We will be needing a test for all functions.
 // and tests for functionality that are largely done so far.
 
-void test_spi_setup(void) {
+void print_register(uint32_t reg, char *name) {
+	uart_write_str("\n\r");
+	uart_write_str(name);
+	uart_write_str(" = ");
+	char chr;
+	for (int i = 31; i >= 0; i--) {
+		chr = (char) (48u + (((reg & (1u << i)) >> i)));
+		uart_write_char(chr);
+		uart_write_str(" ");
+	}
+	uart_write_str("\n\r");
+}
+
+void spi_setup(void) {
 	pmc_enable_peripheral_clock(ID_SPI0);
 	pmc_enable_peripheral_clock(ID_PIOA);
 
@@ -31,6 +44,38 @@ void test_spi_setup(void) {
 	pio_conf_pin_to_peripheral(PIOA, 0, 30);	//NPSC2
 	pio_conf_pin_to_peripheral(PIOA, 0, 31);	//NPSC3
 
+	spi_software_reset(SPI0);
+}
+
+void test_spi_initial_state(void) {
+	// Testing initial values of status register
+	TEST_ASSERT_FALSE(spi_enable_status(SPI0));
+	TEST_ASSERT_TRUE((SPI0->SPI_SR & SPI_SR_RDRF_MASK) == 0);
+	TEST_ASSERT_TRUE((SPI0->SPI_SR & SPI_SR_TDRF_MASK) == 0);
+	TEST_ASSERT_TRUE((SPI0->SPI_SR & SPI_SR_TXEMPTY_MASK) == 0);
+	TEST_ASSERT_TRUE((SPI0->SPI_SR & SPI_SR_SPIENS_MASK) == 0);
+	// Testing initial values of mode register
+	TEST_ASSERT_TRUE((SPI0->SPI_MR & SPI_MR_PCS_MASK) == 0);
+	TEST_ASSERT_TRUE((SPI0->SPI_MR & SPI_MR_LLB_MASK) == 0);
+	TEST_ASSERT_TRUE((SPI0->SPI_MR & SPI_MR_DLYBCS_MASK) == 0);
+	// Testing initial values of selector 0
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR0 & SPI_CSRx_CPOL_MASK) == SPI_POLARITY_LOW);
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR0 & SPI_CSRx_NCPHA_MASK) == SPI_PHASE_LOW);
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR0 & SPI_CSRx_SCBR_MASK) == 0);
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR0 & SPI_CSRx_BITS_MASK) == SPI_BITS_8);
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR0 & SPI_CSRx_DLYBS_MASK) == 0);
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR0 & SPI_CSRx_DLYBCT_MASK) == 0);
+	// Testing initial values of selector 1
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR1 & SPI_CSRx_CPOL_MASK) == SPI_POLARITY_LOW);
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR1 & SPI_CSRx_NCPHA_MASK) == SPI_PHASE_LOW);
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR1 & SPI_CSRx_SCBR_MASK) == 0);
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR1 & SPI_CSRx_BITS_MASK) == SPI_BITS_8);
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR1 & SPI_CSRx_DLYBS_MASK) == 0);
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR1 & SPI_CSRx_DLYBCT_MASK) == 0);
+}
+
+void spi_selector_init(void) {
+	// Initialize ///////////////////////////////////////////
 	const spi_settings_t setting = { .delay_between_cs = 12, };
 
 	// initialize selector 0
@@ -45,42 +90,80 @@ void test_spi_setup(void) {
 
 	// initialize selector 1
 	spi_selector_settings_t selector_1;
-	selector_0.selector = SPI_SELECTOR_1;
-	selector_0.CPOL = SPI_POLARITY_HIGH;
-	selector_0.NCPHA = SPI_PHASE_LOW;
-	selector_0.baud_rate = 128;
-	selector_0.bits_pr_transfer = SPI_BITS_8;
-	selector_0.delay_clk = 1000; // 41*12ns = 492 ns
-	selector_0.delay_transfers = 1000;
+	selector_1.selector = SPI_SELECTOR_1;
+	selector_1.CPOL = SPI_POLARITY_HIGH;
+	selector_1.NCPHA = SPI_PHASE_HIGH;
+	selector_1.baud_rate = 128;
+	selector_1.bits_pr_transfer = SPI_BITS_9;
+	selector_1.delay_clk = 1000; // 41*12ns = 492 ns
+	selector_1.delay_transfers = 1000;
 
 	spi_init(SPI0, &setting);
 	spi_init_selector(SPI0, &selector_0);
 	spi_init_selector(SPI0, &selector_1);
 
-	spi_loopback_enable(SPI0);
+	spi_enable(SPI0);
 
-	spi_select_slave(SPI0, SPI_SELECTOR_0); // Slave 0
+	spi_enable_loopback(SPI0);
 
+	spi_select_slave(SPI0, SPI_SELECTOR_1); // Slave 0
+	/////////////////////////////
 }
 
-void test_spi_init(void) {
-	TEST_ASSERT_TRUE(SPI0->SPI_SR & (0x1u << SPI_SR_SPIENS));
+void test_spi_after_init(void) {
+	spi_selector_init();
+	// Testing initial values of status register
+	TEST_ASSERT_TRUE(spi_enable_status(SPI0));
+	TEST_ASSERT_TRUE((SPI0->SPI_SR & SPI_SR_RDRF_MASK) == 0);
+	TEST_ASSERT_TRUE((SPI0->SPI_SR & SPI_SR_TDRF_MASK) >> 1 == 1);
+	TEST_ASSERT_TRUE((SPI0->SPI_SR & SPI_SR_TXEMPTY_MASK) >> 9 == 1);
+	TEST_ASSERT_TRUE((SPI0->SPI_SR & SPI_SR_SPIENS_MASK) >> 16 == 1);
+	// Testing initial values of mode register
+	TEST_ASSERT_TRUE((SPI0->SPI_MR & SPI_MR_PCS_MASK) >> 16 == 0b0001);
+	TEST_ASSERT_TRUE((SPI0->SPI_MR & SPI_MR_LLB_MASK) >> 7 == 1);
+	TEST_ASSERT_TRUE((SPI0->SPI_MR & SPI_MR_DLYBCS_MASK) >> 24 > 0);
+	// Testing initial values of selector 0
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR0 & SPI_CSRx_CPOL_MASK) == SPI_POLARITY_LOW);
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR0 & SPI_CSRx_NCPHA_MASK) >> 1 == SPI_PHASE_LOW);
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR0 & SPI_CSRx_SCBR_MASK) >> 8 == 255);
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR0 & SPI_CSRx_BITS_MASK) >> 4 == SPI_BITS_8);
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR0 & SPI_CSRx_DLYBS_MASK) >> 16 > 0);
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR0 & SPI_CSRx_DLYBCT_MASK) >> 24 > 0);
+	// Testing initial values of selector 1
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR1 & SPI_CSRx_CPOL_MASK) >> 0 == SPI_POLARITY_HIGH);
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR1 & SPI_CSRx_NCPHA_MASK) >> 1 == SPI_PHASE_HIGH);
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR1 & SPI_CSRx_SCBR_MASK) >> 8 == 128);
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR1 & SPI_CSRx_BITS_MASK) >> 4 == SPI_BITS_9);
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR1 & SPI_CSRx_DLYBS_MASK) >> 16 > 0);
+	TEST_ASSERT_TRUE((SPI0->SPI_CSR1 & SPI_CSRx_DLYBCT_MASK) >> 24 > 0);
 }
 
 void test_spi_select_slave(void) {
 	spi_select_slave(SPI0, SPI_SELECTOR_0);
-	//TODO write a test for this
+	TEST_ASSERT_TRUE((SPI0->SPI_MR & SPI_MR_PCS_MASK) >> 16 == 0b0000);
+	spi_select_slave(SPI0, SPI_SELECTOR_1);
+	TEST_ASSERT_TRUE((SPI0->SPI_MR & SPI_MR_PCS_MASK) >> 16 == 0b0001);
+	spi_select_slave(SPI0, SPI_SELECTOR_2);
+	TEST_ASSERT_TRUE((SPI0->SPI_MR & SPI_MR_PCS_MASK) >> 16 == 0b0011);
 }
 
 void test_spi_write_ready() {
+	spi_enable(SPI0);
+	spi_select_slave(SPI0, SPI_SELECTOR_0);
+	spi_write(SPI0, 0x34);
+	TEST_ASSERT_FALSE(spi_tx_ready(SPI0));
+	delay_ms(1);
 	TEST_ASSERT_TRUE(spi_tx_ready(SPI0));
 }
 
 void test_spi_write() {
-	spi_write(SPI0, 0b01011010);
-	TEST_ASSERT_FALSE(SPI0->SPI_SR & (0x1u << 1));
 	delay_ms(1);
-	TEST_ASSERT_TRUE(SPI0->SPI_SR & (0x1u << 1));
+	spi_select_slave(SPI0, SPI_SELECTOR_0);
+	TEST_ASSERT_TRUE(spi_tx_ready(SPI0));
+	spi_write(SPI0, 0b01011010);
+	TEST_ASSERT_FALSE(spi_tx_ready(SPI0));
+	delay_ms(1);
+//	TEST_ASSERT_TRUE(spi_tx_ready(SPI0));
 }
 
 void test_spi_transmission_complete() {
@@ -94,6 +177,7 @@ void test_spi_transmission_complete() {
 }
 
 void test_spi_read_ready() {
+	delay_ms(1);
 	spi_read(SPI0);
 	spi_write(SPI0, 0b00000000);
 	delay_ms(1);

@@ -28,14 +28,18 @@
  * 0: SPI disabled
  */
 #define SPI_SR_SPIENS		16
-
-void test_spi_setup(void);
-void test_spi_init(void);
+// Setup
+void spi_setup(void);
+void spi_selector_init(void);
+// Initial test
+void test_spi_initial_state(void);
+void test_spi_after_init(void);
+// Incremental tests
 void test_spi_select_slave(void);
 void test_spi_write_ready(void);
 void test_spi_write(void);
 void test_spi_read_ready(void);
-void test_spi_correct_transmission(void);
 void test_spi_transmission_complete(void);
+void test_spi_correct_transmission(void);
 
 #endif

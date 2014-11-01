@@ -102,7 +102,7 @@ void tft_clear(tft_screen *screen);
  * @param y ypos
  * @param color color of pixel, format: 0xRRGGBB
  */
-void tft_write(tft_screen *screen, uint32_t x, uint32_t y, uint32_t color);
+void tft_write(tft_screen *screen, uint32_t x, uint32_t y, uint16_t color);
 
 /**
  * Reads a pixel from the screen, this will be useful if a user wants to

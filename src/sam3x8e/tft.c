@@ -77,6 +77,30 @@ uint32_t tft_read_input(tft_screen *screen, uint32_t *x, uint32_t *y) {
 
 // The funcitons below should not be used by the API user
 // They are only intended as "helper" functions for the tft-api
+
+void tft_set_xy(tft_screen *screen, uint16_t x1, uint16_t x2, uint16_t y1, uint16_t y2) {
+	tft_write_com(screen, 0x46); tft_write_data(screen, (x2 << 8) | x1);
+	tft_write_com(screen, 0x47); tft_write_data(screen, y2 );
+	tft_write_com(screen, 0x48); tft_write_data(screen, y1 );
+	tft_write_com(screen, 0x20); tft_write_data(screen, x1 );
+	tft_write_com(screen, 0x21); tft_write_data(screen, y1 );
+	tft_write_com(screen, 0x22);
+}
+
+void tft_write_com(tft_screen *screen, uint8_t com) {
+	//RS low
+	pio_set_pin(screen->PORT_RS, screen->PIN_RS, 0);
+	tft_write_bus(screen, com);
+}
+
+void tft_write_data(tft_screen *screen, uint16_t data) {
+	//RS high
+	pio_set_pin(screen->PORT_RS, screen->PIN_RS, 1);
+	tft_write_bus(screen, data);
+}
+
+//bus functions
+
 void tft_clear_bus(tft_screen *screen) {
 	pio_set_pin(screen->PORT_D0, screen->PIN_D0, 0);
 	pio_set_pin(screen->PORT_D1, screen->PIN_D1, 0);
@@ -112,16 +136,4 @@ void tft_write_bus(tft_screen *screen, uint16_t data) {
 	tft_clear_bus(screen);
 	tft_set_bus(screen, data);
 	tft_commit_bus(screen);
-}
-
-void tft_write_com(tft_screen *screen, uint8_t com) {
-	//RS low
-	pio_set_pin(screen->PORT_RS, screen->PIN_RS, 0);
-	tft_write_bus(screen, com);
-}
-
-void tft_write_data(tft_screen *screen, uint16_t data) {
-	//RS high
-	pio_set_pin(screen->PORT_RS, screen->PIN_RS, 1);
-	tft_write_bus(screen, data);
 }

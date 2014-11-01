@@ -88,6 +88,14 @@ uint32_t tft_read_input(tft_screen *screen, uint32_t *x, uint32_t *y);
 
 // The funcitons below should not be used by the API user
 // They are only intended as "helper" functions for the tft-api
+void tft_write_com(tft_screen *screen, uint8_t com);
+
+void tft_write_data(tft_screen *screen, uint16_t data);
+
+//defines an area to draw
+void tft_set_xy(tft_screen *screen, uint16_t x1, uint16_t x2, uint16_t y1, uint16_t y2);
+
+// bus functions
 void tft_clear_bus(tft_screen *screen);
 
 void tft_set_bus(tft_screen *screen, uint8_t value);
@@ -95,7 +103,3 @@ void tft_set_bus(tft_screen *screen, uint8_t value);
 void tft_commit_bus(tft_screen *screen);
 
 void tft_write_bus(tft_screen *screen, uint16_t data);
-
-void tft_write_com(tft_screen *screen, uint8_t com);
-
-void tft_write_data(tft_screen *screen, uint16_t data);

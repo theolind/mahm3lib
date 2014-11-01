@@ -94,8 +94,8 @@ void tft_set_bus(tft_screen *screen, uint8_t value);
 
 void tft_commit_bus(tft_screen *screen);
 
-void tft_write_bus(tft_screen *screen, uint8_t vh, uint8_t vl);
+void tft_write_bus(tft_screen *screen, uint16_t data);
 
-void tft_write_com(tft_screen *screen, uint8_t vl);
+void tft_write_com(tft_screen *screen, uint8_t com);
 
 void tft_write_data(tft_screen *screen, uint16_t data);

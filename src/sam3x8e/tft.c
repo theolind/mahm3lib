@@ -105,23 +105,23 @@ void tft_commit_bus(tft_screen *screen) {
 	pio_set_pin(screen->PORT_WR, screen->PIN_WR, 1);
 }
 
-void tft_write_bus(tft_screen *screen, uint8_t vh, uint8_t vl) {
+void tft_write_bus(tft_screen *screen, uint16_t data) {
 	tft_clear_bus(screen);
-	tft_set_bus(screen, vh);
+	tft_set_bus(screen, data>>8);
 	tft_commit_bus(screen);
 	tft_clear_bus(screen);
-	tft_set_bus(screen, vl);
+	tft_set_bus(screen, data);
 	tft_commit_bus(screen);
 }
 
-void tft_write_com(tft_screen *screen, uint8_t vl) {
+void tft_write_com(tft_screen *screen, uint8_t com) {
 	//RS low
 	pio_set_pin(screen->PORT_RS, screen->PIN_RS, 0);
-	tft_write_bus(screen, 0x00, vl);
+	tft_write_bus(screen, com);
 }
 
 void tft_write_data(tft_screen *screen, uint16_t data) {
 	//RS high
 	pio_set_pin(screen->PORT_RS, screen->PIN_RS, 1);
-	tft_write_bus(screen, data>>8, data);
+	tft_write_bus(screen, data);
 }

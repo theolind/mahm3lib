@@ -1,26 +1,26 @@
 /*
- * @file pwm.c
- * @brief Pulse Width Modulation (PWM)
- * @details An API for controlling the PWM peripheral inside a SAM3X8E MCU.
- * This peripheral is an embedded macrocell within the MCU and all of its 44
- * registers are physically mapped on this macrocell, therefore modifying the
- * register requires that the peripheral clock is enabled in PMC. However, when
- * modified, the register values are stored even it the peripheral clock is
- * turned off and the peripheral will continue its operation when the clock is
- * turned back on.
- * This API implements all 8 independent channels and their change of polarity,
- * alignment, PWM frequency and handles the pin multiplexing for all 16 outputs
- * of the peripheral. The API does not stop any clock once it has started them.
+ * @file spi.h
+ * @brief Serial Peripheral Interface (SPI)
+ * @details An API for controlling the two SPI peripherals inside a SAM3X8E MCU.
+ * This API has implemented all of the peripherals setting flexibility and is
+ * suitable for all SPI communicating modules.
+ * This SPI peripheral is fast and can go up to 84 MHz and is suitable to be
+ * used with External Co-Processors. The lowest transfer speed of this
+ * peripheral is 84Hz / 255 = 329412 baud rate.
  * @author Saeed Ghasemi
- * @date 28 sep 2014
- * @pre The API handles all of its dependencies on other peripherals
- * internally and will start other clocks in order to properly operate.
- * @bug Manually tested all functions to comply with all demands.
- * The only problem is that the register set defined below is not working when
- * implemented. The register mapping currently working is non conventional.
+ * @author Soded
+ * @date 1 November 2014
+ * @pre The API does not handle its dependencies on other peripherals
+ * internally and wont start the necessary clocks for it own operation. The
+ * programmer refer to the documentation for PMC and PIO to deal with the
+ * dependencies of this API on them. The programmer must first turn on its
+ * clock in PMC and program the pins of this peripheral to be in its control
+ * using PIO.
+ * @bug Automatic unity testing has been performed on all functions.
+ * No known errors exist.
  */
 
-#include "spi_2.h"
+#include "spi.h"
 
 uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings) {
 	// These settings are not implemented in this API and are therefore

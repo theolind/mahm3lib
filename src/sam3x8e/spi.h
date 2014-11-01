@@ -1,27 +1,32 @@
 /**
- * @file spi_2.h
+ * @file spi.h
  * @brief Serial Peripheral Interface (SPI)
  * @details An API for controlling the two SPI peripherals inside a SAM3X8E MCU.
  * This API has implemented all of the peripherals setting flexibility and is
  * suitable for all SPI communicating modules.
  * This SPI peripheral is fast and can go up to 84 MHz and is suitable to be
  * used with External Co-Processors. The lowest transfer speed of this
- * peripheral is 84Hz / 255 = 329412.
+ * peripheral is 84Hz / 255 = 329412 baud rate.
  * @author Saeed Ghasemi
- * @date 24 okt 2014
+ * @author Soded
+ * @date 1 November 2014
  * @pre The API does not handle its dependencies on other peripherals
  * internally and wont start the necessary clocks for it own operation. The
  * programmer refer to the documentation for PMC and PIO to deal with the
  * dependencies of this API on them. The programmer must first turn on its
- * clock in PMC and program the pins of this peripheral t be in its control
+ * clock in PMC and program the pins of this peripheral to be in its control
  * using PIO.
- * @bug Manually tested all functions to comply with all demands.
+ * @bug Automatic unity testing has been performed on all functions.
+ * No known errors exist.
  */
 
 #ifndef SPI_H_
 #define SPI_H_
 
+#ifndef INTTYPES_H_
+#define INTTYPES_H_
 #include <inttypes.h>
+#endif /* INTTYPES_H_ */
 
 ///\cond
 /**
@@ -245,6 +250,7 @@ typedef struct spi_selector_settings {
  * (Use one of predefined values with prefix: SPI)
  * @param settings This is a struct of type spi_settings_t with different
  * setting for the initialization of the peripheral.
+ * @return error (1 = SUCCESS, 0 = FAIL)
  */
 uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings);
 /**
@@ -260,8 +266,8 @@ uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings);
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
  * @param settings This is a struct of type spi_selector_settings_t with the
- * needed setting for the initialization of the selector.
- * @return
+ * needed parameters for the initialization of the selector.
+ * @return error (1 = SUCCESS, 0 = FAIL)
  */
 uint8_t spi_init_selector(spi_reg_t *spi,
 		const spi_selector_settings_t *settings);
@@ -269,7 +275,7 @@ uint8_t spi_init_selector(spi_reg_t *spi,
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
- * @return
+ * @return error (1 = SUCCESS, 0 = FAIL)
  */
 uint8_t spi_enable(spi_reg_t *spi);
 /**
@@ -285,7 +291,7 @@ uint8_t spi_enable(spi_reg_t *spi);
  * @param selector The selector to be modified.
  * (Use the predefined with prefix: SPI_SELECTOR_)
  * @param baud_rate
- * @return
+ * @return error (1 = SUCCESS, 0 = FAIL)
  */
 uint8_t spi_set_selector_baud_rate(spi_reg_t *spi, uint8_t selector,
 		uint32_t baud_rate);
@@ -454,7 +460,7 @@ uint8_t spi_write(spi_reg_t *spi, uint16_t data);
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
- * @return Returns the data that is received at the point of last transmission
+ * @return Returns the data that is received with the last transmission
  */
 uint16_t spi_read(spi_reg_t *spi);
 /**
@@ -473,7 +479,7 @@ uint8_t spi_tx_ready(spi_reg_t *spi);
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
- * @return Will return 1 if transmissions are complete or 0 if there are
+ * @return Return 1 if transmissions are complete or 0 if there are
  * pending or ongoing transmission.
  */
 uint8_t spi_transmission_done(spi_reg_t *spi);
@@ -483,7 +489,7 @@ uint8_t spi_transmission_done(spi_reg_t *spi);
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
- * @return returns 1 if there is data in the receive register that is not read
+ * @return Returns 1 if there is data in the receive register that is not read
  */
 uint8_t spi_rx_ready(spi_reg_t *spi);
 /**
@@ -501,7 +507,8 @@ uint8_t spi_reset(spi_reg_t *spi);
  * is received or transmitted. If a transfer is in progress, the transfer is
  * finished before the SPI is disabled.
  *
- * @param spi
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
  * @return error (1 = SUCCESS and 0 = FAIL)
  */
 uint8_t spi_disable(spi_reg_t *spi);
@@ -529,15 +536,19 @@ uint8_t spi_disable_loopback(spi_reg_t *spi);
  * the device by raising the CS-line and indicate an end of transfer. If a
  * transfer is ongoing this change will take effect after that the current
  * transfer is complete.
+ *
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
  * @return error (1 = SUCCESS and 0 = FAIL)
  */
 uint8_t spi_close_selector(spi_reg_t *spi);
 /**
  * This function will return 1 if the SPI peripheral is enabled.
  *
- * @param spi
- * @return
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
+ * @return Returns 1 if the SPI peripheral is enabled
  */
 uint8_t spi_enable_status(spi_reg_t *spi);
 
-#endif
+#endif /* SPI_H_ */

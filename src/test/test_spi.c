@@ -5,14 +5,16 @@
  *
  * @author Jonathan Bjarnason
  * @author Soded Alatia
- * @date 2 October 2014
+ * @author Saeed Ghasemi
+ *
+ * @date 1 november 2014
  */
 
 #include "unity/unity.h"
 #include "sam3x8e/pmc.h"
 #include "sam3x8e/pio.h"
 
-#include "sam3x8e/spi_2.h"
+#include "sam3x8e/spi.h"
 #include "test/test_spi.h"
 #include "sam3x8e/delay.h"
 

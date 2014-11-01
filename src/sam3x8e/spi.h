@@ -8,7 +8,7 @@
  * used with External Co-Processors. The lowest transfer speed of this
  * peripheral is 84Hz / 255 = 329412 baud rate.
  * @author Saeed Ghasemi
- * @author Soded
+ * @author Soded Alatia
  * @date 1 November 2014
  * @pre The API does not handle its dependencies on other peripherals
  * internally and wont start the necessary clocks for it own operation. The

@@ -2,6 +2,8 @@
  * @file test_spi.c
  * @brief Serial Peripheral Interface (SPI) unit tests
  * @details This class is used to test SPI capabilities of this API
+ * These test use the internal loopback function of the SPI peripheral.
+ * There are test for all functions.
  *
  * @author Jonathan Bjarnason
  * @author Soded Alatia

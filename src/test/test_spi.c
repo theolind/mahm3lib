@@ -194,34 +194,14 @@ void test_spi_correct_transmission(void) {
 	spi_write(SPI0, data2);
 	delay_ms(1);
 	TEST_ASSERT_EQUAL_HEX32(data2, spi_read(SPI0));
-	// Now we test sending a double byte and see if one byte is returned while
-	// the bits_pr_transfer is set to 8 bits.
-	data1 = 0b0101011101001001;
-	spi_write(SPI0, data1); // We send both bytes as 16 consecutive bits
-	delay_ms(1);
-	// We expect only 1  byte of course (see mask)
-	TEST_ASSERT_EQUAL_HEX32(0x00FF & data1, spi_read(SPI0));
-	// Now we test to see if we can change bits_pr_transfer to 9 bits
-	spi_set_selector_bit_length(SPI0, SPI_SELECTOR_0, SPI_BITS_9);
-	spi_write(SPI0, data1); // We send both bytes as 16 consecutive bits
-	delay_ms(1);
-	// added a bit to mask
-	TEST_ASSERT_EQUAL_HEX32(0x01FF & data1, spi_read(SPI0));
-	// Now we test to see if we can change bits_pr_transfer to 14 bits
-	spi_set_selector_bit_length(SPI0, SPI_SELECTOR_0, SPI_BITS_14);
-	spi_write(SPI0, data1); // We send both bytes as 16 consecutive bits
-	delay_ms(1);
-	TEST_ASSERT_EQUAL_HEX32(0x3FFF & data1, spi_read(SPI0));
-
 }
 
 void test_spi_variable_bit_lenght_transmission(void) {
 	delay_ms(1);
-	// We wish to see if the byte transmitted is the same as the one received.
-	uint16_t data1 = 0b10101010;
+	uint16_t data1 = 0b0101011101001001;
 	// Now we test sending a double byte and see if one byte is returned while
 	// the bits_pr_transfer is set to 8 bits.
-	data1 = 0b0101011101001001;
+	spi_set_selector_bit_length(SPI0, SPI_SELECTOR_0, SPI_BITS_8);
 	spi_write(SPI0, data1); // We send both bytes as 16 consecutive bits
 	delay_ms(1);
 	// We expect only 1  byte of course (see mask)
@@ -239,3 +219,38 @@ void test_spi_variable_bit_lenght_transmission(void) {
 	TEST_ASSERT_EQUAL_HEX32(0x3FFF & data1, spi_read(SPI0));
 }
 
+void test_spi_polarity_phase_change(void) {
+	delay_ms(1);
+	uint16_t data1 = 0b0101011101001001;
+	spi_set_selector_bit_length(SPI0, SPI_SELECTOR_0, SPI_BITS_16);
+	// test case begin
+	spi_set_selector_clk_polarity(SPI0, SPI_SELECTOR_0, SPI_POLARITY_HIGH);
+	spi_set_selector_clk_phase(SPI0, SPI_SELECTOR_0, SPI_PHASE_HIGH);
+	spi_write(SPI0, data1); // We send both bytes as 16 consecutive bits
+	delay_ms(1);
+	TEST_ASSERT_EQUAL_HEX32(data1, spi_read(SPI0));
+	// new test
+	spi_set_selector_clk_polarity(SPI0, SPI_SELECTOR_0, SPI_POLARITY_LOW);
+	spi_set_selector_clk_phase(SPI0, SPI_SELECTOR_0, SPI_PHASE_LOW);
+	spi_write(SPI0, data1); // We send both bytes as 16 consecutive bits
+	delay_ms(1);
+	TEST_ASSERT_EQUAL_HEX32(data1, spi_read(SPI0));
+}
+
+void test_spi_baud_rate_change(void) {
+	delay_ms(1);
+	uint16_t data1 = 0b0101011101001001;
+	spi_set_selector_bit_length(SPI0, SPI_SELECTOR_0, SPI_BITS_16);
+	spi_set_selector_clk_polarity(SPI0, SPI_SELECTOR_0, SPI_POLARITY_LOW);
+	spi_set_selector_clk_phase(SPI0, SPI_SELECTOR_0, SPI_PHASE_LOW);
+	// test case begin
+	spi_set_selector_baud_rate(SPI0, SPI_SELECTOR_0, 1);
+	spi_write(SPI0, data1); // We send both bytes as 16 consecutive bits
+	delay_ms(1);
+	TEST_ASSERT_EQUAL_HEX32(data1, spi_read(SPI0));
+	// new test
+	spi_set_selector_baud_rate(SPI0, SPI_SELECTOR_0, 2);
+	spi_write(SPI0, data1); // We send both bytes as 16 consecutive bits
+	delay_ms(1);
+	TEST_ASSERT_EQUAL_HEX32(data1, spi_read(SPI0));
+}

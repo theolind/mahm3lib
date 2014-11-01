@@ -138,6 +138,8 @@ void run_tests(void) {
 	RUN_TEST(test_spi_transmission_complete, 100);
 	RUN_TEST(test_spi_correct_transmission, 100);
 	RUN_TEST(test_spi_variable_bit_lenght_transmission, 100);
+	RUN_TEST(test_spi_polarity_phase_change, 100);
+	RUN_TEST(test_spi_baud_rate_change, 100);
 	HORIZONTAL_LINE_BREAK();
 
 	UnityEnd();

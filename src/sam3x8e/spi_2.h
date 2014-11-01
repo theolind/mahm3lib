@@ -436,9 +436,7 @@ uint8_t spi_set_selector_delay_transfers(spi_reg_t *spi, uint8_t selector,
  */
 uint8_t spi_select_slave(spi_reg_t *spi, uint8_t slave);
 /**
- * Write a data of max 16 bits in length. This will make the SPI receive a
- * equally long data that it will discard and avoid overrun error in the
- * peripheral.
+ * Write a data of max 16 bits in length.
  * If subsequent write are performed, be sure to check the if transfer buffer
  * is ready with spi_tx_ready() before writing.
  *
@@ -451,6 +449,8 @@ uint8_t spi_write(spi_reg_t *spi, uint16_t data);
 /**
  * This function will read a previously received byte with an earlier
  * transmission.
+ * Keep in mind that the spi_write() function can also be used to read the
+ * previously received data.
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)

@@ -197,7 +197,45 @@ void test_spi_correct_transmission(void) {
 	// Now we test sending a double byte and see if one byte is returned while
 	// the bits_pr_transfer is set to 8 bits.
 	data1 = 0b0101011101001001;
-	spi_write(SPI0, 0x00FF & data1);
-	TEST_ASSERT_EQUAL_HEX32( 0x00FF & data1, spi_read(SPI0));
+	spi_write(SPI0, data1); // We send both bytes as 16 consecutive bits
+	delay_ms(1);
+	// We expect only 1  byte of course (see mask)
+	TEST_ASSERT_EQUAL_HEX32(0x00FF & data1, spi_read(SPI0));
+	// Now we test to see if we can change bits_pr_transfer to 9 bits
+	spi_set_selector_bit_length(SPI0, SPI_SELECTOR_0, SPI_BITS_9);
+	spi_write(SPI0, data1); // We send both bytes as 16 consecutive bits
+	delay_ms(1);
+	// added a bit to mask
+	TEST_ASSERT_EQUAL_HEX32(0x01FF & data1, spi_read(SPI0));
+	// Now we test to see if we can change bits_pr_transfer to 14 bits
+	spi_set_selector_bit_length(SPI0, SPI_SELECTOR_0, SPI_BITS_14);
+	spi_write(SPI0, data1); // We send both bytes as 16 consecutive bits
+	delay_ms(1);
+	TEST_ASSERT_EQUAL_HEX32(0x3FFF & data1, spi_read(SPI0));
+
+}
+
+void test_spi_variable_bit_lenght_transmission(void) {
+	delay_ms(1);
+	// We wish to see if the byte transmitted is the same as the one received.
+	uint16_t data1 = 0b10101010;
+	// Now we test sending a double byte and see if one byte is returned while
+	// the bits_pr_transfer is set to 8 bits.
+	data1 = 0b0101011101001001;
+	spi_write(SPI0, data1); // We send both bytes as 16 consecutive bits
+	delay_ms(1);
+	// We expect only 1  byte of course (see mask)
+	TEST_ASSERT_EQUAL_HEX32(0x00FF & data1, spi_read(SPI0));
+	// Now we test to see if we can change bits_pr_transfer to 9 bits
+	spi_set_selector_bit_length(SPI0, SPI_SELECTOR_0, SPI_BITS_9);
+	spi_write(SPI0, data1); // We send both bytes as 16 consecutive bits
+	delay_ms(1);
+	// added a bit to mask
+	TEST_ASSERT_EQUAL_HEX32(0x01FF & data1, spi_read(SPI0));
+	// Now we test to see if we can change bits_pr_transfer to 14 bits
+	spi_set_selector_bit_length(SPI0, SPI_SELECTOR_0, SPI_BITS_14);
+	spi_write(SPI0, data1); // We send both bytes as 16 consecutive bits
+	delay_ms(1);
+	TEST_ASSERT_EQUAL_HEX32(0x3FFF & data1, spi_read(SPI0));
 }
 

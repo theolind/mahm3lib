@@ -41,5 +41,6 @@ void test_spi_write(void);
 void test_spi_read_ready(void);
 void test_spi_transmission_complete(void);
 void test_spi_correct_transmission(void);
+void test_spi_variable_bit_lenght_transmission(void);
 
 #endif

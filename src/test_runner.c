@@ -24,7 +24,7 @@
 
 void run_tests(void) {
 	UnityBegin();
-/*
+
 	// Run UART tests
 	Unity.TestFile = "test/test_uart.c";
 	RUN_TEST(test_uart_send_receive_char_local_loopback_mode, 0);
@@ -122,7 +122,7 @@ void run_tests(void) {
 	RUN_TEST(test_twi_set_clock_valid_parameters, 90);
 	//RUN_TEST(test_twi_send_receive_SEMI_AUTOMATIC, 90);
 	HORIZONTAL_LINE_BREAK();
-*/
+
 	// Run SPI tests
 	// Have yet to run tests due to error messages
 	Unity.TestFile = "test/test_spi.c";
@@ -137,8 +137,8 @@ void run_tests(void) {
 	RUN_TEST(test_spi_read_ready, 100);
 	RUN_TEST(test_spi_transmission_complete, 100);
 	RUN_TEST(test_spi_correct_transmission, 100);
+	RUN_TEST(test_spi_variable_bit_lenght_transmission, 100);
 	HORIZONTAL_LINE_BREAK();
-
 
 	UnityEnd();
 }

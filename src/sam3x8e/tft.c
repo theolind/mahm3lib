@@ -59,6 +59,18 @@ void tft_init(tft_screen *screen) {
 	pio_set_pin(screen->PORT_CS, screen->PIN_CS, 1);	//CS high
 }
 
+void tft_clear(tft_screen *screen) {
+	pio_set_pin(screen->PORT_CS, screen->PIN_CS, 0);
+	uint16_t x,y;
+	tft_set_xy(screen, 0, screen->width, 0, screen->height);
+	for(x = 0; x < screen->width; x++) {
+		for(y = 0; y < screen->height; y++) {
+			tft_write_data(screen, 0x0000);
+		}
+	}
+	pio_set_pin(screen->PORT_CS, screen->PIN_CS, 1);
+}
+
 void tft_write(tft_screen *screen, uint32_t x, uint32_t y, uint32_t color) {
 
 }

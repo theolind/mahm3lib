@@ -3,6 +3,39 @@
  * @details Provides rendering on a TFT display and touch input (both polling
  * and interrupt based)
  *
+ * @pre This API needs to have all pins in tft_screen struct to be enabled by
+ * pio and configured as outputs. An example using a itead 2.4" shield follows:
+ *
+ *	tft_screen tft;
+ *	tft.PORT_CS = PIOA; tft.PIN_CS = 22;
+ *	tft.PORT_WR = PIOA; tft.PIN_WR = 6;
+ *	tft.PORT_RS = PIOA; tft.PIN_RS = 4;
+ *	tft.PORT_D0 = PIOA; tft.PIN_D0 = 8;
+ *	tft.PORT_D1 = PIOA; tft.PIN_D1 = 9;
+ *	tft.PORT_D2 = PIOB; tft.PIN_D2 = 25;
+ *	tft.PORT_D3 = PIOC; tft.PIN_D3 = 28;
+ *	tft.PORT_D4 = PIOC; tft.PIN_D4 = 26;
+ *	tft.PORT_D5 = PIOC; tft.PIN_D5 = 25;
+ *	tft.PORT_D6 = PIOC; tft.PIN_D6 = 24;
+ *	tft.PORT_D7 = PIOC; tft.PIN_D7 = 23;
+ *	tft.width = 239;
+ *	tft.height = 319;
+ *
+ * 	//configure pins
+ *	pio_enable_pin(tft.PORT_CS, tft.PIN_CS); pio_conf_pin(tft.PORT_CS, tft.PIN_CS, 0, 1);
+ *	pio_enable_pin(tft.PORT_WR, tft.PIN_WR); pio_conf_pin(tft.PORT_WR, tft.PIN_WR, 0, 1);
+ *	pio_enable_pin(tft.PORT_RS, tft.PIN_RS); pio_conf_pin(tft.PORT_RS, tft.PIN_RS, 0, 1);
+ *	pio_enable_pin(tft.PORT_D0, tft.PIN_D0); pio_conf_pin(tft.PORT_D0, tft.PIN_D0, 0, 1);
+ *	pio_enable_pin(tft.PORT_D1, tft.PIN_D1); pio_conf_pin(tft.PORT_D1, tft.PIN_D1, 0, 1);
+ *	pio_enable_pin(tft.PORT_D2, tft.PIN_D2); pio_conf_pin(tft.PORT_D2, tft.PIN_D2, 0, 1);
+ *	pio_enable_pin(tft.PORT_D3, tft.PIN_D3); pio_conf_pin(tft.PORT_D3, tft.PIN_D3, 0, 1);
+ *	pio_enable_pin(tft.PORT_D4, tft.PIN_D4); pio_conf_pin(tft.PORT_D4, tft.PIN_D4, 0, 1);
+ *	pio_enable_pin(tft.PORT_D5, tft.PIN_D5); pio_conf_pin(tft.PORT_D5, tft.PIN_D5, 0, 1);
+ *	pio_enable_pin(tft.PORT_D6, tft.PIN_D6); pio_conf_pin(tft.PORT_D6, tft.PIN_D6, 0, 1);
+ *	pio_enable_pin(tft.PORT_D7, tft.PIN_D7); pio_conf_pin(tft.PORT_D7, tft.PIN_D7, 0, 1);
+ *
+ *	tft_init(&tft);
+ *
  * @author Theodor Lindquist
  * @date 30 October 2014
  *
@@ -45,6 +78,9 @@ typedef struct tft_screen {
 
 	uint32_t PORT_D7;
 	uint32_t PIN_D7;
+
+	uint32_t width;
+	uint32_t height;
 } tft_screen;
 
 /**
@@ -52,6 +88,12 @@ typedef struct tft_screen {
  * @param screen the screen instance
  */
 void tft_init(tft_screen *screen);
+
+/**
+ * Clears the tft screen
+ * @param screen the screen instance
+ */
+void tft_clear(tft_screen *screen);
 
 /**
  * Writes a pixel to the screen memory. Alternative name tft_write_pixel / tft_put_pixel / tft_render_pixel

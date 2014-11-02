@@ -4,8 +4,10 @@
  * PWM - Pulse Width Modulation
  * An API for controlling the PWM peripheral inside a SAM3X8E MCU.
  *
- * Author: Saeed Ghasemi
- * Date: 28 sep 2014
+ * Author:	Saeed Ghasemi
+ *			Andreas Drotth
+ *			Mattias Nilsson
+ * Date:	02 November 2014
  */
 
 #include "pwm.h"
@@ -107,9 +109,6 @@ uint8_t pwm_set_channel_polarity(uint32_t channel, uint32_t pwm_polarity) {
 	p_reg = (&PWM->PWM_CMR0) + (ch_dis * channel);
 	*p_reg = ((~PWM_CDTYUPDx_CDTYUPD_MASK) & *p_reg) |
 						(pwm_polarity << 9);
-
-//	return set_section_in_register((&PWM->PWM_CMR0) + (ch_dis * channel),
-//	PWM_CMRx_CPOL_MASK, pwm_polarity);
 	return 1;
 
 }
@@ -122,8 +121,6 @@ uint8_t pwm_set_channel_alignment(uint32_t channel, uint32_t pwm_alignment) {
 	*p_reg = ((~PWM_CMRx_CALG_MASK) & *p_reg) |
 							(pwm_alignment << 8);
 	return 1;
-//	return set_section_in_register((&PWM->PWM_CMR0) + (ch_dis * channel),
-//	PWM_CMRx_CALG_MASK, pwm_alignment);
 }
 /*
  * Set the channel prescaler
@@ -134,8 +131,6 @@ uint8_t pwm_set_channel_prescaler(uint32_t channel, uint32_t prescaler) {
 	*p_reg = ((~PWM_CMRx_CPRE_MASK) & *p_reg) |
 							(prescaler << 0);
 	return 1;
-//	return set_section_in_register((&PWM->PWM_CMR0) + (ch_dis * channel),
-//	PWM_CMRx_CPRE_MASK, prescaler);
 }
 /*
  * This function will set the period value used by a given PWM channel.
@@ -149,14 +144,10 @@ uint8_t pwm_set_channel_period(uint32_t channel, uint32_t period) {
 		p_reg = (&PWM->PWM_CPRDUPD0) + (ch_dis * channel);
 		*p_reg = ((~PWM_CPRDUPDx_CPRDUPD_MASK) & *p_reg) |
 								(period << 0);
-//		set_section_in_register((&PWM->PWM_CPRDUPD0) + (ch_dis * channel),
-//		PWM_CPRDUPDx_CPRDUPD_MASK, period);
 	} else {
 		p_reg = (&PWM->PWM_CPRD0) + (ch_dis * channel);
 		*p_reg = ((~PWM_CPRDx_CPRD_MASK) & *p_reg) |
 								(period << 0);
-//		set_section_in_register((&PWM->PWM_CPRD0) + (ch_dis * channel),
-//		PWM_CPRDx_CPRD_MASK, period);
 	}
 	return 1;
 }
@@ -272,15 +263,11 @@ uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor) {
 		p_reg = (&PWM->PWM_CLK);
 		*p_reg = ((~PWM_CLK_PREA_MASK) & *p_reg) | (prescaler << 8);
 		*p_reg = ((~PWM_CLK_DIVA_MASK) & *p_reg) | (divisor << 0);
-		//set_section_in_register(&PWM->PWM_CLK, PWM_CLK_PREA_MASK, prescaler);
-		//set_section_in_register(&PWM->PWM_CLK, PWM_CLK_DIVA_MASK, divisor);
 		return 1;
 	} else if (clock_id == PWM_CLK_ID_CLKB) {
 		p_reg = (&PWM->PWM_CLK);
 		*p_reg = ((~PWM_CLK_PREB_MASK) & *p_reg) | (prescaler << 24);
 		*p_reg = ((~PWM_CLK_DIVB_MASK) & *p_reg) | (divisor << 16);
-//		set_section_in_register(&PWM->PWM_CLK, PWM_CLK_PREB_MASK, prescaler);
-//		set_section_in_register(&PWM->PWM_CLK, PWM_CLK_DIVB_MASK, divisor);
 		return 1;
 	}
 	return 0;
@@ -290,31 +277,21 @@ uint8_t pwm_set_clkx(uint32_t clock_id, uint32_t prescaler, uint32_t divisor) {
  */
 uint32_t pwm_read_channel(uint32_t channel) {
 	return (*((&PWM->PWM_CDTY0) + (ch_dis *channel)) & PWM_CDTYx_CDTY_MASK);
-//	return get_section_in_register((&PWM->PWM_CDTY0) + (ch_dis * channel),
-//	PWM_CDTYx_CDTY_MASK);
 }
 /*
  * Writes an output to a given channel by setting the channel duty cycle.
  */
 uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
 	uint32_t *p_reg;
-		if (pwm_channel_enabled(channel)) {
-			p_reg = (&PWM->PWM_CDTYUPD0) + (ch_dis * channel);
-			*p_reg = ((~PWM_CDTYUPDx_CDTYUPD_MASK) & *p_reg) |
-					(duty_cycle << 0);
-		} else {
-			p_reg = (&PWM->PWM_CDTY0) + (ch_dis * channel);
-			*p_reg = ((~PWM_CDTYx_CDTY_MASK) & *p_reg) |
-					(duty_cycle << 0);
-		}
-
-//	if (pwm_channel_enabled(channel)) {
-//		set_section_in_register((&PWM->PWM_CDTYUPD0) + (ch_dis * channel),
-//		PWM_CDTYUPDx_CDTYUPD_MASK, duty_cycle);
-//	} else {
-//		set_section_in_register((&PWM->PWM_CDTY0) + (ch_dis * channel),
-//		PWM_CDTYx_CDTY_MASK, duty_cycle);
-//	}
+	if (pwm_channel_enabled(channel)) {
+		p_reg = (&PWM->PWM_CDTYUPD0) + (ch_dis * channel);
+		*p_reg = ((~PWM_CDTYUPDx_CDTYUPD_MASK) & *p_reg) |
+				(duty_cycle << 0);
+	} else {
+		p_reg = (&PWM->PWM_CDTY0) + (ch_dis * channel);
+		*p_reg = ((~PWM_CDTYx_CDTY_MASK) & *p_reg) |
+				(duty_cycle << 0);
+	}
 	return 1;
 
 }
@@ -323,34 +300,34 @@ uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle) {
  * This is also called channel resolution.
  */
 uint32_t pwm_get_channel_period(uint32_t channel) {
-	return get_section_in_register((&PWM->PWM_CPRD0) + (ch_dis * channel),
-	PWM_CPRDx_CPRD_MASK);
+	return (*((&PWM->PWM_CPRD0) + (ch_dis *channel)) & PWM_CPRDx_CPRD_MASK);
 }
 /*
- * This function reads the alignment og the channel.
+ * This function reads the alignment of the channel.
  */
 uint32_t pwm_get_channel_alignment(uint32_t channel) {
-	return get_section_in_register((&PWM->PWM_CMR0) + (ch_dis * channel),
-	PWM_CMRx_CALG_MASK);
+	return (*((&PWM->PWM_CMR0) + (ch_dis *channel)) & PWM_CMRx_CALG_MASK);
 }
 /*
  * This function reads the selected prescaler of the channel.
  */
 uint32_t pwm_get_channel_prescaler(uint32_t channel) {
-	return get_section_in_register((&PWM->PWM_CMR0) + (ch_dis * channel),
-	PWM_CMRx_CPRE_MASK);
+	return (*((&PWM->PWM_CMR0) + (ch_dis *channel)) & PWM_CMRx_CPRE_MASK);
 }
 /*
  * Turns off clock A or B.
  */
 uint8_t pwm_turn_off_clkx(uint8_t clock_id) {
+	uint32_t *p_reg;
 	if (clock_id == 0) {
-		set_section_in_register(&PWM->PWM_CLK, PWM_CLK_DIVA_MASK,
-		PWM_CLK_DIVx_TURNOFF);
+		p_reg = (&PWM->PWM_CLK);
+		*p_reg = ((~PWM_CLK_DIVA_MASK) & *p_reg) |
+				(0 << 0);
 		return 1;
 	} else if (clock_id == 1) {
-		set_section_in_register(&PWM->PWM_CLK, PWM_CLK_DIVB_MASK,
-		PWM_CLK_DIVx_TURNOFF);
+		p_reg = (&PWM->PWM_CLK);
+		*p_reg = ((~PWM_CLK_DIVB_MASK) & *p_reg) |
+				(0 << 16);
 		return 1;
 	}
 	return 0;
@@ -359,77 +336,41 @@ uint8_t pwm_turn_off_clkx(uint8_t clock_id) {
  * Resets the channel and disables it
  */
 uint8_t pwm_reset_channel(uint32_t channel) {
+	uint32_t *p_reg;
 	pwm_disable_channel(channel);
-	set_section_in_register((&PWM->PWM_CMR0) + (ch_dis * channel), 0xFFFFFFFFU, 0x0U);
-	set_section_in_register((&PWM->PWM_CDTY0) + (ch_dis * channel), 0xFFFFFFFFU, 0x0U);
-	set_section_in_register((&PWM->PWM_CDTYUPD0) + (ch_dis * channel), 0xFFFFFFFFU, 0x0U);
-	set_section_in_register((&PWM->PWM_CPRD0) + (ch_dis * channel), 0xFFFFFFFFU, 0x0U);
-	set_section_in_register((&PWM->PWM_CPRDUPD0) + (ch_dis * channel), 0xFFFFFFFFU, 0x0U);
-	set_section_in_register((&PWM->PWM_DT0) + (ch_dis * channel), 0xFFFFFFFFU, 0x0U);
-	set_section_in_register((&PWM->PWM_DTUPD0) + (ch_dis * channel), 0xFFFFFFFFU, 0x0U);
+	p_reg = (&PWM->PWM_CMR0) + (ch_dis * channel);
+	*p_reg = ((~0xFFFFFFFFU) & *p_reg) |
+			(0 << 0);
+	p_reg = (&PWM->PWM_CDTY0) + (ch_dis * channel);
+	*p_reg = ((~0xFFFFFFFFU) & *p_reg) |
+			(0 << 0);
+	p_reg = (&PWM->PWM_CDTYUPD0) + (ch_dis * channel);
+	*p_reg = ((~0xFFFFFFFFU) & *p_reg) |
+			(0 << 0);
+	p_reg = (&PWM->PWM_CPRD0) + (ch_dis * channel);
+	*p_reg = ((~0xFFFFFFFFU) & *p_reg) |
+			(0 << 0);
+	p_reg = (&PWM->PWM_CPRDUPD0) + (ch_dis * channel);
+	*p_reg = ((~0xFFFFFFFFU) & *p_reg) |
+			(0 << 0);
+	p_reg = (&PWM->PWM_DT0) + (ch_dis * channel);
+	*p_reg = ((~0xFFFFFFFFU) & *p_reg) |
+			(0 << 0);
+	p_reg = (&PWM->PWM_DTUPD0) + (ch_dis * channel);
+	*p_reg = ((~0xFFFFFFFFU) & *p_reg) |
+			(0 << 0);
 	return 1;
 }
 /*
  * Disables and resets all channels and the peripheral
  */
 uint8_t pwm_reset_peripheral() {
-	set_section_in_register(&PWM->PWM_CLK, 0xFFFFFFFFU, 0x0U);
+	uint32_t *p_reg;
+	p_reg = (&PWM->PWM_CLK);
+	*p_reg = ((~0xFFFFFFFFU) & *p_reg) |
+					(0 << 0);
 	for (uint32_t channel = 0; channel < 8; channel++) {
 		pwm_reset_channel(channel);
 	}
 	return 1;
-}
-
-//-------------------BITWISE OPERATIONS-----------------
-
-/*
- * This function return the bit-number of the first bit being high in a 32-bit
- * long value. The main purpose of this function is to find the start-bit of a
- * given mask. The start-bit can then be used to left-bit-shift a value into
- * position relative to a section in a register.
- *
- * Be sure not to pass mask = 0 into this function, the output will be
- * misleading and equal to 0.
- *
- * @param mask {The mask to be examined}
- * @return {bit-number of the first position (0 could indicate error)}
- */
-uint8_t get_position_of_first_highbit(uint32_t mask) {
-	uint8_t j = 0;
-	if (mask != 0x0U) {
-		// 0x80000000 has one bit to the far left only
-		while (mask != 0x80000000) {
-			mask = (mask << 1);
-			j++;
-		}
-		return (uint8_t) (0x1F - j); // = (31 - j)
-	}
-	return 0;
-}
-/*
- * This function will modify a section of a given register as indicated by'
- * mask with the value specified in 'value'.
- *
- * @param reg {This specifies a pointer to the register}
- * @param mask {The mask for the section in question (it may not be inverted)}
- * @param value {The value the section must store}
- * @return error (1 = SUCCESS and 0 = FAIL)
- */
-uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value) {
-	// Retrieving the register and modifying it (Storing error output in shift)
-	uint8_t shift = get_position_of_first_highbit(mask);
-	*reg = ((~mask) & *reg) | (value << shift);
-	return shift; // 0 from shift could means fail
-}
-/*
- * This function will only return the value of a specified section in a given
- * register. The value in the section will be right-shifted so that the value
- * returned is the value stored in the section.
- *
- * @param reg This specifies a pointer to the register
- * @param mask The area for which the value must be returned (high bit are read)
- * @return The value of the section in the register
- */
-uint32_t get_section_in_register(uint32_t *reg, uint32_t mask) {
-	return ((*reg & mask) >> get_position_of_first_highbit(mask));
 }

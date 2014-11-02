@@ -12,7 +12,9 @@
  * alignment, PWM frequency and handles the pin multiplexing for all 16 outputs
  * of the peripheral. The API does not stop any clock once it has started them.
  * @author Saeed Ghasemi
- * @date 28 sep 2014
+ * @author Andreas Drotth
+ * @author Mattias Nilsson
+ * @date 02 November 2014
  * @pre The API does not handle its dependencies on other peripherals
  * internally and wont start the necessary clocks for it own operation. The
  * programmer refer to the documentation for PMC and PIO to deal with the
@@ -607,43 +609,5 @@ uint8_t pwm_reset_channel(uint32_t channel);
  */
 uint8_t pwm_reset_peripheral(void);
 ///@}
-
-
-
-//-------------------BITWISE OPERATIONS-----------------
-
-/**
- * This function return the bit-number of the first bit being high in a 32-bit
- * long value. The main purpose of this function is to find the start-bit of a
- * given mask. The start-bit can then be used to left-bit-shift a value into
- * position relative to a section in a register.
- *
- * Be sure not to pass mask = 0 into this function, the output will be
- * misleading and equal to 0.
- *
- * @param mask {The mask to be examined}
- * @return {bit-number of the first position (0 could indicate error)}
- */
-uint8_t get_position_of_first_highbit(uint32_t mask);
-/**
- * This function will modify a section of a given register as indicated by
- * mask with the value specified in 'value'.
- *
- * @param reg This specifies a pointer to the register
- * @param mask It must have the same length as the register, with ones across the section
- * @param value The value the section must store
- * @return error (1 = SUCCESS and 0 = FAIL)
- */
-uint8_t set_section_in_register(uint32_t *reg, uint32_t mask, uint32_t value);
-/**
- * This function will only return the value of a specified section in a given
- * register. The value in the section will be right-shifted so that the value
- * returned is the value stored in the section.
- *
- * @param reg This specifies a pointer to the register
- * @param mask The area for which the value must be returned (high bit are read)
- * @return The value of the section in the register
- */
-uint32_t get_section_in_register(uint32_t *reg, uint32_t mask);
 
 #endif /* PWM_H_ */

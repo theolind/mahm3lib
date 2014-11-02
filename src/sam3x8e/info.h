@@ -15,7 +15,7 @@
 #include "sam3x8e/uart.h"
 
 /// The version output can be changed here
-#define KERNEL_INFO		"Kernel name: mahm3lib\n\rKernel version: release3"
+#define KERNEL_INFO		"Kernel name: mahm3lib\n\rKernel version: release4"
 
 /**
  * This function will return the kernel name and version by means of the uart.

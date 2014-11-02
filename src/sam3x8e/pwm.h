@@ -365,7 +365,7 @@ typedef struct pwm_reg {
 	uint32_t PWM_DTUPD7; ///< PWM Channel Dead Time Update Register (Channel 7)
 } pwm_reg_t;
 /**
- * @typedef pwm_clk_setting
+ * @typedef pwm_clk_setting_t
  * This structure is used with pwm_init() to set the settings for the clocks A
  * and B of the PWM peripheral.
  */
@@ -376,7 +376,7 @@ typedef struct pwm_clk_setting {
 	uint32_t clkB_divisor; ///<This is the divisor for clock B. Set this between 0 and 255. 0 will turn the clock off.
 } pwm_clk_setting_t;
 /**
- * @typedef pwm_channel_setting
+ * @typedef pwm_channel_setting_t
  * This structure is used with pwm_init_channel() to set the settings of a
  * channel.
  */

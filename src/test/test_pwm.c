@@ -86,7 +86,7 @@ void test_pwm_set_clkx() {
 	TEST_ASSERT_EQUAL_UINT32(0x800000, (PWM->PWM_CLK & PWM_CLK_DIVB_MASK));
 }
 
-void test_set_frequency(){
+void test_pwm_set_frequency(){
 	pwm_reset_peripheral();
 	pwm_set_channel_alignment(PWM_CHANNEL_3, PWM_CHANNEL_ALIGN_LEFT);
 	pwm_set_channel_frequency(PWM_CHANNEL_3, 25000);

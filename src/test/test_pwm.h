@@ -17,7 +17,7 @@ void test_pwm_channel_polarity(void);
 void test_pwm_channel_alignment(void);
 void test_pwm_channel_period(void);
 void test_pwm_set_clkx(void);
-void test_set_frequency(void);
+void test_pwm_set_frequency(void);
 
 #endif
 

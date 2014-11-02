@@ -1,23 +1,24 @@
 /*
- * @file spi.h
- * @brief Serial Peripheral Interface (SPI)
- * @details An API for controlling the two SPI peripherals inside a SAM3X8E MCU.
+ * Serial Peripheral Interface (SPI)
+ * An API for controlling the two SPI peripherals inside a SAM3X8E MCU.
  * This API has implemented all of the peripherals setting flexibility and is
  * suitable for all SPI communicating modules.
  * This SPI peripheral is fast and can go up to 84 MHz and is suitable to be
  * used with External Co-Processors. The lowest transfer speed of this
  * peripheral is 84Hz / 255 = 329412 baud rate.
- * @author Saeed Ghasemi
- * @author Soded Alatia
- * @date 1 November 2014
- * @pre The API does not handle its dependencies on other peripherals
+ *
+ * The API does not handle its dependencies on other peripherals
  * internally and wont start the necessary clocks for it own operation. The
  * programmer refer to the documentation for PMC and PIO to deal with the
  * dependencies of this API on them. The programmer must first turn on its
  * clock in PMC and program the pins of this peripheral to be in its control
  * using PIO.
- * @bug Automatic unity testing has been performed on all functions.
- * No known errors exist.
+ *
+ *  author: Saeed Ghasemi
+ *  author: Soded Alatia
+ *
+ *  date: 1 November 2014
+ *
  */
 
 #include "spi.h"

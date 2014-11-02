@@ -16,9 +16,7 @@
  * dependencies of this API on them. The programmer must first turn on its
  * clock in PMC and program the pins of this peripheral to be in its control
  * using PIO.
- * @bug Automatic unity testing has been performed on all functions.
- * No known errors exist.
- */
+s */
 
 #ifndef SPI_H_
 #define SPI_H_

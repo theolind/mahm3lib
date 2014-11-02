@@ -15,6 +15,7 @@
 #include "test/test_adc.h"
 #include "test/test_dacc.h"
 #include "test/test_uart.h"
+#include "test/test_spi.h"
 #include "test/test_eefc.h"
 #include "test/test_bitwise_operations.h"
 #include "test/test_pwm.h"
@@ -41,11 +42,6 @@ void run_tests(void) {
 	RUN_TEST(test_pmc_PIOB_enabled, 20);
 	RUN_TEST(test_pmc_disable_PIOB, 20);
 	RUN_TEST(test_pmc_PIOB_disabled2, 20);
-	RUN_TEST(test_pmc_PWM_disabled1, 20);
-	RUN_TEST(test_pmc_enable_PWM, 20);
-	RUN_TEST(test_pmc_PWM_enabled, 20);
-	RUN_TEST(test_pmc_disable_PWM, 20);
-	RUN_TEST(test_pmc_PWM_disabled2, 20);
 	HORIZONTAL_LINE_BREAK();
 
 	// Run PIO tests
@@ -102,9 +98,6 @@ void run_tests(void) {
 	RUN_TEST(test_pwm_channel_duty_cycle, 70);
 	RUN_TEST(test_pwm_channel_polarity, 70);
 	RUN_TEST(test_pwm_channel_alignment, 70);
-	RUN_TEST(test_pwm_channel_period, 70);
-	RUN_TEST(test_pwm_set_clkx, 70);
-	RUN_TEST(test_set_frequency, 70);
 	HORIZONTAL_LINE_BREAK();
 
 	// Run TC tests
@@ -128,6 +121,26 @@ void run_tests(void) {
 	RUN_TEST(test_twi_set_clock_invalid_parameters, 90);
 	RUN_TEST(test_twi_set_clock_valid_parameters, 90);
 	//RUN_TEST(test_twi_send_receive_SEMI_AUTOMATIC, 90);
+	HORIZONTAL_LINE_BREAK();
+
+	// Run SPI tests
+	// Have yet to run tests due to error messages
+	Unity.TestFile = "test/test_spi.c";
+	// Initial test
+	spi_setup();
+	RUN_TEST(test_spi_initial_state, 100);
+	RUN_TEST(test_spi_after_init, 100);
+	// Incremental tests
+	RUN_TEST(test_spi_select_slave, 100);
+	RUN_TEST(test_spi_write_ready, 100);
+	RUN_TEST(test_spi_write, 100);
+	RUN_TEST(test_spi_read_ready, 100);
+	RUN_TEST(test_spi_transmission_complete, 100);
+	RUN_TEST(test_spi_correct_transmission, 100);
+	RUN_TEST(test_spi_variable_bit_lenght_transmission, 100);
+	RUN_TEST(test_spi_polarity_phase_change, 100);
+	RUN_TEST(test_spi_baud_rate_change, 100);
+	HORIZONTAL_LINE_BREAK();
 
 	UnityEnd();
 }

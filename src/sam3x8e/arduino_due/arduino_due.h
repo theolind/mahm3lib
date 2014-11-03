@@ -43,23 +43,6 @@
 #define DAC1		DACC_CHANNEL_1
 
 /**
- * PWM mappings
- * Pins PWM 2-13 on the right side of the Arduino board
- */
-//#define PWM2
-//#define PWM3
-//#define PWM4
-//#define PWM5
-#define PWM6		PIN_PWML7_PC24_B
-#define PWM7		PIN_PWML6_PC23_B
-#define PWM8		PIN_PWML5_PC22_B
-#define PWM9		PIN_PWML4_PC21_B
-//#define PWM10
-//#define PWM11
-//#define PWM12
-//#define PWM13
-
-/**
  * PIO mappings
  * Pins 2-13 on the right side of the Arduino board
  * Pins 22-53 on the lower part of the Arduino board

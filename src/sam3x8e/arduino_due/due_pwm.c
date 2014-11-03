@@ -11,12 +11,9 @@
 void due_pwm_init_channel(uint32_t channel) {
 
 	// Channel 6 - 9 is actual hardware (PWM) and has ID's over 21
-	if (channel > PIN_PWML4_PC21_B){
-
-		pio_conf_pin_to_peripheral(PIOC, PIO_PERIPH_B, PIN_PWMH0_PC3_B);
-
+	if (channel >= 6 && channel <= 9){
 		pwm_channel_setting_t channel_settings = {
-		.channel = PWM_CHANNEL_0,
+		.channel = channel,
 		.alignment = PWM_CHANNEL_ALIGN_LEFT,
 		.polarity = PWM_CHANNEL_POLARITY_LOW,
 		.duty_cycle = 0,
@@ -26,8 +23,6 @@ void due_pwm_init_channel(uint32_t channel) {
 		};
 
 		pwm_init_channel(channel_settings);
-
-		pwm_set_channel_prescaler(PWM_CHANNEL_0, PWM_PRES_CLOCKA);
 	}
 	// The rest is PWM created with timers (TC)
 	else {
@@ -36,8 +31,8 @@ void due_pwm_init_channel(uint32_t channel) {
 }
 
 void due_pwm_set_duty_cycle(uint32_t channel, uint32_t duty) {
-	if (channel > PIN_PWML4_PC21_B){
-		pwm_set_channel_duty_cycle(0, duty);
+	if (channel >= 6 && channel <= 9){
+		pwm_set_channel_duty_cycle(channel, duty);
 	}
 	else {
 
@@ -45,8 +40,8 @@ void due_pwm_set_duty_cycle(uint32_t channel, uint32_t duty) {
 }
 
 void due_pwm_enable_channel(uint32_t channel) {
-	if (channel > PIN_PWML4_PC21_B){
-		pwm_channel_enable(0);
+	if (channel >= 6 && channel <= 9){
+		pwm_enable_channel(channel);
 	}
 	else {
 
@@ -54,8 +49,8 @@ void due_pwm_enable_channel(uint32_t channel) {
 }
 
 void due_pwm_disable_channel(uint32_t channel) {
-	if (channel > PIN_PWML4_PC21_B){
-		pwm_channel_disable(0);
+	if (channel >= 6 && channel <= 9){
+		pwm_disable_channel(channel);
 	}
 	else {
 

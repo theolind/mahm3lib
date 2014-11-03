@@ -2,7 +2,12 @@
 
 DON'T FORGET TO INCLUDE:
 #include "sam3x8e/mux_shield.h"
+#include "sam3x8e/uart.h"
 
+	// Initialize the UART for printing the read functions
+	uart_init(const uart_settings_t *);
+	uart_tx_ready();
+	
 	// Initialize the multiplexer shield
 	mux_shield_init();
 	
@@ -14,6 +19,12 @@ DON'T FORGET TO INCLUDE:
 	
 	while(1){
 		mux_shield_set_datapin(MUX_DIGITAL_0, 1);
+		
 		mux_shield_read_datapin(MUX_DIGITAL_1);
+		uart_write_str(MUX_DIGITAL_1);
+				
 		mux_shield_read_analog_datapin(MUX_ADC_2);
+		uart_write_str(MUX_DIGITAL_1);
+		
+		
 	}

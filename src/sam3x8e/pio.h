@@ -70,14 +70,6 @@
 #define PIO_PIN_8_PA15			(15)
 ///@}
 
-
-#define PIO_FILTER_GLITCH	(0) /// Selector for glitch filter mode
-#define PIO_FILTER_DEBOUNCE (0)	/// Selector for debounce filter mode
-
-#define PIO_SCDR_DIV_Pos 0
-#define PIO_SCDR_DIV_Msk (0x3fffu << PIO_SCDR_DIV_Pos) /**< \brief (PIO_SCDR) Slow Clock Divider Selection for Debouncing */
-#define PIO_SCDR_DIV(value) ((PIO_SCDR_DIV_Msk & ((value) << PIO_SCDR_DIV_Pos)))
-
 #define PIO_SLOW_CLOCK_FREQ			(32768)
 
 ///@cond
@@ -297,6 +289,8 @@ uint8_t pio_conf_pin_to_peripheral(pio_reg_t *port, uint32_t periph,
 
 /**
  * Checks if debounce filter is enabled for a specific pin
+ * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
+ * @param pin_number the pin number (on the port) to check if debounce is enabled on
  * @return 1 if debounce filter is selected
  */
 uint8_t pio_debounce_filter_selected(pio_reg_t *port, uint32_t pin_number);
@@ -336,9 +330,10 @@ void pio_enable_input_filter(pio_reg_t *port, uint32_t pin_number);
 void pio_disable_input_filter(pio_reg_t *port, uint32_t pin_number);
 
 /**
- * Returns 1 if glitch filter is enabled on the selected pin/port
+ * Checks if glitch filter is enabled on the selected pin/port
  * @param port the port you want to configure. Expects: PIO_PORTA - F. Defined in pio.h
  * @param pin_number the pin number (on the port) to enable filter on
+ * @return 1 if input filter is enabled
  */
 uint32_t pio_input_filter_enabled(pio_reg_t *port, uint32_t pin_number);
 

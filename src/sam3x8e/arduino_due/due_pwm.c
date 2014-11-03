@@ -26,7 +26,18 @@ void due_pwm_init_channel(uint32_t channel) {
 	}
 	// The rest is PWM created with timers (TC)
 	else {
+		// 1015811, 0xF8003
+		tc_channel_settings_t tc_settings = {
+			.wave = 1,
+			.tcclks = 3,
+			.wavsel = 0,
+			.acpa = 3,
+			.acpc = 3
+		};
 
+		tc_conf_channel(&tc_settings, TC2, TC_CHANNEL_0);
+		tc_write_reg_a(TC2, TC_CHANNEL_0, 16383);
+		tc_write_reg_c(TC2, TC_CHANNEL_0, 49149);
 	}
 }
 
@@ -44,7 +55,7 @@ void due_pwm_enable_channel(uint32_t channel) {
 		pwm_enable_channel(channel);
 	}
 	else {
-
+		tc_enable_clock(TC2, 0);
 	}
 }
 
@@ -53,6 +64,6 @@ void due_pwm_disable_channel(uint32_t channel) {
 		pwm_disable_channel(channel);
 	}
 	else {
-
+		tc_disable_clock(TC2, 0);
 	}
 }

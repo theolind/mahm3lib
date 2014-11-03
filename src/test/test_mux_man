@@ -1,0 +1,19 @@
+-----Manual tests for the MUX SHIELD API-----
+
+DON'T FORGET TO INCLUDE:
+#include "sam3x8e/mux_shield.h"
+
+	// Initialize the multiplexer shield
+	mux_shield_init();
+	
+	// Set shield mode
+	mux_shield_set_mode(MUX_DIGITAL_0, DIGITAL_OUTPUT);
+	mux_shield_set_mode(MUX_DIGITAL_1, DIGITAL_INPUT);
+	mux_shield_set_mode(MUX_ADC_2, ADC_INPUT);
+
+	
+	while(1){
+		mux_shield_set_datapin(MUX_DIGITAL_0, 1);
+		mux_shield_read_datapin(MUX_DIGITAL_1);
+		mux_shield_read_analog_datapin(MUX_ADC_2);
+	}

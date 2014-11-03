@@ -16,4 +16,15 @@ int main(void) {
 
 	// run unit tests
 	run_tests();
+
+	mux_shield_init();
+	mux_shield_set_mode(MUX_DIGITAL_0, DIGITAL_OUTPUT);
+	mux_shield_set_mode(MUX_DIGITAL_1, DIGITAL_INPUT);
+	mux_shield_set_mode(MUX_ADC_2, ADC_INPUT);
+
+	while(1){
+		mux_shield_set_datapin(MUX_DIGITAL_0, 1);
+		mux_shield_read_datapin(MUX_DIGITAL_1);
+		mux_shield_read_analog_datapin(MUX_ADC_2);
+	}
 }

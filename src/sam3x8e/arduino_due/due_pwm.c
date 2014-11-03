@@ -11,7 +11,7 @@
 void due_pwm_init_channel(uint32_t channel) {
 
 	// Channel 6 - 9 is actual hardware (PWM) and has ID's over 21
-	if (channel >= 6 && channel <= 9){
+	if (channel >= PWM9 && channel <= PWM6){
 		pwm_channel_setting_t channel_settings = {
 		.channel = channel,
 		.alignment = PWM_CHANNEL_ALIGN_LEFT,
@@ -31,7 +31,7 @@ void due_pwm_init_channel(uint32_t channel) {
 }
 
 void due_pwm_set_duty_cycle(uint32_t channel, uint32_t duty) {
-	if (channel >= 6 && channel <= 9){
+	if (channel >= PWM9 && channel <= PWM6){
 		pwm_set_channel_duty_cycle(channel, duty);
 	}
 	else {
@@ -40,7 +40,7 @@ void due_pwm_set_duty_cycle(uint32_t channel, uint32_t duty) {
 }
 
 void due_pwm_enable_channel(uint32_t channel) {
-	if (channel >= 6 && channel <= 9){
+	if (channel >= PWM9 && channel <= PWM6){
 		pwm_enable_channel(channel);
 	}
 	else {
@@ -49,7 +49,7 @@ void due_pwm_enable_channel(uint32_t channel) {
 }
 
 void due_pwm_disable_channel(uint32_t channel) {
-	if (channel >= 6 && channel <= 9){
+	if (channel >= PWM9 && channel <= PWM6){
 		pwm_disable_channel(channel);
 	}
 	else {

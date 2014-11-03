@@ -4,27 +4,26 @@ DON'T FORGET TO INCLUDE:
 #include "sam3x8e/mux_shield.h"
 #include "sam3x8e/uart.h"
 
-	// Initialize the UART for printing the read functions
-	uart_init(const uart_settings_t *);
-	uart_tx_ready();
-	
-	// Initialize the multiplexer shield
-	mux_shield_init();
-	
-	// Set shield mode
-	mux_shield_set_mode(MUX_DIGITAL_0, DIGITAL_OUTPUT);
-	mux_shield_set_mode(MUX_DIGITAL_1, DIGITAL_INPUT);
-	mux_shield_set_mode(MUX_ADC_2, ADC_INPUT);
+		// Initialize the UART for printing the read functions
+		uart_init();
+		uart_tx_ready();
 
-	
-	while(1){
-		mux_shield_set_datapin(MUX_DIGITAL_0, 1);
-		
-		mux_shield_read_datapin(MUX_DIGITAL_1);
-		uart_write_str(MUX_DIGITAL_1);
-				
-		mux_shield_read_analog_datapin(MUX_ADC_2);
-		uart_write_str(MUX_DIGITAL_1);
-		
+		// Initialize the multiplexer shield
+		mux_shield_init();
+
+		// Set shield mode
+		mux_shield_set_mode(MUX_DIGITAL_0, DIGITAL_OUTPUT);
+		mux_shield_set_mode(MUX_DIGITAL_1, DIGITAL_INPUT);
+		mux_shield_set_mode(MUX_ADC_2, ADC_INPUT);
+
+		while(1){
+			// Digital output
+			mux_shield_set_datapin(MUX_DIGITAL_0, 1);
+			
+			// Read from digital input
+			uart_write_str(mux_shield_read_datapin(MUX_DIGITAL_1));
+
+			// Read from analog input
+			uart_write_str(mux_shield_read_analog_datapin(MUX_ADC_2));
 		
 	}

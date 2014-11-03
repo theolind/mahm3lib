@@ -13,8 +13,9 @@
 #ifndef DUW_PWM_H_
 #define DUE_PWM_H_
 
-#include <pwm.h>
-#include <tc.h>
+#include "sam3x8e/pwm.h"
+#include "sam3x8e/tc.h"
+#include "sam3x8e/pio.h"
 
 // http://www.robgray.com/temp/Due-pinout-WEB.png
 // http://arduino.cc/en/Hacking/PinMappingSAM3X
@@ -37,9 +38,9 @@
 //#define DUE_PWM_CHANNEL_9	(9)	//PC21	PWML4
 /////@}
 
-void init_channel(uint32_t channel);
-void set_duty_cycle(uint32_t channel, uint32_t duty);
-void enable_channel(uint32_t channel);
-void disable_channel(uint32_t channel);
+void due_pwm_init_channel(uint32_t channel);
+void due_pwm_set_duty_cycle(uint32_t channel, uint32_t duty);
+void due_pwm_enable_channel(uint32_t channel);
+void due_pwm_disable_channel(uint32_t channel);
 
 #endif

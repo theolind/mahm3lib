@@ -13,10 +13,10 @@
 #ifndef ARDUINO_DUE_H_
 #define ARDUINO_DUE_H_
 
-#include "adc.h"
-#include "dacc.h"
-#include "pio.h"
-#include "pwm.h"
+#include "sam3x8e/adc.h"
+#include "sam3x8e/dacc.h"
+#include "sam3x8e/pio.h"
+#include "sam3x8e/pwm.h"
 
 /**
  * ADC mappings

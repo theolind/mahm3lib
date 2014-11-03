@@ -25,6 +25,8 @@
 #ifndef PWM_H_
 #define PWM_H_
 
+#include <inttypes.h>
+
 ///@{
 /**
  * These define the pins that can be used with the PWM peripheral.

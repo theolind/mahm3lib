@@ -8,10 +8,13 @@
 
 #include "due_pwm.h"
 
-void init_channel(uint32_t channel) {
+void due_pwm_init_channel(uint32_t channel) {
 
 	// Channel 6 - 9 is actual hardware (PWM) and has ID's over 21
 	if (channel > PIN_PWML4_PC21_B){
+
+		pio_conf_pin_to_peripheral(PIOC, PIO_PERIPH_B, channel);
+
 		pwm_channel_setting_t channel_settings = {
 		.channel = PWM_CHANNEL_0,
 		.alignment = PWM_CHANNEL_ALIGN_LEFT,
@@ -20,7 +23,7 @@ void init_channel(uint32_t channel) {
 		.use_CLKx = 0,
 		.frequency = 1000,
 		.clock_ID = PWM_CLK_ID_CLKA
-		}
+		};
 
 		pwm_init_channel(channel_settings);
 	}
@@ -30,27 +33,27 @@ void init_channel(uint32_t channel) {
 	}
 }
 
-void set_duty_cycle(uint32_t channel, uint32_t duty) {
+void due_pwm_set_duty_cycle(uint32_t channel, uint32_t duty) {
 	if (channel > PIN_PWML4_PC21_B){
-
+		pwm_set_channel_duty_cycle(0, duty);
 	}
 	else {
 
 	}
 }
 
-void enable_channel(uint32_t channel) {
+void due_pwm_enable_channel(uint32_t channel) {
 	if (channel > PIN_PWML4_PC21_B){
-
+		pwm_channel_enable(0);
 	}
 	else {
 
 	}
 }
 
-void disable_channel(uint32_t channel) {
+void due_pwm_disable_channel(uint32_t channel) {
 	if (channel > PIN_PWML4_PC21_B){
-
+		pwm_channel_disable(0);
 	}
 	else {
 

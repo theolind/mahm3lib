@@ -20,6 +20,7 @@
 #include "test/test_pwm.h"
 #include "test/test_tc.h"
 #include "test/test_twi.h"
+#include "test/test_tft.h"
 
 void run_tests(void) {
 	UnityBegin();
@@ -75,6 +76,30 @@ void run_tests(void) {
 	RUN_TEST(test_adc_set_resolution_10_bit, 50);
 	RUN_TEST(test_adc_set_resolution_12_bit, 50);
 	HORIZONTAL_LINE_BREAK();
+<<<<<<< HEAD
+
+	// Run SPI tests
+	// Have yet to run tests due to error messages
+	/*Unity.TestFile = "test/test_spi.c";
+	test_spi_setup();
+	RUN_TEST(test_spi_init, 30);
+	RUN_TEST(test_spi_select_slave, 30);
+	RUN_TEST(test_spi_write_ready, 30);
+	RUN_TEST(test_spi_write, 30);
+	RUN_TEST(test_spi_read_ready, 30);
+	RUN_TEST(test_spi_transmission_complete,30);
+	RUN_TEST(test_spi_correct_transmission, 30);*/
+
+	/*Unity.TestFile = "test/test_spi_hardcoded.c";
+	RUN_TEST(test_spi_init_hardcoded, 30);
+	RUN_TEST(test_spi_select_slave_hardcoded, 30);
+	RUN_TEST(test_spi_tx_ready_hardcoded, 30);
+	RUN_TEST(test_spi_tx_hardcoded, 30);
+	RUN_TEST(test_spi_tx_complete_hardcoded, 30);
+	RUN_TEST(test_spi_rx_ready_hardcoded, 30);
+	RUN_TEST(test_spi_rx_hardcoded, 30);*/
+=======
+>>>>>>> integration
 
 	// Run PWM tests
 	Unity.TestFile = "test/test_pwm.c";
@@ -103,6 +128,25 @@ void run_tests(void) {
 
 	// Run TWI tests
 	Unity.TestFile = "test/test_twi.c";
+<<<<<<< HEAD
+	RUN_TEST(test_twi_init_slave, 90);
+	RUN_TEST(test_twi_set_device_address, 90);
+	RUN_TEST(test_twi_set_internal_address, 90);
+	RUN_TEST(test_twi_set_clock_invalid_parameters, 90);
+	RUN_TEST(test_twi_set_clock_valid_parameters, 90);
+	//RUN_TEST(test_twi_send_receive_SEMI_AUTOMATIC, 90);
+	HORIZONTAL_LINE_BREAK();
+
+	// Run TFT tests
+	Unity.TestFile = "test/test_tft.c";
+	test_tft_setup();
+	RUN_TEST(test_tft_set_bus, 100);
+	RUN_TEST(test_tft_clear_bus, 100);
+	test_tft_setup2();
+	RUN_TEST(test_tft_init, 100);
+	RUN_TEST(test_tft_clear, 100);
+	RUN_TEST(test_tft_write, 100);
+=======
 	RUN_TEST(test_twi_init_slave, 80);
 	RUN_TEST(test_twi_set_device_address, 80);
 	RUN_TEST(test_twi_set_internal_address, 80);
@@ -129,6 +173,7 @@ void run_tests(void) {
 	RUN_TEST(test_spi_polarity_phase_change, 90);
 	RUN_TEST(test_spi_baud_rate_change, 90);
 	HORIZONTAL_LINE_BREAK();
+>>>>>>> integration
 
 	UnityEnd();
 }

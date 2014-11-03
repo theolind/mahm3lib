@@ -17,8 +17,8 @@ int main(void) {
 	pmc_enable_peripheral_clock(ID_PIOC);
 
 	due_pwm_init_channel(PWM6);
-	due_pwm_set_duty_cycle(PWM6, 50);
 	due_pwm_enable_channel(PWM6);
+	due_pwm_set_duty_cycle(PWM6, 50);
 
 	return 0;
 }

@@ -6,7 +6,6 @@
 *
 * Date:		25 October 2014
 *
-*      -Check with architect if ADC initialization settings are okay
 *
 */
 

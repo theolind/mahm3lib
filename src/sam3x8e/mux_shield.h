@@ -76,7 +76,9 @@ void mux_shield_set_channel(uint32_t channel);
 
 /**
  * This function sets the chosen multiplex Common Input/output as digital input,
- * digital output or analog input
+ * digital output or analog input. When set as analog input the ADC clock is
+ * automatically initalized with ".startup_time = 0, .prescaler = 0" and
+ * ADC resolution to 12 bit
  *
  * @param mux the multiplex you want to configure
  * @param mode the mode you want to set the multiplex as Expects: DIGITAL_OUTPUT, DIGITAL_INPUT or ADC_INPUT. Defined in mux_shield.h

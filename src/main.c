@@ -15,10 +15,5 @@ int main(void) {
 	unity_hw_setup();
 
 	// run unit tests
-	//	run_tests();
-
-		mux_shield_init(); //Initialize mux shield
-		mux_shield_set_mode(MUX0, 1); // Set mux0 as DIGITAL OUTPUT
-		mux_shield_set_channel(0); // Set channel to 0
-		mux_shield_set_datapin(MUX0, 1); // Set mux0 to HIGH
+	run_tests();
 }

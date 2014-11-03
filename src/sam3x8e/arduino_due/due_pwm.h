@@ -19,23 +19,23 @@
 // http://www.robgray.com/temp/Due-pinout-WEB.png
 // http://arduino.cc/en/Hacking/PinMappingSAM3X
 
-///@{
-// Software based PWM pins
-#define DUE_PWM_CHANNEL_2	(2)
-#define DUE_PWM_CHANNEL_3	(3)
-#define DUE_PWM_CHANNEL_4	(4)
-#define DUE_PWM_CHANNEL_5	(5)
-#define DUE_PWM_CHANNEL_10	(10)
-#define DUE_PWM_CHANNEL_11	(11)
-#define DUE_PWM_CHANNEL_12	(12)
-#define DUE_PWM_CHANNEL_13	(13)
-
-// Hardware based PWM pins
-#define DUE_PWM_CHANNEL_6	(6)	//PC24	PWML7
-#define DUE_PWM_CHANNEL_7	(7)	//PC23	PMWL6
-#define DUE_PWM_CHANNEL_8	(8)	//PC22	PWML5
-#define DUE_PWM_CHANNEL_9	(9)	//PC21	PWML4
-///@}
+/////@{
+//// Software based PWM pins
+//#define DUE_PWM_CHANNEL_2	(2)
+//#define DUE_PWM_CHANNEL_3	(3)
+//#define DUE_PWM_CHANNEL_4	(4)
+//#define DUE_PWM_CHANNEL_5	(5)
+//#define DUE_PWM_CHANNEL_10	(10)
+//#define DUE_PWM_CHANNEL_11	(11)
+//#define DUE_PWM_CHANNEL_12	(12)
+//#define DUE_PWM_CHANNEL_13	(13)
+//
+//// Hardware based PWM pins
+//#define DUE_PWM_CHANNEL_6	(6)	//PC24	PWML7
+//#define DUE_PWM_CHANNEL_7	(7)	//PC23	PMWL6
+//#define DUE_PWM_CHANNEL_8	(8)	//PC22	PWML5
+//#define DUE_PWM_CHANNEL_9	(9)	//PC21	PWML4
+/////@}
 
 void init_channel(uint32_t channel);
 void set_duty_cycle(uint32_t channel, uint32_t duty);

@@ -10,14 +10,19 @@
 
 void init_channel(uint32_t channel) {
 
-	//TODO: Can't use 1-13 as channels. Need to use the ones defined in PWM etc.
-	//TODO: Add arduino PWM in pin mapping
-	// Channel 6 - 9 is actual hardware (PWM)
-	if (channel >= 6 && channel <= 9){
-		// 1000 Hz
-		// low
-		// left
-		// etc..
+	// Channel 6 - 9 is actual hardware (PWM) and has ID's over 21
+	if (channel > PIN_PWML4_PC21_B){
+		pwm_channel_setting_t channel_settings = {
+		.channel = PWM_CHANNEL_0,
+		.alignment = PWM_CHANNEL_ALIGN_LEFT,
+		.polarity = PWM_CHANNEL_POLARITY_LOW,
+		.duty_cycle = 0,
+		.use_CLKx = 0,
+		.frequency = 1000,
+		.clock_ID = PWM_CLK_ID_CLKA
+		}
+
+		pwm_init_channel(channel_settings);
 	}
 	// The rest is PWM created with timers (TC)
 	else {
@@ -26,7 +31,7 @@ void init_channel(uint32_t channel) {
 }
 
 void set_duty_cycle(uint32_t channel, uint32_t duty) {
-	if (channel >= 6 && channel <= 9){
+	if (channel > PIN_PWML4_PC21_B){
 
 	}
 	else {
@@ -35,7 +40,7 @@ void set_duty_cycle(uint32_t channel, uint32_t duty) {
 }
 
 void enable_channel(uint32_t channel) {
-	if (channel >= 6 && channel <= 9){
+	if (channel > PIN_PWML4_PC21_B){
 
 	}
 	else {
@@ -44,7 +49,7 @@ void enable_channel(uint32_t channel) {
 }
 
 void disable_channel(uint32_t channel) {
-	if (channel >= 6 && channel <= 9){
+	if (channel > PIN_PWML4_PC21_B){
 
 	}
 	else {

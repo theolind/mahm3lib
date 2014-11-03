@@ -1,27 +1,124 @@
 /**
- * @file spi_2.h
+ * @file spi.h
  * @brief Serial Peripheral Interface (SPI)
  * @details An API for controlling the two SPI peripherals inside a SAM3X8E MCU.
  * This API has implemented all of the peripherals setting flexibility and is
  * suitable for all SPI communicating modules.
  * This SPI peripheral is fast and can go up to 84 MHz and is suitable to be
  * used with External Co-Processors. The lowest transfer speed of this
- * peripheral is 84Hz / 255 = 329412.
+ * peripheral is 84Hz / 255 = 329412 baud rate.
  * @author Saeed Ghasemi
- * @date 24 okt 2014
+ * @author Soded Alatia
+ * @date 1 November 2014
  * @pre The API does not handle its dependencies on other peripherals
  * internally and wont start the necessary clocks for it own operation. The
  * programmer refer to the documentation for PMC and PIO to deal with the
  * dependencies of this API on them. The programmer must first turn on its
- * clock in PMC and program the pins of this peripheral t be in its control
+ * clock in PMC and program the pins of this peripheral to be in its control
  * using PIO.
- * @bug Manually tested all functions to comply with all demands.
- */
+s */
 
 #ifndef SPI_H_
 #define SPI_H_
 
+#ifndef INTTYPES_H_
+#define INTTYPES_H_
 #include <inttypes.h>
+#endif /* INTTYPES_H_ */
+
+///\cond
+/**
+ * These are the base addresses for the two SPI peripherals
+ */
+#define SPI0				((spi_reg_t *) 0x40008000u)
+#define SPI1				((spi_reg_t *) 0x4000C000u)
+/**
+ * SPI register mapping
+ */
+typedef struct spi_reg {
+	uint32_t SPI_CR;		///< 0x00, Control Register
+	uint32_t SPI_MR;		///< 0x04, Mode Register
+	uint32_t SPI_RDR;		///< 0x08, Receive Data Register
+	uint32_t SPI_TDR;		///< 0x0c, Transmit Data Register
+	uint32_t SPI_SR;		///< 0x10, Status Register
+	uint32_t SPI_IER;		///< 0x14, Interrupt Enable Register
+	uint32_t SPI_IDR;		///< 0x18, Interrupt Disable Register
+	uint32_t SPI_IMR;		///< 0x1c, Interrupt Mask Register
+	uint32_t reserved0[4];	///< 0x20-0x2c, Reserved
+	uint32_t SPI_CSR0;		///< 0x30, Chip Select Register 0
+	uint32_t SPI_CSR1;		///< 0X34, Chip Select Register 1
+	uint32_t SPI_CSR2;		///< 0X38, Chip Select Register 2
+	uint32_t SPI_CSR3;		///< 0X3C, Chip Select Register 3
+	uint32_t reserved1[41];	///< 0x40 - 0xe0, Reserved
+	uint32_t SPI_WPMR;		///< 0xE4, Write Protection Control Register
+	uint32_t SPI_WPSR;		///< 0xE8, Write Protection Status Register
+	//registers 0xec - 0xfc reserved
+} spi_reg_t;
+///\endcond
+///@{
+/**
+ * @typedef spi_settings_t
+ * This structure defines the input variable to be used with the spi_init()
+ * function.
+ */
+typedef struct spi_settings {
+	/**
+	 * This defines the Delay Between Chip Selects. The delay time guarantees
+	 * non-overlapping chip selects and solves bus contentions in case of
+	 * peripherals having long data float times. The minimum is 71 ns and
+	 * maximum is 3036 ns. (Value must be a multiply of 12 ns, or it will be
+	 * rounded down.
+	 */
+	uint8_t delay_between_cs;	///< Used to set the delay between chip selects
+} spi_settings_t;
+/**
+ * @typedef spi_selector_settings_t
+ * This structure is used to initialize a selector of the SPI. There is a
+ * total of 4 selectors.
+ */
+typedef struct spi_selector_settings {
+	/**
+	 * This will define the selector to initialize out of 4 in total.
+	 * The values are going from 0 till 3.
+	 * (Use the predefines values with prefix: SPI_SELECTOR_)
+	 */
+	uint8_t selector;
+	/**
+	 * This will define the baud rate for the given selector. The value must be between 0 and 255 and the baud rate will be defined with
+	 * (MCK / baudR) were MCK is the main clock with 84MHz (84000000 Hz).
+	 */
+	uint8_t baud_rate;			///< Used to set the baud rate of the selector
+	/**
+	 * This will define the polarity of the SPI clock. The values are 0 or 1.
+	 * Set it to 1 to define the inactive state value of SPCK to be logic level
+	 * one and vice versa if it's set to 0.
+	 */
+	uint8_t CPOL;				///< CPOL: Clock polarity
+	/**
+	 * This will define the phase of the SPI clock. The values are 0 or 1.
+	 * Set it to 1 to define that data is captured on the leading edge of SPCK
+	 * and changed on the following edge of SPCK and vice versa if it's set to 0.
+	 */
+	uint8_t NCPHA;				///< NCPHA: Clock phase
+	/**
+	 * This will define the Delay Between Consecutive Transfers and must be set
+	 * between 0 and 97143 ns.
+	 */
+	uint32_t delay_transfers;///< Used to set the delay between consecutive transfers
+	/**
+	 * This will define the Delay between the assertion of chip select line and
+	 * when the the SPI clock starts and must be set between 0 and 3036 ns.
+	 */
+	uint16_t delay_clk;			///< Used to set the Delay Before SPCK starts
+	/**
+	 * This variable defines the width of data to be transmitted. The width can
+	 * be between 8 bits and 16 bits. This variable must be set between 0 and 8,
+	 * were 0 means 8 bits and 8 means 16 bits.
+	 */
+	uint8_t bits_pr_transfer;///< The amount of bits to be transmitted on each transfer
+	uint8_t reserved;
+} spi_selector_settings_t;
+///@}
 
 ///@{
 /**
@@ -95,107 +192,55 @@
  * method you can have as many devices connected to the peripheral as there are
  * pins to use.
  */
-#define SPI_SELECTOR_0			(0) //(0b1110)
-#define SPI_SELECTOR_1			(1) //(0b1101)
-#define SPI_SELECTOR_2			(2) //(0b1011)
-#define SPI_SELECTOR_3			(3) //(0b0111)
-#define SPI_SELECTOR_NONE		(4) //(0b1111)
+#define SPI_SELECTOR_0				(0u) //(0b1110)
+#define SPI_SELECTOR_1				(1u) //(0b1101)
+#define SPI_SELECTOR_2				(2u) //(0b1011)
+#define SPI_SELECTOR_3				(3u) //(0b0111)
+#define SPI_SELECTOR_NONE			(4u) //(0b1111)
 ///@}
-
-///\cond
-/**
- * These are the base addresses for the two SPI peripherals
- */
-#define SPI0		((spi_reg_t *) 0x40008000u)
-#define SPI1		((spi_reg_t *) 0x4000C000u)
-/**
- * SPI register mapping
- */
-typedef struct spi_reg {
-	uint32_t SPI_CR;		///< 0x00, Control Register
-	uint32_t SPI_MR;		///< 0x04, Mode Register
-	uint32_t SPI_RDR;		///< 0x08, Receive Data Register
-	uint32_t SPI_TDR;		///< 0x0c, Transmit Data Register
-	uint32_t SPI_SR;		///< 0x10, Status Register
-	uint32_t SPI_IER;		///< 0x14, Interrupt Enable Register
-	uint32_t SPI_IDR;		///< 0x18, Interrupt Disable Register
-	uint32_t SPI_IMR;		///< 0x1c, Interrupt Mask Register
-	uint32_t reserved0[4];	///< 0x20-0x2c, Reserved
-	uint32_t SPI_CSR0;		///< 0x30, Chip Select Register 0
-	uint32_t SPI_CSR1;		///< 0X34, Chip Select Register 1
-	uint32_t SPI_CSR2;		///< 0X38, Chip Select Register 2
-	uint32_t SPI_CSR3;		///< 0X3C, Chip Select Register 3
-	uint32_t reserved1[41];	///< 0x40 - 0xe0, Reserved
-	uint32_t SPI_WPMR;		///< 0xE4, Write Protection Control Register
-	uint32_t SPI_WPSR;		///< 0xE8, Write Protection Status Register
-	//registers 0xec - 0xfc reserved
-} spi_reg_t;
-///\endcond
 ///@{
 /**
- * @typedef spi_settings_t
- * This structure defines the input variable to be used with the spi_init()
- * function.
+ * These are variables used with the
  */
-typedef struct spi_settings {
-	/**
-	 * This defines the Delay Between Chip Selects. The delay time guarantees
-	 * non-overlapping chip selects and solves bus contentions in case of
-	 * peripherals having long data float times. The minimum is 71 ns and
-	 * maximum is 3036 ns. (Value must be a multiply of 12 ns, or it will be
-	 * rounded down.
-	 */
-	uint8_t delay_between_cs;	///< Used to set the delay between chip selects
-} spi_settings_t;
+#define SPI_OPTION_KEEP_CS_ACTIVE			(0u)
+#define SPI_OPTION_DONT_KEEP_CS_ACTIVE		(1u)
+#define SPI_OPTION_DISABLE_CS_OPTIONS		(2u)
+///@}
+///@{
 /**
- * @typedef spi_selector_settings_t
- * This structure is used to initialize a selector of the SPI. There is a
- * total of 4 selectors.
+ * These variable define the inactive state value of the SPI clock
  */
-typedef struct spi_selector_settings {
-	/**
-	 * This will define the selector to initialize out of 4 in total.
-	 * The values are going from 0 till 3.
-	 * (Use the predefines values with prefix: SPI_SELECTOR_)
-	 */
-	uint8_t selector;
-	/**
-	 * This will define the baud rate for the given selector. The value must be between 0 and 255 and the baud rate will be defined with
-	 * (MCK / baudR) were MCK is the main clock with 84MHz (84000000 Hz).
-	 */
-	uint8_t baud_rate;			///< Used to set the baud rate of the selector
-	/**
-	 * This will define the polarity of the SPI clock. The values are 0 or 1.
-	 * Set it to 1 to define the inactive state value of SPCK to be logic level
-	 * one and vice versa if it's set to 0.
-	 */
-	uint8_t CPOL;				///< CPOL: Clock polarity
-	/**
-	 * This will define the phase of the SPI clock. The values are 0 or 1.
-	 * Set it to 1 to define that data is captured on the leading edge of SPCK
-	 * and changed on the following edge of SPCK and vice versa if it's set to 0.
-	 */
-	uint8_t NCPHA;				///< NCPHA: Clock phase
-	/**
-	 * This variable defines the width of data to be transmitted. The width can
-	 * be between 8 bits and 16 bits. This variable must be set between 0 and 8,
-	 * were 0 means 8 bits and 8 means 16 bits.
-	 */
-	uint8_t bits_pr_transfer;///< The amount of bits to be transmitted on each transfer
-	/**
-	 * This will define the Delay Between Consecutive Transfers and must be set
-	 * between 0 and 97143 ns.
-	 */
-	uint8_t delay_transfers;///< Used to set the delay between consecutive transfers
-	/**
-	 * This will define the Delay between the assertion of chip select line and
-	 * when the the SPI clock starts and must be set between 0 and 3036 ns.
-	 */
-	uint8_t delay_clk;			///< Used to set the Delay Before SPCK starts
-} spi_selector_settings_t;
+#define SPI_POLARITY_HIGH			(0x1u)
+#define SPI_POLARITY_LOW			(0x0u)
+///@}
+///@{
+/**
+ * These variable define the actions taken at different time relative to the
+ * SPI clock.
+ * 0 = Data is changed on the leading edge of SPCK and captured on the
+ * following edge of SPCK.
+ * 1 = Data is captured on the leading edge of SPCK and changed on the
+ * following edge of SPCK.
+ */
+#define SPI_PHASE_HIGH				(0x1u)
+#define SPI_PHASE_LOW				(0x0u)
+///@}
+///@{
+/**
+ * These variable define the amount of bits to be tranfered on each
+ * transmission.
+ */
+#define SPI_BITS_8					(0u)
+#define SPI_BITS_9					(1u)
+#define SPI_BITS_10					(2u)
+#define SPI_BITS_11					(3u)
+#define SPI_BITS_12					(4u)
+#define SPI_BITS_13					(5u)
+#define SPI_BITS_14					(6u)
+#define SPI_BITS_15					(7u)
+#define SPI_BITS_16					(8u)
 ///@}
 
-/////// PROTOTYPES ////////////////////////////////////////////////
 /**
  * This function initializes the SPI peripheral.
  *
@@ -203,6 +248,7 @@ typedef struct spi_selector_settings {
  * (Use one of predefined values with prefix: SPI)
  * @param settings This is a struct of type spi_settings_t with different
  * setting for the initialization of the peripheral.
+ * @return error (1 = SUCCESS, 0 = FAIL)
  */
 uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings);
 /**
@@ -218,8 +264,8 @@ uint8_t spi_init(spi_reg_t *spi, const spi_settings_t *settings);
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
  * @param settings This is a struct of type spi_selector_settings_t with the
- * needed setting for the initialization of the selector.
- * @return
+ * needed parameters for the initialization of the selector.
+ * @return error (1 = SUCCESS, 0 = FAIL)
  */
 uint8_t spi_init_selector(spi_reg_t *spi,
 		const spi_selector_settings_t *settings);
@@ -227,9 +273,17 @@ uint8_t spi_init_selector(spi_reg_t *spi,
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
- * @return
+ * @return error (1 = SUCCESS, 0 = FAIL)
  */
 uint8_t spi_enable(spi_reg_t *spi);
+/**
+ * This function will return 1 if the SPI peripheral is enabled.
+ *
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
+ * @return Returns 1 if the SPI peripheral is enabled
+ */
+uint8_t spi_enable_status(spi_reg_t *spi);
 /**
  * This function will set the baud rate for the given selector.
  * The value for baud_rate must be between 0 and 255 and the baud rate will be
@@ -243,34 +297,47 @@ uint8_t spi_enable(spi_reg_t *spi);
  * @param selector The selector to be modified.
  * (Use the predefined with prefix: SPI_SELECTOR_)
  * @param baud_rate
- * @return
+ * @return error (1 = SUCCESS, 0 = FAIL)
  */
 uint8_t spi_set_selector_baud_rate(spi_reg_t *spi, uint8_t selector,
 		uint32_t baud_rate);
-
-uint8_t spi_set_selector_clk_polarity(spi_reg_t *spi, uint8_t selector,
-		uint32_t polarity);
-
-uint8_t spi_set_selector_clk_phase(spi_reg_t *spi, uint8_t selector,
-		uint32_t phase);
 /**
- * Chip Select Not Active After Transfer.
- * Even if the transfer buffer is continuously filled with data, the chip select
- * line will deassert between transfers.
- * This function explicitly tells the peripheral to deassert the cs-line between
- * all transfers, even if new data is placed in the transfer buffer.
- * Certain devices require this option to be set to indicate end of byte.
+ * This function will set the polarity of the SPI clock and indicates what the inactive
+ * state of the SPI clock is.
+ * Set it to SPI_POLARITY_HIGH to define the inactive state value of SPCK to be
+ * logic level 1 and vice versa if it's set to SPI_POLARITY_LOW.
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
  * @param selector The selector to be modified.
  * (Use the predefined with prefix: SPI_SELECTOR_)
- * @param option Set this value to 1 to activate the behavior. (deactivate = 0)
- * @return
+ * @param polarity The polarity of the SPI clock.
+ * (Use the predefined with prefix: SPI_POLARITY_)
+ * @return error (1 = SUCCESS, 0 = FAIL)
  */
-uint8_t spi_set_selector_do_not_keep_cs_active(spi_reg_t *spi, uint8_t selector,
-		uint32_t option);
+uint8_t spi_set_selector_clk_polarity(spi_reg_t *spi, uint8_t selector,
+		uint32_t polarity);
 /**
+ * This function will set the phase of the SPI clock and indicate when
+ * capturing and shifting should occur.
+ * The values are 0 or 1.
+ * Set it to SPI_PHASE_HIGH to define that data is captured on the leading edge
+ * of SPCK (SPI clock) and changed on the following edge of SPCK and vice versa
+ * if it's set to SPI_PHASE_LOW.
+ *
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
+ * @param selector The selector to be modified.
+ * (Use the predefined with prefix: SPI_SELECTOR_)
+ * @param phase The phase of the SPI clock.
+ * (Use the predefined with prefix: SPI_PHASE_)
+ * @return error (1 = SUCCESS, 0 = FAIL)
+ */
+uint8_t spi_set_selector_clk_phase(spi_reg_t *spi, uint8_t selector,
+		uint32_t phase);
+/**
+ * This function can control two options of the selectors.
+ * (1)
  * Chip Select Active After Transfer.
  * If the transfer buffer is continuously filled with data, the chip select (cs)
  * line will not be deasserted before the new transfer is begun. This function
@@ -279,15 +346,29 @@ uint8_t spi_set_selector_do_not_keep_cs_active(spi_reg_t *spi, uint8_t selector,
  * however be deasserted when another selector is selected or when
  * spi_last_transfer() is invoked.
  * Certain devices require this option to be set.
+ * (2)
+ * Chip Select Not Active After Transfer.
+ * Even if the transfer buffer is continuously filled with data, the chip select
+ * line will deassert between transfers.
+ * This function explicitly tells the peripheral to deassert the CS-line between
+ * all transfers, even if new data is placed in the transfer buffer.
+ * Certain devices require this option to be set to indicate end of byte.
+ *
+ * (Use one of the predefined settings with prefix: SPI_OPTION_)
+ *
+ * At default both settings are off and the behavior is something of a mix.
+ * The CS line will not be deasserted if the transmit-buffer is continuously
+ * filled, but it will if the writing to the buffer is delayed.
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
  * @param selector The selector to be modified.
  * (Use the predefined with prefix: SPI_SELECTOR_)
- * @param option Set this value to 1 to activate the behavior. (deactivate = 0)
- * @return
+ * @param option The option to use for setting.
+ * (Use the predefined with prefix: SPI_OPTION_)
+ * @return error (1 = SUCCESS, 0 = FAIL)
  */
-uint8_t spi_set_selector_keep_cs_active(spi_reg_t *spi, uint8_t selector,
+uint8_t spi_set_selector_option(spi_reg_t *spi, uint8_t selector,
 		uint32_t option);
 /**
  * This function set the amount of bits that a single transfer will transfer.
@@ -300,7 +381,7 @@ uint8_t spi_set_selector_keep_cs_active(spi_reg_t *spi, uint8_t selector,
  * @param selector The selector to be modified.
  * (Use the predefined with prefix: SPI_SELECTOR_)
  * @param bit_count The amount of bits to be transfered when transfering.
- * @return
+ * @return error (1 = SUCCESS, 0 = FAIL)
  */
 uint8_t spi_set_selector_bit_length(spi_reg_t *spi, uint8_t selector,
 		uint32_t bit_count);
@@ -315,7 +396,7 @@ uint8_t spi_set_selector_bit_length(spi_reg_t *spi, uint8_t selector,
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
  * @param delay
- * @return
+ * @return error (1 = SUCCESS, 0 = FAIL)
  */
 uint8_t spi_set_delay_between_cs(spi_reg_t *spi, uint16_t delay);
 /**
@@ -333,7 +414,7 @@ uint8_t spi_set_delay_between_cs(spi_reg_t *spi, uint16_t delay);
  * @param selector The selector to be modified.
  * (Use the predefined with prefix: SPI_SELECTOR_)
  * @param delay The delay to be set. (Set between 12 and 3036)
- * @return
+ * @return error (1 = SUCCESS, 0 = FAIL)
  */
 uint8_t spi_set_selector_delay_clk_start(spi_reg_t *spi, uint8_t selector,
 		uint16_t delay);
@@ -350,7 +431,7 @@ uint8_t spi_set_selector_delay_clk_start(spi_reg_t *spi, uint8_t selector,
  * @param selector The selector to be modified.
  * (Use the predefined with prefix: SPI_SELECTOR_)
  * @param delay The delay to be set. (Set between 0 and 97143)
- * @return
+ * @return error (1 = SUCCESS, 0 = FAIL)
  */
 uint8_t spi_set_selector_delay_transfers(spi_reg_t *spi, uint8_t selector,
 		uint32_t delay);
@@ -363,27 +444,40 @@ uint8_t spi_set_selector_delay_transfers(spi_reg_t *spi, uint8_t selector,
  * (Use one of predefined values with prefix: SPI)
  * @param slave This parameter defines which selector to assert.
  * (Use one of the predefines values with prefix: SPI_SELECTOR_)
+ * @return error (1 = SUCCESS, 0 = FAIL)
  */
 uint8_t spi_select_slave(spi_reg_t *spi, uint8_t slave);
 /**
- * Write a data of max 16 bits in length. This will make the SPI receive a
- * equally long data that it will discard and avoid overrun error in the
- * peripheral.
+ * Write a data of max 16 bits in length.
+ * If subsequent write are performed, be sure to check the if transfer buffer
+ * is ready with spi_tx_ready() before writing.
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
  * @param data The data to be transmitted of max length 16-bit
+ * @return error (1 = SUCCESS, 0 = FAIL)
  */
 uint8_t spi_write(spi_reg_t *spi, uint16_t data);
 /**
  * This function will read a previously received byte with an earlier
  * transmission.
+ * Keep in mind that the spi_write() function can also be used to read the
+ * previously received data.
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
- * @return Returns the data that is received when transferring the dummy_data
+ * @return Returns the data that is received with the last transmission
  */
 uint16_t spi_read(spi_reg_t *spi);
+/**
+ * We want to test if we are able to read data. It is good to do this before
+ * you read data.
+ *
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
+ * @return Returns 1 if there is data in the receive register that is not read
+ */
+uint8_t spi_rx_ready(spi_reg_t *spi);
 /**
  * This function will check and see that a new byte can be placed in the
  * transmit buffer of the peripheral.
@@ -400,32 +494,18 @@ uint8_t spi_tx_ready(spi_reg_t *spi);
  *
  * @param spi The base-address of the SPI-peripheral that shall be used.
  * (Use one of predefined values with prefix: SPI)
- * @return Will return 1 if transmissions are complete or 0 if there are
+ * @return Return 1 if transmissions are complete or 0 if there are
  * pending or ongoing transmission.
  */
 uint8_t spi_transmission_done(spi_reg_t *spi);
-/**
- * We want to test if we are able to read data. It is good to do this before you read data.
- * @param spi The base-address of the SPI-peripheral that shall be used.
- * (Use one of predefined values with prefix: SPI)
- * @return returns 1 if we have data in the receive register
- */
-uint8_t spi_rx_ready(spi_reg_t *spi);
-/**
- * This function will generate a software reset of the entire peripheral.
- * This function is used in spi_init()
- *
- * @param spi
- * @return error (1 = SUCCESS and 0 = FAIL)
- */
-uint8_t spi_software_reset(spi_reg_t *spi);
 /**
  * This function will disable the SPI-peripheral. As soon as this function is
  * run, SPI finishes its transfer. All pins are set in input mode and no data
  * is received or transmitted. If a transfer is in progress, the transfer is
  * finished before the SPI is disabled.
  *
- * @param spi
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
  * @return error (1 = SUCCESS and 0 = FAIL)
  */
 uint8_t spi_disable(spi_reg_t *spi);
@@ -437,7 +517,7 @@ uint8_t spi_disable(spi_reg_t *spi);
  * (Use one of predefined values with prefix: SPI)
  * @return error (1 = SUCCESS and 0 = FAIL)
  */
-uint8_t spi_loopback_enable(spi_reg_t *spi);
+uint8_t spi_enable_loopback(spi_reg_t *spi);
 /**
  * run this to disconnect MOSI from MISO in the peripheral internally.
  *
@@ -445,7 +525,16 @@ uint8_t spi_loopback_enable(spi_reg_t *spi);
  * (Use one of predefined values with prefix: SPI)
  * @return error (1 = SUCCESS and 0 = FAIL)
  */
-uint8_t spi_loopback_disable(spi_reg_t *spi);
+uint8_t spi_disable_loopback(spi_reg_t *spi);
+/**
+ * This function will tell the peripheral to generate a software reset of the
+ * entire peripheral.
+ *
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
+ * @return error (1 = SUCCESS and 0 = FAIL)
+ */
+uint8_t spi_reset(spi_reg_t *spi);
 /**
  * This will indicate that the last transfer is done for now and will raise the
  * chip select pin to high and deassert the slave device connected to it. If
@@ -453,15 +542,12 @@ uint8_t spi_loopback_disable(spi_reg_t *spi);
  * the device by raising the CS-line and indicate an end of transfer. If a
  * transfer is ongoing this change will take effect after that the current
  * transfer is complete.
+ *
+ * @param spi The base-address of the SPI-peripheral that shall be used.
+ * (Use one of predefined values with prefix: SPI)
  * @return error (1 = SUCCESS and 0 = FAIL)
  */
-uint8_t spi_selector_close(spi_reg_t *spi);
-/**
- * This function will return 1 if the SPI peripheral is enabled.
- *
- * @param spi
- * @return
- */
-uint8_t spi_enable_status(spi_reg_t *spi);
+uint8_t spi_close_selector(spi_reg_t *spi);
 
-#endif
+
+#endif /* SPI_H_ */

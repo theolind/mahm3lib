@@ -284,6 +284,8 @@ void UnityConcludeTest(void)
 
     Unity.CurrentTestFailed = 0;
     Unity.CurrentTestIgnored = 0;
+
+    uart_write_str("\r");
 }
 
 //-----------------------------------------------

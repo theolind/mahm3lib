@@ -8,7 +8,6 @@
  */
 
 #include "unity/unity.h"
-#include "sam3x8e/id.h"
 #include "sam3x8e/twi.h"
 #include "sam3x8e/pio.h"
 #include "sam3x8e/pmc.h"

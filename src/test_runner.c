@@ -134,41 +134,37 @@ void run_tests(void) {
 	//RUN_TEST(test_twi_send_receive_SEMI_AUTOMATIC, 90);
 	HORIZONTAL_LINE_BREAK();
 
-	// Run TFT tests
-	Unity.TestFile = "test/test_tft.c";
-	test_tft_setup();
-	RUN_TEST(test_tft_set_bus, 100);
-	RUN_TEST(test_tft_clear_bus, 100);
-	test_tft_setup2();
-	RUN_TEST(test_tft_init, 100);
-	RUN_TEST(test_tft_clear, 100);
-	RUN_TEST(test_tft_write, 100);
-	RUN_TEST(test_twi_init_slave, 80);
-	RUN_TEST(test_twi_set_device_address, 80);
-	RUN_TEST(test_twi_set_internal_address, 80);
-	RUN_TEST(test_twi_set_clock_invalid_parameters, 80);
-	RUN_TEST(test_twi_set_clock_valid_parameters, 80);
-	//RUN_TEST(test_twi_send_receive_SEMI_AUTOMATIC, 80);
-	HORIZONTAL_LINE_BREAK();
-
 	// Run SPI tests
 	// Have yet to run tests due to error messages
 	Unity.TestFile = "test/test_spi.c";
 	// Initial test
 	spi_setup();
-	RUN_TEST(test_spi_initial_state, 90);
-	RUN_TEST(test_spi_after_init, 90);
+	RUN_TEST(test_spi_initial_state, 100);
+	RUN_TEST(test_spi_after_init, 100);
 	// Incremental tests
-	RUN_TEST(test_spi_select_slave, 90);
-	RUN_TEST(test_spi_write_ready, 90);
-	RUN_TEST(test_spi_write, 90);
-	RUN_TEST(test_spi_read_ready, 90);
-	RUN_TEST(test_spi_transmission_complete, 90);
-	RUN_TEST(test_spi_correct_transmission, 90);
-	RUN_TEST(test_spi_variable_bit_lenght_transmission, 90);
-	RUN_TEST(test_spi_polarity_phase_change, 90);
-	RUN_TEST(test_spi_baud_rate_change, 90);
+	RUN_TEST(test_spi_select_slave, 100);
+	RUN_TEST(test_spi_write_ready, 100);
+	RUN_TEST(test_spi_write, 100);
+	RUN_TEST(test_spi_read_ready, 100);
+	RUN_TEST(test_spi_transmission_complete, 100);
+	RUN_TEST(test_spi_correct_transmission, 100);
+	RUN_TEST(test_spi_variable_bit_lenght_transmission, 100);
+	RUN_TEST(test_spi_polarity_phase_change, 100);
+	RUN_TEST(test_spi_baud_rate_change, 100);
 	HORIZONTAL_LINE_BREAK();
+
+	// Run TFT tests
+	Unity.TestFile = "test/test_tft.c";
+	test_tft_setup();
+	RUN_TEST(test_tft_set_bus, 110);
+	RUN_TEST(test_tft_clear_bus, 110);
+	//test_tft_setup2();
+	RUN_TEST(test_tft_init, 110);
+	RUN_TEST(test_tft_clear, 110);
+	RUN_TEST(test_tft_write, 110);
+	HORIZONTAL_LINE_BREAK();
+
+
 
 
 	UnityEnd();

@@ -76,7 +76,6 @@ void run_tests(void) {
 	RUN_TEST(test_adc_set_resolution_10_bit, 50);
 	RUN_TEST(test_adc_set_resolution_12_bit, 50);
 	HORIZONTAL_LINE_BREAK();
-<<<<<<< HEAD
 
 	// Run SPI tests
 	// Have yet to run tests due to error messages
@@ -98,8 +97,7 @@ void run_tests(void) {
 	RUN_TEST(test_spi_tx_complete_hardcoded, 30);
 	RUN_TEST(test_spi_rx_ready_hardcoded, 30);
 	RUN_TEST(test_spi_rx_hardcoded, 30);*/
-=======
->>>>>>> integration
+
 
 	// Run PWM tests
 	Unity.TestFile = "test/test_pwm.c";
@@ -128,7 +126,6 @@ void run_tests(void) {
 
 	// Run TWI tests
 	Unity.TestFile = "test/test_twi.c";
-<<<<<<< HEAD
 	RUN_TEST(test_twi_init_slave, 90);
 	RUN_TEST(test_twi_set_device_address, 90);
 	RUN_TEST(test_twi_set_internal_address, 90);
@@ -146,7 +143,6 @@ void run_tests(void) {
 	RUN_TEST(test_tft_init, 100);
 	RUN_TEST(test_tft_clear, 100);
 	RUN_TEST(test_tft_write, 100);
-=======
 	RUN_TEST(test_twi_init_slave, 80);
 	RUN_TEST(test_twi_set_device_address, 80);
 	RUN_TEST(test_twi_set_internal_address, 80);
@@ -173,7 +169,7 @@ void run_tests(void) {
 	RUN_TEST(test_spi_polarity_phase_change, 90);
 	RUN_TEST(test_spi_baud_rate_change, 90);
 	HORIZONTAL_LINE_BREAK();
->>>>>>> integration
+
 
 	UnityEnd();
 }

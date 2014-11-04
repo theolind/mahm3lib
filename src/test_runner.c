@@ -28,12 +28,14 @@ void run_tests(void) {
 	// Run UART tests
 	Unity.TestFile = "test/test_uart.c";
 	RUN_TEST(test_uart_send_receive_char_local_loopback_mode, 0);
-	HORIZONTAL_LINE_BREAK();
+	HORIZONTAL_LINE_BREAK()
+	;
 
 	// Run EEFC tests
 	Unity.TestFile = "test/test_eefc.c";
 	RUN_TEST(test_eefc_set_flash_wait_state, 10);
-	HORIZONTAL_LINE_BREAK();
+	HORIZONTAL_LINE_BREAK()
+	;
 
 	// Run PMC tests
 	Unity.TestFile = "test/test_pmc.c";
@@ -42,7 +44,8 @@ void run_tests(void) {
 	RUN_TEST(test_pmc_PIOB_enabled, 20);
 	RUN_TEST(test_pmc_disable_PIOB, 20);
 	RUN_TEST(test_pmc_PIOB_disabled2, 20);
-	HORIZONTAL_LINE_BREAK();
+	HORIZONTAL_LINE_BREAK()
+	;
 
 	// Run PIO tests
 	Unity.TestFile = "test/test_pio.c";
@@ -54,7 +57,8 @@ void run_tests(void) {
 	RUN_TEST(test_pio_set_output, 30);
 	RUN_TEST(test_pio_set_outputs, 30);
 	RUN_TEST(test_pio_conf_multiple_pins, 30);
-	HORIZONTAL_LINE_BREAK();
+	HORIZONTAL_LINE_BREAK()
+	;
 
 	// Run DACC tests
 	Unity.TestFile = "test/test_dacc.c";
@@ -66,7 +70,8 @@ void run_tests(void) {
 	RUN_TEST(test_dacc_disable_channel_1, 40);
 	RUN_TEST(test_dacc_channel_0_disabled2, 40);
 	RUN_TEST(test_dacc_channel_1_disabled2, 40);
-	HORIZONTAL_LINE_BREAK();
+	HORIZONTAL_LINE_BREAK()
+	;
 
 	// Run ADC tests
 	Unity.TestFile = "test/test_adc.c";
@@ -75,29 +80,8 @@ void run_tests(void) {
 	RUN_TEST(test_adc_channel_status, 50);
 	RUN_TEST(test_adc_set_resolution_10_bit, 50);
 	RUN_TEST(test_adc_set_resolution_12_bit, 50);
-	HORIZONTAL_LINE_BREAK();
-
-	// Run SPI tests
-	// Have yet to run tests due to error messages
-	/*Unity.TestFile = "test/test_spi.c";
-	test_spi_setup();
-	RUN_TEST(test_spi_init, 30);
-	RUN_TEST(test_spi_select_slave, 30);
-	RUN_TEST(test_spi_write_ready, 30);
-	RUN_TEST(test_spi_write, 30);
-	RUN_TEST(test_spi_read_ready, 30);
-	RUN_TEST(test_spi_transmission_complete,30);
-	RUN_TEST(test_spi_correct_transmission, 30);*/
-
-	/*Unity.TestFile = "test/test_spi_hardcoded.c";
-	RUN_TEST(test_spi_init_hardcoded, 30);
-	RUN_TEST(test_spi_select_slave_hardcoded, 30);
-	RUN_TEST(test_spi_tx_ready_hardcoded, 30);
-	RUN_TEST(test_spi_tx_hardcoded, 30);
-	RUN_TEST(test_spi_tx_complete_hardcoded, 30);
-	RUN_TEST(test_spi_rx_ready_hardcoded, 30);
-	RUN_TEST(test_spi_rx_hardcoded, 30);*/
-
+	HORIZONTAL_LINE_BREAK()
+	;
 
 	// Run PWM tests
 	Unity.TestFile = "test/test_pwm.c";
@@ -122,7 +106,8 @@ void run_tests(void) {
 	RUN_TEST(test_tc_read_counter_value, 70);
 	RUN_TEST(test_tc_sync, 70);
 	RUN_TEST(test_register, 70);
-	HORIZONTAL_LINE_BREAK();
+	HORIZONTAL_LINE_BREAK()
+	;
 
 	// Run TWI tests
 	Unity.TestFile = "test/test_twi.c";
@@ -132,7 +117,8 @@ void run_tests(void) {
 	RUN_TEST(test_twi_set_clock_invalid_parameters, 90);
 	RUN_TEST(test_twi_set_clock_valid_parameters, 90);
 	//RUN_TEST(test_twi_send_receive_SEMI_AUTOMATIC, 90);
-	HORIZONTAL_LINE_BREAK();
+	HORIZONTAL_LINE_BREAK()
+	;
 
 	// Run SPI tests
 	// Have yet to run tests due to error messages
@@ -151,7 +137,8 @@ void run_tests(void) {
 	RUN_TEST(test_spi_variable_bit_lenght_transmission, 100);
 	RUN_TEST(test_spi_polarity_phase_change, 100);
 	RUN_TEST(test_spi_baud_rate_change, 100);
-	HORIZONTAL_LINE_BREAK();
+	HORIZONTAL_LINE_BREAK()
+	;
 
 	// Run TFT tests
 	Unity.TestFile = "test/test_tft.c";
@@ -162,10 +149,8 @@ void run_tests(void) {
 	RUN_TEST(test_tft_init, 110);
 	RUN_TEST(test_tft_clear, 110);
 	RUN_TEST(test_tft_write, 110);
-	HORIZONTAL_LINE_BREAK();
-
-
-
+	HORIZONTAL_LINE_BREAK()
+	;
 
 	UnityEnd();
 }

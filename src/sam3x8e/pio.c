@@ -4,7 +4,6 @@
 * Author: 	Theodor Lindquist
 *			Soded Alatia
 * 			Felix Ruponen
-* 			Jonathan Bjarnason
 * 			Mathias Beckius
 * 			Saeed Ghasemi
 *
@@ -72,7 +71,7 @@ void pio_set_pin(pio_reg_t *port, uint32_t pin, uint32_t level) {
 }
 
 void pio_set_pins(pio_reg_t *port, uint32_t pins, uint32_t level) {
-	if (level != 0) {
+	if (level > 1) {
 		port->PIO_SODR = pins;	//set pins
 	} else {
 		port->PIO_CODR = pins;	//clear pins
@@ -109,36 +108,3 @@ uint8_t pio_conf_pin_to_peripheral(pio_reg_t *port, uint32_t periph,
 	port->PIO_PDR |= (0x1U << pin_number);
 	return 1;
 }
-
-uint8_t pio_debounce_filter_selected(pio_reg_t *port, uint32_t pin_number) {
-	return(port->PIO_IFDGSR & (1u << pin_number)) == (1u << pin_number);
-}
-
-void pio_select_debounce_filter(pio_reg_t *port, uint32_t pin_number) {
-	port->PIO_DIFSR = (1u << pin_number);
-}
-
-void pio_set_debounce_frequency(pio_reg_t *port, uint32_t slow_clock) {
-	/*
-	 * The debouncing filter can filter a pulse of less than 1/2 Period of a
-	 * programmable Divided Slow Clock:
-	 * Tdiv_slclk = ((DIV+1)*2) * Tslow_clock
-	 *
-	 * DIV = Tdiv_slclk/(2 * Tslow_clk) - 1
-	 */
-	port->PIO_SCDR = (PIO_SLOW_CLOCK_FREQ /	(2 * slow_clock)) - 1;
-
-}
-
-void pio_enable_input_filter(pio_reg_t *port, uint32_t pin_number) {
-	port->PIO_IFER = (1u << pin_number);
-}
-
-void pio_disable_input_filter(pio_reg_t *port, uint32_t pin_number) {
-	port->PIO_IFDR = (1u << pin_number);
-}
-
-uint32_t pio_input_filter_enabled(pio_reg_t *port, uint32_t pin_number) {
-	return (port->PIO_IFSR & (1u << pin_number));
-}
-

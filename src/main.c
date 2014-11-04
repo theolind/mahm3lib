@@ -2,6 +2,7 @@
 #include <inttypes.h>
 #include "unity/unity_hw_setup.h"
 #include "unity/unity.h"
+#include "unity/unity_hw_setup.h"
 #include "test_runner.h"
 
 

@@ -12,70 +12,78 @@
  * alignment, PWM frequency and handles the pin multiplexing for all 16 outputs
  * of the peripheral. The API does not stop any clock once it has started them.
  * @author Saeed Ghasemi
- * @date 28 sep 2014
+ * @author Andreas Drotth
+ * @author Mattias Nilsson
+ * @date 02 November 2014
  * @pre The API does not handle its dependencies on other peripherals
  * internally and wont start the necessary clocks for it own operation. The
  * programmer refer to the documentation for PMC and PIO to deal with the
  * dependencies of this API on them.
- * @bug Manually tested all functions to comply with all demands.
- * The only problem is that the register set defined below is not working when
- * implemented. The register mapping currently working is non conventional.
+ * @bug The register set defined below is not working when implemented.
+ * The register mapping currently working is non conventional.
  */
 
 #ifndef PWM_H_
 #define PWM_H_
+
+#include <inttypes.h>
+
+/**
+ * The Master clock speed of the SAM3X8E microprocessor.
+ */
+#define SYS_CLK_FREQ		84000000
 
 ///@{
 /**
  * These define the pins that can be used with the PWM peripheral.
  * Not all the pins are necessarily broken out on a particular board.
  * the pins are being defined like this:
- * PIN_PWM[PIN POLAITY][CHANNEL NUMBER]_P[PORT][PIN NUMBER]_[PIO MUX PERIPHERAL]
+ * PWM_[PIN POLAITY][CHANNEL NUMBER]_P[PORT][PIN NUMBER]_[PIO MUX PERIPHERAL]
  */
-#define PIN_PWMH0_PA8_B			(8)
-#define PIN_PWMH0_PB12_B		(12)
-#define PIN_PWMH0_PC3_B			(3)
-#define PIN_PWMH0_PE15_A		(15)
-#define PIN_PWMH1_PA19_B		(19)
-#define PIN_PWMH1_PB13_B		(13)
-#define PIN_PWMH1_PC5_B			(5)
-#define PIN_PWMH1_PE16_A		(16)
-#define PIN_PWMH2_PA13_B		(13)
-#define PIN_PWMH2_PB14_B		(14)
-#define PIN_PWMH2_PC7_B			(7)
-#define PIN_PWMH3_PA9_B			(9)
-#define PIN_PWMH3_PB15_B		(15)
-#define PIN_PWMH3_PC9_B			(9)
-#define PIN_PWMH3_PF3_A			(3)
-#define PIN_PWMH4_PC20_B		(20)
-#define PIN_PWMH4_PE20_A		(20)
-#define PIN_PWMH5_PC19_B		(19)
-#define PIN_PWMH5_PE22_A		(22)
-#define PIN_PWMH6_PC18_B		(18)
-#define PIN_PWMH6_PE24_A		(24)
-#define PIN_PWMH7_PE26_A		(26)
-#define PIN_PWML0_PA21_B		(21)
-#define PIN_PWML0_PB16_B		(16)
-#define PIN_PWML0_PC2_B			(2)
-#define PIN_PWML0_PE18_A		(18)
-#define PIN_PWML1_PA12_B		(12)
-#define PIN_PWML1_PB17_B		(17)
-#define PIN_PWML1_PC4_B			(4)
-#define PIN_PWML2_PA20_B		(20)
-#define PIN_PWML2_PB18_B		(18)
-#define PIN_PWML2_PC6_B			(6)
-#define PIN_PWML2_PE17_A		(17)
-#define PIN_PWML3_PA0_B			(0)
-#define PIN_PWML3_PB19_B		(19)
-#define PIN_PWML3_PC8_B			(8)
-#define PIN_PWML4_PC21_B		(21)
-#define PIN_PWML4_PE19_A		(19)
-#define PIN_PWML5_PC22_B		(22)
-#define PIN_PWML5_PE21_A		(21)
-#define PIN_PWML6_PC23_B		(23)
-#define PIN_PWML6_PE23_A		(23)
-#define PIN_PWML7_PC24_B		(24)
-#define PIN_PWML7_PE25_A		(25)
+#define PWM_HIGH0_PA8_B			(8)
+#define PWM_HIGH0_PB12_B		(12)
+#define PWM_HIGH0_PC3_B			(3)
+#define PWM_HIGH0_PE15_A		(15)
+#define PWM_HIGH1_PA19_B		(19)
+#define PWM_HIGH1_PB13_B		(13)
+#define PWM_HIGH1_PC5_B			(5)
+#define PWM_HIGH1_PE16_A		(16)
+#define PWM_HIGH2_PA13_B		(13)
+#define PWM_HIGH2_PB14_B		(14)
+#define PWM_HIGH2_PC7_B			(7)
+#define PWM_HIGH3_PA9_B			(9)
+#define PWM_HIGH3_PB15_B		(15)
+#define PWM_HIGH3_PC9_B			(9)
+#define PWM_HIGH3_PF3_A			(3)
+#define PWM_HIGH4_PC20_B		(20)
+#define PWM_HIGH4_PE20_A		(20)
+#define PWM_HIGH5_PC19_B		(19)
+#define PWM_HIGH5_PE22_A		(22)
+#define PWM_HIGH6_PC18_B		(18)
+#define PWM_HIGH6_PE24_A		(24)
+#define PWM_HIGH7_PE26_A		(26)
+#define PWM_LOW0_PA21_B			(21)
+#define PWM_LOW0_PB16_B			(16)
+#define PWM_LOW0_PC2_B			(2)
+#define PWM_LOW0_PE18_A			(18)
+#define PWM_LOW1_PA12_B			(12)
+#define PWM_LOW1_PB17_B			(17)
+#define PWM_LOW1_PC4_B			(4)
+#define PWM_LOW2_PA20_B			(20)
+#define PWM_LOW2_PB18_B			(18)
+#define PWM_LOW2_PC6_B			(6)
+#define PWM_LOW2_PE17_A			(17)
+#define PWM_LOW3_PA0_B			(0)
+#define PWM_LOW3_PB19_B			(19)
+#define PWM_LOW3_PC8_B			(8)
+#define PWM_LOW4_PC21_B			(21)
+#define PWM_LOW4_PE19_A			(19)
+#define PWM_LOW5_PC22_B			(22)
+#define PWM_LOW5_PE21_A			(21)
+#define PWM_LOW6_PC23_B			(23)
+#define PWM_LOW6_PE23_A			(23)
+#define PWM_LOW7_PC24_B			(24)
+#define PWM_LOW7_PE25_A			(25)
 ///@}
 
 ///@{
@@ -100,10 +108,10 @@
  * MASKs are being defined like this:
  * [PERIPHERAL]_[REGISTER]_[SECTION]_MASK
  */
-#define PWM_CLK_PREA_MASK	(0x00000F00)
-#define PWM_CLK_PREB_MASK	(0x0F000000)
-#define PWM_CLK_DIVA_MASK	(0x000000FF)
-#define PWM_CLK_DIVB_MASK	(0x00FF0000)
+#define PWM_CLK_PREA_MASK	(0x00000F00u)
+#define PWM_CLK_PREB_MASK	(0x0F000000u)
+#define PWM_CLK_DIVA_MASK	(0x000000FFu)
+#define PWM_CLK_DIVB_MASK	(0x00FF0000u)
 ///@}
 ///@{
 /**
@@ -113,13 +121,13 @@
  * MASKs are being defined like this:
  * [PERIPHERAL]_[REGISTER]_[SECTION]_MASK
  */
-#define PWM_CMRx_CPRE_MASK				(0x0000000F)
-#define PWM_CMRx_CALG_MASK				(1 << 8)
-#define PWM_CMRx_CPOL_MASK				(1 << 9)
-#define PWM_CMRx_CES_MASK				(1 << 10)
-#define PWM_CMRx_DTE_MASK				(1 << 16)
-#define PWM_CMRx_DTHI_MASK				(1 << 17)
-#define PWM_CMRx_DTLI_MASK				(1 << 18)
+#define PWM_CMRx_CPRE_MASK				(0x0000000Fu)
+#define PWM_CMRx_CALG_MASK				(0x0100u)//(1 << 8)
+#define PWM_CMRx_CPOL_MASK				(0x0200u)//(1 << 9)
+#define PWM_CMRx_CES_MASK				(0x040u)//(1 << 10)
+#define PWM_CMRx_DTE_MASK				(0x010000u)//(1 << 16)
+#define PWM_CMRx_DTHI_MASK				(0x020000u)//(1 << 17)
+#define PWM_CMRx_DTLI_MASK				(0x040000u)//(1 << 18)
 ///@}
 ///@{
 /**
@@ -129,8 +137,8 @@
  * MASKs are being defined like this:
  * [PERIPHERAL]_[REGISTER]_[SECTION]_MASK
  */
-#define PWM_CDTYx_CDTY_MASK				(0x0000FFFF)
-#define PWM_CDTYUPDx_CDTYUPD_MASK		(0x0000FFFF)
+#define PWM_CDTYx_CDTY_MASK				(0x0000FFFFu)
+#define PWM_CDTYUPDx_CDTYUPD_MASK		(0x0000FFFFu)
 ///@}
 ///@{
 /**
@@ -140,8 +148,8 @@
  * MASKs are being defined like this:
  * [PERIPHERAL]_[REGISTER]_[SECTION]_MASK
  */
-#define PWM_CPRDx_CPRD_MASK				(0x0000FFFF)
-#define PWM_CPRDUPDx_CPRDUPD_MASK		(0x0000FFFF)
+#define PWM_CPRDx_CPRD_MASK				(0x0000FFFFu)
+#define PWM_CPRDUPDx_CPRDUPD_MASK		(0x0000FFFFu)
 ///@}
 
 //PESCALLERS FOR CHANNEL MODE AND CLOCK REGISTER
@@ -154,19 +162,19 @@
  * Parameters are being defined like this:
  * [PERIPHERAL]_[SECTION]_VALUE
  */
-#define PWM_PRES_MCK_DIV_1				(0b0000)
-#define PWM_PRES_MCK_DIV_2				(0b0001)
-#define PWM_PRES_MCK_DIV_4				(0b0010)
-#define PWM_PRES_MCK_DIV_8				(0b0011)
-#define PWM_PRES_MCK_DIV_16				(0b0100)
-#define PWM_PRES_MCK_DIV_32				(0b0101)
-#define PWM_PRES_MCK_DIV_64				(0b0110)
-#define PWM_PRES_MCK_DIV_128			(0b0111)
-#define PWM_PRES_MCK_DIV_256			(0b1000)
-#define PWM_PRES_MCK_DIV_512			(0b1001)
-#define PWM_PRES_MCK_DIV_1024			(0b1010)
-#define PWM_PRES_CLOCKA					(0b1011)
-#define PWM_PRES_CLOCKB					(0b1100)
+#define PWM_PRES_MCK_DIV_1				(0b0000u)
+#define PWM_PRES_MCK_DIV_2				(0b0001u)
+#define PWM_PRES_MCK_DIV_4				(0b0010u)
+#define PWM_PRES_MCK_DIV_8				(0b0011u)
+#define PWM_PRES_MCK_DIV_16				(0b0100u)
+#define PWM_PRES_MCK_DIV_32				(0b0101u)
+#define PWM_PRES_MCK_DIV_64				(0b0110u)
+#define PWM_PRES_MCK_DIV_128			(0b0111u)
+#define PWM_PRES_MCK_DIV_256			(0b1000u)
+#define PWM_PRES_MCK_DIV_512			(0b1001u)
+#define PWM_PRES_MCK_DIV_1024			(0b1010u)
+#define PWM_PRES_CLOCKA					(0b1011u)
+#define PWM_PRES_CLOCKB					(0b1100u)
 ///@}
 /**
  * Divisors for the CLKx are all values between 0 and 255. But here only the
@@ -357,7 +365,7 @@ typedef struct pwm_reg {
 	uint32_t PWM_DTUPD7; ///< PWM Channel Dead Time Update Register (Channel 7)
 } pwm_reg_t;
 /**
- * @typedef pwm_clk_setting
+ * @typedef pwm_clk_setting_t
  * This structure is used with pwm_init() to set the settings for the clocks A
  * and B of the PWM peripheral.
  */
@@ -368,7 +376,7 @@ typedef struct pwm_clk_setting {
 	uint32_t clkB_divisor; ///<This is the divisor for clock B. Set this between 0 and 255. 0 will turn the clock off.
 } pwm_clk_setting_t;
 /**
- * @typedef pwm_channel_setting
+ * @typedef pwm_channel_setting_t
  * This structure is used with pwm_init_channel() to set the settings of a
  * channel.
  */
@@ -421,7 +429,7 @@ uint8_t pwm_init_channel(pwm_channel_setting_t settings);
  * @param channel The channel to be enabled, use prefix: PWM_CHANNEL_
  * @return error Will always return 1 = SUCCESS
  */
-uint8_t pwm_channel_enable(uint32_t channel);
+uint8_t pwm_enable_channel(uint32_t channel);
 /**
  * This function will disable the selected channel, identified with predefined
  * values, like: PWM_CHANNEL_x_MASK.
@@ -431,14 +439,14 @@ uint8_t pwm_channel_enable(uint32_t channel);
  * @param channel The channel to be disabled, use prefix: PWM_CHANNEL_
  * @return error, 1 = SUCCESS and 0 = FAIL
  */
-uint8_t pwm_channel_disable(uint32_t channel);
+uint8_t pwm_disable_channel(uint32_t channel);
 /**
  * This function will return the state of the PWM channel.
  *
  * @param channel the channel to get the status for
  * @return 1 if the channel is enabled, 0 if it is disabled
  */
-uint8_t pwm_channel_status(uint32_t channel);
+uint8_t pwm_channel_enabled(uint32_t channel);
 ///@}
 ///@{
 /**
@@ -561,7 +569,7 @@ uint8_t pwm_set_channel_duty_cycle(uint32_t channel, uint32_t duty_cycle);
  * @return Previously set duty cycle (if 0 is received then it could mean
  * error)
  */
-uint32_t pwm_channel_read(uint32_t channel);
+uint32_t pwm_read_channel(uint32_t channel);
 /**
  * This function will return the maximum value that the duty cycle can be set
  * to. The highest value that this function can return is 65535.

@@ -1,106 +1,67 @@
-#include "global_definitions.h"
+/*
+ * dacc.c
+ *
+ * Author:	Jonathan Bjarnason,
+ * 			Andreas Drotth,
+ * 			Mathias Beckius
+ *
+ * Date: 30 September 2014
+ */
+
+#include "pmc.h"
 #include "dacc.h"
 
-uint32_t *const p_dacc_cr   = (uint32_t *) 0x400C8000U;
-uint32_t *const p_dacc_mr   = (uint32_t *) 0x400C8004U;
-uint32_t *const p_dacc_cher = (uint32_t *) 0x400C8010U;
-uint32_t *const p_dacc_chdr = (uint32_t *) 0x400C8014U;
-uint32_t *const p_dacc_chsr = (uint32_t *) 0x400C8018U;
-uint32_t *const p_dacc_cdr  = (uint32_t *) 0x400C8020U;
-uint32_t *const p_dacc_isr  = (uint32_t *) 0x400C8030U;
-uint32_t *const p_dacc_wrmr = (uint32_t *) 0x400C80E4U;
-uint32_t *const p_dacc_wpsr = (uint32_t *) 0x400C80E8U;
-
-uint8_t dacc_init(dacc_settings_t *settings){
-
-	// Check for illegal values
-	if(settings->trigger_mode>1||
-			settings->word_transfer>1||
-			settings->speed_mode>1||
-			settings->startup_time>63){
-		return 0;
-	}
-
-	// Enable Peripheral clock for DACC
-	pmc_start_peripheral_clock(ID_DACC);
-
+void dacc_init(const dacc_settings_t *settings) {
 	// Software reset
-	DACC_CR = (0x1u << 0);
-
-	// Trigger mode
-	DACC_MR |= (settings->trigger_mode << 0);
-
+	DACC->DACC_CR = (0x1u << 0);
 	// Word transfer
-	DACC_MR |= (settings->word_transfer << 4);
-
+	DACC->DACC_MR |= (settings->word_transfer << DACC_MR_WORD_POS);
 	// Refresh period
-	DACC_MR |= (settings->refresh << 8);
-
+	DACC->DACC_MR |= (settings->refresh << DACC_MR_REFRESH_POS);
 	// Max speed mode
-	DACC_MR |= (settings->speed_mode << 21);
-
+	DACC->DACC_MR |= (settings->speed_mode << DACC_MR_MAXS_POS);
 	// Startup time selection
-	DACC_MR |= (settings->startup_time << 24);
-
-	return 1;
+	DACC->DACC_MR |= (settings->startup_time << DACC_MR_STARTUP_POS);
 }
 
-uint8_t dacc_enable_channel(uint8_t dacc_channel) {
-
-	if (dacc_channel > 1) {
-		return 0;
+void dacc_enable_channel(uint32_t channel) {
+	if (channel <= DACC_CHANNEL_MAX) {
+		DACC->DACC_CHER = (0x1u << channel);
 	}
+}
 
-	DACC_CHER |= (0x1u << dacc_channel);
+void dacc_disable_channel(uint32_t channel) {
+	if (channel <= DACC_CHANNEL_MAX) {
+		DACC->DACC_CHDR = (0x1u << channel);
+	}
+}
 
-	if ( DACC_CHSR & (0x1u << dacc_channel) ) {
-		return 1;
+uint32_t dacc_channel_enabled(uint32_t channel) {
+	if (channel <= DACC_CHANNEL_MAX) {
+		return (DACC->DACC_CHSR & (0x1u << channel));
 	} else {
 		return 0;
 	}
 }
 
-uint8_t dacc_disable_channel(uint8_t dacc_channel){
-
-	if (dacc_channel > 1) {
-		return 0;
-	}
-
-	DACC_CHDR |= (0x1u << dacc_channel);
-
-	if ( !( DACC_CHSR & (0x1u << dacc_channel)) ) {
-		return 1;
-	} else {
-		return 0;
+void dacc_select_channel(uint32_t channel) {
+	if (channel <= DACC_CHANNEL_MAX) {
+		DACC->DACC_MR |= (channel << DACC_MR_USER_SEL_POS);
 	}
 }
 
-uint8_t dacc_get_channel_status(uint8_t dacc_channel){
-
-	if (dacc_channel > 1) {
-		return 0;
-	}
-
-	if ( DACC_CHSR & (0x1u << dacc_channel) ) {
-		return 1;
-	} else {
-		return 0;
-	}
+uint32_t dacc_tx_ready(void) {
+	return (DACC->DACC_ISR & DACC_ISR_TXRDY_MSK);
 }
 
-uint8_t dacc_write(uint8_t dacc_channel, uint32_t value){
-
-	if (dacc_channel > 1 || value > DACC_MAX_RESOLUTION) {
-		return 0;
+/*
+* If transfer mode is set to HALF-WORD then only DACC_CHR[15:0]
+* is used whereby [11:0] make up the actual output data.
+* If transfer mode is set to WORD then all bits are used whereby
+* [15:0] is converted first and afterwards the [31:16] bits.
+*/
+void dacc_write(uint32_t value) {
+	if (value <= DACC_MAX_RESOLUTION) {
+		DACC->DACC_CDR = value;
 	}
-
-	//TODO: Fix conversion warning
-	DACC_MR |= (dacc_channel << 16);
-
-	//Check if converter is ready before sending new data
-	while ( !( DACC_ISR & 0x1u << 0) );
-
-	DACC_CDR = value;
-
-	return 1;
 }

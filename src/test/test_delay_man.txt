@@ -1,0 +1,85 @@
+-----Manual tests for the Delay API-----
+Copy selected function to main.c and call the function from int main(void).
+test_l_led will blink the L-LED.
+test_pin_33 will turn pin 33 on and off and the delay can be read out by an
+oscilloscope.
+output will compare the delay to the built in timer counter and give an output
+in terminal.
+
+DON'T FORGET TO INCLUDE:
+#include "sam3x8e/pio.h"
+#include "sam3x8e/delay.h"
+#include "sam3x8e/tc.h"
+
+void test_delay_l_led(uint32_t delay){
+	pio_conf_pin(PIOB, 27, 0, 0);
+	for(;;){
+		PIOB->PIO_SODR = (0x1u << 27);	//set pin
+		delay_micros(delay);
+		PIOB->PIO_CODR = (0x1u << 27);	//clear pin
+		delay_micros(delay);
+	}
+}
+
+void test_delay_pin_33(uint32_t delay){
+	pio_conf_pin(PIOC, 1,  0, 0);
+	for(;;){
+		PIOC->PIO_SODR = 2;//(0x1u << 1);	//set pin
+		delay_micros(delay);
+		PIOC->PIO_CODR = 2;//(0x1u << 1);	//clear pin
+		delay_micros(delay);
+	}
+}
+
+void output(){
+	uint32_t first, second, third, fourth, fifth, sixth, seventh, eight;
+	tc_channel_settings_t tc_settings_0 = {
+		.wave = 0,
+		.tcclks = 0
+	};
+
+	pmc_enable_peripheral_clock(ID_TC0);
+
+	tc_conf_channel(&tc_settings_0, TC0, TC_CHANNEL_0);
+	tc_disable_clock(TC0, TC_CHANNEL_0);
+	tc_enable_clock(TC0, TC_CHANNEL_0);
+	tc_start_clock(TC0, TC_CHANNEL_0);
+
+	delay_micros(100);
+
+	uint32_t temp = tc_read_counter_value(TC0, TC_CHANNEL_0);
+	uint32_t temp1 = (float)(temp) * 2 * 0.119;
+
+	first = (temp1 - (temp1 % 100000000)) / 100000000;
+	temp1 = (temp1 - first * 100000000);
+	second = (temp1 - (temp1 % 10000000)) / 10000000;
+	temp1 = (temp1 - second * 10000000);
+	third = (temp1 - (temp1 % 1000000)) / 1000000;
+	temp1 = (temp1 - third * 1000000);
+	fourth = (temp1 - (temp1 % 100000)) / 100000;
+	temp1 = (temp1 - fourth * 100000);
+	fifth = (temp1 - (temp1 % 10000)) / 10000;
+	temp1 = (temp1 - fifth * 10000);
+	sixth = (temp1 - (temp1 % 1000)) / 1000;
+	temp1 = (temp1 - sixth * 1000);
+	seventh = (temp1 - (temp1 % 100)) / 100;
+	temp1 = (temp1 - seventh * 100);
+	eight = temp1 % 10;
+
+	char dataprint[8];
+	dataprint[0] = (char) first;
+	dataprint[1] = (char) second;
+	dataprint[2] = (char) third;
+	dataprint[3] = (char) fourth;
+	dataprint[4] = (char) fifth;
+	dataprint[5] = (char) sixth;
+	dataprint[6] = (char) seventh;
+	dataprint[7] = (char) eight;
+
+	for (int i = 0; i < 8; i++) {
+		UNITY_OUTPUT_CHAR(dataprint[i] + 48);
+	}
+
+	UNITY_OUTPUT_CHAR('\r');
+	UNITY_OUTPUT_CHAR('\n');
+}
